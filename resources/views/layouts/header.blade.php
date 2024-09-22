@@ -15,16 +15,16 @@
      <meta http-equiv="x-ua-compatible" content="ie=edge" />
      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
  
-     <title>Ekka - Ecommerce HTML Template + Admin Dashboard.</title>
+     <title>PolyFIt</title>
      <meta name="keywords"
          content="apparel, catalog, clean, ecommerce, ecommerce HTML, electronics, fashion, html eCommerce, html store, minimal, multipurpose, multipurpose ecommerce, online store, responsive ecommerce template, shops" />
      <meta name="description" content="Best ecommerce html template for single and multi vendor store.">
      <meta name="author" content="ashishmaraviya">
  
      <!-- site Favicon -->
-     <link rel="icon" href="assets/images/favicon/favicon.png" sizes="32x32" />
-     <link rel="apple-touch-icon" href="assets/images/favicon/favicon.png" />
-     <meta name="msapplication-TileImage" content="assets/images/favicon/favicon.png" />
+     <link rel="icon" href="{{asset('theme/client/assets/images/logo/logo1.png')}}" sizes="32x32" />
+     <link rel="apple-touch-icon" href="{{asset('theme/client/assets/images/logo/logo1.png')}}" />
+     <meta name="msapplication-TileImage" content="{{asset('theme/client/assets/images/logo/logo1.png')}}" />
  
      <!-- css Icon Font -->
      <link rel="stylesheet" href="{{asset('theme/client/assets/css/vendor/ecicons.min.css')}}" />
@@ -134,8 +134,8 @@
                          <!-- Ec Header Logo Start -->
                          <div class="align-self-center">
                              <div class="header-logo">
-                                 <a href="index.html"><img src="{{asset('theme/client/assets/images/logo/logo.png')}}" alt="Site Logo" /><img
-                                         class="dark-logo" src="{{asset('theme/client/assets/images/logo/dark-logo.png')}}" alt="Site Logo"
+                                 <a href="index.html"><img src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo" /><img
+                                         class="dark-logo" src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo"
                                          style="display: none;" /></a>
                              </div>
                          </div>
@@ -225,8 +225,8 @@
                                 <i class="fi fi-rr-apps"></i>
                             </a>
                             <ul>
-                                <li><a href="index.html">Trang chủ</a></li>
-                                <li><a href="index.html">Giới thiệu</a></li>
+                                <li><a href="{{ url('/') }}">Trang chủ</a></li>
+                                <li><a href="{{ url('/about') }}">Giới thiệu</a></li>                            
                                 <li><a href="index.html">Cửa hàng</a></li>
                                 <li><a href="index.html">Liên hệ</a></li>
                         </div>

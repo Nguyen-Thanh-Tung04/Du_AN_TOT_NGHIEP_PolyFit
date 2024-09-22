@@ -489,10 +489,10 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                                 <div class="ec-slide-content slider-animation">
-                                    <h1 class="ec-slide-title">New Fashion Collection</h1>
-                                    <h2 class="ec-slide-stitle">Sale Offer</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
-                                    <a href="#" class="btn btn-lg btn-secondary">Order Now</a>
+                                    <h1 class="ec-slide-title">Bộ sưu tập thời trang mới</h1>
+                                    <h2 class="ec-slide-stitle">Khuyến mại</h2>
+                                    <p>PolyFit chúng tôi hân hạnh chào đón bạn !</p>
+                                    <a href="#" class="btn btn-lg btn-secondary">Đặt hàng ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -503,11 +503,11 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                                 <div class="ec-slide-content slider-animation">
-                                    <h1 class="ec-slide-title">Boat Headphone Sets</h1>
-                                    <h2 class="ec-slide-stitle">Sale Offer</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
-                                    <a href="#" class="btn btn-lg btn-secondary">Order Now</a>
-                                </div>
+                                    <h1 class="ec-slide-title">Bộ tai nghe thuyền</h1>
+                                    <h2 class="ec-slide-stitle">Khuyến mại</h2>
+                                    <p>Chúng tôi hi vọng sẽ giúp thỏa mãn mong muốn mua sắm của quý khách !</p>
+                                    <a href="#" class="btn btn-lg btn-secondary">Đặt hàng ngay</a>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -1265,9 +1265,8 @@
     </section>
     <!-- Category Section End -->
 
-    <!--  services Section Start -->
     <section class="section ec-services-section section-space-p" id="services">
-        <h2 class="d-none">Services</h2>
+        <h2 class="d-none">Dịch vụ</h2>
         <div class="container">
             <div class="row">
                 <div class="ec_ser_content ec_ser_content_1 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
@@ -1276,8 +1275,8 @@
                             <i class="fi fi-ts-truck-moving"></i>
                         </div>
                         <div class="ec-service-desc">
-                            <h2>Free Shipping</h2>
-                            <p>Free shipping on all US order or order above $200</p>
+                            <h2>Miễn phí vận chuyển</h2>
+                            <p>Miễn phí vận chuyển cho tất cả các đơn hàng tại Hoa Kỳ hoặc đơn hàng trên 200 đô la</p>
                         </div>
                     </div>
                 </div>
@@ -1287,8 +1286,8 @@
                             <i class="fi fi-ts-hand-holding-seeding"></i>
                         </div>
                         <div class="ec-service-desc">
-                            <h2>24X7 Support</h2>
-                            <p>Contact us 24 hours a day, 7 days a week</p>
+                            <h2>Hỗ trợ 24X7</h2>
+<p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
                         </div>
                     </div>
                 </div>
@@ -1298,8 +1297,8 @@
                             <i class="fi fi-ts-badge-percent"></i>
                         </div>
                         <div class="ec-service-desc">
-                            <h2>30 Days Return</h2>
-                            <p>Simply return it within 30 days for an exchange</p>
+                            <h2>Trả hàng trong vòng 30 ngày</h2>
+<p>Chỉ cần trả lại trong vòng 30 ngày để đổi hàng</p>
                         </div>
                     </div>
                 </div>
@@ -1309,8 +1308,8 @@
                             <i class="fi fi-ts-donate"></i>
                         </div>
                         <div class="ec-service-desc">
-                            <h2>Payment Secure</h2>
-                            <p>Contact us 24 hours a day, 7 days a week</p>
+                            <h2>Thanh toán an toàn</h2>
+                            <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
                         </div>
                     </div>
                 </div>
@@ -1337,98 +1336,6 @@
         </div>
     </section>
     <!-- offer Section End -->
-
-    
-    <!-- ec testmonial Start -->
-    <section class="section ec-test-section section-space-ptb-100 section-space-m" id="reviews">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="section-title mb-0">
-                        <h2 class="ec-bg-title">Testimonial</h2>
-                        <h2 class="ec-title">Client Review</h2>
-                        <p class="sub-title mb-3">What say client about us</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="ec-test-outer">
-                    <ul id="ec-testimonial-slider">
-                        <li class="ec-test-item">
-                            <i class="fi-rr-quote-right top"></i>
-                            <div class="ec-test-inner">
-                                <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                        src="{{asset('theme/client/assets/images/testimonial/1.jpg')}}" /></div>
-                                <div class="ec-test-content">
-                                    <div class="ec-test-desc">Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                                        ever since the 1500s, when an unknown printer took a galley of type and
-                                        scrambled it to make a type specimen</div>
-                                    <div class="ec-test-name">John Doe</div>
-                                    <div class="ec-test-designation">General Manager</div>
-                                    <div class="ec-test-rating">
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <i class="fi-rr-quote-right bottom"></i>
-                        </li>
-                        <li class="ec-test-item ">
-                            <i class="fi-rr-quote-right top"></i>
-                            <div class="ec-test-inner">
-                                <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                        src="{{asset('theme/client/assets/images/testimonial/2.jpg')}}" /></div>
-                                <div class="ec-test-content">
-                                    <div class="ec-test-desc">Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                                        ever since the 1500s, when an unknown printer took a galley of type and
-                                        scrambled it to make a type specimen</div>
-                                    <div class="ec-test-name">John Doe</div>
-                                    <div class="ec-test-designation">General Manager</div>
-                                    <div class="ec-test-rating">
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <i class="fi-rr-quote-right bottom"></i>
-                        </li>
-                        <li class="ec-test-item">
-                            <i class="fi-rr-quote-right top"></i>
-                            <div class="ec-test-inner">
-                                <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                        src="{{asset('theme/client/assets/images/testimonial/3.jpg')}}" /></div>
-                                <div class="ec-test-content">
-                                    <div class="ec-test-desc">Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                                        ever since the 1500s, when an unknown printer took a galley of type and
-                                        scrambled it to make a type specimen</div>
-                                    <div class="ec-test-name">John Doe</div>
-                                    <div class="ec-test-designation">General Manager</div>
-                                    <div class="ec-test-rating">
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <i class="fi-rr-quote-right bottom"></i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ec testmonial end -->
 
     <!-- Ec Brand Section Start -->
     <section class="section ec-brand-area section-space-p">
