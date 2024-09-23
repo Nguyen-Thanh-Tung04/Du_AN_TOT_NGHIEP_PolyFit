@@ -227,7 +227,7 @@
                             <ul>
                                 <li><a href="{{ url('/') }}">Trang chủ</a></li>
                                 <li><a href="{{ url('/about') }}">Giới thiệu</a></li>                            
-                                <li><a href="index.html">Cửa hàng</a></li>
+                                <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
                                 <li><a href="index.html">Liên hệ</a></li>
                         </div>
                     </div>
