@@ -1177,7 +1177,8 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <div class="section-title">
-                        <h2 class="ec-bg-title">Tất cả sản phẩm</h2>
+                        <h2 class="ec-bg-title">Top Danh mục</h2>
+                        <h2 class="ec-title">Top Danh mục</h2>
                         <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
                     </div>
                 </div>
@@ -1222,7 +1223,7 @@
                         <div class="tab-pane fade show active" id="tab-cat-1">
                             <div class="row">
                                 <img src="{{asset('theme/client/assets/images/cat-banner/1.jpg')}}" alt="" />
-                            </div>
+                                </div>
                             <span class="panel-overlay">
                                 <a href="shop-left-sidebar-col-3.html" class="btn btn-primary">View All</a>
                             </span>
@@ -1264,6 +1265,188 @@
         </div>
     </section>
     <!-- Category Section End -->
+     <!--  Top Vendor Section Start -->
+     <section class="section section-space-p" id="vendors">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title">
+                        <h2 class="ec-bg-title">Top Brand</h2>
+                        <h2 class="ec-title">Top Brand</h2>
+                        <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn <a href="catalog-multi-vendor.html">All
+                                Vendors.</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-minus-t-15 margin-minus-b-15">
+                <div class="col-sm-12 col-md-6 col-lg-3 ec_ven_content" data-animation="zoomIn">
+                    <div class="ec-vendor-card">
+                        <div class="ec-vendor-detail">
+                            <div class="ec-vendor-avtar">
+                                <img src="{{asset('theme/client/assets/images/vendor/2.jpg')}}" alt="vendor img">
+                            </div>
+                            <div class="ec-vendor-info">
+                                <a href="catalog-single-vendor.html" class="name">Marvelus</a>
+                                <p class="prod-count">154 Products</p>
+                                <div class="ec-pro-rating">
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star"></i>
+                                </div>
+                                <div class="ec-sale">
+                                    <p title="Weekly sales">Sales 954</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ec-vendor-prod">
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/1_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/2_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/3_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/4_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ec_ven_content" data-animation="zoomIn">
+                    <div class="ec-vendor-card">
+                        <div class="ec-vendor-detail">
+                            <div class="ec-vendor-avtar">
+                                <img src="{{asset('theme/client/assets/images/vendor/3.jpg')}}" alt="vendor img">
+                            </div>
+                            <div class="ec-vendor-info">
+                                <a href="catalog-single-vendor.html" class="name">Oreva Fashion</a>
+                                <p class="prod-count">546 Products</p>
+                                <div class="ec-pro-rating">
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                </div>
+                                <div class="ec-sale">
+                                    <p title="Weekly sales">Sales 785</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ec-vendor-prod">
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/5_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/8_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ec_ven_content" data-animation="zoomIn">
+                    <div class="ec-vendor-card">
+                        <div class="ec-vendor-detail">
+                            <div class="ec-vendor-avtar">
+                                <img src="{{asset('theme/client/assets/images/vendor/4.jpg')}}" alt="vendor img">
+                            </div>
+                            <div class="ec-vendor-info">
+                                <a href="catalog-single-vendor.html" class="name">Cenva Art</a>
+                                <p class="prod-count">854 Products</p>
+                                <div class="ec-pro-rating">
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star"></i>
+                                    <i class="ecicon eci-star"></i>
+                                </div>
+                                <div class="ec-sale">
+                                    <p title="Weekly sales">Sales 587</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ec-vendor-prod">
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/9_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/10_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/11_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/12_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ec_ven_content" data-animation="zoomIn">
+                    <div class="ec-vendor-card">
+                        <div class="ec-vendor-detail">
+                            <div class="ec-vendor-avtar">
+                                <img src="{{asset('theme/client/assets/images/vendor/5.jpg" alt="ven')}}dor img">
+                            </div>
+                            <div class="ec-vendor-info">
+                                <a href="catalog-single-vendor.html" class="name">Neon Fashion</a>
+                                <p class="prod-count">154 Products</p>
+                                <div class="ec-pro-rating">
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                </div>
+                                <div class="ec-sale">
+                                    <p title="Weekly sales">Sales 354</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ec-vendor-prod">
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/13_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/14_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/15_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                            <div class="ec-prod-img">
+                                <a href="product-left-sidebar.html"><img src="{{asset('theme/client/assets/images/product-image/16_1.jpg')}}"
+                                        alt="vendor img"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Top Vendor Section End -->
 
     <section class="section ec-services-section section-space-p" id="services">
         <h2 class="d-none">Dịch vụ</h2>
@@ -1336,7 +1519,330 @@
         </div>
     </section>
     <!-- offer Section End -->
-
+  <!-- New Product Start -->
+  <section class="section ec-new-product section-space-p" id="arrivals">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="section-title">
+                    <h2 class="ec-bg-title">Sản phẩm giảm giá</h2>
+                    <h2 class="ec-title">Sản phẩm giảm giá</h2>
+                    <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="tab-content">
+                    <!-- 1st Product tab start -->
+                    <div class="tab-pane fade show active" id="tab-pro-for-all">
+                        <div class="row">
+                            <!-- Product Content -->
+                           
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content"
+                                data-animation="fadeIn">
+                                <div class="ec-product-inner">
+                                    <div class="ec-pro-image-outer">
+                                        <div class="ec-pro-image">
+                                            <a href="product-left-sidebar.html" class="image">
+                                                <img class="main-image" src="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                                    alt="Product" />
+                                                <img class="hover-image" src="{{asset('theme/client/assets/images/product-image/7_2.jpg')}}"
+                                                    alt="Product" />
+                                            </a>
+                                            <span class="flags">
+                                                <span class="sale">Sale</span>
+                                            </span>
+                                            <a href="#" class="quickview" data-link-action="quickview"
+                                                title="Quick view" data-bs-toggle="modal"
+                                                data-bs-target="#ec_quickview_modal"><i class="fi-rr-eye"></i></a>
+                                            <div class="ec-pro-actions">
+                                                <a href="compare.html" class="ec-btn-group compare"
+                                                    title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                                <button title="Add To Cart" class="add-to-cart"><i
+                                                        class="fi-rr-shopping-basket"></i> Add To Cart</button>
+                                                <a class="ec-btn-group wishlist" title="Wishlist"><i
+                                                        class="fi-rr-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ec-pro-content">
+                                        <h5 class="ec-pro-title"><a href="product-left-sidebar.html">Full Sleeve
+                                                Shirt</a></h5>
+                                        <div class="ec-pro-rating">
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star"></i>
+                                        </div>
+                                        <span class="ec-price">
+                                            <span class="old-price">$12.00</span>
+                                            <span class="new-price">$10.00</span>
+                                        </span>
+                                        <div class="ec-pro-option">
+                                            <div class="ec-pro-color">
+                                                <span class="ec-pro-opt-label">Color</span>
+                                                <ul class="ec-opt-swatch ec-change-img">
+                                                    <li class="active"><a href="#" class="ec-opt-clr-img"
+                                                            data-src="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                                            data-src-hover="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                                            data-tooltip="Gray"><span
+                                                                style="background-color:#01f1f1;"></span></a></li>
+                                                    <li><a href="#" class="ec-opt-clr-img"
+                                                            data-src="{{asset('theme/client/assets/images/product-image/7_2.jpg')}}"
+                                                            data-src-hover="{{asset('theme/client/assets/images/product-image/7_2.jpg')}}"
+                                                            data-tooltip="Orange"><span
+                                                                style="background-color:#b89df8;"></span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="ec-pro-size">
+                                                <span class="ec-pro-opt-label">Size</span>
+                                                <ul class="ec-opt-size">
+                                                    <li class="active"><a href="#" class="ec-opt-sz"
+                                                            data-old="$12.00" data-new="$10.00"
+                                                            data-tooltip="Small">S</a></li>
+                                                    <li><a href="#" class="ec-opt-sz" data-old="$15.00"
+                                                            data-new="$12.00" data-tooltip="Medium">M</a></li>
+                                                    <li><a href="#" class="ec-opt-sz" data-old="$18.00"
+                                                            data-new="$15.00" data-tooltip="Large">X</a></li>
+                                                    <li><a href="#" class="ec-opt-sz" data-old="$20.00"
+                                                            data-new="$17.00" data-tooltip="Extra Large">XL</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content"
+                                data-animation="fadeIn">
+                                <div class="ec-product-inner">
+                                    <div class="ec-pro-image-outer">
+                                        <div class="ec-pro-image">
+                                            <a href="product-left-sidebar.html" class="image">
+                                                <img class="main-image" src="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                                    alt="Product" />
+                                                <img class="hover-image" src="{{asset('theme/client/assets/images/product-image/7_2.jpg')}}"
+                                                    alt="Product" />
+                                            </a>
+                                            <span class="flags">
+                                                <span class="sale">Sale</span>
+                                            </span>
+                                            <a href="#" class="quickview" data-link-action="quickview"
+                                                title="Quick view" data-bs-toggle="modal"
+                                                data-bs-target="#ec_quickview_modal"><i class="fi-rr-eye"></i></a>
+                                            <div class="ec-pro-actions">
+                                                <a href="compare.html" class="ec-btn-group compare"
+                                                    title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                                <button title="Add To Cart" class="add-to-cart"><i
+                                                        class="fi-rr-shopping-basket"></i> Add To Cart</button>
+                                                <a class="ec-btn-group wishlist" title="Wishlist"><i
+                                                        class="fi-rr-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ec-pro-content">
+                                        <h5 class="ec-pro-title"><a href="product-left-sidebar.html">Full Sleeve
+                                                Shirt</a></h5>
+                                        <div class="ec-pro-rating">
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star fill"></i>
+                                            <i class="ecicon eci-star"></i>
+                                        </div>
+                                        <span class="ec-price">
+                                            <span class="old-price">$12.00</span>
+                                            <span class="new-price">$10.00</span>
+                                        </span>
+                                        <div class="ec-pro-option">
+                                            <div class="ec-pro-color">
+                                                <span class="ec-pro-opt-label">Color</span>
+                                                <ul class="ec-opt-swatch ec-change-img">
+                                                    <li class="active"><a href="#" class="ec-opt-clr-img"
+                                                            data-src="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                                            data-src-hover="{{asset('theme/client/assets/images/product-image/7_1.jpg')}}"
+                                                            data-tooltip="Gray"><span
+                                                                style="background-color:#01f1f1;"></span></a></li>
+                                                    <li><a href="#" class="ec-opt-clr-img"
+                                                            data-src="{{asset('theme/client/assets/images/product-image/7_2.jpg')}}"
+                                                            data-src-hover="{{asset('theme/client/assets/images/product-image/7_2.jpg')}}"
+                                                            data-tooltip="Orange"><span
+                                                                style="background-color:#b89df8;"></span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="ec-pro-size">
+                                                <span class="ec-pro-opt-label">Size</span>
+                                                <ul class="ec-opt-size">
+                                                    <li class="active"><a href="#" class="ec-opt-sz"
+                                                            data-old="$12.00" data-new="$10.00"
+                                                            data-tooltip="Small">S</a></li>
+                                                    <li><a href="#" class="ec-opt-sz" data-old="$15.00"
+                                                            data-new="$12.00" data-tooltip="Medium">M</a></li>
+                                                    <li><a href="#" class="ec-opt-sz" data-old="$18.00"
+                                                            data-new="$15.00" data-tooltip="Large">X</a></li>
+                                                    <li><a href="#" class="ec-opt-sz" data-old="$20.00"
+                                                            data-new="$17.00" data-tooltip="Extra Large">XL</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content"
+                            data-animation="fadeIn">
+                            <div class="ec-product-inner">
+                                <div class="ec-pro-image-outer">
+                                    <div class="ec-pro-image">
+                                        <a href="product-left-sidebar.html" class="image">
+                                            <img class="main-image" src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                                alt="Product" />
+                                            <img class="hover-image" src="{{asset('theme/client/assets/images/product-image/6_2.jpg')}}"
+                                                alt="Product" />
+                                        </a>
+                                        <span class="percentage">20%</span>
+                                        <a href="#" class="quickview" data-link-action="quickview"
+                                            title="Quick view" data-bs-toggle="modal"
+                                            data-bs-target="#ec_quickview_modal"><i class="fi-rr-eye"></i></a>
+                                        <div class="ec-pro-actions">
+                                            <a href="compare.html" class="ec-btn-group compare"
+                                                title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                            <button title="Add To Cart" class="add-to-cart"><i
+                                                    class="fi-rr-shopping-basket"></i> Add To Cart</button>
+                                            <a class="ec-btn-group wishlist" title="Wishlist"><i
+                                                    class="fi-rr-heart"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ec-pro-content">
+                                    <h5 class="ec-pro-title"><a href="product-left-sidebar.html">Round Neck
+                                            T-Shirt</a></h5>
+                                    <div class="ec-pro-rating">
+                                        <i class="ecicon eci-star fill"></i>
+                                        <i class="ecicon eci-star fill"></i>
+                                        <i class="ecicon eci-star fill"></i>
+                                        <i class="ecicon eci-star fill"></i>
+                                        <i class="ecicon eci-star"></i>
+                                    </div>
+                                    <span class="ec-price">
+                                        <span class="old-price">$27.00</span>
+                                        <span class="new-price">$22.00</span>
+                                    </span>
+                                    <div class="ec-pro-option">
+                                        <div class="ec-pro-color">
+                                            <span class="ec-pro-opt-label">Color</span>
+                                            <ul class="ec-opt-swatch ec-change-img">
+                                                <li class="active"><a href="#" class="ec-opt-clr-img"
+                                                        data-src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                                        data-src-hover="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                                        data-tooltip="Gray"><span
+                                                            style="background-color:#e8c2ff;"></span></a></li>
+                                                <li><a href="#" class="ec-opt-clr-img"
+                                                        data-src="{{asset('theme/client/assets/images/product-image/6_2.jpg')}}"
+                                                        data-src-hover="{{asset('theme/client/assets/images/product-image/6_2.jpg')}}"
+                                                        data-tooltip="Orange"><span
+                                                            style="background-color:#9cfdd5;"></span></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="ec-pro-size">
+                                            <span class="ec-pro-opt-label">Size</span>
+                                            <ul class="ec-opt-size">
+                                                <li class="active"><a href="#" class="ec-opt-sz"
+                                                        data-old="$25.00" data-new="$20.00"
+                                                        data-tooltip="Small">S</a></li>
+                                                <li><a href="#" class="ec-opt-sz" data-old="$27.00"
+                                                        data-new="$22.00" data-tooltip="Medium">M</a></li>
+                                                <li><a href="#" class="ec-opt-sz" data-old="$30.00"
+                                                        data-new="$25.00" data-tooltip="Large">X</a></li>
+                                                <li><a href="#" class="ec-opt-sz" data-old="$35.00"
+                                                        data-new="$30.00" data-tooltip="Extra Large">XL</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content"
+                        data-animation="fadeIn">
+                        <div class="ec-product-inner">
+                            <div class="ec-pro-image-outer">
+                                <div class="ec-pro-image">
+                                    <a href="product-left-sidebar.html" class="image">
+                                        <img class="main-image" src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                            alt="Product" />
+                                        <img class="hover-image" src="{{asset('theme/client/assets/images/product-image/6_2.jpg')}}"
+                                            alt="Product" />
+                                    </a>
+                                    <span class="percentage">20%</span>
+                                    <a href="#" class="quickview" data-link-action="quickview"
+                                        title="Quick view" data-bs-toggle="modal"
+                                        data-bs-target="#ec_quickview_modal"><i class="fi-rr-eye"></i></a>
+                                    <div class="ec-pro-actions">
+                                        <a href="compare.html" class="ec-btn-group compare"
+                                            title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                        <button title="Add To Cart" class="add-to-cart"><i
+                                                class="fi-rr-shopping-basket"></i> Add To Cart</button>
+                                        <a class="ec-btn-group wishlist" title="Wishlist"><i
+                                                class="fi-rr-heart"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ec-pro-content">
+                                <h5 class="ec-pro-title"><a href="product-left-sidebar.html">Round Neck
+                                        T-Shirt</a></h5>
+                                <div class="ec-pro-rating">
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star"></i>
+                                </div>
+                                <span class="ec-price">
+                                    <span class="old-price">$27.00</span>
+                                    <span class="new-price">$22.00</span>
+                                </span>
+                                <div class="ec-pro-option">
+                                    <div class="ec-pro-color">
+                                        <span class="ec-pro-opt-label">Color</span>
+                                        <ul class="ec-opt-swatch ec-change-img">
+                                            <li class="active"><a href="#" class="ec-opt-clr-img"
+                                                    data-src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                                    data-src-hover="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}"
+                                                    data-tooltip="Gray"><span
+                                                        style="background-color:#e8c2ff;"></span></a></li>
+                                            <li><a href="#" class="ec-opt-clr-img"
+                                                    data-src="{{asset('theme/client/assets/images/product-image/6_2.jpg')}}"
+                                                    data-src-hover="{{asset('theme/client/assets/images/product-image/6_2.jpg')}}"
+                                                    data-tooltip="Orange"><span
+                                                        style="background-color:#9cfdd5;"></span></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="ec-pro-size">
+                                        <span class="ec-pro-opt-label">Size</span>
+                                        <ul class="ec-opt-size">
+                                            <li class="active"><a href="#" class="ec-opt-sz"
+                                                    data-old="$25.00" data-new="$20.00"
+                                                    data-tooltip="Small">S</a></li>
+                                            <li><a href="#" class="ec-opt-sz" data-old="$27.00"
+                                                    data-new="$22.00" data-tooltip="Medium">M</a></li>
+                                            <li><a href="#" class="ec-opt-sz" data-old="$30.00"
+                                                    data-new="$25.00" data-tooltip="Large">X</a></li>
+                                            <li><a href="#" class="ec-opt-sz" data-old="$35.00"
+                                                    data-new="$30.00" data-tooltip="Extra Large">XL</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    
+                </div>
+                
+        </div>
+    </div>
+</section>
+<!-- New Product end -->
     <!-- Ec Brand Section Start -->
     <section class="section ec-brand-area section-space-p">
         <h2 class="d-none">Brand</h2>
@@ -1379,5 +1885,6 @@
         </div>
     </section>
     <!-- Ec Brand Section End -->
+    
 
 @endsection
