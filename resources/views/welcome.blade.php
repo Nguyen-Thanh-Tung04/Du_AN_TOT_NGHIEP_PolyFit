@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('client.layouts.master')
 
 @section('content')
 <div class="ec-side-cart-overlay"></div>
@@ -564,16 +564,11 @@
                                                         alt="Product" />
                                                 </a>
                                                 <span class="percentage">20%</span>
-                                                <a href="#" class="quickview" data-link-action="quickview"
-                                                    title="Quick view" data-bs-toggle="modal"
-                                                    data-bs-target="#ec_quickview_modal"><i class="fi-rr-eye"></i></a>
                                                 <div class="ec-pro-actions">
-                                                    <a href="compare.html" class="ec-btn-group compare"
-                                                        title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                                   
                                                     <button title="Add To Cart" class="add-to-cart"><i
                                                             class="fi-rr-shopping-basket"></i> Add To Cart</button>
-                                                    <a class="ec-btn-group wishlist" title="Wishlist"><i
-                                                            class="fi-rr-heart"></i></a>
+                                                   
                                                 </div>
                                             </div>
                                         </div>

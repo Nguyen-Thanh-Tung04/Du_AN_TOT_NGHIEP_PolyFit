@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('client.layouts.master')
 @section('content')
 <div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
     <div class="container">

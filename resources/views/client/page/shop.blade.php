@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('client.layouts.master')
 @section('content')
 <section class="ec-page-content section-space-p">
     <div class="container">
