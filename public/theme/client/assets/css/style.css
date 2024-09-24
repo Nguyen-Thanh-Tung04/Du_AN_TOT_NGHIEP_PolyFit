@@ -31899,4 +31899,15 @@ input[type=email]:focus::-webkit-input-placeholder {
   font-size: 16px;
   color: #777;
 }
+
+.product-checkbox {
+  width: 17px;
+  height: 17px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.product-checkbox:checked {
+  background-color: #007bff;
+}
 /*# sourceMappingURL=style.css.map */

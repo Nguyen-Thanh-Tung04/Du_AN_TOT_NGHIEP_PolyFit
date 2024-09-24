@@ -25,3 +25,12 @@ Route::get('/shop', function () {
 Route::get('/history', function () {
     return view('client.page.history');
 });
+Route::get('/cart', function () {
+    return view('client.page.cart');
+})->name('cart');
+Route::get('/checkout', function () {
+    return view('client.page.checkout');
+})->name('checkout');
+Route::get('/order', function () {
+    return view('client.page.order');
+})->name('order');
