@@ -32,10 +32,9 @@
         <div class="ec-trackorder-content col-md-12">
             <div class="ec-trackorder-inner">
                 <div class="ec-trackorder-top">
-                    <h2 class="ec-order-id">order #6152</h2>
+                    <h2 class="ec-order-id">Mã Đơn Hàng #6152</h2>
                     <div class="ec-order-detail">
-                        <div>Expected arrival 14-02-2021-2022</div>
-                        <div>Grasshoppers <span>v534hb</span></div>
+                        <div>Dự kiến giao đến bạn ngày 14-02-2025</div>
                     </div>
                 </div>
                 <div class="ec-trackorder-bottom">
@@ -61,6 +60,74 @@
                     </div>
                 </div>
             </div>
+            <div style="background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px); background-position-x: -1.875rem;
+    background-size: 7.25rem .1875rem;
+    height: .1875rem;
+    width: 100%;
+    ">
+            </div>
+            <div class="ec-trackorder-inner" style="background: none;">
+                <h4>Địa chỉ nhận hàng</h4>
+                <div class="d-flex justify-content-between">
+                    <div class="pt-2 pb-2">
+                        <div class="fw-semibold">Hoàng Văn Dương</div>
+                        <div>(+84) 966771508</div>
+                        <div>
+                            Số 18 Hoàng Quốc Việt, Quận Cầu Giấy, Hà Nội
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary">Hủy đơn hàng</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="ec-trackorder-inner ">
+                <div class="col-12">
+                    <a href="link-den-san-pham.html" class="product-link">
+                        <div class="row align-items-center p-3">
+                            <div class="col-1">
+                                <img src="theme/client/assets/images/product-image/6_1.jpg" alt="Áo" class="img-fluid">
+                            </div>
+
+                            <div class="col-8">
+                                <h6>cotton Artsman áo thun dày dặn nam Cổ tròn ngắn mẫu rộng rãi</h6>
+                                <div class="text-muted">Phân loại hàng: <span>Đen, XL</span></div>
+                                <div class="text-muted">x1</div>
+                            </div>
+                            <div class="col-3 text-right">
+                                <del class="fs-6 fw-light text-dark" style="text-decoration-thickness: 1px;">₫239.000</del>
+
+                                <span class="fs-6 fw-medium text-primary">₫139.000</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="row border-bottom border-top">
+                        <div class="col-8 text-end border-end p-2">Tổng tiền hàng</div>
+                        <div class="col-4 text-end p-2">₫139.000</div>
+                    </div>
+
+                    <div class="row border-bottom">
+                        <div class="col-8 text-end border-end p-2">Phí vận chuyển</div>
+                        <div class="col-4 text-end p-2">₫15.000</div>
+                    </div>
+                    <div class="row border-bottom">
+                        <div class="col-8 text-end border-end p-2">Voucher từ Shop</div>
+                        <div class="col-4 text-end p-2">-₫69.500</div>
+                    </div>
+
+                    <div class="row border-bottom">
+                        <div class="col-8 text-end fw-bold border-end p-2">Thành tiền</div>
+                        <div class="col-4 text-end text-primary fw-bold p-2">₫69.500</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8 text-end border-end p-2">Phương thức thanh toán</div>
+                        <div class="col-4 text-end p-2">Thanh toán khi nhận hàng</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <!-- Track Order Content end -->
     </div>

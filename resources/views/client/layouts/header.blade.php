@@ -196,8 +196,8 @@
                     <!-- Ec Header Logo Start -->
                     <div class="col">
                         <div class="header-logo">
-                            <a href="index.html"><img src="assets/images/logo/logo.png" alt="Site Logo" /><img
-                                    class="dark-logo" src="assets/images/logo/dark-logo.png" alt="Site Logo"
+                            <a href="index.html"><img src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo" /><img
+                                    class="dark-logo" src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo"
                                     style="display: none;" /></a>
                         </div>
                     </div>
@@ -222,9 +222,6 @@
                 <div class="row">
                     <div class="col-md-12 align-self-center">
                         <div class="ec-main-menu">
-                            <a href="javascript:void(0)" class="ec-header-btn ec-sidebar-toggle">
-                                <i class="fi fi-rr-apps"></i>
-                            </a>
                             <ul>
                                 <li><a href="{{ url('/') }}">Trang chủ</a></li>
                                 <li><a href="{{ url('/about') }}">Giới thiệu</a></li>

@@ -127,34 +127,34 @@
                     <!-- Sidebar Summary Block -->
                     <div class="ec-sidebar-block">
                         <div class="ec-sb-title">
-                            <h3 class="ec-sidebar-title">Summary</h3>
+                            <h3 class="ec-sidebar-title">Chi tiết</h3>
                         </div>
                         <div class="ec-sb-block-content">
                             <div class="ec-checkout-summary">
                                 <div>
-                                    <span class="text-left">Sub-Total</span>
-                                    <span class="text-right">$80.00</span>
+                                    <span class="text-left">Tổng tiền hàng</span>
+                                    <span class="text-right">₫80.000</span>
                                 </div>
                                 <div>
-                                    <span class="text-left">Delivery Charges</span>
-                                    <span class="text-right">$80.00</span>
+                                    <span class="text-left">Phí vận chuyển</span>
+                                    <span class="text-right">₫80.000</span>
                                 </div>
                                 <div>
-                                    <span class="text-left">Coupan Discount</span>
-                                    <span class="text-right"><a class="ec-checkout-coupan">Apply Coupan</a></span>
+                                    <span class="text-left">Voucher</span>
+                                    <span class="text-right"><a class="ec-checkout-coupan">Sử dụng Voucher</a></span>
                                 </div>
                                 <div class="ec-checkout-coupan-content">
                                     <form class="ec-checkout-coupan-form" name="ec-checkout-coupan-form"
                                         method="post" action="#">
                                         <input class="ec-coupan" type="text" required=""
-                                            placeholder="Enter Your Coupan Code" name="ec-coupan" value="">
+                                            placeholder="Nhập Voucher" name="ec-coupan" value="">
                                         <button class="ec-coupan-btn button btn-primary" type="submit"
-                                            name="subscribe" value="">Apply</button>
+                                            name="subscribe" value="">Ok</button>
                                     </form>
                                 </div>
                                 <div class="ec-checkout-summary-total">
-                                    <span class="text-left">Total Amount</span>
-                                    <span class="text-right">$80.00</span>
+                                    <span class="text-left">Tổng thanh toán</span>
+                                    <span class="text-right">₫80.000</span>
                                 </div>
                             </div>
                             <div class="ec-checkout-pro">
@@ -164,10 +164,7 @@
                                             <div class="ec-pro-image">
                                                 <a href="product-left-sidebar.html" class="image">
                                                     <img class="main-image"
-                                                        src="theme/client/assets/images/product-image/1_1.jpg"
-                                                        alt="Product" />
-                                                    <img class="hover-image"
-                                                        src="theme/client/assets/images/product-image/1_2.jpg"
+                                                        src="theme/client/assets/images/product-image/6_1.jpg"
                                                         alt="Product" />
                                                 </a>
                                             </div>
@@ -182,53 +179,12 @@
                                                 <i class="ecicon eci-star"></i>
                                             </div>
                                             <span class="ec-price">
-                                                <span class="old-price">$95.00</span>
-                                                <span class="new-price">$79.00</span>
+                                                <span class="old-price">₫95.000</span>
+                                                <span class="new-price">₫79.000</span>
                                             </span>
                                             <div class="ec-pro-option">
                                                 <div class="ec-pro-color">
-                                                    <span class="ec-pro-opt-label">Color</span>
-                                                    <ul class="ec-opt-swatch ec-change-img">
-                                                        <li class="active"><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/1_1.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/1_1.jpg"
-                                                                data-tooltip="Gray"><span
-                                                                    style="background-color:#6d4c36;"></span></a>
-                                                        </li>
-                                                        <li><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/1_2.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/1_2.jpg"
-                                                                data-tooltip="Orange"><span
-                                                                    style="background-color:#ffb0e1;"></span></a>
-                                                        </li>
-                                                        <li><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/1_3.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/1_3.jpg"
-                                                                data-tooltip="Green"><span
-                                                                    style="background-color:#8beeff;"></span></a>
-                                                        </li>
-                                                        <li><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/1_4.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/1_4.jpg"
-                                                                data-tooltip="Sky Blue"><span
-                                                                    style="background-color:#74f8d1;"></span></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="ec-pro-size">
-                                                    <span class="ec-pro-opt-label">Size</span>
-                                                    <ul class="ec-opt-size">
-                                                        <li class="active"><a href="#" class="ec-opt-sz"
-                                                                data-old="$95.00" data-new="$79.00"
-                                                                data-tooltip="Small">S</a></li>
-                                                        <li><a href="#" class="ec-opt-sz" data-old="$90.00"
-                                                                data-new="$70.00" data-tooltip="Medium">M</a></li>
-                                                        <li><a href="#" class="ec-opt-sz" data-old="$80.00"
-                                                                data-new="$60.00" data-tooltip="Large">X</a></li>
-                                                        <li><a href="#" class="ec-opt-sz" data-old="$70.00"
-                                                                data-new="$50.00" data-tooltip="Extra Large">XL</a>
-                                                        </li>
-                                                    </ul>
+                                                    Phân loại: Xanh, XL
                                                 </div>
                                             </div>
                                         </div>
@@ -240,10 +196,7 @@
                                             <div class="ec-pro-image">
                                                 <a href="product-left-sidebar.html" class="image">
                                                     <img class="main-image"
-                                                        src="theme/client/assets/images/product-image/8_1.jpg"
-                                                        alt="Product" />
-                                                    <img class="hover-image"
-                                                        src="theme/client/assets/images/product-image/8_2.jpg"
+                                                        src="theme/client/assets/images/product-image/7_1.jpg"
                                                         alt="Product" />
                                                 </a>
                                             </div>
@@ -258,47 +211,12 @@
                                                 <i class="ecicon eci-star"></i>
                                             </div>
                                             <span class="ec-price">
-                                                <span class="old-price">$58.00</span>
-                                                <span class="new-price">$45.00</span>
+                                                <span class="old-price">₫58.000</span>
+                                                <span class="new-price">₫45.000</span>
                                             </span>
                                             <div class="ec-pro-option">
                                                 <div class="ec-pro-color">
-                                                    <span class="ec-pro-opt-label">Color</span>
-                                                    <ul class="ec-opt-swatch ec-change-img">
-                                                        <li class="active"><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/8_2.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/8_2.jpg"
-                                                                data-tooltip="Gray"><span
-                                                                    style="background-color:#f3f3f3;"></span></a>
-                                                        </li>
-                                                        <li><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/8_3.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/8_3.jpg"
-                                                                data-tooltip="Orange"><span
-                                                                    style="background-color:#fac7f3;"></span></a>
-                                                        </li>
-                                                        <li><a href="#" class="ec-opt-clr-img"
-                                                                data-src="theme/client/assets/images/product-image/8_4.jpg"
-                                                                data-src-hover="theme/client/assets/images/product-image/8_4.jpg"
-                                                                data-tooltip="Green"><span
-                                                                    style="background-color:#c5f1ff;"></span></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="ec-pro-size">
-                                                    <span class="ec-pro-opt-label">Size</span>
-                                                    <ul class="ec-opt-size">
-                                                        <li class="active"><a href="#" class="ec-opt-sz"
-                                                                data-old="$48.00" data-new="$45.00"
-                                                                data-tooltip="Small">S</a></li>
-                                                        <li><a href="#" class="ec-opt-sz" data-old="$90.00"
-                                                                data-new="$70.00" data-tooltip="Medium">M</a></li>
-                                                        <li><a href="#" class="ec-opt-sz" data-old="$80.00"
-                                                                data-new="$60.00" data-tooltip="Large">X</a></li>
-                                                        <li><a href="#" class="ec-opt-sz" data-old="$70.00"
-                                                                data-new="$50.00" data-tooltip="Extra Large">XL</a>
-                                                        </li>
-                                                    </ul>
+                                                    Phân loại: Xanh, XL
                                                 </div>
                                             </div>
                                         </div>
@@ -324,12 +242,12 @@
                                         <span>
                                             <span class="ec-del-opt-head">Free Shipping</span>
                                             <input type="radio" id="del1" name="radio-group" checked>
-                                            <label for="del1">Rate - $0 .00</label>
+                                            <label for="del1">Rate - ₫0 .000</label>
                                         </span>
                                         <span>
                                             <span class="ec-del-opt-head">Flat Rate</span>
                                             <input type="radio" id="del2" name="radio-group">
-                                            <label for="del2">Rate - $5.00</label>
+                                            <label for="del2">Rate - ₫5.00<0 /label>
                                         </span>
                                     </span>
                                     <span class="ec-del-commemt">
