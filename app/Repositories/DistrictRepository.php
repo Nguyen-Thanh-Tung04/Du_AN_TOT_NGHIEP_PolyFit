@@ -32,14 +32,4 @@ class DistrictRepository implements DistrictRepositoryInterface
     ) {
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
-
-    public function create(array $payload = []) {
-        $model = $this->model->create($payload);
-        return $model->fresh();
-    }
-
-    public function update(int $id = 0, array $payload = []) {
-        $model = $this->findById($id);
-        return $model->update($payload);
-    }
 }
