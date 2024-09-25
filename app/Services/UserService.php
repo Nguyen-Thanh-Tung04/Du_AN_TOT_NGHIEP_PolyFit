@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
-// use App\Services\Interfaces\UserServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +31,7 @@ class UserService
             'address',
             'publish',
             'user_catalogue_id',
-        ], $condition, [], ['path' => 'user/index'], $perPage);
+        ], $condition, $perPage);
         return $users;
     }
 
@@ -44,7 +43,6 @@ class UserService
                 $payload['birthday'] = $this->convertBirthdayDate($payload['birthday']);
             }
             $payload['password'] = Hash::make($payload['password']);
-            
             $user = $this->userRepository->create($payload);
             DB::commit();
             return true;

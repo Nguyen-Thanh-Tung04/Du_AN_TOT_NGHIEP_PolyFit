@@ -12,43 +12,34 @@ use Faker\Provider\Base;
  */
 class UserRepository implements UserRepositoryInterface
 {
-    protected $model;
-
-    public function __construct(User $model) {
-        $this->model = $model;
-    }
 
     public function pagination(
         array $column = ['*'], 
         array $condition = [],
-        array $join = [],
-        array $extend = [],
         int $perpage = 1,
-        array $relations = [],
     ) {
-        $query = $this->model->select($column)->where(function($query) use ($condition) {
-            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $query->where('name', 'LIKE', '%'.$condition['keyword'].'%')
-                ->orWhere('email', 'LIKE', '%'.$condition['keyword'].'%')
-                ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
-                ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
-            }
-            if (isset($condition['publish']) && $condition['publish'] == 1) {
-                $query->where('publish', '=', '1');
-            } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
-                $query->where('publish', '=', '2');
-            }
-            return $query;
-        })->with('user_catalogues');
-        if(!empty($join)) {
-            $query->join(...$join);
-        }
+        $query = User::select($column)
+            ->where(function($query) use ($condition) {
+                if (isset($condition['keyword']) && !empty($condition['keyword'])) {
+                    $query->where('name', 'LIKE', '%'.$condition['keyword'].'%')
+                    ->orWhere('email', 'LIKE', '%'.$condition['keyword'].'%')
+                    ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
+                    ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
+                }
+                if (isset($condition['publish']) && $condition['publish'] == 1) {
+                    $query->where('publish', '=', '1');
+                } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
+                    $query->where('publish', '=', '2');
+                }
+                return $query;
+            })->with('user_catalogues');
+
         return $query->paginate($perpage)
-                    ->withQueryString()->withPath(env('APP_URL').$extend['path']);
+                    ->withQueryString();
     }
 
     public function create(array $payload = []) {
-        $model = $this->model->create($payload);
+        $model = User::create($payload);
         return $model->fresh();
     }
 
@@ -62,27 +53,23 @@ class UserRepository implements UserRepositoryInterface
         array $whereIn = [],
         array $payload = [],
     ) {
-        return $this->model->whereIn($whereInField, $whereIn)->update($payload);
+        return User::whereIn($whereInField, $whereIn)->update($payload);
     }
 
     public function delete(int $id = 0) {
         return $this->findById($id)->delete();
     }
 
-    public function forceDelete(int $id = 0) {
-        return $this->findById($id)->forceDelete();
-    }
+    // public function forceDelete(int $id = 0) {
+    //     return $this->findById($id)->forceDelete();
+    // }
 
     public function all() {
-        return $this->model->all();
+        return User::all();
     }
 
-    public function findById(
-        int $modelId,
-        array $column = ['*'],
-        array $relation = []
-    ) {
-        return $this->model->select($column)->with($relation)->findOrFail($modelId);
+    public function findById($id) {
+        return User::findOrFail($id);
     }
 
 }

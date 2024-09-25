@@ -11,7 +11,7 @@ use App\Services\UserService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 
-class UserController extends Controller
+class UserController
 {
     protected $userService;
     protected $provinceRepository;
