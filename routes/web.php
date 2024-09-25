@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-    return view('admin.auth.login');
+    return view('welcome');
 });
 Route::get('/about', function () {
     return view('client.page.about');
@@ -34,8 +34,12 @@ Route::get('/shop', function () {
     return view('client.page.shop');
 });
 Route::get('/history', function () {
-    return view('page.history');
+    return view('client.page.history');
 });
+Route::get('/product_detail', function () {
+    return view('client.page.product-detail');
+});
+
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
