@@ -28,32 +28,13 @@
     <div class="container">
         <div class="row">
             <!-- Sidebar Area Start -->
-            <div class="ec-shop-leftside ec-vendor-sidebar col-lg-3 col-md-12">
-                <div class="ec-sidebar-wrap ec-border-box">
-                    <!-- Sidebar Category Block -->
-                    <div class="ec-sidebar-block">
-                        <div class="ec-vendor-block">
-                            <div class="ec-vendor-block-items">
-                                <ul>
-                                    <li><a href="user-profile.html">User Profile</a></li>
-                                    <li><a href="user-history.html">History</a></li>
-                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                    <li><a href="cart.html">Cart</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="track-order.html">Track Order</a></li>
-                                    <li><a href="user-invoice.html">Invoice</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ec-shop-rightside col-lg-9 col-md-12">
+           
+            <div class="ec-shop-rightside">
                 <div class="ec-vendor-dashboard-card">
                     <div class="ec-vendor-card-header">
                         <h5>Product History</h5>
                         <div class="ec-header-btn">
-                            <a class="btn btn-lg btn-primary" href="#">Shop Now</a>
+                            <a class="btn btn-lg btn-primary" href="{{ url('/shop') }}">Shop Now</a>
                         </div>
                     </div>
                     <div class="ec-vendor-card-body">
