@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserCatalogue;
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface;
 use Faker\Provider\Base;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class UserCatalogueRepository
@@ -13,56 +14,40 @@ use Faker\Provider\Base;
  */
 class UserCatalogueRepository implements UserCatalogueRepositoryInterface
 {
-    protected $model;
-
-    public function __construct(UserCatalogue $model) {
-        $this->model = $model;
-    }
-
     public function pagination(
         array $column = ['*'], 
         array $condition = [],
-        array $join = [],
-        array $extend = [],
         int $perpage = 1,
-        array $relations = [],
     ) {
-        $query = $this->model->select($column)->where(function($query) use ($condition) {
-            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $query->where('name', 'LIKE', '%'.$condition['keyword'].'%')
-                ->orWhere('email', 'LIKE', '%'.$condition['keyword'].'%')
-                ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
-                ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
-            }
-            if (isset($condition['publish']) && $condition['publish'] == 1) {
-                $query->where('publish', '=', '1');
-            } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
-                $query->where('publish', '=', '2');
-            }
-            return $query;
-        });
-        
-        if (isset($relations) && !empty($relations)) {
-            foreach($relations as $relation) {
-                $query->withCount($relation);
-            }
-        }
+        $query = UserCatalogue::select($column)
+            ->withCount('users')
+            ->where(function($query) use ($condition) {
+                if (isset($condition['keyword']) && !empty($condition['keyword'])) {
+                    $query->where('name', 'LIKE', '%'.$condition['keyword'].'%')
+                    ->orWhere('email', 'LIKE', '%'.$condition['keyword'].'%')
+                    ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
+                    ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
+                }
+                if (isset($condition['publish']) && $condition['publish'] == 1) {
+                    $query->where('publish', '=', '1');
+                } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
+                    $query->where('publish', '=', '2');
+                }
+                return $query;
+            });
 
-        if(!empty($join)) {
-            $query->join(...$join);
-        }
         return $query->paginate($perpage)
-                    ->withQueryString()->withPath(env('APP_URL').$extend['path']);
+                    ->withQueryString();
     }
 
     public function create(array $payload = []) {
-        $model = $this->model->create($payload);
-        return $model->fresh();
+        return UserCatalogue::create($payload);
     }
 
     public function update(int $id = 0, array $payload = []) {
-        $model = $this->findById($id);
-        return $model->update($payload);
+        $userCatalogue = UserCatalogue::findOrFail($id);
+        $userCatalogue->update($payload);
+        return $userCatalogue;
     }
 
     public function updateByWhereIn(
@@ -70,27 +55,24 @@ class UserCatalogueRepository implements UserCatalogueRepositoryInterface
         array $whereIn = [],
         array $payload = [],
     ) {
-        return $this->model->whereIn($whereInField, $whereIn)->update($payload);
+        return UserCatalogue::whereIn($whereInField, $whereIn)->update($payload);
     }
 
     public function delete(int $id = 0) {
-        return $this->findById($id)->delete();
+        $userCatalogue = UserCatalogue::findOrFail($id);
+        return $userCatalogue->delete();
     }
 
-    public function forceDelete(int $id = 0) {
-        return $this->findById($id)->forceDelete();
-    }
+    // public function forceDelete(int $id = 0) {
+    //     return $this->findById($id)->forceDelete();
+    // }
 
     public function all() {
-        return $this->model->all();
+        return UserCatalogue::all();
     }
 
-    public function findById(
-        int $modelId,
-        array $column = ['*'],
-        array $relation = []
-    ) {
-        return $this->model->select($column)->with($relation)->findOrFail($modelId);
+    public function findById(int $id) {
+        return UserCatalogue::findOrFail($id);
     }
 
 }

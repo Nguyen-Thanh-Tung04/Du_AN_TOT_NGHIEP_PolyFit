@@ -16,10 +16,7 @@ interface UserCatalogueRepositoryInterface
     public function pagination(
         array $column = ['*'], 
         array $condition = [],
-        array $join = [],
-        array $extend = [],
         int $perpage = 1,
-        array $relations = [],
     );
     public function updateByWhereIn(
         string $whereInField = '',
