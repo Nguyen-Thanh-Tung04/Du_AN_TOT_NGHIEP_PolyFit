@@ -29,12 +29,14 @@ class UserCatalogueService
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
         $perPage = $request->integer('perpage');
+
         $userCatalogues = $this->userCatalogueRepository->pagination([
             'id',
             'name',
             'description',
             'publish',
-        ], $condition, [], ['path' => 'user/catalogue/index'], $perPage, ['users']);
+        ], $condition, $perPage);
+        
         return $userCatalogues;
     }
 
@@ -137,13 +139,6 @@ class UserCatalogueService
             echo $e->getMessage();die();
             return false;
         }
-    }
-
-    private function convertBirthdayDate($birthday = '') {
-        $formatBirthday = Carbon::createFromFormat('Y-m-d', $birthday);
-        $birthday = $formatBirthday->format('Y-m-d H:i:s');
-
-        return $birthday;
     }
 
     

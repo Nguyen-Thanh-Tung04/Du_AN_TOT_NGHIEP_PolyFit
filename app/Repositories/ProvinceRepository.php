@@ -28,11 +28,6 @@ class ProvinceRepository implements ProvinceRepositoryInterface
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
-    public function create(array $payload = []) {
-        $model = $this->model->create($payload);
-        return $model->fresh();
-    }
-
 
 
 }

@@ -11,7 +11,7 @@ use App\Services\UserCatalogueService;
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 use Illuminate\Http\Request;
 
-class UserCatalogueController extends Controller
+class UserCatalogueController
 {
     protected $userCatalogueService;
     protected $userCatalogueRepository;
@@ -66,7 +66,7 @@ class UserCatalogueController extends Controller
     public function edit($id) {
         $userCatalogue = $this->userCatalogueRepository->findById($id);
 
-        $template = 'admin.user.catalogue.edit';
+        $template = 'admin.user.catalogue.update';
         $config = [
             'js' => [
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
