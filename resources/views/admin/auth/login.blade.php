@@ -40,12 +40,12 @@
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
-                    
+                    <h2 class="text-center">Đăng Nhập</h2>
                     <form class="m-t" action="{{ route('auth.logined') }}" method="post">
                         @csrf
                         <div class="form-group">
-                            <input type="text" 
-                            class="form-control" 
+                            <input type="text"
+                            class="form-control"
                             name="email"
                             value="{{ old('email') }}"
                             placeholder="Email">
@@ -54,20 +54,25 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <input type="password" 
-                            class="form-control" 
+                            <input type="password"
+                            class="form-control"
                             name="password"
                             placeholder="Password">
                             @error('password')
                                 <span class="error-message">* {{ $message }}</span>
                             @enderror
                         </div>
-                        <button type="submit" 
-                        class="btn btn-primary block full-width m-b">Login</button>
+                        <button type="submit"
+                        class="btn btn-primary block full-width m-b">Đăng Nhập</button>
 
                         <a href="#">
-                            <small>Forgot password?</small>
+                            <small>Quên mật khẩu?</small>
                         </a>
+
+                        <p class="text-muted text-center">
+                            <small>Bạn có muốn tạo tài khoản?</small>
+                        </p>
+                        <a class="btn btn-sm btn-white btn-block" href="{{ route('auth.register') }}">Đăng Ký</a>
                     </form>
                     <p class="m-t">
                         <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small>
