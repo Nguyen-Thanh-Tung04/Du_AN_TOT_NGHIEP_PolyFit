@@ -69,6 +69,9 @@ Route::get('login', [AuthController::class, 'index'])
 Route::post('logined', [AuthController::class, 'logined'])
 ->name('auth.logined');
 
+Route::get('register', [AuthController::class, 'showFormRegister']);
+Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 // AJAX
