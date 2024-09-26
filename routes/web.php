@@ -39,6 +39,15 @@ Route::get('/history', function () {
 Route::get('/product_detail', function () {
     return view('client.page.product-detail');
 });
+Route::get('/cart', function () {
+    return view('client.page.cart');
+})->name('cart');
+Route::get('/checkout', function () {
+    return view('client.page.checkout');
+})->name('checkout');
+Route::get('/order', function () {
+    return view('client.page.order');
+})->name('order');
 
 
 // BACKEND ROUTES
