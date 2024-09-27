@@ -5,8 +5,8 @@
             <th>
                 <input type="checkbox" value="" id="checkAll" class="input-checkbox">
             </th>
-            <th>Tên nhóm thành viên</th>
-            <th class="text-center">Số thành viên</th>
+            <th>Tên vai trò</th>
+            <th class="text-center">Số người</th>
             <th class="text-center">Mô tả</th>
             <th class="text-center">Tình Trạng</th>
             <th class="text-center">Thao Tác</th>

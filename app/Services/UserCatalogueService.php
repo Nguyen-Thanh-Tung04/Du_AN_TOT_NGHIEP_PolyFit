@@ -35,7 +35,7 @@ class UserCatalogueService
             'name',
             'description',
             'publish',
-        ], $condition, $perPage);
+        ], $condition, $perPage, ['path' => 'user/index']);
         
         return $userCatalogues;
     }

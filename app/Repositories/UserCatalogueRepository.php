@@ -18,6 +18,7 @@ class UserCatalogueRepository implements UserCatalogueRepositoryInterface
         array $column = ['*'], 
         array $condition = [],
         int $perpage = 1,
+        array $extend = [],
     ) {
         $query = UserCatalogue::select($column)
             ->withCount('users')
@@ -36,8 +37,8 @@ class UserCatalogueRepository implements UserCatalogueRepositoryInterface
                 return $query;
             });
 
-        return $query->paginate($perpage)
-                    ->withQueryString();
+            return $query->paginate($perpage)
+            ->withQueryString()->withPath(config('app.url').$extend['path']);
     }
 
     public function create(array $payload = []) {

@@ -10,7 +10,7 @@
             <th>Email</th>
             <th>Số Điện Thoại</th>
             <th>Địa Chỉ</th>
-            <th>Nhóm thành viên</th>
+            <th>Vai trò</th>
             <th class="text-center">Tình Trạng</th>
             <th class="text-center">Thao Tác</th>
         </tr>
