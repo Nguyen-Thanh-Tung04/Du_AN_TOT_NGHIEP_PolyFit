@@ -3,28 +3,28 @@
 return [
     'module' => [
         [
-            'title' => 'QL Thành Viên',
+            'title' => 'QL Người dùng',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [
                 [
-                    'title' => 'QL Chức Vụ',
+                    'title' => 'QL Vai Trò',
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL Thành Viên',
+                    'title' => 'QL Người dùng',
                     'route' => 'user/index',
                 ],
             ],
         ],
         [
-            'title' => 'Cấu hình chung',
+            'title' => 'QL Danh Mục',
             'icon' => 'fa fa-cog',
-            'name' => ['language'],
+            'name' => ['category'],
             'subModule' => [
                 [
-                    'title' => 'QL Ngôn Ngữ',
-                    'route' => 'language/index',
+                    'title' => 'QL Danh Mục',
+                    'route' => 'category/index',
                 ]
             ],
         ],

@@ -17,6 +17,7 @@ interface UserCatalogueRepositoryInterface
         array $column = ['*'], 
         array $condition = [],
         int $perpage = 1,
+        array $extend = [],
     );
     public function updateByWhereIn(
         string $whereInField = '',

@@ -31,7 +31,7 @@ class UserService
             'address',
             'publish',
             'user_catalogue_id',
-        ], $condition, $perPage);
+        ], $condition, $perPage, ['path' => 'user/index']);
         return $users;
     }
 
