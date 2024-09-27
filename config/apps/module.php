@@ -18,16 +18,10 @@ return [
             ],
         ],
         [
-            'title' => 'QL Danh Mục',
-            'icon' => 'fa fa-cog',
+            'title' => 'QL Danh mục',
+            'icon' => 'fa fa-sitemap',
             'name' => ['category'],
-            'subModule' => [
-                [
-                    'title' => 'QL Danh Mục',
-                    'route' => 'category/index',
-                ]
-            ],
-        ],
-        
+            'route' => 'categories/index',
+        ]
     ],
 ];

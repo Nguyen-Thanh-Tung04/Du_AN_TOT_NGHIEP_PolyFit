@@ -3,35 +3,34 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category;
 use Illuminate\Http\Request;
-
 use App\Services\CategoryService;
-use App\Repositories\CategoryRepository;
 
-class CategoryController
+class CategoryController extends Controller
 {
     protected $categoryService;
-    protected $categoryRepository;
 
-    public function __construct(
-        CategoryService $categoryService, 
-        CategoryRepository $categoryRepository,
-    ) {
+    public function __construct(CategoryService $categoryService)
+    {
         $this->categoryService = $categoryService;
-        $this->categoryRepository = $categoryRepository;
     }
 
-    // Điều hướng, hiển thị trong view, Request để bắn thông tin sang CategoryService
-    public function index(Request $request) {
-        // $categories = $this->categoryService->paginate($request);
-
-        return view('admin.category.index');
-    }
-
-    public function create() {
-        return view('admin.category.store');
+    public function index(Request $request)
+    {
+        $categories = $this->categoryService->paginate($request);
+        $config = [
+            'js' => [
+                'admin/js/plugins/switchery/switchery.js',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+            ],
+            'css' => [
+                'admin/css/plugins/switchery/switchery.css',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+            ]
+        ];
+        $config['seo'] = config('apps.category');
+        $template = 'admin.categories.index';
+        return view('admin.dashboard.layout', compact('template', 'config', 'categories'));
     }
 }
+?>

@@ -2,29 +2,38 @@
 
 namespace App\Services;
 
-use App\Repositories\CategoryRepository;
+use App\Repositories\Interfaces\CategoryInterface as CategoryRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Class CategoryService
- * @package App\Services
+ * Class CategoryService.
  */
 class CategoryService
 {
-    protected $categoryRepository;
+    protected $CategoryRepository;
 
-    public function __construct(CategoryRepository $categoryRepository) {
-        $this->categoryRepository = $categoryRepository;
+    public function __construct(
+        CategoryRepository $CategoryRepository
+    ) {
+        $this->CategoryRepository = $CategoryRepository;
     }
+    public function paginate($request)
+    {
 
-    // Nhận thông tin request bên controller, dd($request) để xem, truyền tham số thứ nhất vào pagination() là 3 trường trong db
-    public function paginate($request) {
-        $categories = $this->categoryRepository->pagination([
+        $condition['keyword'] = addslashes($request->input('keyword'));
+        $condition['publish'] = $request->integer('publish');
+        $perPage = $request->integer('perpage');
+
+        $CategoryRepository = $this->CategoryRepository->pagination([
             'id',
+            'code',
             'name',
-            'publish',
-        ]);
-        return $categories;
+            'image',
+            'is_active'
+        ], $condition, $perPage);
+
+        return $CategoryRepository;
     }
 }
