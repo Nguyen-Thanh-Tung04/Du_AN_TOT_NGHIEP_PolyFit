@@ -3,6 +3,7 @@
 
 <head>
     @include('admin.dashboard.component.head')
+    @yield('css')
 </head>
 
 <body>
@@ -18,5 +19,6 @@
 
     <!-- Mainly scripts -->
     @include('admin.dashboard.component.script')
+    @yield('js')
 </body>
 </html>

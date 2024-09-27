@@ -40,6 +40,12 @@ class DashboardController extends Controller
                 'admin/js/plugins/easypiechart/jquery.easypiechart.js',
                 'admin/js/plugins/sparkline/jquery.sparkline.min.js',
                 'admin/js/demo/sparkline-demo.js',
+            ],
+            'css' => [
+                'admin/css/animate.css',
+                'admin/css/style.css',
+                'admin/css/customize.css',
+                'admin/js/jquery-3.1.1.min.js',
             ]
         ];
     }

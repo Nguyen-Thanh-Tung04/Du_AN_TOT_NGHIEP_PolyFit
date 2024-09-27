@@ -1,5 +1,11 @@
 @extends('admin.layout')
 
+@section('css')
+    <link href="admin/css/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="admin/css/customize.css" rel="stylesheet">
+@endsection
+
 @section('content')
 
     <div class="row wrapper border-bottom white-bg page-heading">
@@ -152,4 +158,8 @@
         
     </div>
     
+@endsection
+@section('js')
+    <script src="admin/js/plugins/switchery/switchery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endsection
