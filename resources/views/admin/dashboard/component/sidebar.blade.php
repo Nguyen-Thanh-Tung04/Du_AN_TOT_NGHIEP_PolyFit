@@ -23,22 +23,24 @@
                     IN+
                 </div>
             </li>
-            @foreach (config('apps.module.module') as $key => $val)
-                <li class="{{ (in_array($segment, $val['name'])) ? 'active' : '' }}">
-                    <a href="index.html"><i class="{{ $val['icon'] }}"></i> 
-                        <span class="nav-label">{{ $val['title'] }}</span> 
-                        <span class="fa arrow"></span></a>
-                    @if ($val['subModule'])
-                        @foreach ($val['subModule'] as $module)
-                        <ul class="nav nav-second-level">
-                            <li><a href="{{ $module['route'] }}">{{ $module['title'] }}</a></li>
-                        </ul>
-                        @endforeach
-                    @endif
-                </li>
-            @endforeach
-
-
+                @foreach (config('apps.module.module') as $val)
+                    <li class="{{ (in_array($segment, $val['name'])) ? 'active' : '' }}">
+                        <a @if(isset($val['subModule'])) href="#" @else href="{{ $val['route'] }}" @endif>
+                            <i class="{{ $val['icon'] }}"></i> 
+                            <span class="nav-label">{{ $val['title'] }}</span> 
+                            @if (isset($val['subModule']) && count($val['subModule']) > 0)
+                                <span class="fa arrow"></span>
+                            @endif
+                        </a>
+                        @if (isset($val['subModule']) && count($val['subModule']) > 0)
+                            <ul class="nav nav-second-level">
+                                @foreach ($val['subModule'] as $module)
+                                    <li><a href="{{ $module['route'] }}">{{ $module['title'] }}</a></li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
         </ul>
 
     </div>

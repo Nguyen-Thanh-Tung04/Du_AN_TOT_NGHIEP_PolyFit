@@ -18,6 +18,12 @@ return [
             ],
         ],
         [
+            'title' => 'QL Danh mục',
+            'icon' => 'fa fa-sitemap',
+            'name' => ['category'],
+            'route' => 'categories/index',
+        ],
+        [
             'title' => 'Cấu hình chung',
             'icon' => 'fa fa-cog',
             'name' => ['language'],
@@ -28,6 +34,6 @@ return [
                 ]
             ],
         ],
-        
+
     ],
 ];
