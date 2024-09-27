@@ -22,18 +22,6 @@ return [
             'icon' => 'fa fa-sitemap',
             'name' => ['category'],
             'route' => 'categories/index',
-        ],
-        [
-            'title' => 'QL Danh Mục',
-            'icon' => 'fa fa-cog',
-            'name' => ['category'],
-            'subModule' => [
-                [
-                    'title' => 'QL Danh Mục',
-                    'route' => 'category/index',
-                ]
-            ],
-        ],
-
+        ]
     ],
 ];
