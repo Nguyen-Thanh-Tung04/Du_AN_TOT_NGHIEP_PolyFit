@@ -39,6 +39,12 @@ Route::get('/history', function () {
 Route::get('/product_detail', function () {
     return view('client.page.product-detail');
 });
+Route::get('/contact', function () {
+    return view('client.page.contact');
+});
+Route::get('/account', function () {
+    return view('client.page.profile');
+});
 Route::get('/cart', function () {
     return view('client.page.cart');
 })->name('cart');
