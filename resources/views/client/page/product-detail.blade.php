@@ -155,7 +155,7 @@
                                             <input class="qty-input" type="text" name="ec_qtybtn" value="1" />
                                         </div>
                                         <div class="ec-single-cart ">
-                                            <button class="btn btn-primary">Add To Cart</button>
+                                            <button class="btn btn-primary">Thêm giỏ hàng</button>
                                         </div>
                                         <div class="ec-single-wishlist">
                                             <a class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
@@ -367,7 +367,7 @@
                         </ul>
                         <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Boaty air pods s8</a></h3>
                         <div class="ec-price"><span>$90.00</span> $66.00</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">add to cart</a>
+                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
                     </div>
                 </div>
                 <!--/END single card -->
@@ -390,7 +390,7 @@
                         </ul>
                         <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Long slive t-shirt</a></h3>
                         <div class="ec-price">$79.90</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">add to cart</a>
+                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
                     </div>
                 </div>
                 <!--/END single card -->
@@ -414,7 +414,7 @@
                         </ul>
                         <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Leather purse for women</a></h3>
                         <div class="ec-price">$56.90</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">add to cart</a>
+                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
                     </div>
                 </div>
                 <!--/END single card -->
@@ -438,7 +438,7 @@
                         </ul>
                         <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Hool hat for men</a></h3>
                         <div class="ec-price">$79.90</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">add to cart</a>
+                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
                     </div>
                 </div>
                 <!--/END single card -->

@@ -164,10 +164,10 @@
                                      <button class="dropdown-toggle" data-bs-toggle="dropdown"><i
                                              class="fi-rr-user"></i></button>
                                      <ul class="dropdown-menu dropdown-menu-right">
-                                         <li><a class="dropdown-item" href="register.html">Register</a></li>
-                                         <li><a class="dropdown-item" href="checkout.html">Checkout</a></li>
-                                         <li><a class="dropdown-item" href="{{ url('/history') }}">History</a></li>
-                                         <li><a class="dropdown-item" href="login.html">Login</a></li>
+                                        <li><a class="dropdown-item" href="{{ url('/account') }}">Tài khoản</a></li>
+                                         <li><a class="dropdown-item" href="{{ url('/history') }}">Đơn hàng</a></li>
+                                         <li><a class="dropdown-item" href="{{ url('/login') }}">Đăng nhập</a></li>
+                                         <li><a class="dropdown-item" href="{{ url('/register') }}">Đăng ký</a></li>
                                      </ul>
                                  </div>
                                  <!-- Header User End -->
@@ -223,7 +223,7 @@
                                  <li><a href="{{ url('/') }}">Trang chủ</a></li>
                                  <li><a href="{{ url('/about') }}">Giới thiệu</a></li>
                                  <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                                 <li><a href="index.html">Liên hệ</a></li>
+                                 <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
                          </div>
                      </div>
                  </div>
