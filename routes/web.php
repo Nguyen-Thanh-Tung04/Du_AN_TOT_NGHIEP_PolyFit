@@ -163,3 +163,8 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+
+Route::prefix('crud')->name('crud.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [CategoryController::class, 'crud'])->name('crud');
+    Route::get('create', [CategoryController::class, 'create'])->name('create');
+});

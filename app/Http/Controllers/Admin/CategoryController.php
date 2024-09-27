@@ -32,5 +32,15 @@ class CategoryController extends Controller
         $template = 'admin.categories.index';
         return view('admin.dashboard.layout', compact('template', 'config', 'categories'));
     }
+
+    // Controller Demo
+    public function crud()
+    {
+        return view('admin.crud.index');
+    }
+    public function create()
+    {
+        return view('admin.crud.store');
+    }
 }
 ?>
