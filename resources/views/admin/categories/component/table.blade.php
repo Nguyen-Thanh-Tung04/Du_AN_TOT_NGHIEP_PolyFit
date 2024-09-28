@@ -21,12 +21,21 @@
                         </td>
                         <td>{{ $category->code }}</td>
                         <td class="text-center">{{ $category->name }}</td>
-                        <td class="text-center">{{ $category->image }}</td>
-                        <td class="text-center">{{ $category->is_active }}</td>
                         <td class="text-center">
-                            <a href="" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                            <img width="100px" src="{{ asset(Storage::url($category->image)) }}" alt="">
+                        </td>
+                        <td class="text-center js-switch-{{ $category->id }}">
+                            <input type="checkbox" value="{{ $category->is_active }}" 
+                            class="js-switch status " 
+                            data-field="is_active" 
+                            data-model="category"
+                            data-modelId="{{ $category->id }}"
+                            {{ ($category->is_active == 1) ? 'checked' : '' }} />
+                        </td>   
+                         <td class="text-center">
+                            <a href="{{ route('category.edit', $category->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
     
-                            <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                            <a href="{{ route('category.delete', $category->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 @endforeach

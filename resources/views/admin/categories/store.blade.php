@@ -10,9 +10,9 @@
     </div>
 @endif
 @php
-    $url = ($config['method'] == 'create') ? route('user.catalogue.store') : route('user.catalogue.update', $userCatalogue->id);
+    $url = ($config['method'] == 'create') ? route('category.store') : route('category.update', $categoryService->id);
 @endphp
-<form action="{{ $url }}" method="post" class="box">
+<form action="{{ $url }}" method="post" class="box" enctype="multipart/form-data">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -20,7 +20,7 @@
                 <div class="panel-heading">
                     <div class="panel-title">Thông tin chung</div>
                     <div class="panel-description">
-                        <p>- Nhập thông tin chung của nhóm thành viên</p>
+                        <p>- Nhập thông tin danh mục</p>
                         <p>- Lưu ý: Những trường đánh dấu <span class="text-danger">(*) </span>là bắt buộc</p>
                     </div>
                 </div>
@@ -29,9 +29,26 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-lg-6 mb-15">
+                            <div class="col-lg-8 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Tên chức vụ
+                                    <label class="control-label text-left">Mã danh mục
+                                        <span class="text-danger">(*)</span>
+                                        </label>
+                                    <input
+                                        type="text"
+                                        name="code"
+                                        value="{{ old('code', ($userCatalogue->code) ?? '') }}"
+                                        class="form-control"
+                                        placeholder=""
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Tên danh mục
                                         <span class="text-danger">(*)</span>
                                         </label>
                                     <input
@@ -44,17 +61,14 @@
                                     >
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-15">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Mô tả</label>
-                                    <input
-                                        type="text"
-                                        name="description"
-                                        value="{{ old('description', ($userCatalogue->description) ?? '') }}"
-                                        class="form-control"
-                                        placeholder=""
-                                        autocomplete="off"
-                                    >
+                                    <label class="control-label text-left">Ảnh
+                                        <span class="text-danger">(*)</span>
+                                    </label>
+                                    <input type="file" name="image" id="">
                                 </div>
                             </div>
                         </div>
