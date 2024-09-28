@@ -86,21 +86,19 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
 
 Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])
-    ->name('index');
+        ->name('index');
     Route::get('create', [CategoryController::class, 'create'])
-    ->name('create');
+        ->name('create');
     Route::post('store', [CategoryController::class, 'store'])
-    ->name('store');
+        ->name('store');
     Route::get('{id}/edit', [CategoryController::class, 'edit'])
-    ->name('edit');
-    Route::get('{id}/edit', [CategoryController::class, 'edit'])
-    ->name('edit');
+        ->name('edit');
     Route::post('{id}/update', [CategoryController::class, 'update'])
-    ->name('update');
+        ->name('update');
     Route::get('{id}/delete', [CategoryController::class, 'delete'])
-    ->name('delete');
+        ->name('delete');
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
-    ->name('destroy');
+        ->name('destroy');
 });
 
 // AUTH
@@ -146,20 +144,13 @@ Route::prefix('user/catalogue/')->name('user.catalogue.')->middleware('checkLogi
         ->name('destroy');
 });
 
+// Category
 Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])->name('index');
-    Route::get('create', [CategoryController::class, 'create'])
-        ->name('create');
-    Route::post('store', [CategoryController::class, 'store'])
-        ->name('store');
-    Route::get('{id}/edit', [CategoryController::class, 'edit'])
-        ->name('edit');
-    Route::get('{id}/edit', [CategoryController::class, 'edit'])
-        ->name('edit');
-    Route::post('{id}/update', [CategoryController::class, 'update'])
-        ->name('update');
-    Route::get('{id}/delete', [CategoryController::class, 'delete'])
-        ->name('delete');
-    Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
-        ->name('destroy');
-});
+    Route::get('create', [CategoryController::class, 'create'])->name('create');
+    Route::post('store', [CategoryController::class, 'store'])->name('store');
+    Route::get('{id}/edit', [CategoryController::class, 'edit'])->name('edit');
+    Route::post('{id}/update', [CategoryController::class, 'update'])->name('update');
+    Route::get('{id}/delete', [CategoryController::class, 'delete'])->name('delete');
+    Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])->name('destroy');
+}); 

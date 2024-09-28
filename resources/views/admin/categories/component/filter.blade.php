@@ -1,4 +1,4 @@
-{{-- <form action="{{ route('user.catalogue.index') }}">
+<form action="{{ route('category.index') }}">
     <div class="filter-wraper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             @php
@@ -36,10 +36,10 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.catalogue.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới nhóm thành viên</a>
+                    <a href="{{ route('category.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới danh mục</a>
                 </div>
             </div>
         </div>
     </div>
     
-</form> --}}
+</form>

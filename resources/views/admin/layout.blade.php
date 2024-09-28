@@ -3,6 +3,8 @@
 
 <head>
     @include('admin.dashboard.component.head')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/switchery@0.8.2/dist/switchery.min.css">
+
 </head>
 
 <body>
