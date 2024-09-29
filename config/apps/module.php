@@ -32,7 +32,12 @@ return [
             'title' => 'QL Danh mục',
             'icon' => 'fa fa-sitemap',
             'name' => ['category'],
-            'route' => 'categories/index',
-        ]
+            'subModule' => [
+                [
+                    'title' => 'QL Danh Mục',
+                    'route' => 'categories/index',
+                ],
+            ],
+        ],
     ],
 ];
