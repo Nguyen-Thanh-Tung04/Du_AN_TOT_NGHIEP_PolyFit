@@ -3,31 +3,41 @@
 return [
     'module' => [
         [
-            'title' => 'QL Thành Viên',
+            'title' => 'QL Người dùng',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [
                 [
-                    'title' => 'QL Chức Vụ',
+                    'title' => 'QL Vai Trò',
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL Thành Viên',
+                    'title' => 'QL Người dùng',
                     'route' => 'user/index',
                 ],
             ],
         ],
         [
-            'title' => 'Cấu hình chung',
-            'icon' => 'fa fa-cog',
-            'name' => ['language'],
+            'title' => 'Mẫu CRUD',
+            'icon' => 'fa fa-dashboard',
+            'name' => ['crud'],
             'subModule' => [
                 [
-                    'title' => 'QL Ngôn Ngữ',
-                    'route' => 'language/index',
-                ]
+                    'title' => 'Mẫu CRUD',
+                    'route' => 'crud/index',
+                ],
             ],
         ],
-        
+        [
+            'title' => 'QL Danh mục',
+            'icon' => 'fa fa-sitemap',
+            'name' => ['category'],
+            'subModule' => [
+                [
+                    'title' => 'QL Danh Mục',
+                    'route' => 'categories/index',
+                ],
+            ],
+        ],
     ],
 ];

@@ -17,6 +17,7 @@ class UserRepository implements UserRepositoryInterface
         array $column = ['*'], 
         array $condition = [],
         int $perpage = 1,
+        array $extend = [],
     ) {
         $query = User::select($column)
             ->where(function($query) use ($condition) {
@@ -34,8 +35,8 @@ class UserRepository implements UserRepositoryInterface
                 return $query;
             })->with('user_catalogues');
 
-        return $query->paginate($perpage)
-                    ->withQueryString();
+            return $query->paginate($perpage)
+            ->withQueryString()->withPath(config('app.url').$extend['path']);
     }
 
     public function create(array $payload = []) {
