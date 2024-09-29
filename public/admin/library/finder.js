@@ -13,6 +13,13 @@
         }
     }
 
+    HT.uploadAlbum = () => {
+        $(document).on('click', '.upload-picture', function(e){
+            HT.browseServerAlbum();
+            e.preventDefault();
+        })
+    }
+
     HT.ckeditor4 = (elementId, elementHeight) => {
         if (typeof(elementHeight) == 'undefined') {
             elementHeight = 500;
@@ -79,10 +86,50 @@
         finder.popup();
     }
 
+    HT.browseServerAlbum = () => {
+        var type = 'Images';
+        var finder = new CKFinder();
+        
+        finder.resourceType = type;
+        finder.selectActionFunction = function( fileUrl, data, allFiles ) {
+            let html = '';
+            for(var i = 0; i < allFiles.length; i++){
+                var image = allFiles[i].url
+                html += '<li class="ui-state-default">'
+                   html += ' <div class="thumb">'
+                       html += ' <span class="span image img-scaledown">'
+                            html += '<img src="'+image+'" alt="'+image+'">'
+                            html += '<input type="hidden" name="album[]" value="'+image+'">'
+                        html += '</span>'
+                        html += '<button class="delete-image"><i class="fa fa-trash"></i></button>'
+                    html += '</div>'
+                html += '</li>'
+            }
+           
+            $('.click-to-upload').addClass('hidden')
+            $('#sortable').append(html)
+            $('.upload-list').removeClass('hidden')
+        }
+        finder.popup();
+    }
+
+    HT.deletePicture = () => {
+        $(document).on('click', '.delete-image', function(){
+            let _this = $(this)
+            _this.parents('.ui-state-default').remove()
+            if($('.ui-state-default').length == 0){
+                $('.click-to-upload').removeClass('hidden')
+                $('.upload-list').addClass('hidden')
+            }
+        })
+    }
+
     $(document).ready(function () {
         HT.uploadImageToInput();
         HT.setupCkeditor();
         HT.uploadImageAvatar();
+        HT.uploadAlbum();
+        HT.deletePicture();
     });
 
 })(jQuery);

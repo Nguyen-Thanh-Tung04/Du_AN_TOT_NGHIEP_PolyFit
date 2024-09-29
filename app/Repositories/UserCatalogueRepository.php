@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Models\UserCatalogue;
-use App\Repositories\Interfaces\UserCatalogueRepositoryInterface;
 use Faker\Provider\Base;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  * Class UserCatalogueRepository
  * @package App\Repositories
  */
-class UserCatalogueRepository implements UserCatalogueRepositoryInterface
+class UserCatalogueRepository
 {
     public function pagination(
         array $column = ['*'], 

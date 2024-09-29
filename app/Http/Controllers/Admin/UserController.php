@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\UserRepository;
 
 class UserController
 {

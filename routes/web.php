@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserCatalogueController;
 
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
@@ -160,5 +161,25 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::get('{id}/delete', [CategoryController::class, 'delete'])
         ->name('delete');
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
+        ->name('destroy');
+});
+
+// Products
+Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [ProductController::class, 'index'])
+    ->name('index');
+    Route::get('create', [ProductController::class, 'create'])
+        ->name('create');
+    Route::post('store', [ProductController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [ProductController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/edit', [ProductController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [ProductController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [ProductController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
         ->name('destroy');
 });
