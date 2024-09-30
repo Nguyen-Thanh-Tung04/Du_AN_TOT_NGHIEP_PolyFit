@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserCatalogueController;
-
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
 use Illuminate\Support\Facades\Route;
@@ -180,3 +180,14 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [VoucherController::class, 'index'])->name('index');
+    Route::get('create', [VoucherController::class, 'create'])->name('create');
+    Route::post('store', [VoucherController::class, 'store'])->name('store');
+    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit');
+    Route::put('{voucher}/update', [VoucherController::class, 'update'])->name('update');
+    Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
+    Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
+});
+
+

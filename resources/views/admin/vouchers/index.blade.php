@@ -10,12 +10,12 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-8">
-            <h2>sf</h2>
+            <h2>Quản lý Voucher</h2>
             <ol class="breadcrumb" style="margin-bottom: 10px;">
                 <li>
                     <a href="{{ route('dashboard.index') }}">Dashboard</a>
                 </li>
-                <li class="active"><strong>sf</strong></li>
+                <li class="active"><strong>Danh sách voucher</strong></li>
             </ol>
         </div>
     </div>
@@ -24,7 +24,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>tt</h5>
+                    <h5>Danh sách voucher</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -99,6 +99,7 @@
                                                 </span>
                                             </div>
                                         </div>
+                                        <a href="{{ route('vouchers.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới Voucher</a>
                                     </div>
                                 </div>
                             </div>
@@ -111,50 +112,59 @@
     <div class="table-responsive">
         <table class="table table-sm table-striped table-bordered">
             <thead>
-            <tr>
-                <th>
-                    <input type="checkbox" value="" id="checkAll" class="input-checkbox">
-                </th>
-                <th class="text-center" style="width:100px;">Ảnh</th>
-                <th>Họ Tên</th>
-                <th>Email</th>
-                <th>Số Điện Thoại</th>
-                <th>Địa Chỉ</th>
-                <th>Nhóm thành viên</th>
-                <th class="text-center">Tình Trạng</th>
-                <th class="text-center">Thao Tác</th>
-            </tr>
+                <tr>
+                    <th>
+                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                    </th>
+                    <th>Mã Voucher</th>
+                    <th>Tên Voucher</th>
+                    <th>Giá Trị</th>
+                    <th>Giá Trị Giảm Tối Đa</th>
+                    <th>Giá Trị Đơn Hàng Tối Thiểu</th>
+                    <th>Loại Giảm Giá</th>
+                    <th>Số Lượng</th>
+                    <th>Ngày Bắt Đầu</th>
+                    <th>Ngày Kết Thúc</th>
+                    <th class="text-center">Tình Trạng</th>
+                    <th class="text-center">Thao Tác</th>
+                </tr>
             </thead>
             <tbody>
+                @foreach($vouchers as $voucher)
                     <tr>
                         <td>
-                            <input type="checkbox" value="" class="input-checkbox checkBoxItem">
+                            <input type="checkbox" value="{{ $voucher->id }}" class="input-checkbox checkBoxItem">
+                        </td>
+                        <td>{{ $voucher->code }}</td>
+                        <td>{{ $voucher->name }}</td>
+                        <td>{{ $voucher->value }}</td>
+                        <td>{{ $voucher->max_discount_value }}</td>
+                        <td>{{ $voucher->min_order_value }}</td>
+                        <td>{{ $voucher->discount_type == 'fixed' ? 'Giảm giá cố định' : 'Giảm giá theo tỷ lệ' }}</td>
+                        <td>{{ $voucher->quantity }}</td>
+                        <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($voucher->end_time)->format('d/m/Y') }}</td>
+                        <td class="text-center">
+                            <input type="checkbox" value="{{ $voucher->status }}" 
+                                   class="js-switch status" 
+                                   data-field="status" 
+                                   data-model="Voucher"
+                                   data-modelId="{{ $voucher->id }}"
+                                   {{ $voucher->status ? 'checked' : '' }} />
                         </td>
                         <td class="text-center">
-                            <span><img class="image img-cover" src="" alt=""></span>
-                        </td>
-                        <td>12</td>
-                        <td>12</td>
-                        <td>12</td>
-                        <td>12</td>
-                        <td>12</td>
-                        <td class="text-center js-switch-">
-                            <input type="checkbox" value="" 
-                            class="js-switch status " 
-                            data-field="publish" 
-                            data-model="User"
-                            data-modelId=""/>
-                        </td>
-                        <td class="text-center">
-                            <a href="" class="btn btn-success"><i class="fa fa-edit"></i></a>
-
-                            <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                            <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                            <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?');"><i class="fa fa-trash"></i></button>
+                            </form>
                         </td>
                     </tr>
+                @endforeach
             </tbody>
         </table>
-        {{-- {{ $users->links('pagination::bootstrap-5') }} --}}
-        
+        {{-- {{ $vouchers->links('pagination::bootstrap-5') }} --}}
     </div>
     
 @endsection

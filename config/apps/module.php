@@ -43,5 +43,16 @@ return [
                 ],
             ],
         ],
+        [
+            'title' => 'QL Voucher',
+            'icon' => 'fa fa-sitemap',
+            'name' => ['vouchers'],
+            'subModule' => [
+                [
+                    'title' => 'QL Voucher',
+                    'route' => 'vouchers/index',
+                ],
+            ],
+        ],
     ],
 ];
