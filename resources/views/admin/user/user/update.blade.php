@@ -73,7 +73,7 @@
                                         @foreach($userCatalogue as $key => $item)
                                         <option {{ $key == old('user_catalogue_id', (isset
                                         ($user->user_catalogue_id)) ?
-                                        $user->user_catalogue_id : '') ? 'selected' : '' }} 
+                                        $user->user_catalogue_id : '') ? 'selected' : '' }}
                                         value="{{ $key }}">{{ $item }}</option>
                                         @endforeach
                                     </select>
@@ -164,14 +164,14 @@
                                         <option value="0">[Chọn Thành Phố]</option>
                                         @if (isset($provinces))
                                             @foreach($provinces as $province)
-                                            <option value="{{ $province->code }}" 
+                                            <option value="{{ $province->code }}"
                                                 {{ old('province_id') == $province->code ? 'selected' : '' }}>
                                                 {{ $province->name }}
                                             </option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-15">

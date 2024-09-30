@@ -4,31 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateMemberRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Services\UserService;
+use App\Services\MemberService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\Interfaces\MemberRepositoryInterface as MemberRepository;
 
-class UserController
+class MemberController
 {
-    protected $userService;
+    protected $memberService;
     protected $provinceRepository;
-    protected $userRepository;
+    protected $memberRepository;
 
     public function __construct(
-        UserService $userService,
+        MemberService $memberService,
         ProvinceRepository $provinceRepository,
-        UserRepository $userRepository,
+        MemberRepository $memberRepository,
     ) {
-        $this->userService = $userService;
+        $this->memberService = $memberService;
         $this->provinceRepository = $provinceRepository;
-        $this->userRepository = $userRepository;
+        $this->memberRepository = $memberRepository;
     }
 
     public function index(Request $request) {
-        $users = $this->userService->paginate($request);
+        $members = $this->memberService->paginate($request);
+//        dd($members);die();
         $config = [
             'js' => [
                 'admin/js/plugins/switchery/switchery.js',
@@ -39,21 +41,22 @@ class UserController
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
             ]
         ];
-        $config['seo'] = config('apps.user');
-        $template = 'admin.user.user.index';
+        $config['seo'] = config('apps.member');
+//        $template = 'admin.user.member.index';
+        $template = 'admin.user.member.index';
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
-            'users',
+            'members',
         ));
     }
 
     public function create() {
         $provinces = $this->provinceRepository->all();
 
-        $template = 'admin.user.user.store';
+        $template = 'admin.user.member.store';
         $config = $this->configData();
-        $config['seo'] = config('apps.user');
+        $config['seo'] = config('apps.member');
         $config['method'] = 'create';
         return view('admin.dashboard.layout', compact(
             'template',
@@ -63,41 +66,40 @@ class UserController
     }
 
     public function store(StoreUserRequest $request) {
-        if ($this->userService->create($request)) {
-            return redirect()->route('user.index')->with('success', 'Thêm mới bản ghi thành công.');
+        if ($this->memberService->create($request)) {
+            return redirect()->route('member.index')->with('success', 'Thêm mới bản ghi thành công.');
         }
-        return redirect()->route('user.index')->with('error', 'Thêm mới bản ghi thất bại. Hãy thử lại.');
+        return redirect()->route('member.index')->with('error', 'Thêm mới bản ghi thất bại. Hãy thử lại.');
     }
 
     public function edit($id) {
-        $user = $this->userRepository->findById($id);
-        $userCatalogue = $this->userRepository->findById($id);
+        $user = $this->memberRepository->findById($id);
         $provinces = $this->provinceRepository->all();
 
-        $template = 'admin.user.user.update';
+        $template = 'admin.user.member.update';
         $config = $this->configData();
-        $config['seo'] = config('apps.user');
+        $config['seo'] = config('apps.member');
         $config['method'] = 'edit';
         return view('admin.dashboard.layout', compact(
             'template',
             'user',
-            'userCatalogue',
             'provinces',
             'config',
         ));
     }
 
-    public function update($id, UpdateUserRequest $request) {
-        if ($this->userService->update($id, $request)) {
-            return redirect()->route('user.index')->with('success', 'Cập nhật bản ghi thành công.');
+    public function update($id, UpdateMemberRequest $request) {
+//        dd($request);die();
+        if ($this->memberService->update($id, $request)) {
+            return redirect()->route('member.index')->with('success', 'Cập nhật bản ghi thành công.');
         }
-        return redirect()->route('user.index')->with('error', 'Cập nhật bản ghi thất bại. Hãy thử lại.');
+        return redirect()->route('member.index')->with('error', 'Cập nhật bản ghi thất bại. Hãy thử lại.');
     }
 
     public function delete($id) {
-        $user = $this->userRepository->findById($id);
-        $config['seo'] = config('apps.user');
-        $template = 'admin.user.user.delete';
+        $user = $this->memberRepository->findById($id);
+        $config['seo'] = config('apps.member');
+        $template = 'admin.user.member.delete';
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
@@ -106,10 +108,10 @@ class UserController
     }
 
     public function destroy($id) {
-        if ($this->userService->destroy($id)) {
-            return redirect()->route('user.index')->with('success', 'Xóa bản ghi thành công.');
+        if ($this->memberService->destroy($id)) {
+            return redirect()->route('member.index')->with('success', 'Xóa bản ghi thành công.');
         }
-        return redirect()->route('user.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
+        return redirect()->route('member.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
     }
 
     public function configData() {

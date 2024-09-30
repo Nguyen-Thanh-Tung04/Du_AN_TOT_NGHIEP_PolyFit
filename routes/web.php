@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserCatalogueController;
@@ -83,7 +84,24 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
     Route::delete('{id}/destroy', [UserController::class, 'destroy'])
         ->name('destroy');
 });
-
+Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [MemberController::class, 'index'])
+        ->name('index');
+    Route::get('create', [MemberController::class, 'create'])
+        ->name('create');
+    Route::post('store', [MemberController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [MemberController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/edit', [MemberController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [MemberController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [MemberController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
+        ->name('destroy');
+});
 Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])
         ->name('index');

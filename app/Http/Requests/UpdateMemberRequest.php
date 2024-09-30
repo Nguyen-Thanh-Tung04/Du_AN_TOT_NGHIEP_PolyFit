@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class UpdateMemberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'email' => 'required|string|email|unique:users,email, '.$this->id.'|max:255',
             'name' => 'required|string',
-            'user_catalogue_id' => 'required|integer|gt:0',
+//            'user_catalogue_id' => 'required|integer|gt:0',
         ];
     }
 
@@ -38,7 +38,7 @@ class UpdateUserRequest extends FormRequest
             'email.max' => 'Độ dài email tối đa 255 kí tự.',
             'name.required' => 'Bạn chưa nhập Họ Tên.',
             'name.string' => 'Họ Tên phải là dạng kí tự.',
-            'user_catalogue_id.gt' => 'Bạn chưa chọn nhóm thành viên.',
+//            'user_catalogue_id.gt' => 'Bạn chưa chọn nhóm thành viên.',
         ];
     }
 }

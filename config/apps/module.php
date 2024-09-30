@@ -12,12 +12,12 @@ return [
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL Người dùng',
+                    'title' => 'QL Thành Viên',
                     'route' => 'user/index',
                 ],
                 [
                     'title' => 'QL Khách Hàng',
-//                    'route' => 'user/index',
+                    'route' => 'member/index',
                 ],
             ],
         ],

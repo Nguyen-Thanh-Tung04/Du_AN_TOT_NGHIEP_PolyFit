@@ -2,49 +2,50 @@
 
 namespace App\Services;
 
-use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\Interfaces\MemberRepositoryInterface as MemberRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Class UserCatalogueService
+ * Class UserService
  * @package App\Services
  */
-class UserCatalogueService
+class MemberService
 {
-    protected $userCatalogueRepository;
-    protected $userRepository;
+    protected $memberRepository;
 
-    public function __construct(
-        UserCatalogueRepository $userCatalogueRepository,
-        UserRepository $userRepository
-    ) {
-        $this->userCatalogueRepository = $userCatalogueRepository;
-        $this->userRepository = $userRepository;
+    public function __construct(MemberRepository $memberRepository) {
+        $this->memberRepository = $memberRepository;
     }
     public function paginate($request) {
-
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
+        $condition['status'] = $request->integer('status');
         $perPage = $request->integer('perpage');
-
-        $userCatalogues = $this->userCatalogueRepository->pagination([
+        $users = $this->memberRepository->pagination([
             'id',
             'name',
-            'description',
+            'image',
+            'email',
+            'phone',
+            'address',
             'publish',
+            'status',
+            'user_catalogue_id',
         ], $condition, $perPage, ['path' => 'user/index']);
-
-        return $userCatalogues;
+        return $users;
     }
 
     public function create($request) {
         DB::beginTransaction();
         try {
-            $payload = $request->except(['_token', 'send']);
-            $user = $this->userCatalogueRepository->create($payload);
+            $payload = $request->except(['_token', 'send', 're_password']);
+            if ($payload['birthday'] != null) {
+                $payload['birthday'] = $this->convertBirthdayDate($payload['birthday']);
+            }
+            $payload['password'] = Hash::make($payload['password']);
+            $user = $this->memberRepository->create($payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -59,7 +60,10 @@ class UserCatalogueService
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send']);
-            $user = $this->userCatalogueRepository->update($id, $payload);
+            if ($payload['birthday'] != null) {
+                $payload['birthday'] = $this->convertBirthdayDate($payload['birthday']);
+            }
+            $user = $this->memberRepository->update($id, $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -73,7 +77,7 @@ class UserCatalogueService
     public function destroy($id) {
         DB::beginTransaction();
         try {
-            $user = $this->userCatalogueRepository->delete($id);
+            $user = $this->memberRepository->delete($id);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -88,8 +92,7 @@ class UserCatalogueService
         DB::beginTransaction();
         try {
             $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
-            $this->changeUserStatus($post, $payload[$post['field']]);
+            $user = $this->memberRepository->update($post['modelId'], $payload);
 
             DB::commit();
             return true;
@@ -105,9 +108,7 @@ class UserCatalogueService
         DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
-            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['id'], $payload);
-            $this->changeUserStatus($post, $payload[$post['field']]);
-
+            $flag = $this->memberRepository->updateByWhereIn('id', $post['id'], $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -118,27 +119,11 @@ class UserCatalogueService
         }
     }
 
-    private function changeUserStatus($post, $value) {
+    private function convertBirthdayDate($birthday = '') {
+        $formatBirthday = Carbon::createFromFormat('Y-m-d', $birthday);
+        $birthday = $formatBirthday->format('Y-m-d H:i:s');
 
-        DB::beginTransaction();
-        try {
-            $array = [];
-            if(isset($post['modelId'])) {
-                $array[] = $post['modelId'];
-            } else {
-                $array = $post['id'];
-            }
-            $payload[$post['field']] = $value;
-            $this->userRepository->updateByWhereIn('user_catalogue_id', $array, $payload);
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            echo $e->getMessage();die();
-            return false;
-        }
+        return $birthday;
     }
 
 

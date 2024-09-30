@@ -31,9 +31,9 @@
                     <td>{{ $user->address }}</td>
                     <td>{{ $user->user_catalogues->name }}</td>
                     <td class="text-center js-switch-{{ $user->id }}">
-                        <input type="checkbox" value="{{ $user->publish }}" 
-                        class="js-switch status " 
-                        data-field="publish" 
+                        <input type="checkbox" value="{{ $user->publish }}"
+                        class="js-switch status "
+                        data-field="publish"
                         data-model="User"
                         data-modelId="{{ $user->id }}"
                         {{ ($user->publish == 1) ? 'checked' : '' }}/>
@@ -49,5 +49,5 @@
         </tbody>
     </table>
     {{ $users->links('pagination::bootstrap-5') }}
-    
+
 </div>

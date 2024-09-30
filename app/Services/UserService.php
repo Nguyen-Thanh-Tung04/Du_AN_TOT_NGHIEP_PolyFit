@@ -124,6 +124,6 @@ class UserService
         return $birthday;
     }
 
-    
-    
+
+
 }

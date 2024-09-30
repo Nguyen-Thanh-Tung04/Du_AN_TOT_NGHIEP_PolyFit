@@ -1,4 +1,4 @@
-@include('admin.dashboard.component.breadcrumb', ['title' => $config['seo']['create']['title']])
+@include('admin.dashboard.component.breadcrumb', ['title' => $config['seo']['edit']['title']])
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -9,7 +9,7 @@
     </div>
 @endif
 @php
-    $url = route('user.store');
+    $url = route('member.update', $user->id);
 @endphp
 <form action="{{ $url }}" method="post" class="box">
     @csrf
@@ -35,7 +35,7 @@
                                     <input
                                         type="text"
                                         name="email"
-                                        value="{{ old('email') }}"
+                                        value="{{ old('email', ($user->email) ?? '') }}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -49,7 +49,7 @@
                                     <input
                                         type="text"
                                         name="name"
-                                        value="{{ old('name') }}"
+                                        value="{{ old('name', ($user->name) ?? '') }}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -57,23 +57,12 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $userCatalogue = [
-                                '[Chọn nhóm thành viên]',
-                                '[Quản trị viên]',
-                                '[Nhân viên]',
-                            ];
-                        @endphp
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Nhóm Thành Viên
-                                        <span class="text-danger">(*)</span></label>
-                                    <select name="user_catalogue_id" class="form-control setupSelect2">
-                                        @foreach($userCatalogue as $key => $item)
-                                        <option {{ $key == old('user_catalogue_id') ? 'selected' : '' }}
-                                        value="{{ $key }}">{{ $item }}</option>
-                                        @endforeach
+                                    <label class="control-label text-left">Nhóm Thành Viên</label>
+                                    <select  class="form-control setupSelect2" disabled>
+                                       <option>[Khách Hàng]</option>
                                     </select>
                                 </div>
                             </div>
@@ -83,7 +72,7 @@
                                     <input
                                         type="date"
                                         name="birthday"
-                                        value="{{ old('birthday') }}"
+                                        value="{{ old('birthday', isset($user->birthday) ? date('Y-m-d', strtotime($user->birthday)) : '') }}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -129,7 +118,7 @@
                                     <input
                                         type="text"
                                         name="image"
-                                        value="{{ old('image') }}"
+                                        value="{{ old('image', ($user->image) ?? '') }}"
                                         class="form-control upload-image"
                                         data-type="Images"
                                         placeholder=""

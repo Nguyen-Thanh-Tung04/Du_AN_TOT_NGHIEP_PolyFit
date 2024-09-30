@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Repositories\Interfaces\MemberRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Faker\Provider\Base;
 
@@ -10,7 +11,7 @@ use Faker\Provider\Base;
  * Class UserRepository
  * @package App\Repositories
  */
-class UserRepository implements UserRepositoryInterface
+class MemberRepository implements MemberRepositoryInterface
 {
 
     public function pagination(
@@ -23,20 +24,20 @@ class UserRepository implements UserRepositoryInterface
             ->where(function($query) use ($condition) {
                 if (isset($condition['keyword']) && !empty($condition['keyword'])) {
                     $query->where('name', 'LIKE', '%'.$condition['keyword'].'%')
-                    ->orWhere('email', 'LIKE', '%'.$condition['keyword'].'%')
-                    ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
-                    ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
+                        ->orWhere('email', 'LIKE', '%'.$condition['keyword'].'%')
+                        ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
+                        ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
                 }
-                if (isset($condition['publish']) && $condition['publish'] == 1) {
-                    $query->where('publish', '=', '1');
-                } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
-                    $query->where('publish', '=', '2');
+                if (isset($condition['status']) && $condition['status'] == 1) {
+                    $query->where('status', '=', '1');
+                } elseif (isset($condition['status']) && $condition['status'] == 2) {
+                    $query->where('status', '=', '2');
                 }
-                $query->where('user_catalogue_id', '>', 0);
+                $query->where('user_catalogue_id', '=', null);
                 return $query;
             })->with('user_catalogues');
 
-            return $query->paginate($perpage)
+        return $query->paginate($perpage)
             ->withQueryString()->withPath(config('app.url').$extend['path']);
     }
 
