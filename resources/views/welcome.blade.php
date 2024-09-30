@@ -58,62 +58,25 @@
                     <h2 class="ec-title">Danh mục</h2>
 
                     <h2 class="ec-bg-title">Danh mục</h2>
-                    <p class="sub-title">Browse The Collection of Top Categories</p>
+                    <p class="sub-title">Duyệt qua Bộ sưu tập các danh mục hàng đầu</p>
                 </div>
             </div>
         </div>
         <div class="row margin-minus-tb-15">
             <div class="ec_cat_slider">
+                @foreach ($category as $category)
                 <div class="ec_cat_content">
+
                     <div class="ec_cat_inner">
                         <div class="ec-cat-image">
-                            <img src="{{asset('theme/client/assets/images/category-image/1.jpg')}}" alt="slider category img" />
+                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img"  />
                         </div>
-                        <div class="ec-cat-desc">
-                            <span class="ec-section-btn"><a href="#" class="btn-primary">Sofa chair</a></span>
-                        </div>
+
                     </div>
+
                 </div>
-                <div class="ec_cat_content">
-                    <div class="ec_cat_inner">
-                        <div class="ec-cat-image">
-                            <img src="{{asset('theme/client/assets/images/category-image/2.jpg')}}" alt="slider category img" />
-                        </div>
-                        <div class="ec-cat-desc">
-                            <span class="ec-section-btn"><a href="#" class="btn-primary">Wooden Tables</a></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="ec_cat_content">
-                    <div class="ec_cat_inner">
-                        <div class="ec-cat-image">
-                            <img src="{{asset('theme/client/assets/images/category-image/3.jpg')}}" alt="slider category img" />
-                        </div>
-                        <div class="ec-cat-desc">
-                            <span class="ec-section-btn"><a href="#" class="btn-primary">Wooden beds</a></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="ec_cat_content">
-                    <div class="ec_cat_inner">
-                        <div class="ec-cat-image">
-                            <img src="{{asset('theme/client/assets/images/category-image/4.jpg')}}" alt="slider category img" />
-                        </div>
-                        <div class="ec-cat-desc">
-                            <span class="ec-section-btn"><a href="#" class="btn-primary">lighting</a></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="ec_cat_content">
-                    <div class="ec_cat_inner">
-                        <div class="ec-cat-image">
-                            <img src="{{asset('theme/client/assets/images/category-image/5.jpg ')}}" alt="slider category img" />
-                        </div>
-                        <div class="ec-cat-desc">
-                            <span class="ec-section-btn"><a href="#" class="btn-primary">Sofa chair</a></span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+
             </div>
         </div>
     </div>
@@ -170,7 +133,7 @@
                                             </ul>
                                             <h3 class="ec-title"><a href="{{ url('/product_detail') }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
-                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ   </span>  
+                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ   </span>
                                                 {{ number_format($product->min_price, 0) }} VNĐ
                                                 {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                             </div>
@@ -190,7 +153,7 @@
 
                     </div>
                     <!-- ec 2nd Product tab end -->
-                   
+
                 </div>
 
             </div>
@@ -252,15 +215,15 @@
 
     <!--  offer Section Start -->
     <section class="section ec-offer-section section-space-p section-space-m">
-        <h2 class="d-none">Offer</h2>
+        <h2 class="d-none">Lời đề nghị</h2>
         <div class="container">
             <div class="row justify-content-end">
                 <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
-                    <h2 class="ec-offer-title">Sunglasses</h2>
-                    <h3 class="ec-offer-stitle" data-animation="slideInDown">Super Offer</h3>
-                    <span class="ec-offer-img" data-animation="zoomIn"><img src="assets/images/offer-image/1.png"
+                    <h2 class="ec-offer-title">Quần Jean</h2>
+                    <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
+                    <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}"
                             alt="offer image" /></span>
-                    <span class="ec-offer-desc">Acetate Frame Sunglasses</span>
+                    <span class="ec-offer-desc">Quần Jean vá gối</span>
                     <span class="ec-offer-price">$40.00 Only</span>
                     <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Shop Now</a>
                 </div>
@@ -307,7 +270,7 @@
                                             </ul>
                                             <h3 class="ec-title"><a href="{{ url('/product_detail') }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
-                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ   </span>  
+                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ   </span>
                                                 {{ number_format($product->min_price, 0) }} VNĐ
                                                 {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                             </div>

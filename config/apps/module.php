@@ -3,7 +3,7 @@
 return [
     'module' => [
         [
-            'title' => 'QL Tài khoản',
+            'title' => 'QL Người dùng',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [
@@ -14,10 +14,6 @@ return [
                 [
                     'title' => 'QL Người dùng',
                     'route' => 'user/index',
-                ],
-                [
-                    'title' => 'QL Khách Hàng',
-//                    'route' => 'user/index',
                 ],
             ],
         ],

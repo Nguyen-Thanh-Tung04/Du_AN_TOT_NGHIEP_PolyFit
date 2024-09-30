@@ -16,4 +16,12 @@ class Product extends Model
         'description',
         'status'
     ];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function variants(){
+        return $this->belongsTo(Variants::class);
+    }
 }
