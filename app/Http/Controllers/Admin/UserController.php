@@ -10,21 +10,25 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 
 class UserController
 {
     protected $userService;
     protected $provinceRepository;
     protected $userRepository;
+    protected $userCatalogueRepository;
 
     public function __construct(
         UserService $userService,
         ProvinceRepository $provinceRepository,
         UserRepository $userRepository,
+        UserCatalogueRepository $userCatalogueRepository,
     ) {
         $this->userService = $userService;
         $this->provinceRepository = $provinceRepository;
         $this->userRepository = $userRepository;
+        $this->userCatalogueRepository = $userCatalogueRepository;
     }
 
     public function index(Request $request) {
@@ -71,7 +75,8 @@ class UserController
 
     public function edit($id) {
         $user = $this->userRepository->findById($id);
-        $userCatalogue = $this->userRepository->findById($id);
+        $userCatalogue = $this->userCatalogueRepository->all();
+//        dd($userCatalogue);die();
         $provinces = $this->provinceRepository->all();
 
         $template = 'admin.user.user.update';

@@ -57,26 +57,27 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $userCatalogue = [
-                                '[Chọn nhóm thành viên]',
-                                '[Quản trị viên]',
-                                '[Nhân viên]',
-                            ];
-                        @endphp
+{{--                        @php--}}
+{{--                            $userCatalogue = [--}}
+{{--                                '[Chọn nhóm thành viên]',--}}
+{{--                                '[Quản trị viên]',--}}
+{{--                                '[Nhân viên]',--}}
+{{--                            ];--}}
+{{--                        @endphp--}}
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Nhóm Thành Viên
                                         <span class="text-danger">(*)</span></label>
                                     <select name="user_catalogue_id" class="form-control setupSelect2">
-                                        @foreach($userCatalogue as $key => $item)
-                                        <option {{ $key == old('user_catalogue_id', (isset
-                                        ($user->user_catalogue_id)) ?
-                                        $user->user_catalogue_id : '') ? 'selected' : '' }}
-                                        value="{{ $key }}">{{ $item }}</option>
+                                        @foreach($userCatalogue as $catalogue) <!-- Sử dụng $catalogue thay vì $key -->
+                                        <option value="{{ $catalogue->id }}"
+                                            {{ $catalogue->id == old('user_catalogue_id', $user->user_catalogue_id) ? 'selected' : '' }}>
+                                            {{ $catalogue->name }} <!-- Hiển thị tên của nhóm thành viên -->
+                                        </option>
                                         @endforeach
                                     </select>
+
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-15">
