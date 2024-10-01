@@ -62,24 +62,24 @@
             </div>
         </div>
         <div class="row margin-minus-tb-15">
-            <a href="#">
+
                 <div class="ec_cat_slider">
                     @foreach ($category as $category)
                     <div class="ec_cat_content">
                         <div class="ec_cat_inner text-center p-5">
                             <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
-                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
+                           <a href=""> <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
                             width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
                             height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
                             object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
-                            />
+                            /></a>
                         </div>
                     </div>
                     @endforeach
                 </div>
-            </a>
+
         </div>
-        
+
     </div>
 </section>
 <!--category Section End -->
@@ -141,6 +141,7 @@
                                             <a class="ec-add-to-cart" href="{{ url('/product_detail') }}">Thêm giỏ hàng</a>
                                         </div>
                                     </div>
+
                                     <!--/END single card -->
                                 </div>
                                 @endforeach
@@ -225,8 +226,8 @@
                     <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
                             alt="offer image" /></span>
                     <span class="ec-offer-desc">Quần Jean vá gối</span>
-                    <span class="ec-offer-price">$40.00 Only</span>
-                    <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Shop Now</a>
+                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} VNĐ</span>
+                    <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
                 </div>
             </div>
         </div>
@@ -250,7 +251,7 @@
                         <!-- 1st Product tab start -->
                         <div class="tab-pane fade show active" id="tab-pro-for-all">
                             <div class="row">
-                                @foreach ($products as $product)
+                                @foreach ($discounted as $discounted)
                                 <div class="col-lg-3 col-md-6 col-sm-6">
                                     <!-- START single card -->
                                     <div class="ec-product-ds">
@@ -269,10 +270,10 @@
                                                 <li class="ecicon eci-star fill"></li>
                                                 <li class="ecicon eci-star"></li>
                                             </ul>
-                                            <h3 class="ec-title"><a href="{{ url('/product_detail') }}">{{ $product->name }}</a></h3>
+                                            <h3 class="ec-title"><a href="{{ url('/product_detail') }}">{{ $discounted->name }}</a></h3>
                                             <div class="ec-price">
-                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ   </span>
-                                                {{ number_format($product->min_price, 0) }} VNĐ
+                                                <span>{{ number_format($discounted->listed_price, 0) }}VNĐ   </span>
+                                                {{ number_format($discounted->min_price, 0) }} VNĐ
                                                 {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                             </div>
                                             <a class="ec-add-to-cart" href="{{ url('/product_detail') }}">Thêm giỏ hàng</a>
