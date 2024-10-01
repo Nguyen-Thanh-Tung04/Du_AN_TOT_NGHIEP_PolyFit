@@ -9,13 +9,14 @@
                 <div class="col-12">
                     <div class="row ec_breadcrumb_inner">
                         <div class="col-md-6 col-sm-12">
-                            <h2 class="ec-breadcrumb-title">Contact Us</h2>
+                            <h2 class="ec-breadcrumb-title">Liên hệ với chúng tôi</h2>
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <!-- ec-breadcrumb-list start -->
                             <ul class="ec-breadcrumb-list">
-                                <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
-                                <li class="ec-breadcrumb-item active">Contact Us</li>
+                                <li class="ec-breadcrumb-item"><a href="index.html">
+                                    Trang chủ</a></li>
+                                <li class="ec-breadcrumb-item active">Liên hệ với chúng tôi</li>
                             </ul>
                             <!-- ec-breadcrumb-list end -->
                         </div>
@@ -36,29 +37,29 @@
                             <div class="ec-contact-form">
                                 <form action="#" method="post">
                                     <span class="ec-contact-wrap">
-                                        <label>First Name*</label>
-                                        <input type="text" name="firstname" placeholder="Enter your first name"
+                                        <label>Tên</label>
+                                        <input type="text" name="firstname" placeholder="Nhập tên của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
-                                        <label>Last Name*</label>
-                                        <input type="text" name="lastname" placeholder="Enter your last name"
+                                        <label>Họ</label>
+                                        <input type="text" name="lastname" placeholder="Nhập họ của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
-                                        <label>Email*</label>
-                                        <input type="email" name="email" placeholder="Enter your email address"
+                                        <label>Email</label>
+                                        <input type="email" name="email" placeholder="Nhập địa chỉ email của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
-                                        <label>Phone Number*</label>
-                                        <input type="text" name="phonenumber" placeholder="Enter your phone number"
+                                        <label>Số Điện Thoại</label>
+                                        <input type="text" name="phonenumber" placeholder="Nhập số điện thoại của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
-                                        <label>Comments/Questions*</label>
+                                        <label>Nhận xét/Câu hỏi</label>
                                         <textarea name="address"
-                                            placeholder="Please leave your comments here.."></textarea>
+                                            placeholder="Hãy để lại ý kiến ​​của bạn tại đây.."></textarea>
                                     </span>
                                     <span class="ec-contact-wrap ec-recaptcha">
                                         <span class="g-recaptcha"
@@ -70,7 +71,7 @@
                                         <span class="help-block with-errors"></span>
                                     </span>
                                     <span class="ec-contact-wrap ec-contact-btn">
-                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                        <button class="btn btn-primary" type="submit">Gửi</button>
                                     </span>
                                 </form>
                             </div>
@@ -85,17 +86,16 @@
                             </div>
                         </div>
                         <div class="ec_contact_info">
-                            <h1 class="ec_contact_info_head">Contact us</h1>
+                            <h1 class="ec_contact_info_head">Liên hệ với chúng tôi</h1>
                             <ul class="align-items-center">
                                 <li class="ec-contact-item"><i class="ecicon eci-map-marker"
-                                        aria-hidden="true"></i><span>Address :</span>71 Pilgrim Avenue Chevy Chase, east california. east california. MD
-                                    20815, USA</li>
+                                        aria-hidden="true"></i><span>Địa chỉ :</span>Số 3 Phương canh , Nam Từ Niêm Hà Nội</li>
                                 <li class="ec-contact-item align-items-center"><i class="ecicon eci-phone"
-                                        aria-hidden="true"></i><span>Call Us :</span><a href="tel:+440123456789">+44 0123
+                                        aria-hidden="true"></i><span>Gọi cho chúng tôi :</span><a href="tel:+440123456789">+44 0123
                                         456 789</a></li>
                                 <li class="ec-contact-item align-items-center"><i class="ecicon eci-envelope"
                                         aria-hidden="true"></i><span>Email :</span><a
-                                        href="mailto:example@ec-email.com">example@ec-email.com</a></li>
+                                        href="mailto:example@ec-email.com">+thanhtung123@gmail.com</a></li>
                             </ul>
                         </div>
                     </div>

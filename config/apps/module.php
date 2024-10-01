@@ -3,7 +3,7 @@
 return [
     'module' => [
         [
-            'title' => 'QL Tài khoản',
+            'title' => 'QL Người dùng',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserCatalogueController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
+use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,9 +29,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'welcome']);
+
 Route::get('/about', function () {
     return view('client.page.about');
 });

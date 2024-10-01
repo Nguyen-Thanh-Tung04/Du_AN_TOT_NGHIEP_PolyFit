@@ -94,8 +94,8 @@
                                             <i class="ecicon eci-star fill"></i>
                                             <i class="ecicon eci-star-o"></i>
                                         </div>
-                                        <span class="ec-read-review"><a href="#ec-spt-nav-review">Be the first to
-                                                review this product</a></span>
+                                        <span class="ec-read-review"><a href="#ec-spt-nav-review">Hãy là người đầu tiên
+                                            đánh giá sản phẩm này</a></span>
                                     </div>
                                     <div class="ec-single-desc">Lorem Ipsum is simply dummy text of the printing and
                                         typesetting industry. Lorem Ipsum has been the industry's standard dummy
@@ -103,34 +103,33 @@
 
                                     <div class="ec-single-sales">
                                         <div class="ec-single-sales-inner">
-                                            <div class="ec-single-sales-title">sales accelerators</div>
-                                            <div class="ec-single-sales-visitor">real time <span>24</span> visitor
-                                                right now!</div>
+                                            <div class="ec-single-sales-title">máy tăng tốc bán hàng</div>
+                                            <div class="ec-single-sales-visitor">
+                                                thời gian thực <span>24</span> khách truy cập ngay bây giờ!</div>
                                             <div class="ec-single-sales-progress">
-                                                <span class="ec-single-progress-desc">Hurry up!left 29 in
-                                                    stock</span>
+                                                <span class="ec-single-progress-desc">Nhanh lên! Còn 29 phút nữa</span>
                                                 <span class="ec-single-progressbar"></span>
                                             </div>
                                             <div class="ec-single-sales-countdown">
                                                 <div class="ec-single-countdown"><span
                                                         id="ec-single-countdown"></span></div>
-                                                <div class="ec-single-count-desc">Time is Running Out!</div>
+                                                <div class="ec-single-count-desc">Thời gian sắp hết!</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="ec-single-price-stoke">
                                         <div class="ec-single-price">
-                                            <span class="ec-single-ps-title">As low as</span>
+                                            <span class="ec-single-ps-title">THẤP NHẤT</span>
                                             <span class="new-price">$68.00</span>
                                         </div>
                                         <div class="ec-single-stoke">
-                                            <span class="ec-single-ps-title">IN STOCK</span>
-                                            <span class="ec-single-sku">SKU#: WH12</span>
+                                            <span class="ec-single-ps-title">TRONG KHO</span>
+                                            <span class="ec-single-sku">Mã Hàng: WH12</span>
                                         </div>
                                     </div>
                                     <div class="ec-pro-variation">
                                         <div class="ec-pro-variation-inner ec-pro-variation-size">
-                                            <span>SIZE</span>
+                                            <span>KÍCH cỡ</span>
                                             <div class="ec-pro-variation-content">
                                                 <ul>
                                                     <li class="active"><span>7</span></li>
@@ -140,7 +139,7 @@
                                             </div>
                                         </div>
                                         <div class="ec-pro-variation-inner ec-pro-variation-color">
-                                            <span>Color</span>
+                                            <span>Màu sắc</span>
                                             <div class="ec-pro-variation-content">
                                                 <ul>
                                                     <li class="active"><span
@@ -197,15 +196,15 @@
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#ec-spt-nav-details" role="tab" aria-controls="ec-spt-nav-details" aria-selected="true">Detail</a>
+                                        data-bs-target="#ec-spt-nav-details" role="tab" aria-controls="ec-spt-nav-details" aria-selected="true">Chi tiết</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" data-bs-target="#ec-spt-nav-info"
-                                         role="tab" aria-controls="ec-spt-nav-info" aria-selected="false">More Information</a>
+                                         role="tab" aria-controls="ec-spt-nav-info" aria-selected="false">Thêm thông tin</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" data-bs-target="#ec-spt-nav-review"
-                                         role="tab" aria-controls="ec-spt-nav-review" aria-selected="false">Reviews</a>
+                                         role="tab" aria-controls="ec-spt-nav-review" aria-selected="false">Đánh giá</a>
                                 </li>
                             </ul>
                         </div>
@@ -229,9 +228,9 @@
                             <div id="ec-spt-nav-info" class="tab-pane fade">
                                 <div class="ec-single-pro-tab-moreinfo">
                                     <ul>
-                                        <li><span>Weight</span> 1000 g</li>
-                                        <li><span>Dimensions</span> 35 × 30 × 7 cm</li>
-                                        <li><span>Color</span> Black, Pink, Red, White</li>
+                                        <li><span>Cân nặng</span> 1000 g</li>
+                                        <li><span>Kích thước</span> 35 × 30 × 7 cm</li>
+                                        <li><span>Màu sắc</span> Đen, Hồng, Đỏ, Trắng</li>
                                     </ul>
                                 </div>
                             </div>
@@ -292,11 +291,11 @@
 
                                     </div>
                                     <div class="ec-ratting-content">
-                                        <h3>Add a Review</h3>
+                                        <h3>Thêm một đánh giá</h3>
                                         <div class="ec-ratting-form">
                                             <form action="#">
                                                 <div class="ec-ratting-star">
-                                                    <span>Your rating:</span>
+                                                    <span>Đánh giá của bạn:</span>
                                                     <div class="ec-t-review-rating">
                                                         <i class="ecicon eci-star fill"></i>
                                                         <i class="ecicon eci-star fill"></i>
@@ -306,7 +305,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="ec-ratting-input">
-                                                    <input name="your-name" placeholder="Name" type="text" />
+                                                    <input name="your-name" placeholder="Tên*" type="text" />
                                                 </div>
                                                 <div class="ec-ratting-input">
                                                     <input name="your-email" placeholder="Email*" type="email"
@@ -314,9 +313,9 @@
                                                 </div>
                                                 <div class="ec-ratting-input form-submit">
                                                     <textarea name="your-commemt"
-                                                        placeholder="Enter Your Comment"></textarea>
+                                                        placeholder="Nhập bình luận của bạn"></textarea>
                                                     <button class="btn btn-primary" type="submit"
-                                                        value="Submit">Submit</button>
+                                                        value="Submit">Gửi</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -340,9 +339,9 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="section-title">
-                    <h2 class="ec-bg-title">Related products</h2>
-                    <h2 class="ec-title">Related products</h2>
-                    <p class="sub-title">Browse The Collection of Top Products</p>
+                    <h2 class="ec-bg-title">Sản phẩm liên quan</h2>
+                    <h2 class="ec-title">Sản phẩm liên quan</h2>
+                    <p class="sub-title">Duyệt qua Bộ sưu tập các sản phẩm hàng đầu</p>
                 </div>
             </div>
         </div>
@@ -355,7 +354,7 @@
                             <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/18_1.jpg')}}" alt="" />
                         </a>
                         <span class="ec-product-discount-label">-33%</span>
-                        
+
                     </div>
                     <div class="ec-product-body">
                         <ul class="ec-rating">
@@ -402,7 +401,7 @@
                         <a href="{{ url('/product_detail')}}" class="image">
                             <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/3_1.jpg')}}" alt="" />
                         </a>
-                        
+
                     </div>
                     <div class="ec-product-body">
                         <ul class="ec-rating">
@@ -426,7 +425,7 @@
                         <a href="{{ url('/product_detail')}}" class="image">
                             <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/4_1.jpg')}}" alt="" />
                         </a>
-                        
+
                     </div>
                     <div class="ec-product-body">
                         <ul class="ec-rating">
