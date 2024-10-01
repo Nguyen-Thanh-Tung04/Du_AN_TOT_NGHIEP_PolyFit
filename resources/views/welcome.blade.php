@@ -49,36 +49,37 @@
     <!-- Main Slider End -->
 </section>
 <!-- ec Product tab Area End -->
+
+<!--category Section End -->
  <!--  category Section Start -->
- <section class="section ec-category-section ec-category-wrapper-1 section-space-p">
+ <section class="section ec-category-section ec-category-wrapper-1 section-space-p py-1">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="section-title">
-                    <h2 class="ec-title">Danh mục</h2>
-
-                    <h2 class="ec-bg-title">Danh mục</h2>
-                    <p class="sub-title">Duyệt qua Bộ sưu tập các danh mục hàng đầu</p>
+                    <h2 class="ec-title fs-1">Danh mục</h2>
                 </div>
             </div>
         </div>
         <div class="row margin-minus-tb-15">
-            <div class="ec_cat_slider">
-                @foreach ($category as $category)
-                <div class="ec_cat_content">
-
-                    <div class="ec_cat_inner">
-                        <div class="ec-cat-image">
-                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img"  />
+            <a href="#">
+                <div class="ec_cat_slider">
+                    @foreach ($category as $category)
+                    <div class="ec_cat_content">
+                        <div class="ec_cat_inner text-center p-5">
+                            <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
+                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
+                            width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
+                            height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
+                            object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
+                            />
                         </div>
-
                     </div>
-
+                    @endforeach
                 </div>
-                @endforeach
-
-            </div>
+            </a>
         </div>
+        
     </div>
 </section>
 <!--category Section End -->
@@ -89,8 +90,8 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <div class="section-title">
-                        <h2 class="ec-bg-title">PolyFit</h2>
-                        <h2 class="ec-title">PolyFit</h2>
+                        <h2 class="ec-bg-title fs-1">Sản phẩm của chúng tôi</h2>
+                        <h2 class="ec-title fs-1">Sản phẩm của chúng tôi</h2>
                         <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
                     </div>
                 </div>
@@ -160,7 +161,7 @@
         </div>
         </div>
 
-    <section class="section ec-services-section section-space-p" id="services">
+    {{-- <section class="section ec-services-section section-space-p" id="services">
         <h2 class="d-none">Dịch vụ</h2>
         <div class="container">
             <div class="row">
@@ -210,7 +211,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!--services Section End -->
 
     <!--  offer Section Start -->
@@ -221,7 +222,7 @@
                 <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
                     <h2 class="ec-offer-title">Quần Jean</h2>
                     <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
-                    <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}"
+                    <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
                             alt="offer image" /></span>
                     <span class="ec-offer-desc">Quần Jean vá gối</span>
                     <span class="ec-offer-price">$40.00 Only</span>

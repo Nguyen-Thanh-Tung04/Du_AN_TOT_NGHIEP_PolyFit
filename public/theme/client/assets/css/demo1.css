@@ -202,7 +202,7 @@
   font-size: 65px;
   font-weight: 600;
   letter-spacing: 2px;
-  font-family: "Fjalla One";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   position: relative;
 }
 .ec-slide-content .ec-slide-title:before {
@@ -622,7 +622,7 @@
   padding-top: 46px;
 }
 .ec-banner-block-1 .banner-block .banner-text .ec-banner-discount {
-  font-family: "Fjalla One";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .ec-banner-block-2 .banner-block .banner-text .ec-banner-title {
@@ -1073,7 +1073,7 @@
   color: #3474d4;
   margin-bottom: 5px;
   letter-spacing: 2px;
-  font-family: "Montserrat";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   text-transform: uppercase;
   line-height: 1;
   font-weight: 800;

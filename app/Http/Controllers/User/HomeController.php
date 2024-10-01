@@ -20,8 +20,6 @@ class HomeController extends Controller
             ->groupBy('products.id')
             ->get();
 
-        $products = Product::with('category')->get();
-
         // Tạo một mảng kết hợp chứa dữ liệu cần truyền tới view
         $data = [
             'products' => $products,

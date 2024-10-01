@@ -16056,7 +16056,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 /*----  Section  ----*/
@@ -16218,7 +16218,7 @@ h6 {
 }
 
 .section-title .ec-title {
-  font-family: "Montserrat";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 30px;
   font-weight: 800;
   margin-bottom: 7px;
@@ -19639,7 +19639,7 @@ body.ec-open:before {
 .ec-side-cart .ec-cart-inner .ec-cart-title .cart_title {
   font-size: 17px;
   color: #555;
-  font-family: "Montserrat";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: 600;
 }
 
@@ -21395,7 +21395,7 @@ section.ec-test-section {
 }
 
 .ec-test-section .ec-test-name {
-  font-family: "Montserrat";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -21614,7 +21614,7 @@ section.ec-instagram-section {
 }
 
 .ec-footer .footer-top .ec-footer-widget .ec-footer-heading {
-  font-family: "Montserrat";
+	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 11px;
