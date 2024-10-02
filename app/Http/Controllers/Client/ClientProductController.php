@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ClientProductController extends Controller
 {
 
 

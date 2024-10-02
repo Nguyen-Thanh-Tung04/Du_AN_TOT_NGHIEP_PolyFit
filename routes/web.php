@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\ClientProductController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 
@@ -203,7 +203,7 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
 // Products
 Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ProductController::class, 'index'])
-    ->name('index');
+        ->name('index');
     Route::get('{id}/detail', [ProductController::class, 'detail'])
         ->name('detail');
     Route::get('create', [ProductController::class, 'create'])
@@ -219,11 +219,11 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
     Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
         ->name('destroy');
     Route::delete('{id}/destroyVariant', [ProductController::class, 'destroyVariantDetail'])
-    ->name('destroyVariant');
+        ->name('destroyVariant');
 
     Route::prefix('size')->name('size.')->group(function () {
         Route::get('index', [ProductSizeController::class, 'index'])
-        ->name('index');
+            ->name('index');
         Route::get('create', [ProductSizeController::class, 'create'])
             ->name('create');
         Route::post('store', [ProductSizeController::class, 'store'])
@@ -240,7 +240,7 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
 
     Route::prefix('color')->name('color.')->group(function () {
         Route::get('index', [ProductColorController::class, 'index'])
-        ->name('index');
+            ->name('index');
         Route::get('create', [ProductColorController::class, 'create'])
             ->name('create');
         Route::post('store', [ProductColorController::class, 'store'])
@@ -256,9 +256,9 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
     });
 });
 
-Route::get('/product/variant-details', [ProductController::class, 'getVariantDetails'])->name('product.variant');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/product/variant-details', [ClientProductController::class, 'getVariantDetails'])->name('client.product.variant');
+Route::get('/product/{id}', [ClientProductController::class, 'show'])->name('client.product.show');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware('checkLogin');;
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('addToCart')->middleware('checkLogin');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')->middleware('checkLogin');
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('checkLogin');
 Route::post('/cart/delete', [CartController::class, 'deleteCartItem'])->name('cart.delete')->middleware('checkLogin');

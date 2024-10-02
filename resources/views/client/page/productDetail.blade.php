@@ -41,7 +41,7 @@
                                     <div class="single-product-cover">
                                         @foreach($galleryImages as $image)
                                         <div class="single-slide zoom-image-hover">
-                                            <img class="img-responsive" src="{{ Storage::url($image)}}"
+                                            <img class="img-responsive" src="{{ $image }}"
                                                 alt="{{ $product->name }}">
                                         </div>
                                         @endforeach
@@ -49,7 +49,7 @@
                                     <div class="single-nav-thumb">
                                         @foreach($galleryImages as $image)
                                         <div class="single-slide">
-                                            <img class="img-responsive" src="{{ Storage::url($image)}}"
+                                            <img class="img-responsive" src="{{ $image }}"
                                                 alt="{{ $product->name }}">
                                         </div>
                                         @endforeach
@@ -438,7 +438,7 @@
             }
 
             $.ajax({
-                url: '{{route("addToCart")}}',
+                url: '{{route("cart.add")}}',
                 method: 'POST',
                 data: {
                     product_id: productId,
@@ -524,7 +524,7 @@
         function updateVariantDetails() {
             if (selectedSizeId && selectedColorId) {
                 $.ajax({
-                    url: '{{route("product.variant") }}',
+                    url: '{{route("client.product.variant") }}',
                     type: 'GET',
                     data: {
                         _token: '{{ csrf_token() }}',

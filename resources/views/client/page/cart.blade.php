@@ -57,8 +57,7 @@
                                     <tbody>
                                         @foreach($cartItems as $item)
                                         @php
-                                        $galleryString = str_replace("'", '"', $item->variant->product->gallery);
-                                        $gallery = json_decode($galleryString);
+                                        $gallery = json_decode($item->variant->product->gallery);
                                         @endphp
                                         <tr id="cart-item-{{ $item->id }}">
                                             <td> <input type="checkbox" class="product-checkbox cart-checkbox" data-id="{{ $item->id }}"></td>
@@ -66,10 +65,10 @@
 
                                                 <img
                                                     class=" ec-cart-pro-img mr-4"
-                                                    src="{{ (!empty($gallery)) ? Storage::url($gallery[0]) : '' }}" alt="" />
+                                                    src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt="" />
                                             </td>
                                             <td data-label=" Sản phẩm" class="ec-cart-pro-name">
-                                                <a class="fw-semibold fs-6" href="{{ route('product.show', $item->variant->product->id)}}">
+                                                <a class="fw-semibold fs-6" href="{{ route('client.product.show', $item->variant->product->id)}}">
                                                     {{ $item->variant->product->name }}
                                                 </a>
                                             </td>
