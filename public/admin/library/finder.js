@@ -99,7 +99,7 @@
                    html += ' <div class="thumb">'
                        html += ' <span class="span image img-scaledown">'
                             html += '<img src="'+image+'" alt="'+image+'">'
-                            html += '<input type="hidden" name="album[]" value="'+image+'">'
+                            html += '<input type="hidden" name="gallery[]" value="'+image+'">'
                         html += '</span>'
                         html += '<button class="delete-image"><i class="fa fa-trash"></i></button>'
                     html += '</div>'

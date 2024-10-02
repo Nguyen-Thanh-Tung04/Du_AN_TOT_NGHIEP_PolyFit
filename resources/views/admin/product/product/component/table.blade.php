@@ -17,12 +17,15 @@
         <tbody>
             @if (isset($products) && is_object($products))
                 @foreach($products as $product)
+                @php
+                    $gallery = json_decode($product->gallery, true);
+                @endphp
                 <tr>
                     <td>
                         <input type="checkbox" value="{{ $product->id }}" class="input-checkbox checkBoxItem">
                     </td>
                     <td class="text-center">
-                        <span><img class="image img-cover" src="{{ $product->gallery }}" alt=""></span>
+                        <span><img class="image img-cover" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt=""></span>
                     </td>
                     <td>{{ $product->code }}</td>
                     <td>{{ $product->name }}</td>
@@ -37,8 +40,8 @@
                         {{ ($product->status == 1) ? 'checked' : '' }}/>
                     </td>
                     <td class="text-center">
+                        <a href="{{ route('product.detail', $product->id) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
                         <a href="{{ route('product.edit', $product->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-
                         <a href="{{ route('product.delete', $product->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>

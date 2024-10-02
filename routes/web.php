@@ -5,10 +5,14 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductSizeController;
+use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\UserCatalogueController;
 
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 
@@ -168,12 +172,12 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ProductController::class, 'index'])
     ->name('index');
+    Route::get('{id}/detail', [ProductController::class, 'detail'])
+        ->name('detail');
     Route::get('create', [ProductController::class, 'create'])
         ->name('create');
     Route::post('store', [ProductController::class, 'store'])
         ->name('store');
-    Route::get('{id}/edit', [ProductController::class, 'edit'])
-        ->name('edit');
     Route::get('{id}/edit', [ProductController::class, 'edit'])
         ->name('edit');
     Route::post('{id}/update', [ProductController::class, 'update'])
@@ -182,4 +186,40 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
         ->name('delete');
     Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
         ->name('destroy');
+    Route::delete('{id}/destroyVariant', [ProductController::class, 'destroyVariantDetail'])
+    ->name('destroyVariant');
+
+    Route::prefix('size')->name('size.')->group(function () {
+        Route::get('index', [ProductSizeController::class, 'index'])
+        ->name('index');
+        Route::get('create', [ProductSizeController::class, 'create'])
+            ->name('create');
+        Route::post('store', [ProductSizeController::class, 'store'])
+            ->name('store');
+        Route::get('{id}/edit', [ProductSizeController::class, 'edit'])
+            ->name('edit');
+        Route::post('{id}/update', [ProductSizeController::class, 'update'])
+            ->name('update');
+        Route::get('{id}/delete', [ProductSizeController::class, 'delete'])
+            ->name('delete');
+        Route::delete('{id}/destroy', [ProductSizeController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+    Route::prefix('color')->name('color.')->group(function () {
+        Route::get('index', [ProductColorController::class, 'index'])
+        ->name('index');
+        Route::get('create', [ProductColorController::class, 'create'])
+            ->name('create');
+        Route::post('store', [ProductColorController::class, 'store'])
+            ->name('store');
+        Route::get('{id}/edit', [ProductColorController::class, 'edit'])
+            ->name('edit');
+        Route::post('{id}/update', [ProductColorController::class, 'update'])
+            ->name('update');
+        Route::get('{id}/delete', [ProductColorController::class, 'delete'])
+            ->name('delete');
+        Route::delete('{id}/destroy', [ProductColorController::class, 'destroy'])
+            ->name('destroy');
+    });
 });

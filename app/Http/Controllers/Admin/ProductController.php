@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use Illuminate\Http\Request;
-use App\Services\ProductService;
+use App\Http\Requests\DeleteProductRequest;
+use App\Models\Variant;
 use App\Repositories\ProductRepository;
+use App\Services\ProductService;
+
+use function Termwind\ask;
+use Illuminate\Http\Request;
 
 class ProductController
 {
@@ -43,8 +47,11 @@ class ProductController
         ));
     }
 
-    public function create(Request $request) {
-        $dropdown  = $this->nestedset->Dropdown();
+    public function create() {
+        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $getColorAttr = $this->productService->getColorAttr();
+        $getSizeAttr = $this->productService->getSizeAttr();
+   
         $template = 'admin.product.product.store';
         $config = $this->configData();
         $config['seo'] = config('apps.product');
@@ -52,7 +59,9 @@ class ProductController
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
-            'products',
+            'getCategoryAttr',
+            'getColorAttr',
+            'getSizeAttr',
         ));
     }
 
@@ -65,6 +74,11 @@ class ProductController
 
     public function edit($id) {
         $product = $this->productRepository->findById($id);
+        // dd($product->variants);
+        
+        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $getColorAttr = $this->productService->getColorAttr();
+        $getSizeAttr = $this->productService->getSizeAttr();
 
         $template = 'admin.product.product.update';
         $config = $this->configData();
@@ -72,8 +86,32 @@ class ProductController
         $config['method'] = 'edit';
         return view('admin.dashboard.layout', compact(
             'template',
-            'product',
             'config',
+            'product',
+            'getCategoryAttr',
+            'getColorAttr',
+            'getSizeAttr',
+        ));
+    }
+
+    public function detail($id) {
+        $product = $this->productRepository->findById($id);
+        
+        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $getColorAttr = $this->productService->getColorAttr();
+        $getSizeAttr = $this->productService->getSizeAttr();
+
+        $template = 'admin.product.product.detail';
+        $config = $this->configData();
+        $config['seo'] = config('apps.product');
+        $config['method'] = 'detail';
+        return view('admin.dashboard.layout', compact(
+            'template',
+            'config',
+            'product',
+            'getCategoryAttr',
+            'getColorAttr',
+            'getSizeAttr',
         ));
     }
 
@@ -86,31 +124,46 @@ class ProductController
 
     public function delete($id) {
         $product = $this->productRepository->findById($id);
+        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $getColorAttr = $this->productService->getColorAttr();
+        $getSizeAttr = $this->productService->getSizeAttr();
+
         $config['seo'] = config('apps.product');
         $template = 'admin.product.product.delete';
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
             'product',
+            'getCategoryAttr',
+            'getColorAttr',
+            'getSizeAttr',
         ));
     }
 
-    public function destroy($id) {
+    public function destroy($id, DeleteProductRequest $request) {
         if ($this->productService->destroy($id)) {
             return redirect()->route('product.index')->with('success', 'Xóa bản ghi thành công.');
         }
         return redirect()->route('product.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
     }
 
+    public function destroyVariantDetail(Request $request) {
+        if ($this->productService->destroyVariant($request)) {
+            return redirect()->route('product.delete', $request->id)->with('success', 'Xóa bản ghi thành công.');
+        }
+        return redirect()->route('product.delete', $request->id)->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
+    }
+
     public function configData() {
         return [
             'js' => [
+                'admin/js/plugins/switchery/switchery.js',
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-                'admin/library/location.js',
                 'admin/plugins/ckfinder_2/ckfinder.js',
                 'admin/library/finder.js',
             ],
             'css' => [
+                'admin/css/plugins/switchery/switchery.css',
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
             ]
         ];

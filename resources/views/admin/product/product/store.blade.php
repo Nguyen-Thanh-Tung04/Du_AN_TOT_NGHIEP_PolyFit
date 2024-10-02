@@ -9,7 +9,7 @@
     </div>
 @endif
 @php
-    $url = route('user.store');
+    $url = route('product.store');
 @endphp
 <form action="{{ $url }}" method="post" class="box">
     @csrf
@@ -57,22 +57,16 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $userCatalogue = [
-                                '[Chọn danh mục]',
-                                '[Quản trị viên]',
-                                '[Nhân viên]',
-                            ];
-                        @endphp
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Danh mục
                                         <span class="text-danger">(*)</span></label>
-                                        <select name="parent_id" class="form-control setupSelect2">
-                                            @foreach ($dropdown as $key => $val)
-                                                <option
-                                                    value="{{ $key }}"  value="{{ $key }}">{{ $val }}
+                                        <select name="category_id" class="form-control setupSelect2">
+                                            <option value="0">Chọn danh mục</option>
+                                            @foreach ($getCategoryAttr as $item)
+                                                <option {{ old('category_id') == $item->id ? 'selected' : '' }}
+                                                    value="{{ $item->id }}">{{ $item->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -83,7 +77,7 @@
                             <div class="col-lg-12 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Mô tả</label>
-                                    <textarea name="description" class="form-control" name="" id="" cols="30" rows="10"></textarea>
+                                    <textarea name="description" class="form-control" id="" cols="30" rows="10">{{ old('description') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -98,8 +92,8 @@
                                 </div>
                                 <div class="ibox-content">
                                     @php
-                                        $album = (!empty($model->album)) ? json_decode($model->album) : [];
-                                        $gallery = (isset($album) && count($album) ) ? $album : old('album');
+                                        $album = (!empty($product->gallery)) ? json_decode($product->gallery) : [];
+                                        $gallery = (isset($album) && count($album) ) ? $album : old('gallery');
                                     @endphp
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -124,7 +118,7 @@
                                                                 <div class="thumb">
                                                                     <span class="span image img-scaledown">
                                                                         <img src="{{ $val }}" alt="{{ $val }}">
-                                                                        <input type="hidden" name="album[]" value="{{ $val }}">
+                                                                        <input type="hidden" name="gallery[]" value="{{ $val }}">
                                                                     </span>
                                                                     <button class="delete-image"><i class="fa fa-trash"></i></button>
                                                                 </div>
@@ -153,38 +147,62 @@
                                 
                                 <div class="table-responsive">
                                     <div style="margin: 10px 0 20px 0;">
-                                        <a href="http://127.0.0.1:8000/product/create" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới sản phẩm</a>
+                                        <a href="http://127.0.0.1:8000/product/create" class="btn btn-danger" id="addVariant">
+                                            <i class="fa fa-plus mr-5"></i>
+                                            Thêm mới biến thể</a>
                                     </div>
-                                    <table class="table table-sm table-striped table-bordered">
-                                        <tbody>
-                                                <tr>
+                                    <table class="table table-sm table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Màu Sắc</th>
+                                                <th class="text-center">Kích cỡ</th>
+                                                <th class="text-center">Giá nhập kho</th>
+                                                <th class="text-center">Giá niêm yết</th>
+                                                <th class="text-center">Giá sale</th>
+                                                <th class="text-center">Số lượng</th>
+                                                <th class="text-center">Hành động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="variant-tbody">
+                                                <tr class="variant-row">
                                                     <td class="text-center">
-                                                        <select name="" class="form-control setupSelect2" data-target="wards">
-                                                            <option value="0">[Chọn màu sắc]</option>
+                                                        <select name="color[]" class="form-control">
+                                                            <option value="0">Màu Sắc</option>
+                                                            @foreach ($getColorAttr as $item)
+                                                                <option {{ old("color.$loop->index") == $item->id ? 'selected' : '' }}
+                                                                    value="{{ $item->id }}">{{ $item->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td class="text-center" style="padding: 20px 0">
+                                                        <select name="size[]" class="form-control">
+                                                            <option value="0">Kích cỡ</option>
+                                                            @foreach ($getSizeAttr as $item)
+                                                                <option {{ old("size.$loop->index") == $item->id ? 'selected' : '' }}
+                                                                    value="{{ $item->id }}">{{ $item->name }}
+                                                                </option>
+                                                            @endforeach
                                                         </select>
                                                     </td>
                                                     <td class="text-center">
-                                                        <select name="" class="form-control setupSelect2" data-target="wards">
-                                                            <option value="0">[Chọn kích thước]</option>
-                                                        </select>
+                                                        <input type="text" name="purchase_price[]" value="{{ old('purchase_price.0') }}" placeholder="Giá nhập kho" class="form-control">
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" value="" placeholder="Giá nhập kho" class="form-control">
+                                                        <input type="text" name="listed_price[]" value="{{ old('listed_price.0') }}" placeholder="Giá niêm yết" class="form-control">
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" value="" placeholder="Giá bán" class="form-control">
+                                                        <input type="text" name="sale_price[]" value="{{ old('sale_price.0') }}" placeholder="Giá sale" class="form-control">
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" value="" placeholder="Giá sale" class="form-control">
+                                                        <input type="text" name="quantity[]" value="{{ old('quantity.0') }}" placeholder="Số lượng" class="form-control">
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" value="" placeholder="Số lượng" class="form-control">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                        <a href="" class="btn btn-danger remove-variant"><i class="fa fa-trash "></i></a>
                                                     </td>
                                                 </tr>
                                         </tbody>
+                                        
                                     </table>
                                 </div>
                             </div>
@@ -198,5 +216,8 @@
         </div>
     </div>
 </form>
-
+<script>
+    var colors = @json($getColorAttr);
+    var sizes = @json($getSizeAttr);
+</script>
 

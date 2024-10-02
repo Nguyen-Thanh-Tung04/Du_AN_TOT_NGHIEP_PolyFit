@@ -20,11 +20,19 @@ return [
         [
             'title' => 'QL Sản Phẩm',
             'icon' => 'fa fa-dashboard',
-            'name' => ['user'],
+            'name' => ['product'],
             'subModule' => [
                 [
                     'title' => 'QL Sản Phẩm',
                     'route' => 'product/index',
+                ],
+                [
+                    'title' => 'QL Màu Sắc',
+                    'route' => 'product/color/index',
+                ],
+                [
+                    'title' => 'QL Kích Cỡ',
+                    'route' => 'product/size/index',
                 ]
             ],
         ],

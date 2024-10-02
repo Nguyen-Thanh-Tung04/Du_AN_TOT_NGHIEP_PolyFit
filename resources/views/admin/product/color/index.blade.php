@@ -4,12 +4,12 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>{{ $config['seo']['index']['table'] }}</h5>
-                @include('admin.dashboard.component.toolbox', ['model' => 'Product', 'field' => 'status'])
+                @include('admin.dashboard.component.toolbox', ['model' => 'Color', 'field' => 'status'])
 
             </div>
             <div class="ibox-content">
-                @include('admin.product.product.component.filter')
-                @include('admin.product.product.component.table')
+                @include('admin.product.color.component.filter')
+                @include('admin.product.color.component.table')
             </div>
         </div>
     </div>
