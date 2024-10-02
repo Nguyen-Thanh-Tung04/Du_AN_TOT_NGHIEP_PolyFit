@@ -99,7 +99,6 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <a href="{{ route('crud.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới thành viên</a>
                                     </div>
                                 </div>
                             </div>

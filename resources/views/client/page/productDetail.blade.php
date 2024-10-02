@@ -314,6 +314,7 @@
                         </a>
                         <span class="ec-product-discount-label">-33%</span>
 
+
                     </div>
                     <div class="ec-product-body">
                         <ul class="ec-rating">
@@ -361,6 +362,7 @@
                             <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/3_1.jpg')}}" alt="" />
                         </a>
 
+
                     </div>
                     <div class="ec-product-body">
                         <ul class="ec-rating">
@@ -384,6 +386,7 @@
                         <a href="{{ url('/product_detail')}}" class="image">
                             <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/4_1.jpg')}}" alt="" />
                         </a>
+
 
                     </div>
                     <div class="ec-product-body">

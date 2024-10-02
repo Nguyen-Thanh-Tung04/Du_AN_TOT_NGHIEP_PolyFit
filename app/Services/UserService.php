@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -124,6 +124,6 @@ class UserService
         return $birthday;
     }
 
-    
-    
+
+
 }

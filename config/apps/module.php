@@ -3,7 +3,7 @@
 return [
     'module' => [
         [
-            'title' => 'QL Người dùng',
+            'title' => 'QL Người Dùng',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [
@@ -12,9 +12,32 @@ return [
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL Người dùng',
+                    'title' => 'QL Thành Viên',
                     'route' => 'user/index',
                 ],
+                [
+                    'title' => 'QL Khách Hàng',
+                    'route' => 'member/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'QL Sản Phẩm',
+            'icon' => 'fa fa-dashboard',
+            'name' => ['product'],
+            'subModule' => [
+                [
+                    'title' => 'QL Sản Phẩm',
+                    'route' => 'product/index',
+                ],
+                [
+                    'title' => 'QL Màu Sắc',
+                    'route' => 'product/color/index',
+                ],
+                [
+                    'title' => 'QL Kích Cỡ',
+                    'route' => 'product/size/index',
+                ]
             ],
         ],
         [
@@ -36,6 +59,17 @@ return [
                 [
                     'title' => 'QL Danh Mục',
                     'route' => 'categories/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'QL Voucher',
+            'icon' => 'fa fa-sitemap',
+            'name' => ['vouchers'],
+            'subModule' => [
+                [
+                    'title' => 'QL Voucher',
+                    'route' => 'vouchers/index',
                 ],
             ],
         ],

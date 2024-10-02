@@ -34,6 +34,7 @@ class User extends Authenticatable
         'ip',
         'user_catalogue_id',
         'publish',
+        'status',
     ];
 
     /**

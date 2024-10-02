@@ -28,7 +28,7 @@
                             <input type="checkbox" value="{{ $category->is_active }}" 
                             class="js-switch status " 
                             data-field="is_active" 
-                            data-model="category"
+                            data-model="Category"
                             data-modelId="{{ $category->id }}"
                             {{ ($category->is_active == 1) ? 'checked' : '' }} />
                         </td>   

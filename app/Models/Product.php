@@ -12,19 +12,19 @@ class Product extends Model
     protected $fillable = [
         'name',
         'code',
+        'gallery',
         'description',
         'status',
-        'gallery',
         'category_id',
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id');
+    protected $table = 'products';
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function variants()
-    {
-        return $this->hasMany(Variant::class);
+    public function variants() {
+        return $this->hasMany(Variant::class, 'product_id', 'id');
     }
 }

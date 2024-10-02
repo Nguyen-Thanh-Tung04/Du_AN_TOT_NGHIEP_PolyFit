@@ -17,21 +17,20 @@ class Variant extends Model
         'listed_price',
         'sale_price',
         'quantity',
-        'status'
+        'status',
     ];
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id');
+    protected $table = 'variants';
+
+    public function product() {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function color()
-    {
-        return $this->belongsTo(Color::class, 'color_id');
+    public function color() {
+        return $this->belongsTo(Color::class, 'color_id', 'id');
     }
 
-    public function size()
-    {
-        return $this->belongsTo(Size::class, 'size_id');
+    public function size() {
+        return $this->belongsTo(Size::class, 'size_id', 'id');
     }
 }

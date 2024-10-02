@@ -13,8 +13,9 @@ class Size extends Model
         'name',
     ];
 
-    public function variants()
-    {
-        return $this->hasMany(Variant::class, 'size_id');
+    protected $table = 'sizes';
+
+    public function variants() {
+        return $this->hasMany(Variant::class, 'size_id', 'id');
     }
 }

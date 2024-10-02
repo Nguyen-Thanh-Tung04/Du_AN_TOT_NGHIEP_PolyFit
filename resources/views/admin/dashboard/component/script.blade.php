@@ -4,6 +4,7 @@
     <script src="admin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="admin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="admin/library/library.js"></script>
+    <script src="admin/plugins/jquery-ui.js"></script>
 
 
     <!-- Custom and plugin javascript -->

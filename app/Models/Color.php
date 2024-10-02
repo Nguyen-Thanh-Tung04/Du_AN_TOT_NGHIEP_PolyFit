@@ -13,8 +13,9 @@ class Color extends Model
         'name',
     ];
 
-    public function variants()
-    {
-        return $this->hasMany(Variant::class, 'color_id');
+    protected $table = 'colors';
+
+    public function variants() {
+        return $this->hasMany(Variant::class, 'color_id', 'id');
     }
 }
