@@ -40,7 +40,7 @@ class ProductRepository
                     $query->where('status', '=', '2');
                 }
                 // return $query;
-            })->with('categories');
+            })->with('category');
 
             if(isset($orderBy) && !empty($orderBy)) {
                 $query->orderBy($orderBy[0], $orderBy[1]);

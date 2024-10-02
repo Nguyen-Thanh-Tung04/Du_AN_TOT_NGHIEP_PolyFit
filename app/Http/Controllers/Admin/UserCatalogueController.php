@@ -16,8 +16,8 @@ class UserCatalogueController
     protected $userCatalogueRepository;
 
     public function __construct(
-        UserCatalogueService $userCatalogueService, 
-        UserCatalogueRepository $userCatalogueRepository, 
+        UserCatalogueService $userCatalogueService,
+        UserCatalogueRepository $userCatalogueRepository,
     ) {
         $this->userCatalogueService = $userCatalogueService;
         $this->userCatalogueRepository = $userCatalogueRepository;

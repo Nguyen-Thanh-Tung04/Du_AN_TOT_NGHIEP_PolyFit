@@ -41,7 +41,7 @@
                                         </td>
                                         <td>{{ $product->code }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->categories->name }}</td>
+                                        <td>{{ $product->category->name }}</td>
                                         <td>{{ $product->description }}</td>
                                         <td class="text-center js-switch-{{ $product->id }}">
                                             <input readonly type="checkbox" value="{{ $product->status }}" 

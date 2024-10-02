@@ -29,12 +29,12 @@
  */
 function CheckAuthentication()
 {
-	
+
 	// $cookieAuth = (isset($_COOKIE[AUTH.'Backend']) ? $_COOKIE[AUTH.'Backend']:'');
-	
+
 	//  if ( !isset($_COOKIE[AUTH.'Backend']) || empty($cookieAuth)) return false;
-	
-	
+
+
 	// WARNING : DO NOT simply return "true". By doing so, you are allowing
 	// "anyone" to upload and list the files in your server. You must implement
 	// some kind of session validation here. Even something very simple as...

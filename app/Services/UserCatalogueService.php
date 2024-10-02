@@ -36,7 +36,7 @@ class UserCatalogueService
             'description',
             'publish',
         ], $condition, $perPage, ['path' => 'user/index']);
-        
+
         return $userCatalogues;
     }
 
@@ -119,7 +119,7 @@ class UserCatalogueService
     }
 
     private function changeUserStatus($post, $value) {
-        
+
         DB::beginTransaction();
         try {
             $array = [];
@@ -141,6 +141,6 @@ class UserCatalogueService
         }
     }
 
-    
-    
+
+
 }

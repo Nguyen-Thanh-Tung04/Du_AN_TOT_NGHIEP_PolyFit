@@ -3,6 +3,7 @@
 
 <head>
     @include('admin.dashboard.component.head')
+    @yield('css')
 </head>
 
 <body>

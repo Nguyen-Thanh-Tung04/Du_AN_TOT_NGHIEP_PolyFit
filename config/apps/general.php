@@ -11,5 +11,10 @@ return [
         '1' => 'Follow',
         '2' => 'UnFollow',
     ],
+    'is_active' => [
+        '' => 'Chọn tất cả tình trạng',
+        '1' => 'Active',
+        '0' => 'UnActive',
+    ],
     'suffix' => '.html',
 ];

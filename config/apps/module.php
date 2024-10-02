@@ -12,8 +12,12 @@ return [
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL Người dùng',
+                    'title' => 'QL Thành Viên',
                     'route' => 'user/index',
+                ],
+                [
+                    'title' => 'QL Khách Hàng',
+                    'route' => 'member/index',
                 ],
             ],
         ],
@@ -55,6 +59,17 @@ return [
                 [
                     'title' => 'QL Danh Mục',
                     'route' => 'categories/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'QL Voucher',
+            'icon' => 'fa fa-sitemap',
+            'name' => ['vouchers'],
+            'subModule' => [
+                [
+                    'title' => 'QL Voucher',
+                    'route' => 'vouchers/index',
                 ],
             ],
         ],

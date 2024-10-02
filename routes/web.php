@@ -2,17 +2,19 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\UserCatalogueController;
-
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,9 +34,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'welcome']);
+
 Route::get('/about', function () {
     return view('client.page.about');
 });
@@ -88,7 +89,24 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
     Route::delete('{id}/destroy', [UserController::class, 'destroy'])
         ->name('destroy');
 });
-
+Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [MemberController::class, 'index'])
+        ->name('index');
+    Route::get('create', [MemberController::class, 'create'])
+        ->name('create');
+    Route::post('store', [MemberController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [MemberController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/edit', [MemberController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [MemberController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [MemberController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
+        ->name('destroy');
+});
 Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])
         ->name('index');
@@ -167,6 +185,18 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [VoucherController::class, 'index'])->name('index');
+    Route::get('create', [VoucherController::class, 'create'])->name('create');
+    Route::post('store', [VoucherController::class, 'store'])->name('store');
+    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit');
+    Route::put('{voucher}/update', [VoucherController::class, 'update'])->name('update');
+    Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
+    Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
+});
+
+
+
 
 // Products
 Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {

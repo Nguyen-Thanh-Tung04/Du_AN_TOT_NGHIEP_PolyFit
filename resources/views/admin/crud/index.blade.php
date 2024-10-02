@@ -15,7 +15,7 @@
                 <li>
                     <a href="{{ route('dashboard.index') }}">Dashboard</a>
                 </li>
-                <li class="active"><strong>sf</strong></li>
+                <li class="active"><strong>test</strong></li>
             </ol>
         </div>
     </div>
@@ -99,7 +99,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <a href="{{ route('crud.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới thành viên</a>
+                                        {{-- <a href="{{ route('crud.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới thành viên</a> --}}
                                     </div>
                                 </div>
                             </div>

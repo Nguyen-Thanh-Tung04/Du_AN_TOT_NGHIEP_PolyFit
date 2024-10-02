@@ -13,7 +13,7 @@ class UserRepository
 {
 
     public function pagination(
-        array $column = ['*'], 
+        array $column = ['*'],
         array $condition = [],
         int $perpage = 1,
         array $extend = [],
@@ -31,6 +31,7 @@ class UserRepository
                 } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
                     $query->where('publish', '=', '2');
                 }
+                $query->where('user_catalogue_id', '>', 0);
                 return $query;
             })->with('user_catalogues');
 
