@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\UserCatalogueController;
 
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ProductController;
+use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 
 
@@ -40,7 +43,7 @@ Route::get('/history', function () {
     return view('client.page.history');
 });
 Route::get('/product_detail', function () {
-    return view('client.page.product-detail');
+    return view('client.page.productDetail');
 });
 Route::get('/contact', function () {
     return view('client.page.contact');
@@ -48,16 +51,15 @@ Route::get('/contact', function () {
 Route::get('/account', function () {
     return view('client.page.profile');
 });
-Route::get('/cart', function () {
-    return view('client.page.cart');
-})->name('cart');
+// Route::get('/cart', function () {
+//     return view('client.page.cart');
+// })->name('cart');
 Route::get('/checkout', function () {
     return view('client.page.checkout');
 })->name('checkout');
 Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');
-
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -162,3 +164,10 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+
+Route::get('/product/variant-details', [ProductController::class, 'getVariantDetails'])->name('product.variant');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware('checkLogin');;
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('addToCart')->middleware('checkLogin');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('checkLogin');
+Route::post('/cart/delete', [CartController::class, 'deleteCartItem'])->name('cart.delete')->middleware('checkLogin');

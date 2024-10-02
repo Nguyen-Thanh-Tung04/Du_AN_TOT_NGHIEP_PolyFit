@@ -35,83 +35,76 @@
                 <div class="ec-cart-content">
                     <div class="ec-cart-inner">
                         <div class="row">
-                            <form action="#">
-                                <div class="table-content cart-table-content">
-                                    <table>
-                                        <thead>
+                            <div class="table-content cart-table-content">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="selectAll" class="product-checkbox">
+                                            </th>
+                                            <th>
+                                            </th>
+                                            <th>
+                                                Sản phẩm
+                                            </th>
+                                            <th>Phân loại</th>
+                                            <th>Đơn giá</th>
+                                            <th style="text-align: center;">Số lượng</th>
+                                            <th>Số tiền</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($cartItems as $item)
+                                        @php
+                                        $galleryString = str_replace("'", '"', $item->variant->product->gallery);
+                                        $gallery = json_decode($galleryString);
+                                        @endphp
+                                        <tr id="cart-item-{{ $item->id }}">
+                                            <td> <input type="checkbox" class="product-checkbox cart-checkbox" data-id="{{ $item->id }}"></td>
+                                            <td>
 
-                                            <tr>
-                                                <th>
-                                                    <input type="checkbox" id="product-check" class="product-checkbox">
-                                                </th>
-                                                <th>
-                                                    Sản phẩm
-                                                </th>
-                                                <th>Phân loại</th>
-                                                <th>Đơn giá</th>
-                                                <th style="text-align: center;">Số lượng</th>
-                                                <th>Số tiền</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" id="product-check" class="product-checkbox">
-                                                </td>
-                                                <td data-label="Sản phẩm" class="ec-cart-pro-name">
+                                                <img
+                                                    class=" ec-cart-pro-img mr-4"
+                                                    src="{{ (!empty($gallery)) ? Storage::url($gallery[0]) : '' }}" alt="" />
+                                            </td>
+                                            <td data-label=" Sản phẩm" class="ec-cart-pro-name">
+                                                <a class="fw-semibold fs-6" href="{{ route('product.show', $item->variant->product->id)}}">
+                                                    {{ $item->variant->product->name }}
+                                                </a>
+                                            </td>
+                                            <td data-label="Phân loại" class="ec-cart-pro-price">
+                                                <span>{{ $item->variant->size->name }},</span>
+                                                <span>{{ $item->variant->color->name }}</span>
+                                            </td>
+                                            <td data-label="Đơn giá" class="ec-cart-pro-price">
+                                                <span class="amount">
+                                                    @if($item->variant->sale_price)
+                                                    <span class="text-decoration-line-through">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                    {{ number_format($item->variant->sale_price) }}₫
+                                                    @else
+                                                    {{ number_format($item->variant->purchase_price) }}₫
+                                                    @endif
 
-                                                    <a
-                                                        href="product-left-sidebar.html"><img
-                                                            class="ec-cart-pro-img mr-4"
-                                                            src="theme/client/assets/images/product-image/2.jpg" alt="" />Áo Hoodie nam nữ thoáng mát</a>
-
-                                                </td>
-                                                <td data-label="Phân loại" class="ec-cart-pro-price"><span
-                                                        class="amount">N Xanh than</span></td>
-                                                <td data-label="Đơn giá" class="ec-cart-pro-price"><span
-                                                        class="amount">₫75.000</span></td>
-                                                <td data-label="Số lượng" class="ec-cart-pro-qty"
-                                                    style="text-align: center;">
-                                                    <div class="cart-qty-plus-minus">
-                                                        <input class="cart-plus-minus" type="text"
-                                                            name="cartqtybutton" value="1" />
-                                                    </div>
-                                                </td>
-                                                <td data-label="Số tiền" class="ec-cart-pro-subtotal">₫75.000</td>
-                                                <td data-label="Xóa" class="ec-cart-pro-remove">
-                                                    <a href="#"><i class="ecicon eci-trash-o"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" id="product-check" class="product-checkbox">
-                                                </td>
-                                                <td data-label="Sản phẩm" class="ec-cart-pro-name"><a
-                                                        href="product-left-sidebar.html"><img
-                                                            class="ec-cart-pro-img mr-4"
-                                                            src="theme/client/assets/images/product-image/3.jpg"
-                                                            alt="" />Áo dài tay nữ siêu đẹp</a></td>
-                                                <td data-label="Phân loại" class="ec-cart-pro-price"><span
-                                                        class="amount">M, Hồng nhạt</span></td>
-                                                <td data-label="Đơn giá" class="ec-cart-pro-price"><span
-                                                        class="amount">₫48.000</span></td>
-                                                <td data-label="Số lượng" class="ec-cart-pro-qty"
-                                                    style="text-align: center;">
-                                                    <div class="cart-qty-plus-minus">
-                                                        <input class="cart-plus-minus" type="text"
-                                                            name="cartqtybutton" value="1" />
-                                                    </div>
-                                                </td>
-                                                <td data-label="Số tiền" class="ec-cart-pro-subtotal">₫48.000</td>
-                                                <td data-label="Xóa" class="ec-cart-pro-remove">
-                                                    <a href="#"><i class="ecicon eci-trash-o"></i></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
+                                                </span>
+                                            </td>
+                                            <td data-label="Số lượng" class="ec-cart-pro-qty"
+                                                style="text-align: center;">
+                                                <div class="cart-qty-plus-minus">
+                                                    <input class="cart-plus-minus quantity-input" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Số tiền" class="ec-cart-pro-subtotal">
+                                                {{ number_format(($item->variant->sale_price ?? $item->variant->purchase_price) * $item->quantity) }}₫
+                                            </td>
+                                            <td data-label="Xóa" class="ec-cart-pro-remove">
+                                                <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,19 +134,19 @@
                                     </div>
                                     <div class="border-top pt-3">
                                         <span class="text-left">Tổng tiền hàng</span>
-                                        <span class="text-right">₫20.000</span>
+                                        <span class="text-right">0₫</span>
                                     </div>
                                     <div class="pt-3">
                                         <span class="text-left">Voucher giảm giá</span>
-                                        <span class="text-right">₫0</span>
+                                        <span class="text-right">0₫</span>
                                     </div>
                                     <div class="pt-3">
                                         <span class="text-left">Giảm giá sản phẩm</span>
-                                        <span class="text-right">₫20.000</span>
+                                        <span class="text-right">0₫</span>
                                     </div>
                                     <div class="fw-bolder pt-3 border-top">
                                         <span class="text-left">Tổng số tiền</span>
-                                        <span class="text-right">₫40.000</span>
+                                        <span class="text-right">0₫</span>
                                     </div>
 
                                     <div class="ec-cart-summary-total border-top">
@@ -465,4 +458,74 @@
     </div>
 </section>
 <!-- New Product end -->
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('.delete-item').on('click', function() {
+            const cartId = $(this).data('cart-id');
+            const rowId = "#cart-item-" + cartId;
+            $.ajax({
+                url: '{{ route("cart.delete")}}',
+                method: 'POST',
+                data: {
+                    cart_id: cartId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.status) {
+                        $(rowId).remove();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message,
+                        })
+                    }
+                },
+                error: function() {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Xảy ra lỗi',
+                    })
+                }
+            });
+        });
+
+        $('#selectAll').change(function() {
+            $('.cart-checkbox').prop('checked', $(this).is(':checked'));
+            //calculateTotal();
+        });
+
+        $('.quantity-input').on('input', function() {
+            let input = $(this);
+            let min = parseInt(input.attr('data-min'));
+            let max = parseInt(input.attr('data-max'));
+            let value = input.val();
+
+            // Remove non-numeric characters
+            if (value.match(/[^0-9]/g)) {
+                value = value.replace(/[^0-9]/g, '');
+                input.val(value);
+            }
+
+            // Prevent values below min
+            if (value < min) {
+                input.val(min);
+            }
+
+            // Prevent values above max
+            if (value > max) {
+                input.val(max);
+            }
+        });
+
+        // Optionally prevent invalid input entirely (e.g., when pasting)
+        $('.quantity-input').on('keydown', function(e) {
+            if ((e.which < 48 || e.which > 57) && e.which !== 8 && e.which !== 37 && e.which !== 39) {
+                e.preventDefault(); // Prevent any non-numeric input except backspace and arrow keys
+            }
+        });
+    });
+</script>
 @endsection
