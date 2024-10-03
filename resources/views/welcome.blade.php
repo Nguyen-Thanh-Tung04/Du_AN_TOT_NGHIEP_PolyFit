@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                             <div class="ec-slide-content slider-animation">
-                                <h1 class="ec-slide-title">Bộ tai nghe thuyền</h1>
+                            <h1 class="ec-slide-title">Bộ thời trang sang trọng quý phái</h1>
                                 <h2 class="ec-slide-stitle">Khuyến mại</h2>
                                 <p>Chúng tôi hi vọng sẽ giúp thỏa mãn mong muốn mua sắm của quý khách !</p>
                                 <a href="{{ url('/product_detail') }}" class="btn btn-lg btn-secondary">Đặt hàng
@@ -62,23 +62,24 @@
             </div>
         </div>
         <div class="row margin-minus-tb-15">
-
+            <a href="#">
                 <div class="ec_cat_slider">
                     @foreach ($category as $category)
                     <div class="ec_cat_content">
                         <div class="ec_cat_inner text-center p-5">
                             <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
-                           <a href=""> <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
+                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
                             width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
                             height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                            object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */" />
+                            object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
+                            />
                         </div>
                     </div>
                     @endforeach
                 </div>
-
+            </a>
         </div>
-
+        
     </div>
 </section>
 <!--category Section End -->
@@ -113,12 +114,15 @@
                     <div class="tab-pane fade show active" id="tab-pro-for-all">
                         <div class="row">
                             @foreach ($products as $product)
+                            @php
+                            $gallery = json_decode($product->gallery);
+                            @endphp
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <!-- START single card -->
                                 <div class="ec-product-ds">
                                     <div class="ec-product-image">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ asset('theme/client/assets/images/product-image/18_1.jpg') }}"
+                                            <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
                                                 alt="" />
                                         </a>
                                         <span class="ec-product-discount-label">-33%</span>
@@ -219,11 +223,11 @@
         <div class="container">
             <div class="row justify-content-end">
                 <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
-                    <h2 class="ec-offer-title">Quần Jean</h2>
+                    <h2 class="ec-offer-title">Mũ</h2>
                     <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
                     <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
                             alt="offer image" /></span>
-                    <span class="ec-offer-desc">Quần Jean vá gối</span>
+                    <span class="ec-offer-desc">Mũ</span>
                     <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} VNĐ</span>
                     <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
                 </div>
@@ -249,13 +253,16 @@
                         <!-- 1st Product tab start -->
                         <div class="tab-pane fade show active" id="tab-pro-for-all">
                             <div class="row">
-                                @foreach ($discounted as $discounted)
+                                @foreach ($products as $product)
+                                @php
+                                $gallery = json_decode($product->gallery);
+                                @endphp
                                 <div class="col-lg-3 col-md-6 col-sm-6">
                                     <!-- START single card -->
                                     <div class="ec-product-ds">
                                         <div class="ec-product-image">
-                                            <a href="{{ url('/product_detail') }}" class="image">
-                                                <img class="pic-1" src="{{ asset('theme/client/assets/images/product-image/18_1.jpg') }}"
+                                            <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                                <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
                                                     alt="" />
                                             </a>
                                             <span class="ec-product-discount-label">-33%</span>
@@ -268,19 +275,19 @@
                                                 <li class="ecicon eci-star fill"></li>
                                                 <li class="ecicon eci-star"></li>
                                             </ul>
-                                            <h3 class="ec-title"><a href="{{ url('/product_detail') }}">{{ $discounted->name }}</a></h3>
+                                            <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
                                                 <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
                                                 {{ number_format($product->min_price, 0) }} VNĐ
                                                 {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                             </div>
-                                            <a class="ec-add-to-cart" href="{{ url('/product_detail') }}">Thêm giỏ hàng</a>
+                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
                                         </div>
                                     </div>
                                     <!--/END single card -->
                                 </div>
                                 @endforeach
-
+    
                             </div>
                         </div>
                     </div>
