@@ -13,9 +13,6 @@ class AuthController extends Controller
 {
 
     public function index (){
-        if (Auth::id() > 0) {
-            return redirect()->route('dashboard.index');
-        }
         return view('admin.auth.login');
     }
     public function login()

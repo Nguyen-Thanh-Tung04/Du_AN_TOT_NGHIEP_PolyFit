@@ -138,6 +138,13 @@ Route::get('admin-login', [AuthController::class, 'index'])
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');
+// Quên mật khẩu
+Route::get('forget-password', [AuthController::class, 'forget'])->name('auth.forgot');
+Route::post('forget-password', [AuthController::class, 'postForgetPass']);
+
+// Nhập lại mật khẩu
+Route::get('get-password/{customer}/{token}', [AuthController::class, 'getPass'])->name('auth.forgot');
+Route::post('get-password/{customer}/{token}', [AuthController::class, 'postPass']);
 
 Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.client.register');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
