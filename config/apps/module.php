@@ -64,11 +64,11 @@ return [
         ],
         [
             'title' => 'QL Voucher',
-            'icon' => 'fa fa-sitemap',
+            'icon' => 'fa fa-money',
             'name' => ['vouchers'],
             'subModule' => [
                 [
-                    'title' => 'QL Voucher',
+                    'title' => 'QL Khuyến mại',
                     'route' => 'vouchers/index',
                 ],
             ],
