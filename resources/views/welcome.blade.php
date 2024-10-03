@@ -101,8 +101,8 @@
                 <ul class="ec-pro-tab-nav nav justify-content-center">
                     <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
                             href="{{ url('/product_detail') }}tab-pro-for-all">Tất cả sản phẩm</a></li>
-                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                            href="{{ url('/product_detail') }}tab-pro-for-men">Sản phẩm mới nhất</a></li>
+                    {{-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
+                            href="{{ url('/product_detail') }}tab-pro-for-men">Sản phẩm mới nhất</a></li> --}}
                 </ul>
             </div>
             <!-- Tab End -->
@@ -123,7 +123,7 @@
                                     <div class="ec-product-image">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                             <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" />
+                                                alt="" style="height: 300px"  />
                                         </a>
                                         <span class="ec-product-discount-label">-33%</span>
                                     </div>
@@ -263,7 +263,7 @@
                                         <div class="ec-product-image">
                                             <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                                 <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                    alt="" />
+                                                    alt="" style="height: 300px" />
                                             </a>
                                             <span class="ec-product-discount-label">-33%</span>
                                         </div>
