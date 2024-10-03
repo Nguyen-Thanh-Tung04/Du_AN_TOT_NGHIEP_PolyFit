@@ -37,8 +37,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'welcome']);
-
+Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/about', function () {
     return view('client.page.about');
 });
@@ -127,13 +126,20 @@ Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(f
 });
 
 // AUTH
-Route::get('login', [AuthController::class, 'index'])
+// Login client
+Route::get('login', [AuthController::class, 'login'])
+    ->name('auth.client-login');
+Route::post('login-client', [AuthController::class, 'loginclient'])
+    ->name('auth.login-client');
+
+// Login admin
+Route::get('admin-login', [AuthController::class, 'index'])
     ->name('auth.login');
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');
 
-Route::get('register', [AuthController::class, 'showFormRegister']);
+Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.client.register');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
