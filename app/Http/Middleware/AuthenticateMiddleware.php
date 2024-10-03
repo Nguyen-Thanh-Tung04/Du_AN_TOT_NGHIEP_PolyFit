@@ -17,6 +17,13 @@ class AuthenticateMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::id() == null) {
+            if ($request->ajax() || $request->wantsJson()) {
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Bạn phải đăng nhập để sử dụng chức năng này'
+                ], 401);
+            }
             return redirect()->route('auth.login')->with('error', 'Bạn phải đăng nhập để sử dụng chức năng này');
         }
         return $next($request);

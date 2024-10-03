@@ -9,7 +9,7 @@
         <li>
             <a href="#" 
             class="changeStatusAll" 
-            data-field="publish"
+            data-field="{{ $field ?? 0 }}"
             data-model="{{ $model }}"
             data-value="1"
             >Active toàn bộ</a>
@@ -17,7 +17,7 @@
         <li>
             <a href="#" 
             class="changeStatusAll" 
-            data-field="publish"
+            data-field="{{ $field ?? 0 }}"
             data-model="{{ $model }}"
             data-value="2"
             >UnActive toàn bộ</a>

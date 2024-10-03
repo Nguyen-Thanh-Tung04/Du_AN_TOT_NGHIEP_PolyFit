@@ -5,11 +5,19 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductSizeController;
+use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\UserCatalogueController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ClientProductController;
+use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 
 
@@ -29,8 +37,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'welcome']);
-
+Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/about', function () {
     return view('client.page.about');
 });
@@ -41,7 +48,7 @@ Route::get('/history', function () {
     return view('client.page.history');
 });
 Route::get('/product_detail', function () {
-    return view('client.page.product-detail');
+    return view('client.page.productDetail');
 });
 Route::get('/contact', function () {
     return view('client.page.contact');
@@ -49,16 +56,15 @@ Route::get('/contact', function () {
 Route::get('/account', function () {
     return view('client.page.profile');
 });
-Route::get('/cart', function () {
-    return view('client.page.cart');
-})->name('cart');
+// Route::get('/cart', function () {
+//     return view('client.page.cart');
+// })->name('cart');
 Route::get('/checkout', function () {
     return view('client.page.checkout');
 })->name('checkout');
 Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');
-
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -120,13 +126,20 @@ Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(f
 });
 
 // AUTH
-Route::get('login', [AuthController::class, 'index'])
+// Login client
+Route::get('login', [AuthController::class, 'login'])
+    ->name('auth.client-login');
+Route::post('login-client', [AuthController::class, 'loginclient'])
+    ->name('auth.login-client');
+
+// Login admin
+Route::get('admin-login', [AuthController::class, 'index'])
     ->name('auth.login');
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');
 
-Route::get('register', [AuthController::class, 'showFormRegister']);
+Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.client.register');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -191,3 +204,67 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
 });
 
 
+
+
+// Products
+Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [ProductController::class, 'index'])
+        ->name('index');
+    Route::get('{id}/detail', [ProductController::class, 'detail'])
+        ->name('detail');
+    Route::get('create', [ProductController::class, 'create'])
+        ->name('create');
+    Route::post('store', [ProductController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [ProductController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [ProductController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [ProductController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
+        ->name('destroy');
+    Route::delete('{id}/destroyVariant', [ProductController::class, 'destroyVariantDetail'])
+        ->name('destroyVariant');
+
+    Route::prefix('size')->name('size.')->group(function () {
+        Route::get('index', [ProductSizeController::class, 'index'])
+            ->name('index');
+        Route::get('create', [ProductSizeController::class, 'create'])
+            ->name('create');
+        Route::post('store', [ProductSizeController::class, 'store'])
+            ->name('store');
+        Route::get('{id}/edit', [ProductSizeController::class, 'edit'])
+            ->name('edit');
+        Route::post('{id}/update', [ProductSizeController::class, 'update'])
+            ->name('update');
+        Route::get('{id}/delete', [ProductSizeController::class, 'delete'])
+            ->name('delete');
+        Route::delete('{id}/destroy', [ProductSizeController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+    Route::prefix('color')->name('color.')->group(function () {
+        Route::get('index', [ProductColorController::class, 'index'])
+            ->name('index');
+        Route::get('create', [ProductColorController::class, 'create'])
+            ->name('create');
+        Route::post('store', [ProductColorController::class, 'store'])
+            ->name('store');
+        Route::get('{id}/edit', [ProductColorController::class, 'edit'])
+            ->name('edit');
+        Route::post('{id}/update', [ProductColorController::class, 'update'])
+            ->name('update');
+        Route::get('{id}/delete', [ProductColorController::class, 'delete'])
+            ->name('delete');
+        Route::delete('{id}/destroy', [ProductColorController::class, 'destroy'])
+            ->name('destroy');
+    });
+});
+
+Route::get('/product/variant-details', [ClientProductController::class, 'getVariantDetails'])->name('client.product.variant');
+Route::get('/product/{id}', [ClientProductController::class, 'show'])->name('client.product.show');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware('checkLogin');;
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')->middleware('checkLogin');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('checkLogin');
+Route::post('/cart/delete', [CartController::class, 'deleteCartItem'])->name('cart.delete')->middleware('checkLogin');

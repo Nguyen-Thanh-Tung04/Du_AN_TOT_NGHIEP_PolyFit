@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Login 2</title>
+    <title>Trang Đăng Nhập</title>
 
     @include('admin.dashboard.component.head')
 
@@ -19,22 +19,20 @@
         <div class="row">
 
             <div class="col-md-6">
-                <h2 class="font-bold">Welcome to IN+</h2>
+                <h2 class="font-bold">Chào Mừng đến PolyFit+</h2>
 
                 <p>
-                    Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+                    Chào bạn! Rất vui được chào đón bạn đến với hệ thống quản trị của Polyfit.
                 </p>
 
                 <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                    Với giao diện thân thiện và trực quan, chúng tôi cam kết mang đến cho bạn trải nghiệm tốt nhất trong việc quản lý sản phẩm, đơn hàng và khách hàng.
                 </p>
-
                 <p>
-                    When an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    Nhập thông tin đăng nhập của bạn ở phía dưới để truy cập vào bảng điều khiển.
                 </p>
-
                 <p>
-                    <small>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</small>
+                    <small>Chào mừng bạn đến với Polyfit - Nơi khởi đầu cho những thành công mới!</small>
                 </p>
 
             </div>
@@ -65,17 +63,9 @@
                         <button type="submit"
                         class="btn btn-primary block full-width m-b">Đăng Nhập</button>
 
-                        <a href="#">
-                            <small>Quên mật khẩu?</small>
-                        </a>
-
-                        <p class="text-muted text-center">
-                            <small>Bạn có muốn tạo tài khoản?</small>
-                        </p>
-                        <a class="btn btn-sm btn-white btn-block" href="{{ route('auth.register') }}">Đăng Ký</a>
                     </form>
                     <p class="m-t">
-                        <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small>
+                        <small> <small>Chào mừng bạn đến với Polyfit - Nơi khởi đầu cho những thành công mới!</small></small>
                     </p>
                 </div>
             </div>
@@ -83,10 +73,10 @@
         <hr/>
         <div class="row">
             <div class="col-md-6">
-                Copyright Example Company
+                Copyright Example PolyFit
             </div>
             <div class="col-md-6 text-right">
-               <small>© 2014-2015</small>
+               <small>© 2024-2025</small>
             </div>
         </div>
     </div>

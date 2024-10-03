@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class UserCatalogueRepository implements UserCatalogueRepositoryInterface
 {
     public function pagination(
-        array $column = ['*'], 
+        array $column = ['*'],
         array $condition = [],
         int $perpage = 1,
         array $extend = [],

@@ -3,14 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
 use Faker\Provider\Base;
 
 /**
  * Class UserRepository
  * @package App\Repositories
  */
-class UserRepository implements UserRepositoryInterface
+class UserRepository
 {
 
     public function pagination(

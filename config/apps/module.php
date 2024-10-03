@@ -3,7 +3,7 @@
 return [
     'module' => [
         [
-            'title' => 'QL Người dùng',
+            'title' => 'QL Tài Khoản',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [
@@ -22,17 +22,6 @@ return [
             ],
         ],
         [
-            'title' => 'Mẫu CRUD',
-            'icon' => 'fa fa-dashboard',
-            'name' => ['crud'],
-            'subModule' => [
-                [
-                    'title' => 'Mẫu CRUD',
-                    'route' => 'crud/index',
-                ],
-            ],
-        ],
-        [
             'title' => 'QL Danh mục',
             'icon' => 'fa fa-sitemap',
             'name' => ['category'],
@@ -44,8 +33,38 @@ return [
             ],
         ],
         [
-            'title' => 'QL Voucher',
-            'icon' => 'fa fa-sitemap',
+            'title' => 'QL Sản Phẩm',
+            'icon' => 'fa fa-dashboard',
+            'name' => ['product'],
+            'subModule' => [
+                [
+                    'title' => 'QL Sản Phẩm',
+                    'route' => 'product/index',
+                ],
+                [
+                    'title' => 'QL Màu Sắc',
+                    'route' => 'product/color/index',
+                ],
+                [
+                    'title' => 'QL Kích Cỡ',
+                    'route' => 'product/size/index',
+                ]
+            ],
+        ],
+        [
+            'title' => 'Mẫu CRUD',
+            'icon' => 'fa fa-dashboard',
+            'name' => ['crud'],
+            'subModule' => [
+                [
+                    'title' => 'Mẫu CRUD',
+                    'route' => 'crud/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'QL Khuyến Mại',
+            'icon' => 'fa fa-money',
             'name' => ['vouchers'],
             'subModule' => [
                 [
