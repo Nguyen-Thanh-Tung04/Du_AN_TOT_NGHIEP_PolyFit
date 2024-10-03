@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserCatalogueController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ShopController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -33,9 +34,8 @@ Route::get('/', [HomeController::class, 'welcome']);
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/shop', function () {
-    return view('client.page.shop');
-});
+Route::get('/shop', [ShopController::class,'shop']
+);
 Route::get('/history', function () {
     return view('client.page.history');
 });

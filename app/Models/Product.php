@@ -16,4 +16,14 @@ class Product extends Model
         'description',
         'status'
     ];
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+    public function size(){
+        return $this->belongsTo(Size::class);
+    }
+    public function color(){
+        return $this->belongsTo(Color::class);
+    }
+
 }
