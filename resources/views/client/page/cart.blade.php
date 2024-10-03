@@ -60,7 +60,7 @@
                                         $gallery = json_decode($item->variant->product->gallery);
                                         @endphp
                                         <tr id="cart-item-{{ $item->id }}">
-                                            <td> <input type="checkbox" class="product-checkbox cart-checkbox" data-id="{{ $item->id }}"></td>
+                                            <td> <input type="checkbox" class="product-checkbox select-item" data-id="{{ $item->id }}"></td>
                                             <td>
 
                                                 <img
@@ -79,10 +79,10 @@
                                             <td data-label="Đơn giá" class="ec-cart-pro-price">
                                                 <span class="amount">
                                                     @if($item->variant->sale_price)
-                                                    <span class="text-decoration-line-through">{{ number_format($item->variant->purchase_price) }}₫</span>
-                                                    {{ number_format($item->variant->sale_price) }}₫
+                                                    <span class="text-decoration-line-through purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                    <span class="sale_price"> {{ number_format($item->variant->sale_price) }}₫</span>
                                                     @else
-                                                    {{ number_format($item->variant->purchase_price) }}₫
+                                                    <span class="purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
                                                     @endif
 
                                                 </span>
@@ -90,7 +90,7 @@
                                             <td data-label="Số lượng" class="ec-cart-pro-qty"
                                                 style="text-align: center;">
                                                 <div class="cart-qty-plus-minus">
-                                                    <input class="cart-plus-minus quantity-input" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
+                                                    <input class="cart-plus-minus quantity-input" data-id="{{ $item->id }}" data-old-value="{{ $item->quantity }}" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
                                                 </div>
                                             </td>
                                             <td data-label="Số tiền" class="ec-cart-pro-subtotal">
@@ -133,7 +133,7 @@
                                     </div>
                                     <div class="border-top pt-3">
                                         <span class="text-left">Tổng tiền hàng</span>
-                                        <span class="text-right">0₫</span>
+                                        <span id="subtotal" class="text-right">0₫</span>
                                     </div>
                                     <div class="pt-3">
                                         <span class="text-left">Voucher giảm giá</span>
@@ -141,11 +141,11 @@
                                     </div>
                                     <div class="pt-3">
                                         <span class="text-left">Giảm giá sản phẩm</span>
-                                        <span class="text-right">0₫</span>
+                                        <span id="discount" class="text-right">0₫</span>
                                     </div>
                                     <div class="fw-bolder pt-3 border-top">
                                         <span class="text-left">Tổng số tiền</span>
-                                        <span class="text-right">0₫</span>
+                                        <span id="total" class="text-right">0₫</span>
                                     </div>
 
                                     <div class="ec-cart-summary-total border-top">
@@ -462,12 +462,124 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+
+        $('#selectAll').change(function() {
+            $('.select-item').prop('checked', $(this).is(':checked'));
+            calculateTotal();
+        });
+
+        $('.select-item').on('change', function() {
+            if ($('.select-item:checked').length === $('.select-item').length) {
+                $('#selectAll').prop('checked', true);
+            } else {
+                $('#selectAll').prop('checked', false);
+            }
+            calculateTotal();
+        });
+
+        $('.quantity-input').on('input', function() {
+            let input = $(this);
+            let min = parseInt(input.attr('data-min'));
+            let max = parseInt(input.attr('data-max'));
+            let value = input.val();
+
+            if (value.match(/[^0-9]/g)) {
+                value = value.replace(/[^0-9]/g, '');
+                input.val(value);
+            }
+
+            if (value < min) {
+                input.val(min);
+            }
+
+            if (value > max) {
+                input.val(max);
+            }
+        });
+
+        $('.quantity-input').on('change', function() {
+            let itemId = $(this).data('id');
+            let quantity = parseInt($(this).val());
+            let maxQuantity = parseInt($(this).attr('max'));
+
+            updateCartQuantity(itemId, quantity, $(this));
+        });
+
+
+        function updateCartQuantity(itemId, quantity, input) {
+            input.prop('disabled', true).addClass('disabled-input');
+            $.ajax({
+                url: '{{route("cart.update")}}',
+                method: 'PUT',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    cart_id: itemId,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    input.prop('disabled', false).removeClass('disabled-input');
+                    if (response.status) {
+                        calculateTotal();
+                    }
+                },
+                error: function() {
+                    input.prop('disabled', false).removeClass('disabled-input');
+                }
+            });
+        }
+
+        $('.quantity-input').on('keydown', function(e) {
+            if ((e.which < 48 || e.which > 57) && e.which !== 8 && e.which !== 37 && e.which !== 39) {
+                e.preventDefault();
+            }
+        });
+
+        function calculateTotal() {
+            let selectedItems = [];
+
+            $('.select-item:checked').each(function() {
+                let itemId = $(this).data('id');
+
+                selectedItems.push({
+                    id: itemId
+                });
+            });
+
+            if (selectedItems.length === 0) {
+                $('#subtotal').text('0₫');
+                $('#discount').text('0₫');
+                $('#total').text('0₫');
+                return;
+            }
+
+            $.ajax({
+                url: '{{route("cart.calculate")}}',
+                method: 'GET',
+                data: {
+                    items: selectedItems,
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(response) {
+
+                    $('#subtotal').text(new Intl.NumberFormat().format(response.subtotal) + '₫');
+                    $('#discount').text(new Intl.NumberFormat().format(response.discount) + '₫');
+                    $('#total').text(new Intl.NumberFormat().format(response.total) + '₫');
+                },
+                error: function(xhr) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: "Có lỗi xảy ra!",
+                    })
+                }
+            });
+        }
+
         $('.delete-item').on('click', function() {
             const cartId = $(this).data('cart-id');
             const rowId = "#cart-item-" + cartId;
             $.ajax({
                 url: '{{ route("cart.delete")}}',
-                method: 'POST',
+                method: 'DELETE',
                 data: {
                     cart_id: cartId,
                     _token: '{{ csrf_token() }}'
@@ -491,40 +603,6 @@
             });
         });
 
-        $('#selectAll').change(function() {
-            $('.cart-checkbox').prop('checked', $(this).is(':checked'));
-            //calculateTotal();
-        });
-
-        $('.quantity-input').on('input', function() {
-            let input = $(this);
-            let min = parseInt(input.attr('data-min'));
-            let max = parseInt(input.attr('data-max'));
-            let value = input.val();
-
-            // Remove non-numeric characters
-            if (value.match(/[^0-9]/g)) {
-                value = value.replace(/[^0-9]/g, '');
-                input.val(value);
-            }
-
-            // Prevent values below min
-            if (value < min) {
-                input.val(min);
-            }
-
-            // Prevent values above max
-            if (value > max) {
-                input.val(max);
-            }
-        });
-
-        // Optionally prevent invalid input entirely (e.g., when pasting)
-        $('.quantity-input').on('keydown', function(e) {
-            if ((e.which < 48 || e.which > 57) && e.which !== 8 && e.which !== 37 && e.which !== 39) {
-                e.preventDefault(); // Prevent any non-numeric input except backspace and arrow keys
-            }
-        });
     });
 </script>
 @endsection

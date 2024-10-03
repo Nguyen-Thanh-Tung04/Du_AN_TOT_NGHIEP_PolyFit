@@ -24,6 +24,11 @@
     cursor: not-allowed;
 }
 
+.disabled-input {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .colored-toast.swal2-icon-success {
     background-color: #a5dc86 !important;
 }
