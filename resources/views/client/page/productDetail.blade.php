@@ -195,90 +195,134 @@
                             </div>
 
                             <div id="ec-spt-nav-review" class="tab-pane fade">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="ec-t-review-top d-flex flex-column">
+                                        <h4 class="mb-2">4.5 trên 5</h4>
+                                        <div class="ec-t-review-rating">
+                                            <i class="ecicon eci-star text-warning"></i>
+                                            <i class="ecicon eci-star text-warning"></i>
+                                            <i class="ecicon eci-star text-warning"></i>
+                                            <i class="ecicon eci-star text-warning"></i>
+                                            <i class="ecicon eci-star-o"></i>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary rounded-pill btn-jittery" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Viết đánh giá</button>                                </div>
                                 <div class="row">
                                     <div class="ec-t-review-wrapper">
-                                        <div class="ec-t-review-item">
-                                            <div class="ec-t-review-avtar">
-                                                <img src="{{asset('theme/client/assets/images/review-image/1.jpg')}}" alt="" />
-                                            </div>
-                                            <div class="ec-t-review-content">
-                                                <div class="ec-t-review-top">
-                                                    <div class="ec-t-review-name">Jeny Doe</div>
-                                                    <div class="ec-t-review-rating">
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star-o"></i>
+                                        @if($reviews->count() > 0)
+                                            @foreach($reviews as $rv)
+                                                <div class="ec-t-review-item">
+                                                    <div class="ec-t-review-avtar">
+                                                        <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" class="rounded-circle" alt="" />
                                                     </div>
-                                                </div>
-                                                <div class="ec-t-review-bottom">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting industry. Lorem Ipsum has been the industry's
-                                                        standard dummy text ever since the 1500s, when an unknown
-                                                        printer took a galley of type and scrambled it to make a
-                                                        type specimen.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ec-t-review-item">
-                                            <div class="ec-t-review-avtar">
-                                                <img src="{{asset('theme/client/assets/images/review-image/2.jpg')}}" alt="" />
-                                            </div>
-                                            <div class="ec-t-review-content">
-                                                <div class="ec-t-review-top">
-                                                    <div class="ec-t-review-name">Linda Morgus</div>
-                                                    <div class="ec-t-review-rating">
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star-o"></i>
-                                                        <i class="ecicon eci-star-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="ec-t-review-bottom">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing and
-                                                        typesetting industry. Lorem Ipsum has been the industry's
-                                                        standard dummy text ever since the 1500s, when an unknown
-                                                        printer took a galley of type and scrambled it to make a
-                                                        type specimen.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                    <div class="ec-t-review-content">
+                                                        <div class="ec-t-review-top">
+                                                            <div class="ec-t-review-name">{{ $rv->user->name ?? 'Khách hàng' }}</div>
+                                                            <div class="ec-t-review-rating">
+                                                                @for($i = 1; $i <= 5; $i++)
+                                                                    @if($i <= $rv->score)  <!-- Sử dụng score để quyết định số sao -->
+                                                                        <i class="ecicon eci-star text-warning"></i>  <!-- Sao đầy -->
+                                                                    @else
+                                                                        <i class="ecicon eci-star-o"></i>   <!-- Sao trống -->
+                                                                    @endif
+                                                                @endfor
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="ec-t-review-bottom">
+                                                            <p>{{ $rv->content }}</p>
+                                                        </div>
+                                                        @if($rv->image)  <!-- Kiểm tra nếu có ảnh -->
+                                                        <img src="{{ asset(Storage::url($rv->image)) }}" style="height:90px; width:90px" alt="Review Image" />
+                                                    @endif
 
-                                    </div>
-                                    <!-- <div class="ec-ratting-content">
-                                        <h3>Add a Review</h3>
-                                        <div class="ec-ratting-form">
-                                            <form action="#">
-                                                <div class="ec-ratting-star">
-                                                    <span>Your rating:</span>
-                                                    <div class="ec-t-review-rating">
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star fill"></i>
-                                                        <i class="ecicon eci-star-o"></i>
-                                                        <i class="ecicon eci-star-o"></i>
-                                                        <i class="ecicon eci-star-o"></i>
                                                     </div>
                                                 </div>
-                                                <div class="ec-ratting-input">
-                                                    <input name="your-name" placeholder="Name" type="text" />
+                                            @endforeach
+                                        @else
+                                            <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                        @endif
+                                    </div>
+                                    
+                                  <!-- Modal -->
+                                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="exampleModalLabel">Viết đánh giá</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                
+                                            <div class="modal-body">
+                                                <!-- Product Image -->
+                                                <div class="row mb-4">
+                                                    <div class="col-12 text-center">
+                                                        @foreach($galleryImages as $key => $image)
+                                                            @if($key === 0)
+                                                                <div class="single-slide">
+                                                                    <img class="img-fluid rounded" src="{{ $image }}" alt="{{ $product->name }}" style="max-width: 200px;">
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                 </div>
-                                                <div class="ec-ratting-input">
-                                                    <input name="your-email" placeholder="Email*" type="email"
-                                                        required />
+                                
+                                                <!-- Rating Section -->
+                                                <div class="row mb-3 justify-content-center">
+                                                    <div class="col-auto">
+                                                        <div class="rate">
+                                                            <input type="radio" id="star5" name="rate" value="5" />
+                                                            <label for="star5" title="Rất hài lòng">5 stars</label>
+                                                            <input type="radio" id="star4" name="rate" value="4" />
+                                                            <label for="star4" title="Hài lòng">4 stars</label>
+                                                            <input type="radio" id="star3" name="rate" value="3" />
+                                                            <label for="star3" title="Bình thường">3 stars</label>
+                                                            <input type="radio" id="star2" name="rate" value="2" />
+                                                            <label for="star2" title="Tạm được">2 stars</label>
+                                                            <input type="radio" id="star1" name="rate" value="1" />
+                                                            <label for="star1" title="Không thích">1 star</label>
+                                                        </div>
+                                                        <div class="rate-text text-center uk-hidden">
+                                                            Rất hài lòng
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="ec-ratting-input form-submit">
-                                                    <textarea name="your-commemt"
-                                                        placeholder="Enter Your Comment"></textarea>
-                                                    <button class="btn btn-primary" type="submit"
-                                                        value="Submit">Submit</button>
-                                                </div>
-                                            </form>
+                                
+                                                <!-- Review Form -->
+                                                <form id="review-form" enctype="multipart/form-data">
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    
+                                                    <div class="mb-4">
+                                                        <textarea class="form-control" id="message-text" name="review_text" rows="4" placeholder="Mời bạn chia sẻ thêm cảm nhận ..."></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3 text-center">
+                                                        <label for="file-upload" class="form-label">Hình ảnh trải nghiệm sản phẩm (nếu có)</label>
+                                                        <div class="container-xl">
+                                                            <div class="box-input-1"></div>
+                                                            <!-- Nhãn tải ảnh tùy chỉnh -->
+                                                            <label for="imgUpload_2" class="custom-file-2">
+                                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                            </label>
+                                                            <span id="filesel_2">Choose a file...</span>
+                                                            <!-- Input tệp tin -->
+                                                            <input type="file" id="imgUpload_2" class="uk-hidden" name="review_image" accept="image/*" multiple>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </form>
+                                                
+                                            </div>
+                                
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Thoát</button>
+                                                <button type="button" class="btn btn-primary rounded-pill" id="submit-review">Gửi đánh giá</button>
+                                            </div>
                                         </div>
-                                    </div> -->
+                                    </div>
+                                </div>
+                                
+                                                                
                                 </div>
                             </div>
                         </div>
@@ -556,5 +600,70 @@
             }
         }
     });
+
+    $(document).ready(function() {
+    // Đối tượng chứa mô tả tương ứng với từng ngôi sao
+    var starDescriptions = {
+        1: "Không thích",
+        2: "Tạm được",
+        3: "Bình thường",
+        4: "Hài lòng",
+        5: "Rất hài lòng"
+    };
+
+    // Khi người dùng chọn sao
+    $('.rate input').on('change', function() {
+        // Lấy giá trị của sao đã chọn
+        var starValue = $(this).val();
+
+        // Cập nhật nội dung mô tả dựa trên giá trị sao
+        $('.rate-text').text(starDescriptions[starValue]);
+
+        // Hiển thị lại phần mô tả nếu nó đang bị ẩn
+        if ($('.rate-text').hasClass('uk-hidden')) {
+            $('.rate-text').removeClass('uk-hidden');
+        }
+    });
+});
+
+    // AJAX khi người dùng nhấn vào "Gửi đánh giá"
+$('#submit-review').on('click', function(e) {
+    e.preventDefault();
+
+    var formData = new FormData($('#review-form')[0]);
+    formData.append('rate', $('input[name="rate"]:checked').val());
+
+    // Thêm CSRF token vào form data
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content')); 
+    
+    // Console log dữ liệu trong formData
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    $.ajax({
+        url: '/submit-review',  // Đường dẫn đến route xử lý trên server
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            // Xử lý thành công
+            alert('Cảm ơn bạn đã đánh giá!');
+            $('#exampleModal').modal('hide');  // Đóng modal
+        },
+        error: function(xhr, status, error) {
+            // Xử lý lỗi
+            alert('Có lỗi xảy ra. Vui lòng thử lại.');
+        }
+    });
+});
+
+// Cập nhật bình luận ra màn hình luôn
+
+
+
+
+
 </script>
 @endsection

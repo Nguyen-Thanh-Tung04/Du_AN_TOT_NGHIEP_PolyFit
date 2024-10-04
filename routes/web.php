@@ -17,6 +17,7 @@ use App\Models\Category;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
+use App\Http\Controllers\ReviewController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 
@@ -275,3 +276,6 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middl
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')->middleware('checkLogin');
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('checkLogin');
 Route::post('/cart/delete', [CartController::class, 'deleteCartItem'])->name('cart.delete')->middleware('checkLogin');
+
+//Reviews
+Route::post('/submit-review', [ReviewController::class, 'store']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -27,8 +28,11 @@ class ClientProductController extends Controller
         $galleryString = str_replace("'", '"', $product->gallery);
 
         $galleryImages = json_decode($galleryString);
+        
+        $reviews = Review::where('product_id', $id)->get();
 
-        return view('client.page.productDetail', compact('product', 'minPurchasePrice', 'minSalePrice', 'galleryImages'));
+
+        return view('client.page.productDetail', compact('product', 'minPurchasePrice', 'minSalePrice', 'galleryImages','reviews'));
     }
 
     public function getVariantDetails(Request $request)

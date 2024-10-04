@@ -6,6 +6,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <title>PolyFit</title>
     <meta name="keywords"
@@ -38,6 +40,17 @@
 
     <!-- Background css -->
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/backgrounds/bg-4.css')}}">
+    {{-- Reviews --}}
+    <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/review.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+  <!-- UIkit CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/css/uikit.min.css" />
+
+<!-- UIkit JS -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
+
+
 </head>
 
 <body>
@@ -85,6 +98,8 @@
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/main.js')}}"></script>
+    <script src="{{asset('theme/client/assets/js/review.js')}}"></script>
+
     @yield('scripts')
 </body>
 
