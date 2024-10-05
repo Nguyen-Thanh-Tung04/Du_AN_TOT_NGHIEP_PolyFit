@@ -206,9 +206,18 @@
                                             <i class="ecicon eci-star-o"></i>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary rounded-pill btn-jittery" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Viết đánh giá</button>                                </div>
+                                    @if(Auth::check())
+                                    <button type="button" class="btn btn-primary rounded-pill btn-jittery" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Viết đánh giá</button>                               
+                                    @else
+                                    <div class="alert alert-danger" id="loginBtn" role="alert">
+                                        Đăng nhập để có thể đánh giá sản phẩm
+                                    </div>
+                                    {{-- <button>Đăng nhập để được viết đánh giá !</button> --}}
+                                    @endif
+                                </div>
+
                                 <div class="row">
-                                    <div class="ec-t-review-wrapper">
+                                    <div class="ec-t-review-wrapper" id="reviewList">
                                         @if($reviews->count() > 0)
                                             @foreach($reviews as $rv)
                                                 <div class="ec-t-review-item">
@@ -220,22 +229,20 @@
                                                             <div class="ec-t-review-name">{{ $rv->user->name ?? 'Khách hàng' }}</div>
                                                             <div class="ec-t-review-rating">
                                                                 @for($i = 1; $i <= 5; $i++)
-                                                                    @if($i <= $rv->score)  <!-- Sử dụng score để quyết định số sao -->
-                                                                        <i class="ecicon eci-star text-warning"></i>  <!-- Sao đầy -->
+                                                                    @if($i <= $rv->score)
+                                                                        <i class="ecicon eci-star text-warning"></i>
                                                                     @else
-                                                                        <i class="ecicon eci-star-o"></i>   <!-- Sao trống -->
+                                                                        <i class="ecicon eci-star-o"></i>
                                                                     @endif
                                                                 @endfor
                                                             </div>
-                                                            
                                                         </div>
                                                         <div class="ec-t-review-bottom">
                                                             <p>{{ $rv->content }}</p>
                                                         </div>
-                                                        @if($rv->image)  <!-- Kiểm tra nếu có ảnh -->
-                                                        <img src="{{ asset(Storage::url($rv->image)) }}" style="height:90px; width:90px" alt="Review Image" />
-                                                    @endif
-
+                                                        @if($rv->image)
+                                                            <img src="{{ asset(Storage::url($rv->image)) }}" style="height:90px; width:90px" alt="Review Image" />
+                                                        @endif
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -243,6 +250,7 @@
                                             <p>Chưa có đánh giá nào cho sản phẩm này.</p>
                                         @endif
                                     </div>
+                                    
                                     
                                   <!-- Modal -->
                                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -266,8 +274,11 @@
                                                         @endforeach
                                                     </div>
                                                 </div>
-                                
-                                                <!-- Rating Section -->
+                                                                
+                                                <!-- Review Form -->
+                                                <form id="review-form" enctype="multipart/form-data">
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                     <!-- Rating Section -->
                                                 <div class="row mb-3 justify-content-center">
                                                     <div class="col-auto">
                                                         <div class="rate">
@@ -287,11 +298,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                
-                                                <!-- Review Form -->
-                                                <form id="review-form" enctype="multipart/form-data">
-                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                    
                                                     <div class="mb-4">
                                                         <textarea class="form-control" id="message-text" name="review_text" rows="4" placeholder="Mời bạn chia sẻ thêm cảm nhận ..."></textarea>
                                                     </div>
@@ -300,15 +306,17 @@
                                                         <label for="file-upload" class="form-label">Hình ảnh trải nghiệm sản phẩm (nếu có)</label>
                                                         <div class="container-xl">
                                                             <div class="box-input-1"></div>
-                                                            <!-- Nhãn tải ảnh tùy chỉnh -->
                                                             <label for="imgUpload_2" class="custom-file-2">
                                                                 <i class="fas fa-cloud-upload-alt"></i>
                                                             </label>
                                                             <span id="filesel_2">Choose a file...</span>
-                                                            <!-- Input tệp tin -->
                                                             <input type="file" id="imgUpload_2" class="uk-hidden" name="review_image" accept="image/*" multiple>
+                                                            
+                                                            <!-- Container for displaying selected images -->
+                                                            <div id="image-preview-container" class="mt-3"></div>
                                                         </div>
                                                     </div>
+                                                    
                                                     
                                                 </form>
                                                 
@@ -601,6 +609,7 @@
         }
     });
 
+    // Phần sao reviews
     $(document).ready(function() {
     // Đối tượng chứa mô tả tương ứng với từng ngôi sao
     var starDescriptions = {
@@ -626,41 +635,138 @@
     });
 });
 
-    // AJAX khi người dùng nhấn vào "Gửi đánh giá"
-$('#submit-review').on('click', function(e) {
-    e.preventDefault();
+// Cập nhật reviews 
+$(document).ready(function() {
+    $('#submit-review').on('click', function(e) {
+        e.preventDefault();
 
-    var formData = new FormData($('#review-form')[0]);
-    formData.append('rate', $('input[name="rate"]:checked').val());
+        var formData = new FormData($('#review-form')[0]);
+        formData.append('rate', $('input[name="rate"]:checked').val());
 
-    // Thêm CSRF token vào form data
-    formData.append('_token', $('meta[name="csrf-token"]').attr('content')); 
-    
-    // Console log dữ liệu trong formData
-    for (var pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-
-    $.ajax({
-        url: '/submit-review',  // Đường dẫn đến route xử lý trên server
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            // Xử lý thành công
-            alert('Cảm ơn bạn đã đánh giá!');
-            $('#exampleModal').modal('hide');  // Đóng modal
-        },
-        error: function(xhr, status, error) {
-            // Xử lý lỗi
-            alert('Có lỗi xảy ra. Vui lòng thử lại.');
+        // Thêm CSRF token vào form data
+        formData.append('_token', $('meta[name="csrf-token"]').attr('content')); 
+        
+        // Console log dữ liệu trong formData (for debugging)
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
         }
+
+        $.ajax({
+            url: '/submit-review',  // Đường dẫn đến route xử lý trên server
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Xử lý thành công
+                if (response.success) {
+                    Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Đánh giá thành công !',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 6000,
+                    showCloseButton: true
+                });
+                    $('#exampleModal').modal('hide');  // Đóng modal
+
+                    // Append the new review dynamically
+                    var newReview = `
+                        <div class="ec-t-review-item">
+                            <div class="ec-t-review-avtar">
+                                <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" class="rounded-circle" alt="" />
+                            </div>
+                            <div class="ec-t-review-content">
+                                <div class="ec-t-review-top">
+                                    <div class="ec-t-review-name">${response.name}</div>
+                                    <div class="ec-t-review-rating">`;
+
+                    for (var i = 1; i <= 5; i++) {
+                        newReview += `<i class="ecicon ${i <= response.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>`;
+                    }
+
+                    newReview += `
+                                    </div>
+                                </div>
+                                <div class="ec-t-review-bottom">
+                                    <p>${response.content}</p>
+                                </div>`;
+
+                    if (response.image) {
+                        newReview += `<img src="${response.image}" style="height:90px; width:90px" alt="Review Image" />`;
+                    }
+
+                    newReview += `</div></div>`;
+
+                    $('#reviewList').prepend(newReview); // Assuming you have a container with ID reviewList
+                } else {
+                    alert(response.message || 'Có lỗi xảy ra.');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    var errors = xhr.responseJSON.errors;
+                    
+                    // Hiển thị lỗi cho từng trường
+                    if (errors.review_text) {
+                        $('#message-text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
+                    }
+                    if (errors.rate) {
+                        $('input[name="rate"]').closest('.rate-group').after('<div class="error-message text-danger">' + errors.rate[0] + '</div>');
+                    }
+                    if (errors.review_image) {
+                        $('#imgUpload_2').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');
+                    }
+                } else {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                }
+            }
+        });
     });
 });
 
-// Cập nhật bình luận ra màn hình luôn
 
+// cập nhật ảnh ra form luôn sau khi chọn
+$(document).ready(function() {
+    $('#imgUpload_2').on('change', function(event) {
+        // Clear previous images
+        $('#image-preview-container').empty();
+        
+        // Get the selected files
+        var files = event.target.files;
+
+        // Loop through the selected files and create image elements
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+
+            // Create an image element for each file
+            reader.onload = (function(file) {
+                return function(e) {
+                    var imgElement = $('<img>', {
+                        src: e.target.result,
+                        class: 'img-thumbnail',
+                        style: 'height: 90px; width: 90px; margin-right: 5px;'
+                    });
+                    $('#image-preview-container').append(imgElement);
+                };
+            })(file);
+
+            // Read the file as a data URL
+            reader.readAsDataURL(file);
+        }
+        
+        // Update the label to show the number of files selected
+        $('#filesel_2').text(files.length + ' file(s) selected');
+    });
+});
+
+// Nút bấm đăng nhập
+document.getElementById("loginBtn").addEventListener("click", function() {
+    window.location.href = "{{ route('auth.client-login') }}";
+});
 
 
 

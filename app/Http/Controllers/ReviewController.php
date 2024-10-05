@@ -13,26 +13,45 @@ class ReviewController extends Controller
 {
     public function store(Request $request)
     {
-        // Bỏ qua bước validate
+        // Validate input
+        $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'review_text' => 'required|string',
+        'rate' => 'required|integer|min:1|max:5',
+        'review_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Adjust validation rules as necessary
+        ], [
+        'product_id.required' => 'ID sản phẩm là bắt buộc.',
+        'product_id.exists' => 'ID sản phẩm không hợp lệ.',
+        'review_text.required' => 'Bạn phải nhập nội dung đánh giá.',
+        'rate.required' => 'Bạn phải chọn số sao.',
+        'review_image.image' => 'Tệp ảnh không hợp lệ.',
+        'review_image.mimes' => 'Chỉ chấp nhận định dạng ảnh jpg, jpeg, png.',
+        'review_image.max' => 'Ảnh không được quá 2MB.',
+        ]);
+        // Save the image if provided
+        $imagePath = $request->hasFile('review_image')
+            ? $request->file('review_image')->store('review_images', 'public')
+            : '';
 
-        // Lưu ảnh nếu có
-        if ($request->hasFile('review_image')) {
-            $imagePath = $request->file('review_image')->store('review_images', 'public');
-        } else {
-            $imagePath = '';
-        }
-
-        // Tạo một review mới mà không cần xác thực
-        Review::create([
-           'product_id' => $request->input('product_id'), // ID sản phẩm từ form
-            'account_id' => auth()->id(),  // ID người dùng hiện tại
-            'content' => $request->input('review_text'), // Nội dung đánh giá
-            'image' => $imagePath, // Đường dẫn hình ảnh
-            'score' => $request->input('rate'), // Điểm đánh giá
-            'status' => 1 // Ví dụ: bạn có thể thiết lập trạng thái mặc định là 
+        // Create a new review
+        $review = Review::create([
+            'product_id' => $request->input('product_id'),
+            'account_id' => auth()->id(),
+            'content' => $request->input('review_text'),
+            'image' => $imagePath,
+            'score' => $request->input('rate'),
+            'status' => 1,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Đánh giá của bạn đã được lưu']);
+        // Prepare response data
+        return response()->json([
+            'success' => true,
+            'message' => 'Đánh giá của bạn đã được lưu',
+            'name' => $review->user->name, // Assuming you have a relationship with User
+            'content' => $review->content,
+            'score' => $review->score,
+            'image' => $imagePath ? asset('storage/' . $imagePath) : null,
+        ]);
     }
     
 }

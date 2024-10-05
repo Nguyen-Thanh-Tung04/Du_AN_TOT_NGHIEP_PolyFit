@@ -102,4 +102,20 @@
 }
 
 
+  /* CSS cho nút "Đăng nhập để viết đánh giá" */
+  #loginBtn {
+    background-color: #dc3545; /* Màu đỏ */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Bo tròn viền */
+    text-transform: uppercase; /* Chuyển đổi chữ hoa */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+#loginBtn:hover {
+    background-color: hsl(354, 83%, 64%); /* Màu đỏ tối hơn khi di chuột vào */
+}
+
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
