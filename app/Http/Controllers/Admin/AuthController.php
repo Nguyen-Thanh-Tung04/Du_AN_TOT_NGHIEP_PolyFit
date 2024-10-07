@@ -33,7 +33,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Kiểm tra trạng thái tài khoản: 1 là mơ, 2 là khóa
-            if ($user->status !== 1) {
+            if ($user->publish !== 1) {
                 return redirect()->route('auth.client-login')->with('error', 'Tài khoản của bạn đang bị khóa hoặc chưa được kích hoạt.');
             }
 
