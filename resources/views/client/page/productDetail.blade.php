@@ -90,10 +90,10 @@
                                     <div class="ec-single-price-stoke">
                                         <div class="ec-single-price">
                                             @if($minSalePrice)
-                                            <span id="purchase-price" class="fw-semibold" style="text-decoration: line-through;">{{ number_format($minPurchasePrice) }} ₫</span>
+                                            <span id="listed-price" class="fw-semibold" style="text-decoration: line-through;">{{ number_format($minListedPrice) }} ₫</span>
                                             <span id="sale-price" class="new-price">{{ number_format($minSalePrice) }} ₫</span>
                                             @else
-                                            <span id="purchase-price" class="new-price">{{ number_format($minPurchasePrice) }} ₫</span>
+                                            <span id="listed-price" class="new-price">{{ number_format($minListedPrice) }} ₫</span>
                                             @endif
                                         </div>
                                         <div class="ec-single-stoke">
@@ -556,14 +556,14 @@
                     },
                     success: function(response) {
                         if (response.status) {
-                            let purchasePrice = response.data.purchase_price;
+                            let listedPrice = response.data.listed_price;
                             let salePrice = response.data.sale_price;
 
                             if (salePrice) {
-                                $('#purchase-price').text(new Intl.NumberFormat().format(purchasePrice) + ' ₫');
+                                $('#listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
                                 $('#sale-price').text(new Intl.NumberFormat().format(salePrice) + ' ₫');
                             } else {
-                                $('#purchase-price').text(new Intl.NumberFormat().format(purchasePrice) + ' ₫');
+                                $('#listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
                                 $('#sale-price').text('');
                             }
                         }

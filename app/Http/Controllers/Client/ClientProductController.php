@@ -18,17 +18,17 @@ class ClientProductController extends Controller
         $product = Product::with(['category', 'variants.color', 'variants.size'])->findOrFail($id);
 
         $minVariant = $product->variants->sortBy(function ($variant) {
-            return $variant->sale_price ?? $variant->purchase_price;
+            return $variant->sale_price ?? $variant->listed_price;
         })->first();
 
-        $minPurchasePrice = $minVariant->purchase_price;
+        $minListedPrice = $minVariant->listed_price;
         $minSalePrice = $minVariant->sale_price;
 
         $galleryString = str_replace("'", '"', $product->gallery);
 
         $galleryImages = json_decode($galleryString);
 
-        return view('client.page.productDetail', compact('product', 'minPurchasePrice', 'minSalePrice', 'galleryImages'));
+        return view('client.page.productDetail', compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages'));
     }
 
     public function getVariantDetails(Request $request)

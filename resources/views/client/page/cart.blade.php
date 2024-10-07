@@ -79,10 +79,10 @@
                                             <td data-label="Đơn giá" class="ec-cart-pro-price">
                                                 <span class="amount">
                                                     @if($item->variant->sale_price)
-                                                    <span class="text-decoration-line-through purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                    <span class="text-decoration-line-through listed_price">{{ number_format($item->variant->listed_price) }}₫</span>
                                                     <span class="sale_price"> {{ number_format($item->variant->sale_price) }}₫</span>
                                                     @else
-                                                    <span class="purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                    <span class="listed_price">{{ number_format($item->variant->listed_price) }}₫</span>
                                                     @endif
 
                                                 </span>
@@ -93,8 +93,8 @@
                                                     <input class="cart-plus-minus quantity-input" data-id="{{ $item->id }}" data-old-value="{{ $item->quantity }}" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
                                                 </div>
                                             </td>
-                                            <td data-label="Số tiền" class="ec-cart-pro-subtotal">
-                                                {{ number_format(($item->variant->sale_price ?? $item->variant->purchase_price) * $item->quantity) }}₫
+                                            <td data-label="Số tiền" class="ec-cart-pro-subtotal total-price">
+                                                {{ number_format(($item->variant->sale_price ?? $item->variant->listed_price) * $item->quantity) }}₫
                                             </td>
                                             <td data-label="Xóa" class="ec-cart-pro-remove">
                                                 <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
@@ -520,6 +520,9 @@
                     input.prop('disabled', false).removeClass('disabled-input');
                     if (response.status) {
                         calculateTotal();
+                        var row = $('#cart-item-' + itemId);
+
+                        row.find('.total-price').text(response.data.total_price + '₫');
                     }
                 },
                 error: function() {
@@ -587,6 +590,12 @@
                 success: function(response) {
                     if (response.status) {
                         $(rowId).remove();
+                        if ($('.select-item').length > 0 && $('.select-item:checked').length === $('.select-item').length) {
+                            $('#selectAll').prop('checked', true);
+                        } else {
+                            $('#selectAll').prop('checked', false);
+                        }
+                        calculateTotal();
                     } else {
                         Toast.fire({
                             icon: 'error',
