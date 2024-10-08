@@ -53,6 +53,7 @@
 
     <!-- Vendor JS -->
     <script src="{{asset('theme/client/assets/js/vendor/jquery-3.5.1.min.js')}}"></script>
+    <script src="{{asset('theme/client/library/library.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/popper.min.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/bootstrap.min.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/jquery-migrate-3.3.0.min.js')}}"></script>
@@ -85,6 +86,8 @@
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/main.js')}}"></script>
+    <script src="{{ asset('admin/library/location.js') }}"></script>
+    {{-- <script src="{{ asset('admin/library/library.js') }}"></script> --}}
     @yield('scripts')
 </body>
 

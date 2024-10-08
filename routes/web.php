@@ -1,24 +1,26 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
-use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\UserCatalogueController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
-use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\User\HomeController;
 use App\Models\Cart;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -59,9 +61,8 @@ Route::get('/account', function () {
 // Route::get('/cart', function () {
 //     return view('client.page.cart');
 // })->name('cart');
-Route::get('/checkout', function () {
-    return view('client.page.checkout');
-})->name('checkout');
+Route::get('checkout', [CheckoutController::class, 'checkout'])->middleware('checkLoginClient')
+->name('checkout');
 Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');

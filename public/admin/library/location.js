@@ -28,7 +28,7 @@
                 if (district_id != '' && option.target == 'districts') {
                     $('.districts').val(district_id).trigger('change')
                 }
-
+                
                 if (ward_id != '' && option.target == 'wards') {
                     $('.wards').val(ward_id).trigger('change')
                 }

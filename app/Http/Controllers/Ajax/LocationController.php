@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
-use App\Repositories\Interfaces\DistrictRepositoryInterface as DistrictRepository;
-use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
+use App\Repositories\DistrictRepository;
+use App\Repositories\ProvinceRepository;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
