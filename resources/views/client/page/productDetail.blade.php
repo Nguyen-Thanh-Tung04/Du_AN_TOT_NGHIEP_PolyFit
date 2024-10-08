@@ -243,6 +243,37 @@
                                                         @if($rv->image)
                                                             <img src="{{ asset(Storage::url($rv->image)) }}" style="height:90px; width:90px" alt="Review Image" />
                                                         @endif
+                                                        <div class="ec-t-review-bottom">
+                                                            <p>{{ $rv->created_at->format('Y-m-d') }}</p>
+                                                        </div>
+                                                        {{-- Trả lời đánh giá  --}}
+                                                        @foreach($rv->replies as $reply)
+                                                        <div class="ec-t-review-item mt-2">
+                                                            <div class="ec-t-review-avtar">
+                                                                <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" class="rounded-circle" alt="" />
+                                                            </div>
+                                                            <div class="ec-t-review-content border bg-light p-3" style="width:45rem">
+                                                                <div class="ec-t-review-top">
+                                                                    <div class="ec-t-review-name">{{ $reply->user->name }}</div>
+                                                                    <div class="ec-t-review-rating">
+                                                                        @for($i = 1; $i <= 5; $i++)
+                                                                            @if($i <= $rv->score)
+                                                                                <i class="ecicon eci-star text-warning"></i>
+                                                                            @else
+                                                                                <i class="ecicon eci-star-o"></i>
+                                                                            @endif
+                                                                        @endfor
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ec-t-review-bottom">
+                                                                    <p> {{ $reply->content }}</p>
+                                                                </div>
+                                                                <div class="ec-t-review-bottom">
+                                                                    <p>{{ $reply->created_at->format('Y-m-d') }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             @endforeach

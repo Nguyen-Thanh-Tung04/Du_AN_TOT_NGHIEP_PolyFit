@@ -9,18 +9,24 @@ class Review extends Model
 {
     use HasFactory;
     protected $fillable = [
-       'product_id',
+        'product_id',
         'account_id',
         'content',
         'image',
         'score',
         'status'
     ];
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'account_id');
+    }
+    public function replies()
+    {
+        return $this->hasMany(ReviewReply::class, 'review_id');
     }
 }

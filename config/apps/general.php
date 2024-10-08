@@ -16,5 +16,10 @@ return [
         '1' => 'Active',
         '0' => 'UnActive',
     ],
+    'status' => [
+        '' => 'Chọn tất cả tình trạng',
+        '1' => 'Active',
+        '0' => 'UnActive',
+    ],
     'suffix' => '.html',
 ];

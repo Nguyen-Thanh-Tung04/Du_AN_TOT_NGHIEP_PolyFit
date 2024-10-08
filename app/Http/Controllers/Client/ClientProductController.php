@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\ReviewReply;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -29,8 +30,7 @@ class ClientProductController extends Controller
 
         $galleryImages = json_decode($galleryString);
         
-        $reviews = Review::where('product_id', $id)->get();
-
+        $reviews = Review::with('replies')->where('product_id', $id)->get();
 
         return view('client.page.productDetail', compact('product', 'minPurchasePrice', 'minSalePrice', 'galleryImages','reviews'));
     }
