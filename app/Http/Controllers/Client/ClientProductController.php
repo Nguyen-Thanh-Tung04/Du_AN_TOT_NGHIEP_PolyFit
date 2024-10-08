@@ -29,10 +29,10 @@ class ClientProductController extends Controller
         $galleryString = str_replace("'", '"', $product->gallery);
 
         $galleryImages = json_decode($galleryString);
-        
+
         $reviews = Review::with('replies')->where('product_id', $id)->get();
 
-        return view('client.page.productDetail', compact('product', 'minPurchasePrice', 'minSalePrice', 'galleryImages','reviews'));
+        return view('client.page.productDetail', compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'reviews'));
     }
 
     public function getVariantDetails(Request $request)

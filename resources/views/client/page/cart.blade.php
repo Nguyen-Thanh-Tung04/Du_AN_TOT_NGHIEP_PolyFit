@@ -118,19 +118,6 @@
                         <div class="ec-sb-block-content">
                             <div class="ec-cart-summary-bottom">
                                 <div class="ec-cart-summary">
-                                    <div>
-                                        <span class="text-left">Voucher</span>
-                                        <span class="text-right"><a class="ec-cart-coupan">Nhập mã</a></span>
-                                    </div>
-                                    <div class="ec-cart-coupan-content">
-                                        <form class="ec-cart-coupan-form" name="ec-cart-coupan-form" method="post"
-                                            action="#">
-                                            <input class="ec-coupan" type="text" required=""
-                                                placeholder="Nhập mã giảm giá" name="ec-coupan" value="">
-                                            <button class="ec-coupan-btn button btn-primary" type="submit"
-                                                name="subscribe" value="">OK</button>
-                                        </form>
-                                    </div>
                                     <div class="border-top pt-3">
                                         <span class="text-left">Tổng tiền hàng</span>
                                         <span id="subtotal" class="text-right">0₫</span>
