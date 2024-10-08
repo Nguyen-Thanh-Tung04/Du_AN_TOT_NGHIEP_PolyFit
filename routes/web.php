@@ -17,6 +17,8 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\admin\ReviewController;
+
 use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
@@ -201,6 +203,23 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+// reviews
+Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [ReviewController::class, 'index'])->name('index');
+    
+    Route::get('{id}/edit', [ReviewController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [ReviewController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [ReviewController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [ReviewController::class, 'destroy'])
+        ->name('destroy');
+});
+// Review reply
+Route::post('reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply');
+
+// voucher
 Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(function () {
     Route::get('index', [VoucherController::class, 'index'])->name('index');
     Route::get('create', [VoucherController::class, 'create'])->name('create');
@@ -280,3 +299,6 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
     Route::delete('/delete', [CartController::class, 'deleteCartItem'])->name('delete');
     Route::get('/calculate', [CartController::class, 'calculateTotal'])->name('calculate');
 });
+
+//Reviews
+Route::post('/submit-review', [App\Http\Controllers\ReviewController::class, 'store']);
