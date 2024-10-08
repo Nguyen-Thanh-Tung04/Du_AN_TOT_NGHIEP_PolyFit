@@ -290,10 +290,14 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
 
 Route::get('/product/variant-details', [ClientProductController::class, 'getVariantDetails'])->name('client.product.variant');
 Route::get('/product/{id}', [ClientProductController::class, 'show'])->name('client.product.show');
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware('checkLogin');;
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add')->middleware('checkLogin');
-Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update')->middleware('checkLogin');
-Route::post('/cart/delete', [CartController::class, 'deleteCartItem'])->name('cart.delete')->middleware('checkLogin');
+
+Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(function () {
+    Route::get('', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'addToCart'])->name('add');
+    Route::put('/update', [CartController::class, 'updateCart'])->name('update');
+    Route::delete('/delete', [CartController::class, 'deleteCartItem'])->name('delete');
+    Route::get('/calculate', [CartController::class, 'calculateTotal'])->name('calculate');
+});
 
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\ReviewController::class, 'store']);

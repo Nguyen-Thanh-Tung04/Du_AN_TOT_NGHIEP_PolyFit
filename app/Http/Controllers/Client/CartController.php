@@ -7,7 +7,6 @@ use App\Models\Cart;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Expr\Cast;
 
 class CartController extends Controller
 {
@@ -28,7 +27,6 @@ class CartController extends Controller
             'size_id' => 'nullable|integer|exists:sizes,id',
         ]);
 
-        // Nếu không có cả size_id và color_id, tìm variant mặc định hợp lệ
         if (!$request->color_id && !$request->size_id) {
             $variant = Variant::where('product_id', $request->product_id)
                 ->where('quantity', '>', 0)
@@ -120,6 +118,36 @@ class CartController extends Controller
         return response()->json([
             'status' => false,
             'message' => 'Cart item not found',
+        ]);
+    }
+
+    public function calculateTotal(Request $request)
+    {
+        $items = $request->input('items');
+        $subtotal = 0;
+        $discount = 0;
+
+
+
+        foreach ($items as $item) {
+            $cart = Cart::with('variant')->find($item['id']);
+
+            if ($cart) {
+                $salePrice = $cart->variant->sale_price;
+                $purchasePrice = $cart->variant->purchase_price;
+                $quantity = $cart->variant->quantity;
+
+                $subtotal += $salePrice * $quantity;
+                $discount += ($purchasePrice - $salePrice) * $quantity;
+            }
+        }
+
+        $total = $subtotal - $discount;
+
+        return response()->json([
+            'subtotal' => $subtotal,
+            'discount' => $discount,
+            'total' => $total,
         ]);
     }
 }

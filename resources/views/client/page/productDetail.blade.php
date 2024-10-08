@@ -537,7 +537,7 @@
                             icon: "success",
                             title: "Thêm giỏ hàng thành công",
                             showConfirmButton: false,
-                            timer: 3000
+                            timer: 1000
                         });
                     } else {
                         Toast.fire({
@@ -562,18 +562,39 @@
 
         $('.size-btn').on('click', function() {
             selectedSizeId = $(this).data('id');
-            $('.size-btn').removeClass('active');
-            $(this).addClass('active');
-            updateColorOptions();
-            updateVariantDetails();
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                selectedSizeId = null;
+            } else {
+                $('.size-btn').removeClass('active');
+                $(this).addClass('active');
+            }
+            if (selectedSizeId) {
+                updateColorOptions();
+                updateVariantDetails();
+            } else {
+                $('.color-btn').prop('disabled', false);
+            }
+
         });
 
         $('.color-btn').on('click', function() {
             selectedColorId = $(this).data('id');
-            $('.color-btn').removeClass('active');
-            $(this).addClass('active');
-            updateSizeOptions();
-            updateVariantDetails();
+
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                selectedColorId = null;
+            } else {
+                $('.color-btn').removeClass('active');
+                $(this).addClass('active');
+            }
+            if (selectedColorId) {
+                updateSizeOptions();
+                updateVariantDetails();
+            } else {
+                $('.size-btn').prop('disabled', false);
+            }
+
         });
 
         function updateColorOptions() {
@@ -604,6 +625,7 @@
             });
         }
 
+
         function updateVariantDetails() {
             if (selectedSizeId && selectedColorId) {
                 $.ajax({
@@ -627,15 +649,9 @@
                                 $('#purchase-price').text(new Intl.NumberFormat().format(purchasePrice) + ' ₫');
                                 $('#sale-price').text('');
                             }
-
-                            // .. $('#variant-quantity').text(response.data.quantity);
-                        } else {
-                            // $('#variant-quantity').text('Out of stock');
                         }
                     }
                 });
-            } else {
-                $('#variant-quantity').text('Please select size and color');
             }
         }
     });
