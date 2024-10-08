@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-    public function index (){
+    public function index()
+    {
         return view('admin.auth.login');
     }
     public function login()
@@ -45,7 +46,8 @@ class AuthController extends Controller
         return redirect()->route('auth.client-login')->with('error', 'Email hoặc mật khẩu không chính xác.');
     }
 
-    public function logined (AuthRequest $request){
+    public function logined(AuthRequest $request)
+    {
         $credentials = [
             'email' => $request->input('email'),
             'password' => $request->input('password'),
@@ -55,7 +57,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // Lấy thông tin người dùng đã đăng nhập
             $user = Auth::user();
-//            dd($user->user_catalogue_id );
+            //            dd($user->user_catalogue_id );
             // Check tài khoản xem có phải tài khoản admin không
             if ($user->user_catalogue_id == null) {
                 Auth::logout();
@@ -80,8 +82,10 @@ class AuthController extends Controller
         return redirect()->route('auth.client-login')->with('success', 'Đăng ký thành công. Vui lòng đăng nhập.');
     }
 
-    public function logout() {
+    public function logout()
+    {
         Auth::logout();
+        session()->forget('selected_items');
         return redirect()->route('auth.login');
         // $request->session()->invalidate();
         // $request->session()->regenerateToken();

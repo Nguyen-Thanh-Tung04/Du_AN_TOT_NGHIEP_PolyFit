@@ -19,10 +19,12 @@ class CheckoutService
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository) {
+    public function __construct(UserRepository $userRepository)
+    {
         $this->userRepository = $userRepository;
     }
-    public function paginate($request) {
+    public function paginate($request)
+    {
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
         $perPage = $request->integer('perpage');
@@ -39,7 +41,8 @@ class CheckoutService
         return $users;
     }
 
-    public function create($request) {
+    public function create($request)
+    {
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send', 're_password']);
@@ -53,12 +56,14 @@ class CheckoutService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function update($id, $request) {
+    public function update($id, $request)
+    {
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send']);
@@ -71,12 +76,14 @@ class CheckoutService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         DB::beginTransaction();
         try {
             $user = $this->userRepository->delete($id);
@@ -85,15 +92,17 @@ class CheckoutService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function updateStatus($post = []) {
+    public function updateStatus($post = [])
+    {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
+            $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
             $user = $this->userRepository->update($post['modelId'], $payload);
 
             DB::commit();
@@ -101,12 +110,14 @@ class CheckoutService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function updateStatusAll($post) {
+    public function updateStatusAll($post)
+    {
         DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
@@ -116,15 +127,24 @@ class CheckoutService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function findByIdUser($userId) {
+    public function findByIdUser($userId)
+    {
         $userId = Auth::id();
     }
 
-
-
+    public function calculateTotal($cartItems)
+    {
+        $total = 0;
+        foreach ($cartItems as $item) {
+            $price = $item->variant->sale_price ?? $item->variant->listed_price;
+            $total += $price * $item->quantity;
+        }
+        return $total;
+    }
 }

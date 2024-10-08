@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\CheckoutService;
@@ -30,18 +31,30 @@ class CheckoutController
         $this->checkoutService = $checkoutService;
     }
 
-    public function checkout(Request $request) {
+    public function checkout(Request $request)
+    {
         $userId = Auth::id();
         $user = $this->userRepository->findById($userId);
         $provinces = $this->provinceRepository->all();
 
+        $selectedItems = session('selected_items', []);
+        $cartItems = Cart::with('variant.product')
+            ->where('user_id', Auth::id())
+            ->whereIn('id', $selectedItems)
+            ->get();
+
+        $totalPrice = $this->checkoutService->calculateTotal($cartItems);
         return view('client.page.checkout', compact(
             'user',
             'provinces',
+            'cartItems',
+            'totalPrice'
         ));
     }
+    // session()->forget('selected_items'); xóa khi order xong
 
-    public function create() {
+    public function create()
+    {
         $provinces = $this->provinceRepository->all();
 
         $template = 'admin.user.user.store';
@@ -55,14 +68,16 @@ class CheckoutController
         ));
     }
 
-    public function store(StoreUserRequest $request) {
+    public function store(StoreUserRequest $request)
+    {
         if ($this->userService->create($request)) {
             return redirect()->route('user.index')->with('success', 'Thêm mới bản ghi thành công.');
         }
         return redirect()->route('user.index')->with('error', 'Thêm mới bản ghi thất bại. Hãy thử lại.');
     }
 
-    public function shippingAddress($id) {
+    public function shippingAddress($id)
+    {
         $user = $this->userRepository->findById($id);
         $provinces = $this->provinceRepository->all();
 
@@ -75,14 +90,16 @@ class CheckoutController
         ));
     }
 
-    public function update($id, UpdateUserRequest $request) {
+    public function update($id, UpdateUserRequest $request)
+    {
         if ($this->userService->update($id, $request)) {
             return redirect()->route('user.index')->with('success', 'Cập nhật bản ghi thành công.');
         }
         return redirect()->route('user.index')->with('error', 'Cập nhật bản ghi thất bại. Hãy thử lại.');
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $user = $this->userRepository->findById($id);
         $config['seo'] = config('apps.user');
         $template = 'admin.user.user.delete';
@@ -93,14 +110,16 @@ class CheckoutController
         ));
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         if ($this->userService->destroy($id)) {
             return redirect()->route('user.index')->with('success', 'Xóa bản ghi thành công.');
         }
         return redirect()->route('user.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
     }
 
-    public function configData() {
+    public function configData()
+    {
         return [
             'js' => [
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',

@@ -30,6 +30,7 @@
 <section class="ec-page-content section-space-p">
     <div class="container">
         <div class="row">
+            @if(count($cartItems) > 0)
             <div class="ec-cart-leftside col-lg-12 col-md-12 ">
                 <!-- cart content Start -->
                 <div class="ec-cart-content">
@@ -123,10 +124,6 @@
                                         <span id="subtotal" class="text-right">0₫</span>
                                     </div>
                                     <div class="pt-3">
-                                        <span class="text-left">Voucher giảm giá</span>
-                                        <span class="text-right">0₫</span>
-                                    </div>
-                                    <div class="pt-3">
                                         <span class="text-left">Giảm giá sản phẩm</span>
                                         <span id="discount" class="text-right">0₫</span>
                                     </div>
@@ -137,7 +134,7 @@
 
                                     <div class="ec-cart-summary-total border-top">
                                         <span class="text-left"></span>
-                                        <a href="{{route('checkout')}}" class="btn btn-primary">Mua hàng</a>
+                                        <button id="checkout-btn" class="btn btn-primary">Mua hàng</button>
                                     </div>
 
                                 </div>
@@ -148,6 +145,17 @@
                     <!-- Sidebar Summary Block -->
                 </div>
             </div>
+            @else
+            <div class="ec-cart-leftside col-lg-12 col-md-12 ">
+                <div class="d-flex justify-content-center flex-column align-items-center">
+                    <h4 class="text-center">Giỏ hàng của bạn đang trống!</h4>
+                    <div>
+                        <a href="{{ route('home')}}" class="btn btn-primary text-center">Mua ngay</a>
+                    </div>
+                </div>
+
+            </div>
+            @endif
         </div>
     </div>
 </section>
@@ -577,6 +585,9 @@
                 success: function(response) {
                     if (response.status) {
                         $(rowId).remove();
+                        if ($('.select-item').length === 0) {
+                            location.reload();
+                        }
                         if ($('.select-item').length > 0 && $('.select-item:checked').length === $('.select-item').length) {
                             $('#selectAll').prop('checked', true);
                         } else {
@@ -595,6 +606,40 @@
                         icon: 'error',
                         title: 'Xảy ra lỗi',
                     })
+                }
+            });
+        });
+
+        $('#checkout-btn').on('click', function() {
+            let selectedItems = $('.select-item:checked').map(function() {
+                return $(this).data('id');
+            }).get();
+
+            if (selectedItems.length === 0) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: "Không có sản phẩm nào được chọn!",
+                });
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('cart.selected') }}",
+                method: "POST",
+                data: {
+                    selected_items: selectedItems,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.status) {
+                        window.location.href = "{{ route('checkout') }}";
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message,
+                        });
+                    }
+
                 }
             });
         });

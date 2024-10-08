@@ -69,12 +69,12 @@
                                                     <select name="province_id" class="ec-bill-select province location" data-target="districts">
                                                         <option value="0">[Chọn Tỉnh/Thành Phố]</option>
                                                         @if (isset($provinces))
-                                                            @foreach($provinces as $province)
-                                                            <option value="{{ $province->code }}"
-                                                                {{ old('province_id') == $province->code ? 'selected' : '' }}>
-                                                                {{ $province->name }}
-                                                            </option>
-                                                            @endforeach
+                                                        @foreach($provinces as $province)
+                                                        <option value="{{ $province->code }}"
+                                                            {{ old('province_id') == $province->code ? 'selected' : '' }}>
+                                                            {{ $province->name }}
+                                                        </option>
+                                                        @endforeach
                                                         @endif
                                                     </select>
                                                 </span>
@@ -126,11 +126,11 @@
                             <div class="ec-checkout-summary">
                                 <div>
                                     <span class="text-left">Tổng tiền hàng</span>
-                                    <span class="text-right">₫80.000</span>
+                                    <span class="text-right"> {{ number_format($totalPrice) }}₫</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Phí vận chuyển</span>
-                                    <span class="text-right">₫80.000</span>
+                                    <span class="text-right">40.000₫</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Voucher</span>
@@ -147,23 +147,28 @@
                                 </div>
                                 <div class="ec-checkout-summary-total">
                                     <span class="text-left">Tổng thanh toán</span>
-                                    <span class="text-right">₫80.000</span>
+                                    <span class="text-right">{{ number_format($totalPrice + 40000)}}</span>
                                 </div>
                             </div>
                             <div class="ec-checkout-pro">
+                                @foreach($cartItems as $item)
+                                @php
+                                $gallery = json_decode($item->variant->product->gallery);
+                                @endphp
                                 <div class="col-sm-12 mb-6">
                                     <div class="ec-product-inner">
                                         <div class="ec-pro-image-outer">
                                             <div class="ec-pro-image">
-                                                <a href="product-left-sidebar.html" class="image">
+                                                <a href="{{ route('client.product.show', $item->variant->product->id)}}" class="image">
                                                     <img class="main-image"
-                                                        src="theme/client/assets/images/product-image/6_1.jpg"
+                                                        src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
                                                         alt="Product" />
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="ec-pro-content">
-                                            <h5 class="ec-pro-title"><a href="product-left-sidebar.html">Baby toy teddy bear</a></h5>
+                                            <h5 class="ec-pro-title"><a href="{{ route('client.product.show', $item->variant->product->id)}}">{{$item->variant->product->name}} </a>
+                                            </h5>
                                             <div class="ec-pro-rating">
                                                 <i class="ecicon eci-star fill"></i>
                                                 <i class="ecicon eci-star fill"></i>
@@ -172,49 +177,25 @@
                                                 <i class="ecicon eci-star"></i>
                                             </div>
                                             <span class="ec-price">
-                                                <span class="old-price">₫95.000</span>
-                                                <span class="new-price">₫79.000</span>
+                                                @if($item->variant->sale_price)
+                                                <span class="text-decoration-line-through old-price">{{ number_format($item->variant->listed_price) }}₫</span>
+                                                <span class="new-price"> {{ number_format($item->variant->sale_price) }}</span>₫
+                                                @else
+                                                <span class="old-price">{{ number_format($item->variant->listed_price) }}</span>₫
+                                                @endif
                                             </span>
                                             <div class="ec-pro-option">
                                                 <div class="ec-pro-color">
-                                                    Phân loại: Xanh, XL
+                                                    Phân loại:
+                                                    <span>{{ $item->variant->size->name }},</span>
+                                                    <span>{{ $item->variant->color->name }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 mb-0">
-                                    <div class="ec-product-inner">
-                                        <div class="ec-pro-image-outer">
-                                            <div class="ec-pro-image">
-                                                <a href="product-left-sidebar.html" class="image">
-                                                    <img class="main-image"
-                                                        src="theme/client/assets/images/product-image/7_1.jpg"
-                                                        alt="Product" />
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="ec-pro-content">
-                                            <h5 class="ec-pro-title"><a href="product-left-sidebar.html">Smart I watch 2GB</a></h5>
-                                            <div class="ec-pro-rating">
-                                                <i class="ecicon eci-star fill"></i>
-                                                <i class="ecicon eci-star fill"></i>
-                                                <i class="ecicon eci-star fill"></i>
-                                                <i class="ecicon eci-star fill"></i>
-                                                <i class="ecicon eci-star"></i>
-                                            </div>
-                                            <span class="ec-price">
-                                                <span class="old-price">₫58.000</span>
-                                                <span class="new-price">₫45.000</span>
-                                            </span>
-                                            <div class="ec-pro-option">
-                                                <div class="ec-pro-color">
-                                                    Phân loại: Xanh, XL
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
+
                             </div>
                         </div>
                     </div>
@@ -280,14 +261,17 @@
                     </div>
                     <!-- Sidebar Payment Block -->
                 </div>
-                
+
             </div>
         </div>
     </div>
 </section>
 <script>
-    var province_id = '{{ (isset($user->province_id)) ? $user->province_id : old('province_id') }}'
-    var district_id = '{{ (isset($user->district_id)) ? $user->district_id : old('district_id') }}'
-    var ward_id = '{{ (isset($user->ward_id)) ? $user->ward_id : old('ward_id') }}'
+    var province_id = '{{ (isset($user->province_id)) ? $user->province_id : old('
+    province_id ') }}'
+    var district_id = '{{ (isset($user->district_id)) ? $user->district_id : old('
+    district_id ') }}'
+    var ward_id = '{{ (isset($user->ward_id)) ? $user->ward_id : old('
+    ward_id ') }}'
 </script>
 @endsection

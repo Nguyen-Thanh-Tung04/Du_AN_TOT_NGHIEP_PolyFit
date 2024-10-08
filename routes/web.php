@@ -60,11 +60,7 @@ Route::get('/contact', function () {
 Route::get('/account', function () {
     return view('client.page.profile');
 });
-// Route::get('/cart', function () {
-//     return view('client.page.cart');
-// })->name('cart');
-Route::get('checkout', [CheckoutController::class, 'checkout'])->middleware('checkLoginClient')
-->name('checkout');
+
 Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');
@@ -206,7 +202,7 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ReviewController::class, 'index'])->name('index');
-    
+
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
         ->name('edit');
     Route::post('{id}/update', [ReviewController::class, 'update'])
@@ -298,7 +294,10 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
     Route::put('/update', [CartController::class, 'updateCart'])->name('update');
     Route::delete('/delete', [CartController::class, 'deleteCartItem'])->name('delete');
     Route::get('/calculate', [CartController::class, 'calculateTotal'])->name('calculate');
+    Route::post('/save-selected', [CartController::class, 'saveSelectedItems'])->name('selected');
 });
 
+
+Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\ReviewController::class, 'store']);

@@ -72,6 +72,37 @@ class CartController extends Controller
         ]);
     }
 
+    public function saveSelectedItems(Request $request)
+    {
+        $selectedItems = $request->input('selected_items', []);
+
+        if (!$selectedItems) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bạn chưa chọn sản phẩm nào!',
+            ]);
+        }
+
+        session(['selected_items' => $selectedItems]);
+
+        $cartItems = Cart::with('variant.product')
+            ->where('user_id', Auth::id())
+            ->whereIn('id', $selectedItems)
+            ->get();
+
+
+        $validSelectedItems = $cartItems->pluck('id')->toArray();
+        if (count($selectedItems) !== count($validSelectedItems)) {
+            session(['selected_items' => $validSelectedItems]);
+        }
+
+
+        return response()->json([
+            'status' => true,
+            'message' =>  '',
+        ]);
+    }
+
     public function updateCart(Request $request)
     {
         $cartItem = Cart::find($request->cart_id);
