@@ -30,6 +30,7 @@
 <section class="ec-page-content section-space-p">
     <div class="container">
         <div class="row">
+            @if(count($cartItems) > 0)
             <div class="ec-cart-leftside col-lg-12 col-md-12 ">
                 <!-- cart content Start -->
                 <div class="ec-cart-content">
@@ -79,10 +80,10 @@
                                             <td data-label="Đơn giá" class="ec-cart-pro-price">
                                                 <span class="amount">
                                                     @if($item->variant->sale_price)
-                                                    <span class="text-decoration-line-through purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                    <span class="text-decoration-line-through listed_price">{{ number_format($item->variant->listed_price) }}₫</span>
                                                     <span class="sale_price"> {{ number_format($item->variant->sale_price) }}₫</span>
                                                     @else
-                                                    <span class="purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                    <span class="listed_price">{{ number_format($item->variant->listed_price) }}₫</span>
                                                     @endif
 
                                                 </span>
@@ -93,8 +94,8 @@
                                                     <input class="cart-plus-minus quantity-input" data-id="{{ $item->id }}" data-old-value="{{ $item->quantity }}" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
                                                 </div>
                                             </td>
-                                            <td data-label="Số tiền" class="ec-cart-pro-subtotal">
-                                                {{ number_format(($item->variant->sale_price ?? $item->variant->purchase_price) * $item->quantity) }}₫
+                                            <td data-label="Số tiền" class="ec-cart-pro-subtotal total-price">
+                                                {{ number_format(($item->variant->sale_price ?? $item->variant->listed_price) * $item->quantity) }}₫
                                             </td>
                                             <td data-label="Xóa" class="ec-cart-pro-remove">
                                                 <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
@@ -118,26 +119,9 @@
                         <div class="ec-sb-block-content">
                             <div class="ec-cart-summary-bottom">
                                 <div class="ec-cart-summary">
-                                    <div>
-                                        <span class="text-left">Voucher</span>
-                                        <span class="text-right"><a class="ec-cart-coupan">Nhập mã</a></span>
-                                    </div>
-                                    <div class="ec-cart-coupan-content">
-                                        <form class="ec-cart-coupan-form" name="ec-cart-coupan-form" method="post"
-                                            action="#">
-                                            <input class="ec-coupan" type="text" required=""
-                                                placeholder="Nhập mã giảm giá" name="ec-coupan" value="">
-                                            <button class="ec-coupan-btn button btn-primary" type="submit"
-                                                name="subscribe" value="">OK</button>
-                                        </form>
-                                    </div>
                                     <div class="border-top pt-3">
                                         <span class="text-left">Tổng tiền hàng</span>
                                         <span id="subtotal" class="text-right">0₫</span>
-                                    </div>
-                                    <div class="pt-3">
-                                        <span class="text-left">Voucher giảm giá</span>
-                                        <span class="text-right">0₫</span>
                                     </div>
                                     <div class="pt-3">
                                         <span class="text-left">Giảm giá sản phẩm</span>
@@ -150,7 +134,7 @@
 
                                     <div class="ec-cart-summary-total border-top">
                                         <span class="text-left"></span>
-                                        <a href="{{route('checkout')}}" class="btn btn-primary">Mua hàng</a>
+                                        <button id="checkout-btn" class="btn btn-primary">Mua hàng</button>
                                     </div>
 
                                 </div>
@@ -161,6 +145,17 @@
                     <!-- Sidebar Summary Block -->
                 </div>
             </div>
+            @else
+            <div class="ec-cart-leftside col-lg-12 col-md-12 ">
+                <div class="d-flex justify-content-center flex-column align-items-center">
+                    <h4 class="text-center">Giỏ hàng của bạn đang trống!</h4>
+                    <div>
+                        <a href="{{ route('home')}}" class="btn btn-primary text-center">Mua ngay</a>
+                    </div>
+                </div>
+
+            </div>
+            @endif
         </div>
     </div>
 </section>
@@ -520,6 +515,9 @@
                     input.prop('disabled', false).removeClass('disabled-input');
                     if (response.status) {
                         calculateTotal();
+                        var row = $('#cart-item-' + itemId);
+
+                        row.find('.total-price').text(response.data.total_price + '₫');
                     }
                 },
                 error: function() {
@@ -587,6 +585,15 @@
                 success: function(response) {
                     if (response.status) {
                         $(rowId).remove();
+                        if ($('.select-item').length === 0) {
+                            location.reload();
+                        }
+                        if ($('.select-item').length > 0 && $('.select-item:checked').length === $('.select-item').length) {
+                            $('#selectAll').prop('checked', true);
+                        } else {
+                            $('#selectAll').prop('checked', false);
+                        }
+                        calculateTotal();
                     } else {
                         Toast.fire({
                             icon: 'error',
@@ -599,6 +606,40 @@
                         icon: 'error',
                         title: 'Xảy ra lỗi',
                     })
+                }
+            });
+        });
+
+        $('#checkout-btn').on('click', function() {
+            let selectedItems = $('.select-item:checked').map(function() {
+                return $(this).data('id');
+            }).get();
+
+            if (selectedItems.length === 0) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: "Không có sản phẩm nào được chọn!",
+                });
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('cart.selected') }}",
+                method: "POST",
+                data: {
+                    selected_items: selectedItems,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.status) {
+                        window.location.href = "{{ route('checkout') }}";
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.message,
+                        });
+                    }
+
                 }
             });
         });

@@ -73,6 +73,7 @@
                             height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
                             object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
                             />
+                            <p>áo</p>
                         </div>
                     </div>
                     @endforeach

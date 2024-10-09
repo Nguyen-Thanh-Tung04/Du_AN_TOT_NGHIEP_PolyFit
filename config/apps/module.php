@@ -63,7 +63,7 @@ return [
             ],
         ],
         [
-            'title' => 'QL Khuyến Mại',
+            'title' => 'QL Khuyến ',
             'icon' => 'fa fa-money',
             'name' => ['vouchers'],
             'subModule' => [
@@ -73,5 +73,17 @@ return [
                 ],
             ],
         ],
-    ],
+
+        [
+            'title' => 'Quản lý đánh giá',
+            'icon' => 'fa fa-money',
+            'name' => ['reviews'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý đánh giá',
+                    'route' => 'reviews/index',
+                ],
+            ],
+        ]
+    ]
 ];

@@ -22833,10 +22833,10 @@ select::-ms-expand {
   letter-spacing: 0.4px;
 }
 
-.ec-sidebar-wrap .ec-sb-block-content {
+/* .ec-sidebar-wrap .ec-sb-block-content {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 10px;
-}
+} */
 
 .ec-sidebar-wrap .ec-sb-block-content li a span {
   float: right;

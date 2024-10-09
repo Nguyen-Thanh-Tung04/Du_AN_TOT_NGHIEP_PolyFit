@@ -72,6 +72,37 @@ class CartController extends Controller
         ]);
     }
 
+    public function saveSelectedItems(Request $request)
+    {
+        $selectedItems = $request->input('selected_items', []);
+
+        if (!$selectedItems) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bạn chưa chọn sản phẩm nào!',
+            ]);
+        }
+
+        session(['selected_items' => $selectedItems]);
+
+        $cartItems = Cart::with('variant.product')
+            ->where('user_id', Auth::id())
+            ->whereIn('id', $selectedItems)
+            ->get();
+
+
+        $validSelectedItems = $cartItems->pluck('id')->toArray();
+        if (count($selectedItems) !== count($validSelectedItems)) {
+            session(['selected_items' => $validSelectedItems]);
+        }
+
+
+        return response()->json([
+            'status' => true,
+            'message' =>  '',
+        ]);
+    }
+
     public function updateCart(Request $request)
     {
         $cartItem = Cart::find($request->cart_id);
@@ -89,10 +120,14 @@ class CartController extends Controller
 
             $cartItem->quantity = $newQuantity;
             $cartItem->save();
+            $totalPrice = ($variant->sale_price ?? $variant->listed_price) * $cartItem->quantity;
 
             return response()->json([
                 'status' => true,
                 'message' => 'Cập nhật số lượng thành công',
+                'data' => [
+                    'total_price' => number_format($totalPrice)
+                ],
             ]);
         }
 
@@ -131,14 +166,13 @@ class CartController extends Controller
 
         foreach ($items as $item) {
             $cart = Cart::with('variant')->find($item['id']);
-
             if ($cart) {
                 $salePrice = $cart->variant->sale_price;
-                $purchasePrice = $cart->variant->purchase_price;
-                $quantity = $cart->variant->quantity;
+                $listedPrice = $cart->variant->listed_price;
+                $quantity = $cart->quantity;
 
-                $subtotal += $salePrice * $quantity;
-                $discount += ($purchasePrice - $salePrice) * $quantity;
+                $subtotal += $listedPrice * $quantity;
+                $discount += ($listedPrice - $salePrice) * $quantity;
             }
         }
 
@@ -146,7 +180,7 @@ class CartController extends Controller
 
         return response()->json([
             'subtotal' => $subtotal,
-            'discount' => $discount,
+            'discount' => -$discount,
             'total' => $total,
         ]);
     }
