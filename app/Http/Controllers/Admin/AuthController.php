@@ -84,10 +84,25 @@ class AuthController extends Controller
 
     public function logout()
     {
+        $user = Auth::user();
+        // dd($user->publish);
+
         Auth::logout();
         session()->forget('selected_items');
-        return redirect()->route('auth.login');
+        
+        // Làm sạch phiên người dùng
         // $request->session()->invalidate();
         // $request->session()->regenerateToken();
+        
+        // Kiểm tra vai trò người dùng và điều hướng đến trang đăng nhập tương ứng
+        if ($user->publish === 1) {
+            // dd("admin");
+            // Chuyển hướng tới trang đăng nhập của admin
+            return redirect()->route('auth.login'); // Đây là route admin login
+        } else {
+            // dd("user");
+            // Chuyển hướng tới trang đăng nhập của client
+            return redirect()->route('auth.client-login'); // Đây là route client login
+        }
     }
 }

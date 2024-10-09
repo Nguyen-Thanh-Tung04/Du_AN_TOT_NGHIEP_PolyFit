@@ -149,6 +149,8 @@ Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
 
 // AJAX
 Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])
