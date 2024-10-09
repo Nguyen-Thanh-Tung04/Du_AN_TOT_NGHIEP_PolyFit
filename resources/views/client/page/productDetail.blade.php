@@ -376,120 +376,80 @@
 <!-- End Single product -->
 
 <!-- Related Product Start -->
-<section class="section ec-releted-product section-space-p">
+<section class="section ec-new-product section-space-p" id="arrivals">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="section-title">
-                    <h2 class="ec-bg-title">Related products</h2>
-                    <h2 class="ec-title">Related products</h2>
-                    <p class="sub-title">Browse The Collection of Top Products</p>
+                    <h2 class="ec-bg-title">Sản phẩm cùng hạng mục</h2>
+                    <h2 class="ec-title">Sản phẩm cùng danh mục</h2>
+                    <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
                 </div>
             </div>
         </div>
-        <div class="row margin-minus-b-30">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <!-- START single card -->
-                <div class="ec-product-ds">
-                    <div class="ec-product-image">
-                        <a href="{{ url('/product_detail')}}" class="image">
-                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/18_1.jpg')}}" alt="" />
-                        </a>
-                        <span class="ec-product-discount-label">-33%</span>
+        <div class="row">
+            <div class="col">
+                <div class="tab-content">
+                    <!-- 1st Product tab start -->
+                    <div class="tab-pane fade show active" id="tab-pro-for-all">
+                        <div class="row">
+                            @foreach ($similar_products as $product)
+                            @php
+                            $gallery = json_decode($product->gallery);
+                            @endphp
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <!-- START single card -->
+                                <div class="ec-product-ds">
+                                    <div class="ec-product-image">
+                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                            <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
+                                                alt="" style="height: 300px" />
+                                        </a>
+                                        <span class="ec-product-discount-label">-33%</span>
+                                    </div>
+                                    <div class="ec-product-body">
+                                        <ul class="ec-rating">
+                                            <li class="ecicon eci-star fill"></li>
+                                            <li class="ecicon eci-star fill"></li>
+                                            <li class="ecicon eci-star fill"></li>
+                                            <li class="ecicon eci-star fill"></li>
+                                            <li class="ecicon eci-star"></li>
+                                        </ul>
+                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+                                        <div class="ec-price">
+                                            <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
+                                            {{ number_format($product->min_price, 0) }} VNĐ
+                                            {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
+                                        </div>
+                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                    </div>
+                                </div>
+                                <!--/END single card -->
+                            </div>
+                            @endforeach
 
-
-                    </div>
-                    <div class="ec-product-body">
-                        <ul class="ec-rating">
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star"></li>
-                        </ul>
-                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Boaty air pods s8</a></h3>
-                        <div class="ec-price"><span>$90.00</span> $66.00</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
+                        </div>
                     </div>
                 </div>
-                <!--/END single card -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <!-- START single card -->
-                <div class="ec-product-ds">
-                    <div class="ec-product-image">
-                        <a href="{{ url('/product_detail')}}" class="image">
-                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}" alt="" />
-                        </a>
-                    </div>
-                    <div class="ec-product-body">
-                        <ul class="ec-rating">
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star"></li>
-                        </ul>
-                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Long slive t-shirt</a></h3>
-                        <div class="ec-price">$79.90</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                    </div>
+                <!-- ec 1st Product tab end -->
+                <!-- ec 2nd Product tab start -->
+                <div class="tab-pane fade" id="tab-pro-for-men">
+
                 </div>
-                <!--/END single card -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <!-- START single card -->
-                <div class="ec-product-ds">
-                    <div class="ec-product-image">
-                        <a href="{{ url('/product_detail')}}" class="image">
-                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/3_1.jpg')}}" alt="" />
-                        </a>
+                <!-- ec 2nd Product tab end -->
+                <!-- ec 3rd Product tab start -->
+                <div class="tab-pane fade" id="tab-pro-for-women">
 
-
-                    </div>
-                    <div class="ec-product-body">
-                        <ul class="ec-rating">
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star"></li>
-                        </ul>
-                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Leather purse for women</a></h3>
-                        <div class="ec-price">$56.90</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                    </div>
                 </div>
-                <!--/END single card -->
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <!-- START single card -->
-                <div class="ec-product-ds">
-                    <div class="ec-product-image">
-                        <a href="{{ url('/product_detail')}}" class="image">
-                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/4_1.jpg')}}" alt="" />
-                        </a>
+                <!-- ec 3rd Product tab end -->
+                <!-- ec 4th Product tab start -->
+                <div class="tab-pane fade" id="tab-pro-for-child">
 
-
-                    </div>
-                    <div class="ec-product-body">
-                        <ul class="ec-rating">
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star fill"></li>
-                            <li class="ecicon eci-star"></li>
-                        </ul>
-                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Hool hat for men</a></h3>
-                        <div class="ec-price">$79.90</div>
-                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                    </div>
                 </div>
-                <!--/END single card -->
+                <!-- ec 4th Product tab end -->
             </div>
+
         </div>
-    </div>
-    <div id="product-variants" data-variants="{{ json_encode($product->variants) }}">
     </div>
 </section>
 <!-- Related Product end -->
