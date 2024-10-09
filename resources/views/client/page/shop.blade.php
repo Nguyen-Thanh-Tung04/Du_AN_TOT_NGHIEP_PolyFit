@@ -13,15 +13,15 @@
                         </div>
                     </div>
                     <div class="col-md-6 ec-sort-select">
-                        <span class="sort-by">Sort by</span>
+                        <span class="sort-by">Sắp xếp</span>
                         <div class="ec-select-inner">
                             <select name="ec-select" id="ec-select">
-                                <option selected disabled>Position</option>
-                                <option value="1">Relevance</option>
-                                <option value="2">Name, A to Z</option>
-                                <option value="3">Name, Z to A</option>
-                                <option value="4">Price, low to high</option>
-                                <option value="5">Price, high to low</option>
+                                <option selected disabled>Vị trí</option>
+                                <option value="1">Liên quan</option>
+                                <option value="2">Tên, A to Z</option>
+                                <option value="3">Tên, Z to A</option>
+                                <option value="4">Giá, thấp đến cao</option>
+                                <option value="5">Price, cao đến thấp</option>
                             </select>
                         </div>
                     </div>
@@ -32,214 +32,52 @@
                 <div class="shop-pro-content">
                     <div class="shop-pro-inner">
                         <div class="row">
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/18_1.jpg')}}" alt="" />
-                                        </a>
-                                        <span class="ec-product-discount-label">-33%</span>
-                                        
+                            @foreach ($products as $product)
+                                @php
+                                    $gallery = json_decode($product->gallery);
+                                @endphp
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <!-- START single card -->
+                                    <div class="ec-product-ds">
+                                        <div class="ec-product-image">
+                                            <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                                <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
+                                                     alt="" style="height: 200px"  />
+                                            </a>
+                                            <span class="ec-product-discount-label">-33%</span>
+                                        </div>
+                                        <div class="ec-product-body">
+                                            <ul class="ec-rating">
+                                                <li class="ecicon eci-star fill"></li>
+                                                <li class="ecicon eci-star fill"></li>
+                                                <li class="ecicon eci-star fill"></li>
+                                                <li class="ecicon eci-star fill"></li>
+                                                <li class="ecicon eci-star"></li>
+                                            </ul>
+                                            <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+                                            <div class="ec-price">
+                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
+                                                {{ number_format($product->min_price, 0) }} VNĐ
+                                                {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
+                                            </div>
+                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                        </div>
                                     </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Boaty air pods s8</a></h3>
-                                        <div class="ec-price"><span>$90.00</span> $66.00</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
+                                    <!--/END single card -->
                                 </div>
-                                <!--/END single card -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}" alt="" />
-                                        </a>
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Long slive t-shirt</a></h3>
-                                        <div class="ec-price">$79.90</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/3_1.jpg')}}" alt="" />
-                                        </a>
-                                        
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Leather purse for women</a></h3>
-                                        <div class="ec-price">$56.90</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/4_1.jpg')}}" alt="" />
-                                        </a>
-                                        
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Hool hat for men</a></h3>
-                                        <div class="ec-price">$79.90</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/18_1.jpg')}}" alt="" />
-                                        </a>
-                                        <span class="ec-product-discount-label">-33%</span>
-                                        
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Boaty air pods s8</a></h3>
-                                        <div class="ec-price"><span>$90.00</span> $66.00</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/6_1.jpg')}}" alt="" />
-                                        </a>
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Long slive t-shirt</a></h3>
-                                        <div class="ec-price">$79.90</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/3_1.jpg')}}" alt="" />
-                                        </a>
-                                        
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Leather purse for women</a></h3>
-                                        <div class="ec-price">$56.90</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ url('/product_detail')}}" class="image">
-                                            <img class="pic-1" src="{{asset('theme/client/assets/images/product-image/4_1.jpg')}}" alt="" />
-                                        </a>
-                                        
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
-                                        <h3 class="ec-title"><a href="{{ url('/product_detail')}}">Hool hat for men</a></h3>
-                                        <div class="ec-price">$79.90</div>
-                                        <a class=" ec-add-to-cart" href="{{ url('/product_detail')}}">Thêm giỏ hàng</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
+                            @endforeach
+
                         </div>
                     </div>
                     <!-- Ec Pagination Start -->
                     <div class="ec-pro-pagination">
-                        <span>Showing 1-12 of 21 item(s)</span>
+                        <span>Hiện thị {{ $products->firstItem() }}-{{ $products->lastItem() }} of {{ $products->total() }} item(s)</span>
                         <ul class="ec-pro-pagination-inner">
-                            <li><a class="active" href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a class="next" href="#">Next <i class="ecicon eci-angle-right"></i></a></li>
+                            {{-- Laravel sẽ tự động tạo các liên kết phân trang với định dạng phù hợp --}}
+                            <li>{{ $products->links('pagination::bootstrap-4') }}</li>
                         </ul>
                     </div>
+
                     <!-- Ec Pagination End -->
                 </div>
                 <!--Shop content End -->
@@ -248,73 +86,41 @@
             <div class="ec-shop-leftside col-lg-3 col-md-12 order-lg-first order-md-last">
                 <div id="shop_sidebar">
                     <div class="ec-sidebar-heading">
-                        <h1>Filter Products By</h1>
+                        <h1>Lọc sản phẩm</h1>
                     </div>
                     <div class="ec-sidebar-wrap">
                         <!-- Sidebar Category Block -->
                         <div class="ec-sidebar-block">
                             <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Category</h3>
+                                <h3 class="ec-sidebar-title">Danh mục</h3>
                             </div>
                             <div class="ec-sb-block-content">
                                 <ul>
+                                    @foreach($categories as $categorie)
+                                        <li>
+                                            <div class="ec-sidebar-block-item">
+                                                <input type="checkbox" /> <a href="#">{{ $categorie->name }}</a><span
+                                                    class="checked"></span>
+                                            </div>
+                                        </li>
+                                    @endforeach
                                     <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" checked /> <a href="#">clothes</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" /> <a href="#">Bags</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" /> <a href="#">Shoes</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" /> <a href="#">cosmetics</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" /> <a href="#">electrics</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" /> <a href="#">phone</a><span
-                                                class="checked"></span>
+                                        <div class="ec-sidebar-block-item ec-more-toggle">
+                                            <span class="checked"></span><span id="ec-more-toggle">
+                                                Xem thêm</span>
                                         </div>
                                     </li>
                                     <li id="ec-more-toggle-content" style="padding: 0; display: none;">
                                         <ul>
-                                            <li>
-                                                <div class="ec-sidebar-block-item">
-                                                    <input type="checkbox" /> <a href="#">Watch</a><span
-                                                        class="checked"></span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="ec-sidebar-block-item">
-                                                    <input type="checkbox" /> <a href="#">Cap</a><span
-                                                        class="checked"></span>
-                                                </div>
-                                            </li>
+                                            @foreach($categories as $categorie)
+                                                <li>
+                                                    <div class="ec-sidebar-block-item">
+                                                        <input type="checkbox" /> <a href="#">{{ $categorie->name }}</a><span
+                                                            class="checked"></span>
+                                                    </div>
+                                                </li>
+                                            @endforeach
                                         </ul>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item ec-more-toggle">
-                                            <span class="checked"></span><span id="ec-more-toggle">More
-                                                Categories</span>
-                                        </div>
                                     </li>
 
                                 </ul>
@@ -323,90 +129,39 @@
                         <!-- Sidebar Size Block -->
                         <div class="ec-sidebar-block">
                             <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Size</h3>
+                                <h3 class="ec-sidebar-title">Kích thước</h3>
                             </div>
                             <div class="ec-sb-block-content">
                                 <ul>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" value="" checked /><a href="#">S</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" value="" /><a href="#">M</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" value="" /> <a href="#">L</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" value="" /><a href="#">XL</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" value="" /><a href="#">XXL</a><span
-                                                class="checked"></span>
-                                        </div>
-                                    </li>
+                                    @foreach($variants as $variant)
+                                        @if($variant->size) <!-- Kiểm tra nếu biến thể có màu sắc -->
+                                        <li>
+                                            <div class="ec-sidebar-block-item">
+                                                <input type="checkbox" value="{{ $variant->size->id }}" />
+                                                <a href="#">{{ $variant->size->name }}</a><span class="checked"></span>
+                                            </div>
+                                        </li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
-                        <!-- Sidebar Color item -->
-                        <div class="ec-sidebar-block ec-sidebar-block-clr">
+                        <div class="ec-sidebar-block">
                             <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Color</h3>
+                                <h3 class="ec-sidebar-title">Màu sắc</h3>
                             </div>
                             <div class="ec-sb-block-content">
                                 <ul>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#c4d6f9;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#ff748b;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#000000;"></span></div>
-                                    </li>
-                                    <li class="active">
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#2bff4a;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#ff7c5e;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#f155ff;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#ffef00;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#c89fff;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#7bfffa;"></span></div>
-                                    </li>
-                                    <li>
-                                        <div class="ec-sidebar-block-item"><span
-                                                style="background-color:#56ffc1;"></span></div>
-                                    </li>
+                                    @foreach($variants as $variant)
+                                        @if($variant->color) <!-- Kiểm tra nếu biến thể có màu sắc -->
+                                        <li>
+                                            <div class="ec-sidebar-block-item">
+                                                <input type="checkbox" value="{{ $variant->color->id }}" />
+                                                <a href="#">{{ $variant->color->name }}</a><span class="checked"></span>
+                                            </div>
+                                        </li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>

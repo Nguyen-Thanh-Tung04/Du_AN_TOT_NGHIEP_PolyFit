@@ -17,10 +17,12 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 
 use App\Models\Cart;
 use App\Models\Category;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -48,6 +50,7 @@ Route::get('/about', function () {
 Route::get('/shop', function () {
     return view('client.page.shop');
 });
+Route::get('/shop', [ProductCatalogueController::class, 'index']);
 Route::get('/history', function () {
     return view('client.page.history');
 });

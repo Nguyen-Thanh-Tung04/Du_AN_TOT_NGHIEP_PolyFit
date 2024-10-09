@@ -80,7 +80,7 @@
                 </div>
             </a>
         </div>
-        
+
     </div>
 </section>
 <!--category Section End -->
@@ -124,7 +124,7 @@
                                     <div class="ec-product-image">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                             <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" style="height: 300px"  />
+                                                alt="" style="height: 250px"  />
                                         </a>
                                         <span class="ec-product-discount-label">-33%</span>
                                     </div>
@@ -288,7 +288,7 @@
                                     <!--/END single card -->
                                 </div>
                                 @endforeach
-    
+
                             </div>
                         </div>
                     </div>
