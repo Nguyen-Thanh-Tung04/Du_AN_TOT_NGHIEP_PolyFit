@@ -5,9 +5,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Variants;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 
 
@@ -66,7 +68,7 @@ class HomeController extends Controller
 
         $category = Category::all();
 
-        return view('welcome', $data, compact('products', 'search', 'category')); // Chuyển hướng tới view kết quả tìm kiếm
+        return view('client.page.shop', $data, compact('products', 'search', 'category')); // Chuyển hướng tới view kết quả tìm kiếm
     }
 
 
@@ -74,26 +76,53 @@ class HomeController extends Controller
 
     public function forgetPass()
     {
-        return view('client.ResetPass.forgetPass');
+        return view('client.passwords.forgetPass');
     }
 
-    public function postForgetPass (Request $req)
-    {
-        $req->validate([
-        'email' => 'required exists:customer'
-        ],[
+    // public function postForgetPass (Request $req)
+    // {
+    //     $req->validate([
+    //     'email' => 'required exists:customer'
+    //     ],[
+    //     'email.required' => 'Vui lòng nhập địa chỉ email hợp lệ',
+    //     'email.exists' => 'Email này không tông tại trong hệ thống'
+    //     ]);
+    //     $token = strtoupper(Str::random(10));
+    //     $customer = User::where('email', $req->email)->first();
+    //     $customer->update(['token' => $token]);
+    //     Mail::send('emails.check_email_forget', compact('customer'),function($email) use($customer){
+    //         $email->subject ('MyShoping - Lấy lại mật khẩu tài khoản');
+    //         $email->to($customer->email, $customer->name);
+    //         return redirect()->back('auth.client-login')->with('yes', 'Vui lòng check email để thự hiện thay đổi mật khẩu');
+    //     });
+
+    // }
+    public function postForgetPass(Request $req)
+{
+    $req->validate([
+        'email' => 'required|exists:users,email'
+    ],[
         'email.required' => 'Vui lòng nhập địa chỉ email hợp lệ',
-        'email.exists' => 'Email này không tông tại trong hệ thống'
-        ]);
+        'email.exists' => 'Email này không tồn tại trong hệ thống'
+    ]);
 
-        $token = strtoupper (Str::random(10));
-        $customer = Customer::where('email', $req->email)->first();
-        $customer->update(['token' => $token]);
-        Mail::send('emails.check_email_forget', compact('customer'),function($email) use($customer){
-            $email->subject ('MyShoping - Lấy lại mật khẩu tài khoản');
-            $email->to($customer->email, $customer->name);
-            return redirect()->back('auth.client-login')->with('yes', 'Vui lòng check email để thự hiện thay đổi mật khẩu');
-        });
-
+    $token = strtoupper(Str::random(10));
+    $customer = User::where('email', $req->email)->first();
+    if (!$customer) {
+        return back()->with('error', 'Email không tồn tại trong hệ thống.');
     }
+
+    $customer->update(['token' => $token]);
+
+    Mail::send('emails.check_email_forget', compact('customer'), function($email) use($customer) {
+        $email->subject('MyShoping - Lấy lại mật khẩu tài khoản');
+        $email->to($customer->email, $customer->name);
+    });
+
+    if (Mail::failures()) {
+        return back()->with('error', 'Không thể gửi email. Vui lòng thử lại.');
+    }
+
+    return redirect()->route('auth.client-login')->with('yes', 'Vui lòng check email để thực hiện thay đổi mật khẩu');
+}
 }

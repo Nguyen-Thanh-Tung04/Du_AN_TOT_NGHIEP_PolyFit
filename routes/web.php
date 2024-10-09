@@ -43,10 +43,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/forget-password', [HomeController::class, 'forgetPass'])->name('customer.forgetPass');
-Route::post('/forget-password', [HomeController::class, 'postForgetPass']);
-Route::get('/get-password', [HomeController::class, 'getPass'])->name('customer.getPass');
+// Route::get('/forget-password', [HomeController::class, 'forgetPass'])->name('admin.forgetPass');
+// Route::post('/forget-password', [HomeController::class, 'postForgetPass']);
+Route::get('/get-password', [HomeController::class, 'getPass'])->name('getPass');
 Route::post('/get-password', [HomeController::class, 'postGetPass']);
+Route::get('/forget-pass', [HomeController::class, 'forgetPass'])->name('forget');
+Route::post('/forget-pass', [HomeController::class, 'postForgetPass']);
 
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
