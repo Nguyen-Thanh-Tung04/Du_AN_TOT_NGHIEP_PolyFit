@@ -7,6 +7,9 @@ use App\Models\Variants;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class HomeController extends Controller
 {
@@ -64,5 +67,33 @@ class HomeController extends Controller
         $category = Category::all();
 
         return view('welcome', $data, compact('products', 'search', 'category')); // Chuyển hướng tới view kết quả tìm kiếm
+    }
+
+
+    // gửi email quên mật khẩu
+
+    public function forgetPass()
+    {
+        return view('client.ResetPass.forgetPass');
+    }
+
+    public function postForgetPass (Request $req)
+    {
+        $req->validate([
+        'email' => 'required exists:customer'
+        ],[
+        'email.required' => 'Vui lòng nhập địa chỉ email hợp lệ',
+        'email.exists' => 'Email này không tông tại trong hệ thống'
+        ]);
+
+        $token = strtoupper (Str::random(10));
+        $customer = Customer::where('email', $req->email)->first();
+        $customer->update(['token' => $token]);
+        Mail::send('emails.check_email_forget', compact('customer'),function($email) use($customer){
+            $email->subject ('MyShoping - Lấy lại mật khẩu tài khoản');
+            $email->to($customer->email, $customer->name);
+            return redirect()->back('home.login')->with('yes', 'Vui lòng check email để thự hiện thay đổi mật khẩu');
+        });
+
     }
 }

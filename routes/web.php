@@ -23,7 +23,6 @@ use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Auth\PasswordResetController;
 
 
 
@@ -44,9 +43,10 @@ use App\Http\Controllers\Auth\PasswordResetController;
 */
 
 
-
-Route::get('password/reset', [PasswordResetController::class, 'showResetRequestForm'])->name('password.request');
-Route::post('password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+Route::get('/forget-password', [HomeController::class, 'forgetPass'])->name('customer.forgetPass');
+Route::post('/forget-password', [HomeController::class, 'postForgetPass']);
+Route::get('/get-password', [HomeController::class, 'getPass'])->name('customer.getPass');
+Route::post('/get-password', [HomeController::class, 'postGetPass']);
 
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');

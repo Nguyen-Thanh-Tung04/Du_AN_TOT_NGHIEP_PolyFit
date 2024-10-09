@@ -32,9 +32,9 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="section-title">
-                    <h2 class="ec-bg-title">Đăng Nhập</h2>
-                    <h2 class="ec-title">Đăng Nhập</h2>
-                    <p class="sub-title mb-3">Nơi tốt nhất để mua sản phẩm.</p>
+                    <h2 class="ec-bg-title">Lấy lại mật khẩu</h2>
+                    <h2 class="ec-title">Lấy lại mật khẩu</h2>
+                    <p class="sub-title mb-3">Vui lòng nhập email mà bạn đã đăng ký tài khoản trong hệ thống của chúng tôi.</p>
                 </div>
             </div>
             <div class="ec-login-wrapper">
@@ -49,19 +49,8 @@
                                     <p class="text-danger mb-2">* {{ $message }}</p>
                                 @enderror
                             </span>
-                            <span class="ec-login-wrap">
-                                <label>Password*</label>
-                                <input type="password" name="password" placeholder="Nhập mật khẩu" style="margin-bottom: 10px"/>
-                                @error('password')
-                                    <p class="text-danger mb-2">* {{ $message }}</p>
-                                @enderror
-                            </span>
-                            <span class="ec-login-wrap ec-login-fp">
-                                <label><a href="{{ route('customer.forgetPass')}}">Quên mật khẩu?</a></label>
-                            </span>
                             <span class="ec-login-wrap ec-login-btn">
-                                <button class="btn btn-primary" type="submit">Đăng nhập</button>
-                                <a href="{{ route('auth.client.register') }}" class="btn btn-secondary">Đăng ký</a>
+                                <button class="btn btn-primary" type="submit">Gửi email xác nhận</button>
                             </span>
                         </form>
                     </div>
