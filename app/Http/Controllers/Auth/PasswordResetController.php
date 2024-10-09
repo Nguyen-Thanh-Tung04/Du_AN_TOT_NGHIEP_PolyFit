@@ -12,7 +12,7 @@ class PasswordResetController extends Controller
 {
     public function showResetRequestForm()
     {
-        return view('auth.passwords.email');
+        return view('client.auth.passwords.email');
     }
 
     public function sendResetLink(Request $request)

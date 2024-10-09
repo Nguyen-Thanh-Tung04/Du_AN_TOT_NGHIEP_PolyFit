@@ -42,7 +42,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 
 
 Route::get('password/reset', [PasswordResetController::class, 'showResetRequestForm'])->name('password.request');
-Route::post('password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+Route::get('password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
 
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
