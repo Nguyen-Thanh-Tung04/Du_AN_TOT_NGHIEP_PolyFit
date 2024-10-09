@@ -29,6 +29,7 @@ class HomeController extends Controller
             ->groupBy('products.id')
             ->get();
 
+
         // Tạo một mảng kết hợp chứa dữ liệu cần truyền tới view
         $data = [
             'products' => $products,
@@ -41,5 +42,27 @@ class HomeController extends Controller
         // dd($data);
 
         return view('welcome', $data, compact('category') );
+    }
+
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search'); // Lấy giá trị tìm kiếm từ input
+
+        // Truy vấn tìm kiếm sản phẩm
+        $products = Product::with('variants') // Eager load variants để giảm số lượng truy vấn
+            ->where('name', 'like', "%{$search}%") // Tìm kiếm theo tên sản phẩm
+            ->orWhere('code', 'like', "%{$search}%") // Tìm kiếm theo mã sản phẩm
+            ->get();
+
+        // Tạo một mảng dữ liệu để truyền tới view
+        $data = [
+            'products' => $products,
+            'search' => $search, // Truyền biến tìm kiếm tới view để hiển thị
+        ];
+
+        $category = Category::all();
+
+        return view('welcome', $data, compact('products', 'search', 'category')); // Chuyển hướng tới view kết quả tìm kiếm
     }
 }

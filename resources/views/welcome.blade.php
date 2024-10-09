@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="row margin-minus-tb-15">
-            <a href="#">
+
                 <div class="ec_cat_slider">
                     @foreach ($category as $category)
                     <div class="ec_cat_content">
@@ -77,9 +77,9 @@
                     </div>
                     @endforeach
                 </div>
-            </a>
+            
         </div>
-        
+
     </div>
 </section>
 <!--category Section End -->
@@ -95,6 +95,7 @@
                     <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
                 </div>
             </div>
+
 
             <!-- Tab Start -->
             <div class="col-md-12 text-center">
@@ -164,7 +165,7 @@
     </div>
     </div>
 
-    {{-- <section class="section ec-services-section section-space-p" id="services">
+    <section class="section ec-services-section section-space-p" id="services">
         <h2 class="d-none">Dịch vụ</h2>
         <div class="container">
             <div class="row">
@@ -214,7 +215,7 @@
                 </div>
             </div>
         </div>
-    </section> --}}
+    </section>
     <!--services Section End -->
 
     <!--  offer Section Start -->
@@ -287,7 +288,7 @@
                                     <!--/END single card -->
                                 </div>
                                 @endforeach
-    
+
                             </div>
                         </div>
                     </div>

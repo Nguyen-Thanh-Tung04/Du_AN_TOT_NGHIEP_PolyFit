@@ -20,6 +20,8 @@ use App\Http\Controllers\Client\ClientProductController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth\PasswordResetController;
+
 
 
 
@@ -37,7 +39,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+Route::get('password/reset', [PasswordResetController::class, 'showResetRequestForm'])->name('password.request');
+Route::post('password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+
+
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
