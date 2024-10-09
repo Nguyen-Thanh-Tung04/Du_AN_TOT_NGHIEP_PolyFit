@@ -92,7 +92,7 @@ class HomeController extends Controller
         Mail::send('emails.check_email_forget', compact('customer'),function($email) use($customer){
             $email->subject ('MyShoping - Lấy lại mật khẩu tài khoản');
             $email->to($customer->email, $customer->name);
-            return redirect()->back('home.login')->with('yes', 'Vui lòng check email để thự hiện thay đổi mật khẩu');
+            return redirect()->back('auth.client-login')->with('yes', 'Vui lòng check email để thự hiện thay đổi mật khẩu');
         });
 
     }
