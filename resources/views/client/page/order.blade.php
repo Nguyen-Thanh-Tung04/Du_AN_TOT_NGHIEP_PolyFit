@@ -38,15 +38,21 @@
                 <div class="ec-trackorder-bottom">
                     <div class="ec-progress-track">
                         <ul id="ec-progressbar">
-                            @foreach ($order->statusHistories as $statusHistory)
-                                <li class="step0 {{ $loop->first ? 'active' : '' }}">
-                                    <span class="ec-track-icon">
-                                        <img src="theme/client/assets/images/icons/track_{{ $loop->index + 1 }}.png" alt="track_order">
-                                    </span>
-                                    <span class="ec-progressbar-track"></span>
-                                    <span class="ec-track-title">{{ $statusHistory->newStatusName() }}</span>
-                                </li>
-                            @endforeach
+                            <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_1.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đơn hàng đã đặt</span></li>
+                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_2.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận thông tin thanh toán</span></li>
+                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_3.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
+                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_4.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang giao tới bạn <br> </span></li>
+                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_5.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
                         </ul>
                     </div>
                 </div>
@@ -68,25 +74,25 @@
 
             @foreach ($order->orderItems as $orderItem)
             @php
-                            $gallery = json_decode($orderItem->product->gallery);
-                            @endphp
-                <div class="ec-trackorder-inner">
-                        <div class="row align-items-center p-3">
-                            <div class="col-1">
-                                <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
-                            </div>
-                            <div class="col-8">
-                                <h6>{{ $orderItem->variant->product->name }}</h6>
-                                <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
-                                <div class="text-muted">x{{ $orderItem->quantity }}</div>
-                            </div>
-                            <div class="col-3 text-right">
-                                <del class="fs-6 fw-light text-dark">₫{{ number_format($orderItem->price, 0, ',', '.') }}</del>
-                                <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
-                            </div>
-                        </div>
-                    </a>
+            $gallery = json_decode($orderItem->product->gallery);
+            @endphp
+            <div class="ec-trackorder-inner">
+                <div class="row align-items-center p-3">
+                    <div class="col-1">
+                        <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
+                    </div>
+                    <div class="col-8">
+                        <h6>{{ $orderItem->variant->product->name }}</h6>
+                        <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
+                        <div class="text-muted">x{{ $orderItem->quantity }}</div>
+                    </div>
+                    <div class="col-3 text-right">
+                        <del class="fs-6 fw-light text-dark">₫{{ number_format($orderItem->price, 0, ',', '.') }}</del>
+                        <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
+                    </div>
                 </div>
+                </a>
+            </div>
             @endforeach
 
             <div class="row border-bottom border-top">
