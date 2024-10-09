@@ -18,10 +18,12 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
 use App\Models\Cart;
 use App\Models\Category;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -48,6 +50,13 @@ Route::get('/about', function () {
 });
 Route::get('/shop', function () {
     return view('client.page.shop');
+});
+Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
+Route::get('/shop-category/{id}', [ProductCatalogueController::class, 'show'])->name('shop.show');
+
+
+Route::get('/history', function () {
+    return view('client.page.history');
 });
 Route::get('/product_detail', function () {
     return view('client.page.productDetail');
@@ -147,6 +156,8 @@ Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
 
 // AJAX
 Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])

@@ -73,14 +73,14 @@
                             height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
                             object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
                             />
-                            <p>áo</p>
+                            <p class="text-black fw-bold">{{$category->name}}</p>
                         </div>
                     </div>
                     @endforeach
                 </div>
             </a>
         </div>
-        
+
     </div>
 </section>
 <!--category Section End -->
@@ -124,7 +124,7 @@
                                     <div class="ec-product-image">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                             <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" style="height: 300px"  />
+                                                alt="" style="height: 250px"  />
                                         </a>
                                         <span class="ec-product-discount-label">-33%</span>
                                     </div>
@@ -223,7 +223,7 @@
         <h2 class="d-none">Lời đề nghị</h2>
         <div class="container">
             <div class="row justify-content-end">
-                <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
+                {{-- <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
                     <h2 class="ec-offer-title">Mũ</h2>
                     <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
                     <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
@@ -231,7 +231,7 @@
                     <span class="ec-offer-desc">Mũ</span>
                     <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} VNĐ</span>
                     <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -288,7 +288,7 @@
                                     <!--/END single card -->
                                 </div>
                                 @endforeach
-    
+
                             </div>
                         </div>
                     </div>
