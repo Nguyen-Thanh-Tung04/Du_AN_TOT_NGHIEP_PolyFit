@@ -50,7 +50,10 @@ Route::get('/about', function () {
 Route::get('/shop', function () {
     return view('client.page.shop');
 });
-Route::get('/shop', [ProductCatalogueController::class, 'index']);
+Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
+Route::get('/shop-category/{id}', [ProductCatalogueController::class, 'show'])->name('shop.show');
+
+
 Route::get('/history', function () {
     return view('client.page.history');
 });
