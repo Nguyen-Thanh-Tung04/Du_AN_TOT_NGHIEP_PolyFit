@@ -42,10 +42,10 @@
                             <table class="table ec-table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Mã Đơn Hàng</th>
-                                        <th scope="col">Ảnh sản phẩm</th>
+                                        <th scope="col">Mã Đơn hàng</th>
+                                        <th scope="col">Khách hàng</th>
                                         <th scope="col">Ngày đặt</th>
-                                        <th scope="col">Giá</th>
+                                        <th scope="col">Tổng tiền</th>
                                         <th scope="col">Trạng thái</th>
                                         <th scope="col">Hành động</th>
                                     </tr>
@@ -53,17 +53,14 @@
                                 <tbody>
                                     @foreach($orders as $order)
                                         @foreach($order->orderItems as $item)
-                                        @php
-                                    $gallery = json_decode($item->product->gallery);
-                                @endphp
                                             <tr>
                                                 <td>{{ $order->id }}</td>
-                                                <td><img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" width="100px"></td>
+                                                <td>{{ $order->user->name }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                                                 <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} VND</td>
                                                 <td style="font-weight: bold; ">{{ $order->status_name }}</td>
                                                 <td>
-                                                    <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-info">Xem</a>
+                                                    <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-info text-white">Xem</a>
                                                 </td>
                                             </tr>
                                                 
