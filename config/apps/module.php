@@ -84,6 +84,18 @@ return [
                     'route' => 'reviews/index',
                 ],
             ],
+        ],
+        [
+            'title' => 'Quản lý Đơn hàng',
+            'icon' => 'fa fa-money',
+            'name' => ['orders'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý Đơn hàng',
+                    'route' => 'orders/index',
+                ],
+            ],
         ]
+
     ]
 ];

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
@@ -19,7 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
-
+use App\Http\Controllers\Client\OrderHistoryController;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -236,7 +237,14 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
     Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
     Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
 });
-
+Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
+    Route::get('index',                 [OrderController::class, 'index'])->name('index');
+    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
+});
+Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
+Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
 
 
 
