@@ -141,12 +141,12 @@
                                 <div class="ec-vendor-block-profile">
                                     <div class="ec-vendor-block-img space-bottom-30">
                                         <div class="ec-vendor-block-bg">
-                                            <a href="#" class="btn btn-lg btn-primary"
+                                            <a href="{{route('updateProfile',$profile->id)}}" class="btn btn-lg btn-primary"
                                                 data-link-action="editmodal" title="Edit Detail"
                                                 data-bs-toggle="modal" data-bs-target="#edit_modal">Chỉnh sửa</a>
                                         </div>
                                         <div class="ec-vendor-block-detail">
-                                            <img class="v-img" src="assets/images/user/1.jpg" alt="vendor image">
+                                            <img class="v-img" src="..." alt="vendor image">
                                             <h5 class="name">{{$profile->name}}</h5>
 
                                         </div>
@@ -185,7 +185,7 @@
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <div class="ec-vendor-detail-block ec-vendor-block-address">
-                                                <h6>Địa chỉ: {{$profile->ward_id}}, {{$profile->district_id}}, {{$profile->province_id}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
+                                                <h6>Địa chỉ: {{$profile->address}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
                                             </div>
                                         </div>
 
@@ -214,7 +214,7 @@
                                 <div class="thumb-preview ec-preview">
                                     <div class="image-thumb-preview">
                                         <img class="image-thumb-preview ec-image-preview v-img"
-                                            src="{{asset('theme/client/assets/images/banner/8.jpg')}}" alt="edit" />
+                                            src="{{asset('theme/client/assets/images/banner/8.jpg')}}"alt="edit" />
                                     </div>
                                 </div>
                             </div>
@@ -222,7 +222,7 @@
                         <div class="ec-vendor-block-detail">
                             <div class="thumb-upload">
                                 <div class="thumb-edit">
-                                    <input type='file' id="thumbUpload02" class="ec-image-upload"
+                                    <input type='file' id="thumbUpload02" name="imageUser" class="ec-image-upload"
                                         accept=".png, .jpg, .jpeg" />
                                     <label><i class="fi-rr-edit"></i></label>
                                 </div>
@@ -260,7 +260,7 @@
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <label class="form-label">Địa chỉ</label>
-                                    <input type="text" name="address" class="form-control" value="{{$profile->ward_id}}, {{$profile->district_id}}, {{$profile->province_id}}">
+                                    <input type="text" name="address" class="form-control" value="{{$profile->address}}">
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <button type="submit" class="btn btn-primary">Cập nhật</button>
