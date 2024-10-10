@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserCatalogueController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,9 +46,11 @@ Route::get('/product_detail', function () {
 Route::get('/contact', function () {
     return view('client.page.contact');
 });
-Route::get('/account', function () {
-    return view('client.page.profile');
-});
+
+Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
+// Route::get('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+Route::patch('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+
 Route::get('/cart', function () {
     return view('client.page.cart');
 })->name('cart');
