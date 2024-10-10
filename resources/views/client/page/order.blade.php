@@ -41,16 +41,16 @@
                             <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_1.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đơn hàng đã đặt</span></li>
-                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                            <li class="step0"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_2.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận thông tin thanh toán</span></li>
-                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                            <li class="step0"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_3.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
-                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã giao cho ĐVVC</span></li>
+                            <li class="step0"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_4.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đang giao tới bạn <br> </span></li>
-                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                            <li class="step0"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_5.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
                         </ul>
@@ -63,57 +63,56 @@
                 <div class="d-flex justify-content-between">
                     <div class="pt-2 pb-2">
                         <div class="fw-semibold">{{ $order->full_name }}</div>
-                        <div>(+84) {{ $order->phone }}</div>
-                        <div>{{ $order->address }}</div>
+                        <div>{{ $order->phone }}</div>
+                        <div>
+                            {{ $order->address }}, {{ optional($order->ward)->name}}, {{ optional($order->district)->name}},{{ optional($order->province)->name ?? '' }}
+                        </div>
                     </div>
                     <div>
                         <button class="btn btn-primary">Hủy đơn hàng</button>
                     </div>
                 </div>
             </div>
+            <div class="ec-trackorder-inner ">
+                <div class="col-12">
+                    @foreach($order->orderItems as $item)
+                        <a href="link-den-san-pham.html" class="product-link">
+                            <div class="row align-items-center p-3">
+                                <div class="col-1">
+                                    <img src="{{ $item->image }}" alt="Áo" class="img-fluid">
+                                </div>
 
-            @foreach ($order->orderItems as $orderItem)
-            @php
-            $gallery = json_decode($orderItem->product->gallery);
-            @endphp
-            <div class="ec-trackorder-inner">
-                <div class="row align-items-center p-3">
-                    <div class="col-1">
-                        <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
+                                <div class="col-8">
+                                    <h6>{{ $item->variant->product->name }}</h6>
+                                    <div class="text-muted">Phân loại hàng: <span>{{ $item->color }}, {{ $item->size }}</span></div>
+                                    <div class="text-muted">x{{ $item->quantity }}</div>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <span class="fs-6 fw-medium text-primary">₫{{ number_format($item->price, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                    <div class="row border-bottom border-top">
+                        <div class="col-8 text-end border-end p-2">Phí vận chuyển</div>
+                        <div class="col-4 text-end p-2">₫{{ number_format($order->shipping_cost, 0, ',', '.') }}</div>
                     </div>
-                    <div class="col-8">
-                        <h6>{{ $orderItem->variant->product->name }}</h6>
-                        <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
-                        <div class="text-muted">x{{ $orderItem->quantity }}</div>
+
+                    <div class="row border-bottom">
+                        <div class="col-8 text-end border-end p-2">Voucher từ Shop</div>
+                        <div class="col-4 text-end p-2">-₫{{ number_format($order->discount_amount, 0, ',', '.') }}</div>
                     </div>
-                    <div class="col-3 text-right">
-                        <del class="fs-6 fw-light text-dark">₫{{ number_format($orderItem->price, 0, ',', '.') }}</del>
-                        <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
+
+                    <div class="row border-bottom">
+                        <div class="col-8 text-end fw-bold border-end p-2">Thành tiền</div>
+                        <div class="col-4 text-end text-primary fw-bold p-2">₫{{ number_format($order->total_price, 0, ',', '.') }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8 text-end border-end p-2">Phương thức thanh toán</div>
+                        <div class="col-4 text-end p-2">Thanh toán khi nhận hàng</div>
                     </div>
                 </div>
-                </a>
-            </div>
-            @endforeach
-
-            <div class="row border-bottom border-top">
-                <div class="col-8 text-end border-end p-2">Tổng tiền hàng</div>
-                <div class="col-4 text-end p-2">₫{{ number_format($order->total_price, 0, ',', '.') }}</div>
-            </div>
-            <div class="row border-bottom">
-                <div class="col-8 text-end border-end p-2">Phí vận chuyển</div>
-                <div class="col-4 text-end p-2">₫{{ number_format($order->shipping_cost, 0, ',', '.') }}</div>
-            </div>
-            <div class="row border-bottom">
-                <div class="col-8 text-end border-end p-2">Voucher từ Shop</div>
-                <div class="col-4 text-end p-2">-₫{{ number_format($order->discount_amount, 0, ',', '.') }}</div>
-            </div>
-            <div class="row border-bottom">
-                <div class="col-8 text-end fw-bold border-end p-2">Thành tiền</div>
-                <div class="col-4 text-end text-primary fw-bold p-2">₫{{ number_format($order->total_price - $order->discount_amount + $order->shipping_cost, 0, ',', '.') }}</div>
-            </div>
-            <div class="row">
-                <div class="col-8 text-end border-end p-2">Phương thức thanh toán</div>
-                <div class="col-4 text-end p-2">{{ $order->paymentMethodName }}</div>
             </div>
 
         </div>

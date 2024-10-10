@@ -40,6 +40,10 @@
 
     <!-- Background css -->
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/backgrounds/bg-4.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="{{asset('theme/client/assets/js/vendor/jquery-3.5.1.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     {{-- Reviews --}}
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/review.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
@@ -55,8 +59,6 @@
     <!-- UIkit JS -->
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
-
-
 </head>
 
 <body>
@@ -71,7 +73,7 @@
 
 
     <!-- Vendor JS -->
-    <script src="{{asset('theme/client/assets/js/vendor/jquery-3.5.1.min.js')}}"></script>
+    
     <script src="{{asset('theme/client/library/library.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/popper.min.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/bootstrap.min.js')}}"></script>
@@ -88,7 +90,7 @@
     <script src="{{asset('theme/client/assets/js/vendor/jquery.magnific-popup.min.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/plugins/jquery.sticky-sidebar.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/plugins/sweetalert2.js')}}"></script>
-    <script>
+    {{-- <script>
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -100,16 +102,13 @@
             timer: 1500,
             timerProgressBar: true,
         })
-    </script>
+    </script> --}}
 
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/main.js')}}"></script>
-    <script src="{{ asset('admin/library/location.js') }}"></script>
-    {{-- <script src="{{ asset('admin/library/library.js') }}"></script> --}}
+    <script src="{{ asset('theme/client/library/library.js') }}"></script>
     <script src="{{asset('theme/client/assets/js/review.js')}}"></script>
-
-
     @yield('scripts')
 </body>
 

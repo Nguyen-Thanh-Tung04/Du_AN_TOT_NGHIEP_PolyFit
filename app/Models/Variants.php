@@ -19,4 +19,14 @@ class Variants extends Model
 		'quantity',
 		'status',
     ];
+
+	protected $table = 'products';
+
+	public function color() {
+		return $this->belongsTo(Color::class, 'color_id', 'id');
+	}
+
+	public function size() {
+		return $this->belongsTo(Size::class, 'size_id', 'id');
+	}
 }
