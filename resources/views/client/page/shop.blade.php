@@ -206,20 +206,25 @@
                 content.style.display = 'none';
             }
         });
+    </script>
+    <script>
+
         document.getElementById('ec-select').addEventListener('change', function () {
             const selectedValue = this.value;
             window.location.href = `?sort=${selectedValue}`;
         });
+    </script>
+    <script>
         // Khởi tạo thanh trượt với noUiSlider
         var slider = document.getElementById('ec-sliderPrice');
 
         noUiSlider.create(slider, {
-            start: [0, 1000000],  // Giá trị khởi tạo của slider
+            start: [0, 10000000],  // Giá trị khởi tạo của slider
             connect: true,  // Hiển thị màu nối giữa 2 nút
             step: 10,  // Bước nhảy của slider
             range: {
                 'min': 0,
-                'max': 1000000
+                'max': 10000000
             },
             format: {
                 to: function (value) {
