@@ -90,7 +90,7 @@
                                     <h3 class="ec-sidebar-title">Danh mục</h3>
                                 </div>
                                 <div class="ec-sb-block-content">
-                                    <form action="{{ route('products.filter') }}" method="GET" id="category-filter-form">
+                                    <form action="{{ route('shop.show') }}" method="GET" id="category-filter-form">
                                         <ul>
                                             @foreach($categories as $categorie)
                                                 <li>
@@ -206,20 +206,25 @@
                 content.style.display = 'none';
             }
         });
+    </script>
+    <script>
+
         document.getElementById('ec-select').addEventListener('change', function () {
             const selectedValue = this.value;
             window.location.href = `?sort=${selectedValue}`;
         });
+    </script>
+    <script>
         // Khởi tạo thanh trượt với noUiSlider
         var slider = document.getElementById('ec-sliderPrice');
 
         noUiSlider.create(slider, {
-            start: [0, 1000000],  // Giá trị khởi tạo của slider
+            start: [0, 10000000],  // Giá trị khởi tạo của slider
             connect: true,  // Hiển thị màu nối giữa 2 nút
             step: 10,  // Bước nhảy của slider
             range: {
                 'min': 0,
-                'max': 1000000
+                'max': 10000000
             },
             format: {
                 to: function (value) {
@@ -249,7 +254,7 @@
             var maxPrice = values[1].replace('đ', '');
 
             // Gửi request để lọc sản phẩm theo giá trị đã chọn
-            window.location.href = `{{ route('products.show') }}?min_price=${minPrice}&max_price=${maxPrice}`;
+            window.location.href = `{{ route('products.filter') }}?min_price=${minPrice}&max_price=${maxPrice}`;
         });
     </script>
 

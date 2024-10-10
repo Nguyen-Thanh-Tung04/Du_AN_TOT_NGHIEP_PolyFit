@@ -70,21 +70,25 @@ class ProductCatalogueController
         // Trả về view với dữ liệu đã truyền
         return view('client.page.shop', $data);
     }
-    public function show(Request $request, $id)
+    public function show(Request $request)
     {
-        // Lấy danh mục theo ID
-        $category = Category::findOrFail($id);
+        $sizes = $request->get('sizes', []);
+        $categories = $request->get('categories', []);
+        $colors = $request->get('colors', []);
+        $minPrice = $request->get('min_price', 0);
+        $maxPrice = $request->get('max_price', 250);
 
-        // Truy vấn sản phẩm thuộc danh mục với việc tính toán giá
         $query = Product::select('products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
             DB::raw('MIN(variants.listed_price) as listed_price'))
             ->join('variants', 'products.id', '=', 'variants.product_id')
-            ->where('products.category_id', $category->id) // Thêm điều kiện để chỉ lấy sản phẩm thuộc danh mục
             ->groupBy('products.id');
 
-        // Kiểm tra tham số sắp xếp và áp dụng sắp xếp vào truy vấn
+        // Lọc theo giá
+        $query->whereBetween('variants.sale_price', [$minPrice, $maxPrice]);
+
+        // Sắp xếp theo yêu cầu
         if ($request->has('sort')) {
             switch ($request->input('sort')) {
                 case 'name_asc':
@@ -102,33 +106,94 @@ class ProductCatalogueController
             }
         }
 
-        // Lấy dữ liệu sản phẩm sau khi đã sắp xếp
+        // Lọc theo size
+        if (!empty($sizes)) {
+            $query->whereHas('variants', function ($query) use ($sizes) {
+                $query->whereIn('size_id', $sizes);
+            });
+        }
+
+        // Lọc theo màu sắc
+        if (!empty($colors)) {
+            $query->whereHas('variants', function ($query) use ($colors) {
+                $query->whereIn('color_id', $colors);
+            });
+        }
+
+        // Lọc theo danh mục
+        if (!empty($categories)) {
+            $query->whereIn('products.category_id', $categories);
+        }
+
+        // Lấy danh sách sản phẩm sau khi lọc
         $products = $query->get();
 
-        // Lấy danh sách các sản phẩm có giảm giá
-        $discounted = Product::select('products.*',
+        // Lấy danh sách tất cả các biến thể để hiển thị lại các size, màu sắc trong sidebar
+        $variants = Variant::all();
+        $categories = Category::all(); // Để hiển thị lại các danh mục
+
+        return view('client.page.shop', compact('products', 'variants', 'categories'));
+    }
+    public function filter(Request $request)
+    {
+        $sizes = $request->get('sizes', []);
+        $categories = $request->get('categories', []);
+        $colors = $request->get('colors', []);
+
+        $query = Product::select('products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
+            DB::raw('MAX(variants.sale_price) as max_price'),
             DB::raw('MIN(variants.listed_price) as listed_price'))
             ->join('variants', 'products.id', '=', 'variants.product_id')
-            ->whereColumn('variants.listed_price', '>', 'variants.sale_price')
-            ->groupBy('products.id')
-            ->get();
+            ->groupBy('products.id');
 
-        // Lấy danh sách các danh mục và biến thể
-        $categories = Category::all();
+        // Sắp xếp theo yêu cầu
+        if ($request->has('sort')) {
+            switch ($request->input('sort')) {
+                case 'name_asc':
+                    $query->orderBy('products.name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('products.name', 'desc');
+                    break;
+                case 'price_asc':
+                    $query->orderBy('min_price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('min_price', 'desc');
+                    break;
+            }
+        }
+
+        // Lọc theo size
+        if (!empty($sizes)) {
+            $query->whereHas('variants', function ($query) use ($sizes) {
+                $query->whereIn('size_id', $sizes);
+            });
+        }
+
+        // Lọc theo màu sắc
+        if (!empty($colors)) {
+            $query->whereHas('variants', function ($query) use ($colors) {
+                $query->whereIn('color_id', $colors);
+            });
+        }
+
+        // Lọc theo danh mục
+        if (!empty($categories)) {
+            $query->whereIn('products.category_id', $categories);
+        }
+
+        // Lấy danh sách sản phẩm sau khi lọc
+        $products = $query->get();
+
+        // Lấy danh sách tất cả các biến thể để hiển thị lại các size, màu sắc trong sidebar
         $variants = Variant::all();
+        $categories = Category::all(); // Để hiển thị lại các danh mục
 
-        // Tạo mảng dữ liệu để truyền vào view
-        $data = [
-            'products' => $products,
-            'discounted' => $discounted,
-            'categories' => $categories,
-            'variants' => $variants,
-        ];
-
-        // Trả về view với dữ liệu đã truyền
-        return view('client.page.shop', $data);
+        return view('client.page.shop', compact('products', 'variants', 'categories'));
     }
+
 
 
 }
