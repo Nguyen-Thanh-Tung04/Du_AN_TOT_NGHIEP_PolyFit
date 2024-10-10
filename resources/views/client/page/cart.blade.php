@@ -29,139 +29,147 @@
 <!-- Ec About Us page -->
 <section class="ec-page-content section-space-p">
     <div class="container">
-        <div class="row">
-            <div class="ec-cart-leftside col-lg-12 col-md-12 ">
-                <!-- cart content Start -->
-                <div class="ec-cart-content">
-                    <div class="ec-cart-inner">
-                        <div class="row">
-                            <div class="table-content cart-table-content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <input type="checkbox" id="selectAll" class="product-checkbox">
-                                            </th>
-                                            <th>
-                                            </th>
-                                            <th>
-                                                Sản phẩm
-                                            </th>
-                                            <th>Phân loại</th>
-                                            <th>Đơn giá</th>
-                                            <th style="text-align: center;">Số lượng</th>
-                                            <th>Số tiền</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($cartItems as $item)
-                                        @php
-                                        $gallery = json_decode($item->variant->product->gallery);
-                                        @endphp
-                                        <tr id="cart-item-{{ $item->id }}">
-                                            <td> <input type="checkbox" class="product-checkbox select-item" data-id="{{ $item->id }}"></td>
-                                            <td>
+        <form id="checkoutForm" action="{{ route('checkout.show') }}" method="POST">
+            @csrf
+            <div class="row">
+                <div class="ec-cart-leftside col-lg-12 col-md-12 ">
+                    <!-- cart content Start -->
+                    <div class="ec-cart-content">
+                        <div class="ec-cart-inner">
+                            <div class="row">
+                                <div class="table-content cart-table-content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" id="selectAll" class="product-checkbox">
+                                                </th>
+                                                <th>
+                                                </th>
+                                                <th>
+                                                    Sản phẩm
+                                                </th>
+                                                <th>Phân loại</th>
+                                                <th>Đơn giá</th>
+                                                <th style="text-align: center;">Số lượng</th>
+                                                <th>Số tiền</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($cartItems as $item)
+                                            @php
+                                            $gallery = json_decode($item->variant->product->gallery);
+                                            @endphp
+                                            <tr id="cart-item-{{ $item->id }}">
+                                                <td>
+                                                    <input type="checkbox"
+                                                    class="product-checkbox select-item"
+                                                    data-id="{{ $item->id }}"
+                                                    name="product_variant_ids[]" 
+                                                    value="{{ $item->variant->id }}">
+                                                </td>
+                                                <td>
+                                                    <img
+                                                        class=" ec-cart-pro-img mr-4"
+                                                        src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt="" />
+                                                </td>
+                                                <td data-label=" Sản phẩm" class="ec-cart-pro-name">
+                                                    <a class="fw-semibold fs-6" href="{{ route('client.product.show', $item->variant->product->id)}}">
+                                                        {{ $item->variant->product->name }}
+                                                    </a>
+                                                </td>
+                                                <td data-label="Phân loại" class="ec-cart-pro-price">
+                                                    <span>{{ $item->variant->size->name }},</span>
+                                                    <span>{{ $item->variant->color->name }}</span>
+                                                </td>
+                                                <td data-label="Đơn giá" class="ec-cart-pro-price">
+                                                    <span class="amount">
+                                                        @if($item->variant->sale_price)
+                                                        <span class="text-decoration-line-through purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                        <span class="sale_price"> {{ number_format($item->variant->sale_price) }}₫</span>
+                                                        @else
+                                                        <span class="purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
+                                                        @endif
 
-                                                <img
-                                                    class=" ec-cart-pro-img mr-4"
-                                                    src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt="" />
-                                            </td>
-                                            <td data-label=" Sản phẩm" class="ec-cart-pro-name">
-                                                <a class="fw-semibold fs-6" href="{{ route('client.product.show', $item->variant->product->id)}}">
-                                                    {{ $item->variant->product->name }}
-                                                </a>
-                                            </td>
-                                            <td data-label="Phân loại" class="ec-cart-pro-price">
-                                                <span>{{ $item->variant->size->name }},</span>
-                                                <span>{{ $item->variant->color->name }}</span>
-                                            </td>
-                                            <td data-label="Đơn giá" class="ec-cart-pro-price">
-                                                <span class="amount">
-                                                    @if($item->variant->sale_price)
-                                                    <span class="text-decoration-line-through purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
-                                                    <span class="sale_price"> {{ number_format($item->variant->sale_price) }}₫</span>
-                                                    @else
-                                                    <span class="purchase_price">{{ number_format($item->variant->purchase_price) }}₫</span>
-                                                    @endif
-
-                                                </span>
-                                            </td>
-                                            <td data-label="Số lượng" class="ec-cart-pro-qty"
-                                                style="text-align: center;">
-                                                <div class="cart-qty-plus-minus">
-                                                    <input class="cart-plus-minus quantity-input" data-id="{{ $item->id }}" data-old-value="{{ $item->quantity }}" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
-                                                </div>
-                                            </td>
-                                            <td data-label="Số tiền" class="ec-cart-pro-subtotal">
-                                                {{ number_format(($item->variant->sale_price ?? $item->variant->purchase_price) * $item->quantity) }}₫
-                                            </td>
-                                            <td data-label="Xóa" class="ec-cart-pro-remove">
-                                                <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                                    </span>
+                                                </td>
+                                                <td data-label="Số lượng" class="ec-cart-pro-qty"
+                                                    style="text-align: center;">
+                                                    <div class="cart-qty-plus-minus">
+                                                        <input class="cart-plus-minus quantity-input" name="quantities[{{ $item->variant->id }}]" data-id="{{ $item->id }}" data-old-value="{{ $item->quantity }}" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ $item->quantity }}"/>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Số tiền" class="ec-cart-pro-subtotal">
+                                                    {{ number_format(($item->variant->sale_price ?? $item->variant->purchase_price) * $item->quantity) }}₫
+                                                </td>
+                                                <td data-label="Xóa" class="ec-cart-pro-remove">
+                                                    <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!--cart content End -->
                 </div>
-                <!--cart content End -->
-            </div>
-            <!-- Sidebar Area Start -->
-            <div class="ec-cart-rightside col-lg-12 col-md-12 mt-5">
-                <div class="ec-sidebar-wrap">
-                    <!-- Sidebar Summary Block -->
-                    <div class="ec-sidebar-block">
+                <!-- Sidebar Area Start -->
+                <div class="ec-cart-rightside col-lg-12 col-md-12 mt-5">
+                    <div class="ec-sidebar-wrap">
+                        <!-- Sidebar Summary Block -->
+                        <div class="ec-sidebar-block">
 
-                        <div class="ec-sb-block-content">
-                            <div class="ec-cart-summary-bottom">
-                                <div class="ec-cart-summary">
-                                    <div>
-                                        <span class="text-left">Voucher</span>
-                                        <span class="text-right"><a class="ec-cart-coupan">Nhập mã</a></span>
-                                    </div>
-                                    <div class="ec-cart-coupan-content">
-                                        <form class="ec-cart-coupan-form" name="ec-cart-coupan-form" method="post"
-                                            action="#">
-                                            <input class="ec-coupan" type="text" required=""
-                                                placeholder="Nhập mã giảm giá" name="ec-coupan" value="">
-                                            <button class="ec-coupan-btn button btn-primary" type="submit"
-                                                name="subscribe" value="">OK</button>
-                                        </form>
-                                    </div>
-                                    <div class="border-top pt-3">
-                                        <span class="text-left">Tổng tiền hàng</span>
-                                        <span id="subtotal" class="text-right">0₫</span>
-                                    </div>
-                                    <div class="pt-3">
-                                        <span class="text-left">Voucher giảm giá</span>
-                                        <span class="text-right">0₫</span>
-                                    </div>
-                                    <div class="pt-3">
-                                        <span class="text-left">Giảm giá sản phẩm</span>
-                                        <span id="discount" class="text-right">0₫</span>
-                                    </div>
-                                    <div class="fw-bolder pt-3 border-top">
-                                        <span class="text-left">Tổng số tiền</span>
-                                        <span id="total" class="text-right">0₫</span>
-                                    </div>
+                            <div class="ec-sb-block-content">
+                                <div class="ec-cart-summary-bottom">
+                                    <div class="ec-cart-summary">
+                                        {{-- <div>
+                                            <span class="text-left">Voucher</span>
+                                            <span class="text-right"><a class="ec-cart-coupan">Nhập mã</a></span>
+                                        </div>
+                                        <div class="ec-cart-coupan-content">
+                                            <form class="ec-cart-coupan-form" name="ec-cart-coupan-form"
+                                                action="#">
+                                                <input class="ec-coupan" type="text" required=""
+                                                    placeholder="Nhập mã giảm giá" name="ec-coupan" value="">
+                                                <button class="ec-coupan-btn button btn-primary" type="submit"
+                                                    name="subscribe" value="">OK</button>
+                                            </form>
+                                        </div> --}}
+                                        <div class="border-top pt-3">
+                                            <span class="text-left">Tổng tiền hàng</span>
+                                            <span id="subtotal" class="text-right">0₫</span>
+                                        </div>
+                                        <div class="pt-3">
+                                            <span class="text-left">Voucher giảm giá</span>
+                                            <span class="text-right">0₫</span>
+                                        </div>
+                                        <div class="pt-3">
+                                            <span class="text-left">Giảm giá sản phẩm</span>
+                                            <span id="discount" class="text-right">0₫</span>
+                                        </div>
+                                        <div class="fw-bolder pt-3 border-top">
+                                            <span class="text-left">Tổng số tiền</span>
+                                            <span id="total" class="text-right">0₫</span>
+                                        </div>
 
-                                    <div class="ec-cart-summary-total border-top">
-                                        <span class="text-left"></span>
-                                        <a href="{{route('checkout')}}" class="btn btn-primary">Mua hàng</a>
+                                        <div class="ec-cart-summary-total border-top">
+                                            <span class="text-left"></span>
+                                            <button type="submit" class="btn btn-primary">Mua hàng</button>
+                                        </div>
+
                                     </div>
 
                                 </div>
-
                             </div>
                         </div>
+                        <!-- Sidebar Summary Block -->
                     </div>
-                    <!-- Sidebar Summary Block -->
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
 
@@ -605,4 +613,5 @@
 
     });
 </script>
+<script src="{{ asset('theme/client/library/library.js') }}"></script>
 @endsection

@@ -4,11 +4,17 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use Illuminate\Http\Request;
-use App\Services\UserService;
-use App\Services\CheckoutService;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\Variant;
+use App\Models\Voucher;
 use App\Repositories\ProvinceRepository;
 use App\Repositories\UserRepository;
+use App\Services\CheckoutService;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController
@@ -30,7 +36,23 @@ class CheckoutController
         $this->checkoutService = $checkoutService;
     }
 
-    public function checkout(Request $request) {
+    public function showFormCheckout(Request $request) {
+        $productVarians = $request->input('product_variant_ids');
+        if (empty($productVarians)) {
+            return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm nào để thanh toán.');
+        }
+        
+        $quantities = [];
+        foreach ($productVarians as $id) {
+            $quantities[$id] = $request->input("quantities.$id");
+        }
+        $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
+
+        $total = 0;
+        foreach ($productVariants as $productVariant) {
+            $qty = $quantities[$productVariant->id];
+            $total += ($productVariant->sale_price != 0) ? $productVariant->sale_price * $qty : $productVariant->listed_price * $qty;
+        }
         $userId = Auth::id();
         $user = $this->userRepository->findById($userId);
         $provinces = $this->provinceRepository->all();
@@ -38,79 +60,135 @@ class CheckoutController
         return view('client.page.checkout', compact(
             'user',
             'provinces',
+            'productVariants',
+            'quantities',
+            'total',
         ));
     }
 
-    public function create() {
-        $provinces = $this->provinceRepository->all();
-
-        $template = 'admin.user.user.store';
-        $config = $this->configData();
-        $config['seo'] = config('apps.user');
-        $config['method'] = 'create';
-        return view('admin.dashboard.layout', compact(
-            'template',
-            'config',
-            'provinces',
-        ));
+    public function applyVoucher(Request $request)
+{
+    $voucherCode = $request->input('voucher_code');
+    $totalAmount = $request->input('total_amount');
+   
+    $voucher = Voucher::where('code', $voucherCode)
+    ->where('status', 1)
+    ->whereDate('start_time', '<=', now())
+    ->whereDate('end_time', '>=', now())
+    ->first();
+    
+    if (!$voucher) {
+        return response()->json([
+            'success' => false, 
+            'message' => 'Mã voucher không hợp lệ hoặc đã hết hạn.'
+        ]);
     }
+    if ($voucher->min_order_value && $totalAmount < $voucher->min_order_value) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Đơn hàng của bạn không đủ giá trị tối thiểu để áp dụng mã voucher này.'
+        ]);
+    } elseif ($voucher->min_order_value && $totalAmount > $voucher->max_discount_value) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Đơn hàng của bạn vượt mức số tiền cho phép để áp dụng mã voucher này.'
+        ]);
+    }
+    $discount = 0;
+    if ($voucher->discount_type == 'percentage') {
+        // Tính giảm giá theo phần trăm
+        $discount = ($voucher->value / 100) * $totalAmount;
+    } elseif ($voucher->discount_type == 'fixed') {
+        // Giảm giá theo số tiền cụ thể
+        $discount = $voucher->value;
 
-    public function store(StoreUserRequest $request) {
-        if ($this->userService->create($request)) {
-            return redirect()->route('user.index')->with('success', 'Thêm mới bản ghi thành công.');
+        // Đảm bảo không vượt quá tổng tiền đơn hàng
+        if ($discount > $totalAmount) {
+            $discount = $totalAmount;
         }
-        return redirect()->route('user.index')->with('error', 'Thêm mới bản ghi thất bại. Hãy thử lại.');
+    }
+    // Tính toán tổng tiền sau khi áp dụng giảm giá
+    $finalTotal = $totalAmount - $discount;
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Áp dụng voucher thành công.',
+        'discount' => $discount,
+        'final_total' => $finalTotal,
+        'voucher' => $voucher,
+    ]);
+}
+
+    public function getAvailableVouchers()
+    {
+        $availableVouchers = Voucher::where('status', 1)
+                            ->whereDate('start_time', '<=', now())
+                            ->whereDate('end_time', '>=', now())
+                            ->get();
+        return response()->json([
+            'success' => true,
+            'vouchers' => $availableVouchers
+        ]);
     }
 
-    public function shippingAddress($id) {
-        $user = $this->userRepository->findById($id);
-        $provinces = $this->provinceRepository->all();
 
-        $config = $this->configData();
-        return view('admin.dashboard.layout', compact(
-            'user',
-            'userCatalogue',
-            'provinces',
-            'config',
-        ));
-    }
+    public function orderStore(Request $request) {
+        $totalAmount = $request->input('total_amount');
+        $voucherCode = $request->input('voucher_code');
 
-    public function update($id, UpdateUserRequest $request) {
-        if ($this->userService->update($id, $request)) {
-            return redirect()->route('user.index')->with('success', 'Cập nhật bản ghi thành công.');
+        $voucher = Voucher::where('code', $voucherCode)
+        ->where('start_time', '<=', now())
+        ->where('end_time', '>=', now())
+        ->where('min_order_value', '<=', $totalAmount)
+        ->where('max_discount_value', '>=', $totalAmount)
+        ->where('status', 1)
+        ->first();
+        
+        $user = Auth::user();
+
+        $order = Order::create([
+            'user_id' => $user->id,
+            'voucher_id' => $voucher->id ?? null,
+            'voucher_code' => $voucher->code ?? null,
+            'full_name' => $request->input('full_name'),
+            'province_id' => $request->input('province_id'),
+            'district_id' => $request->input('district_id'),
+            'ward_id' => $request->input('ward_id'),
+            'address' => $request->input('address'),
+            'phone' => $request->input('phone'),
+            'note' => $request->input('note') ?? null,
+            'shipping_cost' => $request->input('shipping_cost'),
+            'total_price' => $request->input('final_total'),
+            'discount_amount' => $request->input('discount_amount'),
+            'payment_method' => $request->input('payment_method'),
+        ]);
+
+        $productVariants = $request->input('product_variants');
+        foreach ($productVariants as $variant) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'variant_id' => $variant['product_variant_id'],
+                'image' => $variant['image'],
+                'price' => $variant['price'],
+                'color' => $variant['color'],
+                'size' => $variant['size'],
+                'quantity' => $variant['quantity'],
+            ]);
         }
-        return redirect()->route('user.index')->with('error', 'Cập nhật bản ghi thất bại. Hãy thử lại.');
+
+        return response()->json([
+            'success' => true, 
+            'order_id' => $order->id,
+            'message' => 'Đặt hàng thành công!',
+        ]);
+
     }
 
-    public function delete($id) {
-        $user = $this->userRepository->findById($id);
-        $config['seo'] = config('apps.user');
-        $template = 'admin.user.user.delete';
-        return view('admin.dashboard.layout', compact(
-            'template',
-            'config',
-            'user',
-        ));
-    }
+    public function orderShow($id) {
+        $order = Order::with('orderItems.variant')->findOrFail($id);
 
-    public function destroy($id) {
-        if ($this->userService->destroy($id)) {
-            return redirect()->route('user.index')->with('success', 'Xóa bản ghi thành công.');
-        }
-        return redirect()->route('user.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
-    }
-
-    public function configData() {
-        return [
-            'js' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-                'admin/library/location.js',
-                'admin/plugins/ckfinder_2/ckfinder.js',
-                'admin/library/finder.js',
-            ],
-            'css' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-            ]
-        ];
+        return view('client.page.order', compact([
+            'order',
+        ]));
     }
 }

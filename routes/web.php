@@ -61,11 +61,24 @@ Route::get('/account', function () {
 // Route::get('/cart', function () {
 //     return view('client.page.cart');
 // })->name('cart');
-Route::get('checkout', [CheckoutController::class, 'checkout'])->middleware('checkLoginClient')
-->name('checkout');
-Route::get('/order', function () {
-    return view('client.page.order');
-})->name('order');
+Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
+->middleware('checkLoginClient')
+->name('checkout.show');
+Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
+->middleware('checkLoginClient')
+->name('checkout.process');
+Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
+->middleware('checkLoginClient')
+->name('checkout.applyVoucher');
+Route::post('/checkout/available-vouchers', [CheckoutController::class, 'getAvailableVouchers'])
+->middleware('checkLoginClient')
+->name('checkout.availableVouchers');
+Route::post('/order/store', [CheckoutController::class, 'orderStore'])
+->middleware('checkLoginClient')
+->name('order.store');
+Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
+->middleware('checkLoginClient')
+->name('order.show');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
