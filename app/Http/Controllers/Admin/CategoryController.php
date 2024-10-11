@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\CategoryService;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Requests\DestroyCategoryRequest;
 use App\Repositories\Interfaces\CategoryInterface as CategoryRepository;
 
 
@@ -102,7 +103,7 @@ class CategoryController extends Controller
         return view('admin.dashboard.layout', compact('template', 'config', 'category'));
     }
 
-    public function destroy($id)
+    public function destroy(DestroyCategoryRequest $request, $id)
     {
         if ($this->categoryService->destroy($id)) {
             return redirect()->route('category.index')->with('success', 'Xóa bản ghi thành công.');

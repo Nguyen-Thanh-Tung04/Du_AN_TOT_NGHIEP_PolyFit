@@ -1,0 +1,101 @@
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                </th>
+                <th class="text-center">Mã</th>
+                <th>Tên danh mục</th>
+                <th class="text-center">Ảnh danh mục</th>
+                <th class="text-center">Tình Trạng</th>
+                <th class="text-center">Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (isset($categories) && is_object($categories))
+                @foreach($categories as $category)
+                    <tr>
+                        <td>
+                            <input type="checkbox" value="{{ $category->id }}" class="input-checkbox checkBoxItem">
+                        </td>
+                        <td>{{ $category->code }}</td>
+                        <td class="text-center">{{ $category->name }}</td>
+                        <td class="text-center">
+                            <img width="100px" src="{{ asset(Storage::url($category->image)) }}" alt="">
+                        </td>
+                        <td class="text-center js-switch-{{ $category->id }}">
+                            <input type="checkbox" value="{{ $category->is_active }}" 
+                            class="js-switch status " 
+                            data-field="is_active" 
+                            data-model="Category"
+                            data-modelId="{{ $category->id }}"
+                            {{ ($category->is_active == 1) ? 'checked' : '' }} 
+                            onchange="confirmChange(event, '{{ $category->id }}')"
+                            />
+                        </td>   
+                         <td class="text-center">
+                            <a href="{{ route('category.edit', $category->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+    
+                            <a href="{{ route('category.delete', $category->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+    {{-- {{ $categories->links('pagination::bootstrap-5') }} --}}
+</div>
+<script>
+   let changingState = false; // Cờ để theo dõi khi nào logic nội bộ thay đổi trạng thái
+
+function confirmChange(event, categoryId) {
+    // Nếu sự kiện này do logic nội bộ kích hoạt, không hiển thị lại SweetAlert
+    if (changingState) {
+        return;
+    }
+
+    // Ngăn chặn hành động mặc định (tránh thay đổi trạng thái checkbox ngay lập tức)
+    event.preventDefault();
+
+    const currentChecked = event.target.checked; // Lưu lại trạng thái hiện tại của checkbox
+
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Đánh dấu cờ để biết rằng chúng ta đang thay đổi trạng thái thông qua logic
+            changingState = true;
+
+            // Thực hiện logic thay đổi trạng thái, không cần đảo ngược lại
+            event.target.checked = currentChecked; // Giữ nguyên trạng thái hiện tại của checkbox
+
+            // Kích hoạt sự kiện `change` của checkbox
+            event.target.dispatchEvent(new Event('change'));
+
+            // Hiển thị thông báo sau khi xác nhận thay đổi thành công
+            Swal.fire({
+                title: "Changed!",
+                text: "The status has been updated.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+            });
+
+            // Đặt lại cờ sau khi đã hoàn thành logic thay đổi
+            setTimeout(() => {
+                changingState = false;
+            }, 100);
+        } else {
+            // Nếu người dùng hủy, khôi phục lại trạng thái checkbox ban đầu
+            event.target.checked = !currentChecked; // Đảo ngược trạng thái checkbox về như cũ
+        }
+    });
+}
+
+</script>

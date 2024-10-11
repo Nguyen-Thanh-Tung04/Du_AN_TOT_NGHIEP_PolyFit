@@ -60,7 +60,7 @@ class ReviewService {
     public function updateStatus($post = []) {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = (($post['value'] == 0)?1:0);
+            $payload[$post['field']] = (($post['value'] == 1)?1:2);
             $user = $this->ReviewRepository->update($post['modelId'], $payload);
             $this->changReviewStatus($post, $payload[$post['field']]);
 
