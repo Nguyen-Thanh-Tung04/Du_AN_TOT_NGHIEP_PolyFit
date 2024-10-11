@@ -77,3 +77,6 @@
     font-weight: 500;
     transition: background 0.3s;
 }
+.mb-50 {
+    margin-bottom: 50px;
+}
