@@ -118,7 +118,7 @@
                                 <th>Tên Khách Hàng</th>
                                 <th>Địa Chỉ</th>
                                 <th>Điện Thoại</th>
-                                <th>Tổng Giá</th>
+                                <th>Tổng Tiền</th>
                                 <th>Trạng Thái</th>
                                 <th>Ngày Tạo</th>
                                 <th class="text-center">Thao Tác</th>

@@ -32,45 +32,68 @@
                 <div class="ec-trackorder-top">
                     <h2 class="ec-order-id">Mã Đơn Hàng #{{ $order->id }}</h2>
                     <div class="ec-order-detail">
-                        <div>Dự kiến giao đến bạn ngày {{ $order->estimated_delivery_date }}</div>
+                        @if ($order->status === \App\Models\Order::STATUS_HUY_DON_HANG)
+                            <div class="alert alert-danger">
+                                Đơn hàng đã bị hủy.
+                            </div>
+                        @else
+                            <div>Dự kiến giao đến bạn ngày {{ $order->estimated_delivery_date }}</div>
+                        @endif
                     </div>
                 </div>
+
+                @if ($order->status !== \App\Models\Order::STATUS_HUY_DON_HANG)
                 <div class="ec-trackorder-bottom">
                     <div class="ec-progress-track">
                         <ul id="ec-progressbar">
                             <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_1.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đơn hàng đã đặt</span></li>
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Chờ xác nhận</span></li>
                             <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_2.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận thông tin thanh toán</span></li>
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận</span></li>
                             <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_3.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
                             <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_4.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang giao tới bạn <br> </span></li>
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang vận chuyển <br> </span></li>
                             <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_5.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
                         </ul>
                     </div>
                 </div>
-            </div>
-            <div style="background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px); background-position-x: -1.875rem; background-size: 7.25rem .1875rem; height: .1875rem; width: 100%;"></div>
-            <div class="ec-trackorder-inner" style="background: none;">
-                <h4>Địa chỉ nhận hàng</h4>
-                <div class="d-flex justify-content-between">
-                    <div class="pt-2 pb-2">
-                        <div class="fw-semibold">{{ $order->full_name }}</div>
-                        <div>(+84) {{ $order->phone }}</div>
-                        <div>{{ $order->address }}</div>
-                    </div>
-                    <div>
-                        <button class="btn btn-primary">Hủy đơn hàng</button>
-                    </div>
+                <div class="text-right mt-5">
+                    <form action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PUT')
+                        @if ($order->status === \App\Models\Order::STATUS_CHO_XAC_NHAN) 
+                            <input type="hidden" name="huy_don_hang" value="1">
+                            <button type="submit" class="custom-btn danger-btn"
+                                onclick="return confirm('Bạn có xác nhận hủy đơn hàng không?')">
+                                <i class="fas fa-times-circle"></i> Hủy đơn hàng
+                            </button>
+                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN) 
+                            <input type="hidden" name="da_giao_hang" value="1">
+                            <button type="submit" class="custom-btn success-btn"
+                                onclick="return confirm('Xác nhận đã nhận hàng?')">
+                                <i class="fas fa-check-circle"></i> Đã nhận hàng
+                            </button>
+                        @endif
+                    </form>
                 </div>
+                
+                
+                @endif
             </div>
+
+            <!-- Canceled Order Section -->
+            @if ($order->status === \App\Models\Order::STATUS_HUY_DON_HANG)
+            <div class="alert alert-warning mt-4">
+                Đơn hàng này đã bị hủy. Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với dịch vụ khách hàng.
+            </div>
+            @endif
 
             @foreach ($order->orderItems as $orderItem)
             @php
@@ -97,7 +120,15 @@
 
             <div class="row border-bottom border-top">
                 <div class="col-8 text-end border-end p-2">Tổng tiền hàng</div>
-                <div class="col-4 text-end p-2">₫{{ number_format($order->total_price, 0, ',', '.') }}</div>
+                <div class="col-4 text-end p-2">
+                    @php
+                        $totalItemPrice = 0;
+                        foreach ($order->orderItems as $orderItem) {
+                            $totalItemPrice += $orderItem->price * $orderItem->quantity;
+                        }
+                    @endphp
+                    ₫{{ number_format($totalItemPrice, 0, ',', '.') }}
+                </div>
             </div>
             <div class="row border-bottom">
                 <div class="col-8 text-end border-end p-2">Phí vận chuyển</div>

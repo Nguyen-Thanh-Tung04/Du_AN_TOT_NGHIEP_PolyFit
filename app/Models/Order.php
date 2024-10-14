@@ -9,15 +9,13 @@ class Order extends Model
 {
     use HasFactory;
 
-    // Define constants for order statuses
-    const STATUS_CHO_XAC_NHAN = 1; // Waiting for confirmation
-    const STATUS_DA_XAC_NHAN = 2; // Confirmed
-    const STATUS_DANG_CHUAN_BI = 3; // Preparing
-    const STATUS_DANG_VAN_CHUYEN = 4; // In transit
-    const STATUS_DA_GIAO_HANG = 5; // Delivered
-    const STATUS_HUY_DON_HANG = 6; // Order cancelled
+    const STATUS_CHO_XAC_NHAN = 1; 
+    const STATUS_DA_XAC_NHAN = 2; 
+    const STATUS_DANG_CHUAN_BI = 3; 
+    const STATUS_DANG_VAN_CHUYEN = 4; 
+    const STATUS_DA_GIAO_HANG = 5; 
+    const STATUS_HUY_DON_HANG = 6; 
 
-    // Mapping status constants to human-readable names
     const STATUS_NAMES = [
         self::STATUS_CHO_XAC_NHAN => 'Chờ xác nhận',
         self::STATUS_DA_XAC_NHAN => 'Đã xác nhận',
@@ -26,11 +24,9 @@ class Order extends Model
         self::STATUS_DA_GIAO_HANG => 'Đã giao hàng',
         self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
     ];
-     // Define constants for payment methods
-     const PAYMENT_METHOD_COD = 1; // Cash on delivery
-     const PAYMENT_METHOD_ONLINE = 2; // Online payment
+     const PAYMENT_METHOD_COD = 1; 
+     const PAYMENT_METHOD_ONLINE = 2; 
  
-     // Mapping payment method constants to human-readable names
      const PAYMENT_METHOD_NAMES = [
          self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
          self::PAYMENT_METHOD_ONLINE => 'Thanh toán trực tuyến',

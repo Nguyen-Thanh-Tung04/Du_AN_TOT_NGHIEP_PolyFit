@@ -245,6 +245,7 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
 });
 Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
 Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
 
 
 
