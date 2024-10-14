@@ -1,4 +1,5 @@
 @extends('client.layouts.master')
+
 @section('content')
 <div class="sticky-header-next-sec ec-breadcrumb section-space-mb">
     <div class="container">
@@ -9,25 +10,20 @@
                         <h2 class="ec-breadcrumb-title">Lịch sử mua hàng</h2>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <!-- ec-breadcrumb-list start -->
                         <ul class="ec-breadcrumb-list">
                             <li class="ec-breadcrumb-item"><a href="{{ url('/') }}">Trang chủ</a></li>
                             <li class="ec-breadcrumb-item active">Lịch sử</li>
                         </ul>
-                        <!-- ec-breadcrumb-list end -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Ec breadcrumb end -->
 
-<!-- User history section -->
 <section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
     <div class="container">
         <div class="row">
-            <!-- Sidebar Area Start -->
             <div class="ec-shop-rightside">
                 <div class="ec-vendor-dashboard-card">
                     <div class="ec-vendor-card-header">
@@ -37,35 +33,52 @@
                         </div>
                     </div>
                     <div class="ec-vendor-card-body">
-                        <div class="ec-vendor-card-table">
-                            <table class="table ec-table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Mã Đơn hàng</th>
-                                        <th scope="col">Khách hàng</th>
-                                        <th scope="col">Ngày đặt</th>
-                                        <th scope="col">Tổng tiền</th>
-                                        <th scope="col">Trạng thái</th>
-                                        <th scope="col">Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($orders as $order)
-                                    <tr>
-                                        <td>{{ $order->id }}</td>
-                                        <td>{{ $order->user->name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
-                                        <td>{{ number_format($order->orderItems->sum(function($item) {
-                                            return $item->price * $item->quantity;
-                                        }), 0, ',', '.') }} VND</td>
-                                        <td style="font-weight: bold;">{{ $order->status_name }}</td>
-                                        <td>
-                                            <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-info text-white">Xem</a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <ul class="nav nav-tabs" id="orderTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="all-orders-tab" data-toggle="tab" href="#all-orders" role="tab">Tất cả</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">Chờ xác nhận</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="confirmed-orders-tab" data-toggle="tab" href="#confirmed-orders" role="tab">Đã xác nhận</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="preparing-orders-tab" data-toggle="tab" href="#preparing-orders" role="tab">Đang chuẩn bị</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="shipping-orders-tab" data-toggle="tab" href="#shipping-orders" role="tab">Đang vận chuyển</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="delivered-orders-tab" data-toggle="tab" href="#delivered-orders" role="tab">Đã giao hàng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cancelled-orders-tab" data-toggle="tab" href="#cancelled-orders" role="tab">Đã hủy</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="orderTabContent">
+                            <div class="tab-pane fade show active" id="all-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $orders])
+                            </div>
+                            <div class="tab-pane fade" id="pending-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $pendingOrders])
+                            </div>
+                            <div class="tab-pane fade" id="confirmed-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $confirmedOrders])
+                            </div>
+                            <div class="tab-pane fade" id="preparing-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $preparingOrders])
+                            </div>
+                            <div class="tab-pane fade" id="shipping-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $shippingOrders])
+                            </div>
+                            <div class="tab-pane fade" id="delivered-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $deliveredOrders])
+                            </div>
+                            <div class="tab-pane fade" id="cancelled-orders" role="tabpanel">
+                                @include('client.page.orders_table', ['orders' => $cancelledOrders])
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,5 +86,4 @@
         </div>
     </div>
 </section>
-<!-- End User history section -->
 @endsection

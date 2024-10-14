@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
@@ -16,16 +15,34 @@ class OrderHistoryController extends Controller
             ->where('user_id', auth()->id())
             ->get();
 
-        return view('client.page.history', compact('orders'));
+        // Phân loại đơn hàng
+        $pendingOrders = $orders->where('status', Order::STATUS_CHO_XAC_NHAN);
+        $confirmedOrders = $orders->where('status', Order::STATUS_DA_XAC_NHAN);
+        $preparingOrders = $orders->where('status', Order::STATUS_DANG_CHUAN_BI);
+        $shippingOrders = $orders->where('status', Order::STATUS_DANG_VAN_CHUYEN);
+        $deliveredOrders = $orders->where('status', Order::STATUS_DA_GIAO_HANG);
+        $cancelledOrders = $orders->where('status', Order::STATUS_HUY_DON_HANG);
+
+        return view('client.page.history', compact(
+            'orders',
+            'pendingOrders',
+            'confirmedOrders',
+            'preparingOrders',
+            'shippingOrders',
+            'deliveredOrders',
+            'cancelledOrders'
+        ));
     }
+
     public function show($id)
     {
         $order = Order::with('orderItems.variant.product')->findOrFail($id);
         return view('client.page.order', compact('order'));
     }
+
     public function update(Request $request, string $id)
     {
-        $donHang = Order::query()->findOrFail($id);
+        $donHang = Order::findOrFail($id);
         DB::beginTransaction();
 
         try {
@@ -34,8 +51,7 @@ class OrderHistoryController extends Controller
                     return redirect()->back()->withErrors(['msg' => 'Không thể hủy đơn hàng khi nó không ở trạng thái "Chờ xác nhận".']);
                 }
                 $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
-            }
-            elseif ($request->has('da_giao_hang')) {
+            } elseif ($request->has('da_giao_hang')) {
                 if ($donHang->status !== Order::STATUS_DANG_VAN_CHUYEN) {
                     return redirect()->back()->withErrors(['msg' => 'Không thể xác nhận đã nhận hàng khi nó không ở trạng thái "Đang vận chuyển".']);
                 }
