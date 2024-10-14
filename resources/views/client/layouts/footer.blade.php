@@ -5,7 +5,7 @@
              <div class="container">
                  <div class="row">
                      <div class="text-center footer-off-msg">
-                         <span>Thời trang chất liệu tạo nên uy tín !</span><a href="#" target="_blank">Cửa hàng</a>
+                         <span>Thời trang chất liệu tạo nên uy tín hàng đâu !</span><a href="#" target="_blank">Cửa hàng</a>
                      </div>
                  </div>
              </div>
