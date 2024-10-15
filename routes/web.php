@@ -96,7 +96,9 @@ Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
 Route::get('dashboard/index', [DashboardController::class, 'index'])
     ->name('dashboard.index')
     ->middleware('checkLogin');
-
+Route::post('dashboard/index', [DashboardController::class, 'statistical_sale'])
+    ->name('dashboard.post')
+    ->middleware('checkLogin');
 // USER
 Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserController::class, 'index'])

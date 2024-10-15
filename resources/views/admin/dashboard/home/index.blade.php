@@ -3,52 +3,87 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-success pull-right">Monthly</span>
-                    <h5>Income</h5>
+                <span class="label label-success pull-right">
+                    Tháng {{ isset($results[0]['month']) ? $results[0]['month'] : 0 }}
+                </span>
+                    <h5>ĐƠN HÀNG TRONG</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">40 886,200</h1>
-                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                    <small>Total income</small>
+                    <h1 class="no-margins">
+                        {{ isset($results[0]['total_orders']) ? $results[0]['total_orders'] : 0 }}
+                    </h1>
+                    <div class="stat-percent font-bold
+                    {{ isset($results[0]['growth']) && $results[0]['growth'] > 0 ? 'text-success' : 'text-danger' }}">
+                        {{ isset($results[0]['growth']) ? $results[0]['growth'] : '0%' }}
+                        <i class="fa
+                        {{ isset($results[0]['growth']) && $results[0]['growth'] > 0 ? 'fa-level-up' : 'fa-level-down' }}">
+                        </i>
+                    </div>
+
+                    <small>
+{{--                        @dd($results)--}}
+                        @if(isset($results[0]['growth']))
+                            @if($results[0]['growth'] > 0)
+                                Tăng so với tháng trước
+                            @elseif($results[0]['growth'] < 0)
+                                Giảm so với tháng trước
+                            @else
+                                Không thay đổi so với tháng trước
+                            @endif
+                        @else
+                            Không có dữ liệu
+                        @endif
+                    </small>
                 </div>
             </div>
         </div>
+
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-info pull-right">Annual</span>
-                    <h5>Orders</h5>
+                    <span class="label label-info pull-right">Tổng số đơn hàng</span>
+                    <h5>ĐƠN HÀNG</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">275,800</h1>
-                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
-                    <small>New orders</small>
+                    <h1 class="no-margins">{{ isset($totalOrders) ? $totalOrders : 0 }}</h1>
+                    <div class="stat-percent font-bold text-info">
+                        {{ isset($cancellationRate) ? $cancellationRate : '0%' }}
+                        <i class="fa fa-level-up"></i>
+                    </div>
+                    <small>Số đơn hủy {{ isset($canceledOrders) ? $canceledOrders : 0 }} chiếm</small>
                 </div>
             </div>
         </div>
+
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-primary pull-right">Today</span>
-                    <h5>visits</h5>
+                    <span class="label label-primary pull-right">Tổng</span>
+                    <h5>TỔNG DOANH THU</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">106,120</h1>
-                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
-                    <small>New visits</small>
+                    <h1 class="no-margins">{{ isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00' }}</h1>
+                    <div class="stat-percent font-bold
+                    {{ isset($results[0]['revenue_growth']) && $results[0]['revenue_growth'] > 0 ? 'text-navy' : 'text-danger' }}">
+                        {{ isset($results[0]['revenue_growth']) ? $results[0]['revenue_growth'] : '0%' }}
+                        <i class="fa
+                        {{ isset($results[0]['revenue_growth']) && $results[0]['revenue_growth'] > 0 ? 'fa-level-up' : 'fa-level-down' }}">
+                        </i>
+                    </div>
+                    <small>Tổng doanh thu</small>
                 </div>
             </div>
         </div>
+
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-danger pull-right">Low value</span>
-                    <h5>User activity</h5>
+                    <span class="label label-danger pull-right">Khách hàng</span>
+                    <h5>TỔNG KHÁCH HÀNG</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">80,600</h1>
-                    <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div>
-                    <small>In first month</small>
+                    <h1 class="no-margins">{{ isset($totalCustomers) ? $totalCustomers : 0 }}</h1>
+                    <small>Tổng số khách hàng</small>
                 </div>
             </div>
         </div>
@@ -57,19 +92,37 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Orders</h5>
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-white active">Today</button>
-                            <button type="button" class="btn btn-xs btn-white">Monthly</button>
-                            <button type="button" class="btn btn-xs btn-white">Annual</button>
-                        </div>
+                    <h5 style="padding-top: 5px"> BIỂU ĐỒ DOANH SỐ</h5>
+                    <div class="right">
+                        <form action="{{ route('dashboard.post') }}" method="POST">
+                            @csrf
+                            <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN </h5>
+                            <input type="date" name="date_start" class="btn btn-xs btn-white">
+                            <input type="date" name="end_date" class="btn btn-xs btn-white">
+                            <select name="choose_time" id="" class="btn btn-xs btn-white">
+                                <option value="year">Năm</option>
+                                <option value="month">Tháng</option>
+                                <option value="week">Tuần</option>
+                                <option value="date">Ngày</option>
+                            </select>
+                            <input type="submit" value="Lọc" name="search" class="btn btn-primary">
+                        </form>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-9">
+                            <div id="chart-container" style="position: relative;">
+{{--                                <div id="chart-title" style="text-align: center; font-weight: bold; font-size: 20px; position: absolute; top: 10px; width: 100%; color: #333;">--}}
+{{--                                    Doanh thu--}}
+{{--                                </div>--}}
+{{--                                <div id="flot-dashboard-chart" style="width: 600px; height: 400px;"></div>--}}
+                            </div>
+
                             <div class="flot-chart">
+                                <div id="chart-title" style="text-align: center; font-weight: 500; font-size: 20px; position: absolute; top: 10px; width: 100%; color: #333;">
+                                    Doanh thu
+                                </div>
                                 <div class="flot-chart-content" id="flot-dashboard-chart"></div>
                             </div>
                         </div>
@@ -77,7 +130,7 @@
                             <ul class="stat-list">
                                 <li>
                                     <h2 class="no-margins">2,346</h2>
-                                    <small>Total orders in period</small>
+                                    <small>Tổng số đơn đặt hàng</small>
                                     <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
                                     <div class="progress progress-mini">
                                         <div style="width: 48%;" class="progress-bar"></div>
@@ -85,7 +138,7 @@
                                 </li>
                                 <li>
                                     <h2 class="no-margins ">4,422</h2>
-                                    <small>Orders in last month</small>
+                                    <small>Tổng số đơn hàng đã hủy</small>
                                     <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i></div>
                                     <div class="progress progress-mini">
                                         <div style="width: 60%;" class="progress-bar"></div>
@@ -93,7 +146,7 @@
                                 </li>
                                 <li>
                                     <h2 class="no-margins ">9,180</h2>
-                                    <small>Monthly income from orders</small>
+                                    <small>Doanh thu</small>
                                     <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
                                     <div class="progress progress-mini">
                                         <div style="width: 22%;" class="progress-bar"></div>
@@ -111,7 +164,7 @@
         <div class="col-lg-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Messages</h5>
+                    <h5>TIN NHẮN</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -201,7 +254,7 @@
                 <div class="col-lg-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>User project list</h5>
+                            <h5>TOP SẢN PHẨM BÁN CHẠY</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -252,18 +305,8 @@
                                     <td>Janet</td>
                                     <td class="text-navy"> <i class="fa fa-level-up"></i> 22% </td>
                                 </tr>
-                                <tr>
-                                    <td><span class="label label-primary">Completed</span> </td>
-                                    <td><i class="fa fa-clock-o"></i> 04:10am</td>
-                                    <td>Amelia</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
-                                </tr>
-                                <tr>
-                                    <td><small>Pending...</small> </td>
-                                    <td><i class="fa fa-clock-o"></i> 12:08am</td>
-                                    <td>Damian</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 23% </td>
-                                </tr>
+
+
                                 </tbody>
                             </table>
                         </div>
@@ -272,7 +315,7 @@
                 <div class="col-lg-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Small todo list</h5>
+                            <h5>TRẠNG THÁI ĐƠN HÀNG</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -283,39 +326,49 @@
                             </div>
                         </div>
                         <div class="ibox-content">
-                            <ul class="todo-list m-t small-list">
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                    <span class="m-l-xs todo-completed">Buy a milk</span>
+                            <canvas id="myPieChart" width="400" height="400"></canvas>
 
-                                </li>
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">Go to shop and find some products.</span>
-
-                                </li>
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">Send documents to Mike</span>
-                                    <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 mins</small>
-                                </li>
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">Go to the doctor dr Smith</span>
-                                </li>
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                    <span class="m-l-xs todo-completed">Plan vacation</span>
-                                </li>
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">Create new stuff</span>
-                                </li>
-                                <li>
-                                    <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">Call to Anna for dinner</span>
-                                </li>
-                            </ul>
+                            <script>
+                                const ctx = document.getElementById('myPieChart').getContext('2d');
+                                const myPieChart = new Chart(ctx, {
+                                    type: 'pie', // Loại biểu đồ: 'pie'
+                                    data: {
+                                        labels: ['Nhóm A', 'Nhóm B', 'Nhóm C', 'Nhóm D'], // Nhãn cho các phần
+                                        datasets: [{
+                                            label: 'Giá Trị', // Nhãn cho dataset
+                                            data: [10, 20, 30, 40], // Dữ liệu cho biểu đồ
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.6)',
+                                                'rgba(54, 162, 235, 0.6)',
+                                                'rgba(255, 206, 86, 0.6)',
+                                                'rgba(75, 192, 192, 0.6)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255, 99, 132, 1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)'
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true, // Đảm bảo biểu đồ đáp ứng
+                                        plugins: {
+                                            legend: {
+                                                position: 'top', // Vị trí của legend
+                                            },
+                                            tooltip: {
+                                                callbacks: {
+                                                    label: function(tooltipItem) {
+                                                        return tooltipItem.label + ': ' + tooltipItem.raw; // Hiển thị nhãn và giá trị
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -324,7 +377,7 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Transactions worldwide</h5>
+                            <h5>TOP 10 ĐƠN HÀNG MỚI THÁNG NÀY</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -336,64 +389,54 @@
                         </div>
                         <div class="ibox-content">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <table class="table table-hover margin bottom">
                                         <thead>
                                         <tr>
-                                            <th style="width: 1%" class="text-center">No.</th>
-                                            <th>Transaction</th>
-                                            <th class="text-center">Date</th>
-                                            <th class="text-center">Amount</th>
+                                            <th style="width: 1%" class="text-center">STT</th>
+                                            <th style="padding-left: 45px">Thông Tin</th>
+                                            <th class="text-center">Tổng Tiền</th>
+                                            <th class="text-center">Trạng Thái</th>
+                                            <th class="text-center">Thời Gian</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td> Security doors
+                                        @foreach($latestOrders as $latestOrder)
+                                            <tr>
+                                                <td class="text-center">{{ $latestOrder->id }}</td>
+                                                <td>
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li><strong>Tên:</strong> {{ $latestOrder->full_name }}</li>
+                                                        <li><strong>Địa chỉ:</strong> {{ $latestOrder->address }}</li>
+                                                        <li><strong>Điện thoại:</strong> {{ $latestOrder->phone }}</li>
+                                                    </ul>
                                                 </td>
-                                            <td class="text-center small">16 Jun 2014</td>
-                                            <td class="text-center"><span class="label label-primary">$483.00</span></td>
+                                                <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
+                                                <td class="text-center">
+                                                    @php
+                                                        // Định nghĩa các trạng thái và màu sắc tương ứng
+                                                        $statuses = [
+                                                            1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
+                                                            2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
+                                                            3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
+                                                            4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
+                                                            5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
+                                                            6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
+                                                        ];
+                                                    @endphp
+                                                    @php
+                                                        // Lấy trạng thái tương ứng
+                                                        $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
+                                                    @endphp
+                                                    <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
+                                                </td>
 
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">2</td>
-                                            <td> Wardrobes
-                                            </td>
-                                            <td class="text-center small">10 Jun 2014</td>
-                                            <td class="text-center"><span class="label label-primary">$327.00</span></td>
+                                                <td class="text-center">{{ $latestOrder->created_at }}</td>
+                                            </tr>
+                                        @endforeach
 
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">3</td>
-                                            <td> Set of tools
-                                            </td>
-                                            <td class="text-center small">12 Jun 2014</td>
-                                            <td class="text-center"><span class="label label-warning">$125.00</span></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">4</td>
-                                            <td> Panoramic pictures</td>
-                                            <td class="text-center small">22 Jun 2013</td>
-                                            <td class="text-center"><span class="label label-primary">$344.00</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">5</td>
-                                            <td>Phones</td>
-                                            <td class="text-center small">24 Jun 2013</td>
-                                            <td class="text-center"><span class="label label-primary">$235.00</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">6</td>
-                                            <td>Monitors</td>
-                                            <td class="text-center small">26 Jun 2013</td>
-                                            <td class="text-center"><span class="label label-primary">$100.00</span></td>
-                                        </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div id="world-map" style="height: 300px;"></div>
                                 </div>
                             </div>
                         </div>

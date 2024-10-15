@@ -215,7 +215,7 @@ input[name=canonical] {
     margin-top: 10px;
 }
 .sortui .ui-state-default {
-    background-color: white; 
+    background-color: white;
     width: calc(20% - 2px);
     float: left;
     padding-left: 10px;
@@ -282,4 +282,6 @@ input[name=canonical] {
     display: block;
     object-fit: cover;
 }
-
+.right{
+    margin-left: 578px;
+}
