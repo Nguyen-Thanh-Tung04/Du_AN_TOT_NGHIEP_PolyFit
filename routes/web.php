@@ -338,3 +338,5 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+// Route để xem đánh giá cho một đơn hàng cụ thể
+Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

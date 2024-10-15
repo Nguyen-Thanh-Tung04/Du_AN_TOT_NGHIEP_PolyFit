@@ -10,12 +10,12 @@ class Order extends Model
 {
     use HasFactory, SoftDeletes;
 
-    const STATUS_CHO_XAC_NHAN = 1; 
-    const STATUS_DA_XAC_NHAN = 2; 
-    const STATUS_DANG_CHUAN_BI = 3; 
-    const STATUS_DANG_VAN_CHUYEN = 4; 
-    const STATUS_DA_GIAO_HANG = 5; 
-    const STATUS_HUY_DON_HANG = 6; 
+    const STATUS_CHO_XAC_NHAN = 1;
+    const STATUS_DA_XAC_NHAN = 2;
+    const STATUS_DANG_CHUAN_BI = 3;
+    const STATUS_DANG_VAN_CHUYEN = 4;
+    const STATUS_DA_GIAO_HANG = 5;
+    const STATUS_HUY_DON_HANG = 6;
 
     const STATUS_NAMES = [
         self::STATUS_CHO_XAC_NHAN => 'Chờ xác nhận',
@@ -25,13 +25,13 @@ class Order extends Model
         self::STATUS_DA_GIAO_HANG => 'Đã giao hàng',
         self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
     ];
-     const PAYMENT_METHOD_COD = 1; 
-     const PAYMENT_METHOD_ONLINE = 2; 
- 
-     const PAYMENT_METHOD_NAMES = [
-         self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
-         self::PAYMENT_METHOD_ONLINE => 'Thanh toán trực tuyến',
-     ];
+    const PAYMENT_METHOD_COD = 1;
+    const PAYMENT_METHOD_ONLINE = 2;
+
+    const PAYMENT_METHOD_NAMES = [
+        self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
+        self::PAYMENT_METHOD_ONLINE => 'Thanh toán trực tuyến',
+    ];
 
     protected $fillable = [
         'user_id',
@@ -53,15 +53,18 @@ class Order extends Model
 
     protected $table = 'orders';
 
-    public function orderItems() {
+    public function orderItems()
+    {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function voucher(){
+    public function voucher()
+    {
         return $this->belongsTo(Voucher::class, 'voucher_id', 'id');
     }
 
@@ -94,5 +97,23 @@ class Order extends Model
     {
         return self::PAYMENT_METHOD_NAMES[$this->payment_method] ?? 'Phương thức thanh toán không xác định';
     }
-    
+   
+    // Lấy tất cả các đánh giá liên quan đến các sản phẩm trong đơn hàng
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            Review::class,  // Model Review
+            OrderItem::class,  // Model trung gian OrderItem
+            'order_id',  // Khóa ngoại trong OrderItem
+            'product_id',  // Khóa ngoại trong Review
+            'id',  // Khóa chính của Order
+            'variant_id'  // Khóa chính của sản phẩm trong Review
+        );
+    }
+
+    // Kiểm tra xem đơn hàng có đánh giá nào không
+    public function getHasReviewAttribute()
+    {
+        return $this->reviews()->exists();
+    }
 }

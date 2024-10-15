@@ -107,7 +107,34 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>      
+                                            <!-- Modal Xem đánh giá -->
+                                            <div class="modal fade" id="viewReviewModal" tabindex="-1" aria-labelledby="viewReviewModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h3 class="modal-title" id="viewReviewModalLabel">Xem đánh giá</h3>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <!-- Phần hiển thị danh sách sản phẩm -->
+                                                            <h5>Danh sách sản phẩm đã mua</h5>
+                                                            <div id="products-list"></div>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <!-- Phần hiển thị danh sách đánh giá -->
+                                                            <div id="view-review-list"></div>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                      
                                       @endforeach
                                 </tbody>
                             </table>
@@ -238,6 +265,87 @@
         
     });
 
+    // Khi bấm nút 'Xem đánh giá'
+    $('.open-view-review-modal').on('click', function() {
+        const orderId = $(this).data('order-id');
+        const products = $(this).data('products');
+
+          // Xóa danh sách sản phẩm cũ
+          $('#products-list').empty();
+          // Đổ sản phẩm vào danh sách
+        products.forEach(function(product) {
+            $('#products-list').append(`
+                <div class="row mb-4 align-items-center">
+                    <div class="col-md-3 col-12 text-center">
+                        <img class="img-fluid rounded" src="${product.image}" alt="${product.name}" style="max-width: 60px;">
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <h5 class="mb-0">${product.name}</h5>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div>Màu: <span class="fw-bold">${product.color}</span></div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div>Kích cỡ: <span class="fw-bold">${product.size}</span></div>
+                    </div>
+                </div>
+            `);
+        });
+
+        // Gọi AJAX để lấy danh sách đánh giá
+        $.ajax({
+    url: `/reviews/${orderId}`, // Đường dẫn API để lấy đánh giá
+    method: 'GET',
+    success: function(response) {
+        let reviewsHtml = '';
+        
+        // Check if there are reviews
+        if (response.reviews && response.reviews.length > 0) {
+            const review = response.reviews[0]; // Get the first review only
+            
+            reviewsHtml = `
+                <div class="ec-t-review-item d-flex">
+    <div class="ec-t-review-avtar">
+        <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" width="70px" class="rounded-circle" alt="" />
+    </div>
+    <div class="mx-5 ec-t-review-content">
+        <div class="ec-t-review-top">
+            <div class="ec-t-review-name">${review.user.name}</div>
+            <div class="ec-t-review-rating">
+                ${Array.from({length: 5}, (v, i) => `
+                    <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
+                `).join('')}
+            </div>
+        </div>
+        <div class="ec-t-review-bottom">
+            <p>${review.content}</p>
+        </div>
+        ${review.image ? `<img src="/storage/${review.image}" alt="Review Image" width="100">` : ''}
+        <div class="ec-t-review-bottom">
+            <p>${new Date(review.created_at).toLocaleDateString()}</p>
+        </div>
+    </div>
+</div>
+            `;
+        } else {
+            reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
+        }
+        
+        // Display the review (or message if no reviews)
+        $('#view-review-list').html(reviewsHtml);
+
+        // Show the modal to view the review
+        $('#viewReviewModal').modal('show');
+    },
+    error: function() {
+        alert('Không thể tải danh sách đánh giá.');
+    }
+});
+
+    });
+
+
+    // Submit
     $('#submit-review').on('click', function (e) {
         e.preventDefault();
 
@@ -313,7 +421,7 @@
         });
     });         
 
-
+    // Cập nhật ảnh
     $(document).on('change', '#review_image', function (event) {
         console.log('File input changed'); // Debugging line
 

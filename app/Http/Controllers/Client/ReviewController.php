@@ -41,6 +41,7 @@ class ReviewController extends Controller
             // Create a new review for each product
             foreach ($products as $productId) {
                 Review::create([
+                    'order_id' => $order->id,
                     'product_id' => $productId,
                     'account_id' => auth()->id(),
                     'content' => $request->input('review_text'),
@@ -66,4 +67,16 @@ class ReviewController extends Controller
             ], 500);
         }
     }
+    public function getReviews($orderId)
+{
+    $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
+    $reviews = Review::whereIn('product_id', $order->orderItems->pluck('variant.product_id'))
+        ->with('user')
+        ->get();
+
+    return response()->json([
+        'reviews' => $reviews,
+    ]);
+}
+
 }

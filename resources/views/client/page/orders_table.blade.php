@@ -50,9 +50,21 @@
                                 </button>
                             @else
                                 <!-- View Review Button -->
-                                <a href="#" class="btn btn-secondary">
-                                    Xem đánh giá
-                                </a>
+                                <button type="button" class="btn btn-secondary open-view-review-modal"
+                                data-order-id="{{ $order->id }}" 
+                                {{ !$order->has_review ? 'disabled' : '' }}
+                                data-products="{{ json_encode($order->orderItems->map(function($item) {
+                                    return [
+                                        'id' => $item->variant->product->id,
+                                        'name' => $item->variant->product->name,
+                                        'image' => $item->image,
+                                        'color' => $item->color,
+                                        'size' => $item->size,
+                                    ];
+                                })) }}"
+                                >
+                                Xem đánh giá
+                            </button>
                             @endif
                         @endif
                     </td>
