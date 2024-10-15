@@ -74,23 +74,23 @@ Route::get('/account', function () {
 //     return view('client.page.cart');
 // })->name('cart');
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
-->middleware('checkLoginClient')
-->name('checkout.show');
+    ->middleware('checkLoginClient')
+    ->name('checkout.show');
 Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
-->middleware('checkLoginClient')
-->name('checkout.process');
+    ->middleware('checkLoginClient')
+    ->name('checkout.process');
 Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
-->middleware('checkLoginClient')
-->name('checkout.applyVoucher');
+    ->middleware('checkLoginClient')
+    ->name('checkout.applyVoucher');
 Route::post('/checkout/available-vouchers', [CheckoutController::class, 'getAvailableVouchers'])
-->middleware('checkLoginClient')
-->name('checkout.availableVouchers');
+    ->middleware('checkLoginClient')
+    ->name('checkout.availableVouchers');
 Route::post('/order/store', [CheckoutController::class, 'orderStore'])
-->middleware('checkLoginClient')
-->name('order.store');
+    ->middleware('checkLoginClient')
+    ->name('order.store');
 Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
-->middleware('checkLoginClient')
-->name('order.show');
+    ->middleware('checkLoginClient')
+    ->name('order.show');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -336,4 +336,4 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
-Route::post('/submit-review', [App\Http\Controllers\ReviewController::class, 'store']);
+Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
