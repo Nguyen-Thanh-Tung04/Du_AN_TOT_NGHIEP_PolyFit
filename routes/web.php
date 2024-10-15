@@ -48,13 +48,8 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/shop', function () {
-    return view('client.page.shop');
-});
+
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
-//Route::get('/shop-category/{id}', [ProductCatalogueController::class, 'show'])->name('shop.show');
-Route::get('/shop-category/', [ProductCatalogueController::class, 'show'])->name('products.show');
-Route::get('/products/filter', [ProductCatalogueController::class, 'filter'])->name('products.filter');
 
 
 
@@ -74,23 +69,23 @@ Route::get('/account', function () {
 //     return view('client.page.cart');
 // })->name('cart');
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
-->middleware('checkLoginClient')
-->name('checkout.show');
+    ->middleware('checkLoginClient')
+    ->name('checkout.show');
 Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
-->middleware('checkLoginClient')
-->name('checkout.process');
+    ->middleware('checkLoginClient')
+    ->name('checkout.process');
 Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
-->middleware('checkLoginClient')
-->name('checkout.applyVoucher');
+    ->middleware('checkLoginClient')
+    ->name('checkout.applyVoucher');
 Route::post('/checkout/available-vouchers', [CheckoutController::class, 'getAvailableVouchers'])
-->middleware('checkLoginClient')
-->name('checkout.availableVouchers');
+    ->middleware('checkLoginClient')
+    ->name('checkout.availableVouchers');
 Route::post('/order/store', [CheckoutController::class, 'orderStore'])
-->middleware('checkLoginClient')
-->name('order.store');
+    ->middleware('checkLoginClient')
+    ->name('order.store');
 Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
-->middleware('checkLoginClient')
-->name('order.show');
+    ->middleware('checkLoginClient')
+    ->name('order.show');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])

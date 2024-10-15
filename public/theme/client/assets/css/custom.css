@@ -5,9 +5,8 @@
     font-weight: 500;
     background-color: #ffff;
     color: #000c;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .09);
     cursor: pointer;
-    border-radius: 5px;
 }
 
 .product-option.active {
@@ -62,8 +61,10 @@
 }
 
 #voucherList li:hover {
-    background: #e2e6ea; /* Màu nền khi hover */
-    cursor: pointer; /* Con trỏ chuột khi hover */
+    background: #e2e6ea;
+    /* Màu nền khi hover */
+    cursor: pointer;
+    /* Con trỏ chuột khi hover */
 }
 
 #voucherList li {
@@ -77,6 +78,7 @@
     font-weight: 500;
     transition: background 0.3s;
 }
+
 .mb-50 {
     margin-bottom: 50px;
 }

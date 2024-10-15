@@ -128,14 +128,6 @@
                                         <div class="ec-single-cart ">
                                             <button id="addToCartButton" class="btn btn-primary">Thêm giỏ hàng</button>
                                         </div>
-                                        <div class="ec-single-wishlist">
-                                            <a class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
-                                        </div>
-                                        <div class="ec-single-quickview">
-                                            <a href="#" class="ec-btn-group quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#ec_quickview_modal"><i class="fi-rr-eye"></i></a>
-                                        </div>
                                     </div>
                                     <div class="ec-single-social">
                                         <ul class="mb-0">
@@ -419,9 +411,9 @@
                                         </ul>
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                         <div class="ec-price">
-                                            <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
-                                            {{ number_format($product->min_price, 0) }} VNĐ
-                                            {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
+                                            <span>{{ number_format($product->listed_price, 0) }}₫ </span>
+                                            {{ number_format($product->min_price, 0) }} ₫
+                                            {{-- - {{ number_format($product->max_price, 0) }} ₫ --}}
                                         </div>
                                         <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
                                     </div>
