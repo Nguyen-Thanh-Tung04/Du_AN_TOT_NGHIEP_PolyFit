@@ -29,6 +29,8 @@
 <!-- Ec About Us page -->
 <section class="ec-page-content section-space-p">
     <div class="container">
+        <form id="checkoutForm" action="{{ route('checkout.show') }}" method="POST">
+        @csrf
         <div class="row">
             @if(count($cartItems) > 0)
             <div class="ec-cart-leftside col-lg-12 col-md-12 ">
@@ -61,7 +63,13 @@
                                         $gallery = json_decode($item->variant->product->gallery);
                                         @endphp
                                         <tr id="cart-item-{{ $item->id }}">
-                                            <td> <input type="checkbox" class="product-checkbox select-item" data-id="{{ $item->id }}"></td>
+                                            <td>
+                                                <input type="checkbox"
+                                                class="product-checkbox select-item"
+                                                data-id="{{ $item->id }}"
+                                                name="product_variant_ids[]" 
+                                                value="{{ $item->variant->id }}">
+                                            </td>
                                             <td>
 
                                                 <img
@@ -91,7 +99,13 @@
                                             <td data-label="Số lượng" class="ec-cart-pro-qty"
                                                 style="text-align: center;">
                                                 <div class="cart-qty-plus-minus">
-                                                    <input class="cart-plus-minus quantity-input" data-id="{{ $item->id }}" data-old-value="{{ $item->quantity }}" data-min="1" data-max=" {{$item->variant->quantity }}" type="text" value="{{ number_format($item->quantity) }}" />
+                                                    <input class="cart-plus-minus quantity-input" 
+                                                    name="quantities[{{ $item->variant->id }}]"
+                                                    data-id="{{ $item->id }}" 
+                                                    data-old-value="{{ $item->quantity }}" 
+                                                    data-min="1" 
+                                                    data-max=" {{$item->variant->quantity }}" type="text" 
+                                                    value="{{ number_format($item->quantity) }}" />
                                                 </div>
                                             </td>
                                             <td data-label="Số tiền" class="ec-cart-pro-subtotal total-price">
@@ -132,9 +146,10 @@
                                         <span id="total" class="text-right">0₫</span>
                                     </div>
 
+                                        
                                     <div class="ec-cart-summary-total border-top">
                                         <span class="text-left"></span>
-                                        <button id="checkout-btn" class="btn btn-primary">Mua hàng</button>
+                                        <button type="submit" id="checkout-btn" class="btn btn-primary">Mua hàng</button>
                                     </div>
 
                                 </div>
@@ -157,6 +172,7 @@
             </div>
             @endif
         </div>
+        </form>
     </div>
 </section>
 
@@ -318,40 +334,9 @@
             });
         });
 
-        $('#checkout-btn').on('click', function() {
-            let selectedItems = $('.select-item:checked').map(function() {
-                return $(this).data('id');
-            }).get();
-
-            if (selectedItems.length === 0) {
-                Toast.fire({
-                    icon: 'warning',
-                    title: "Không có sản phẩm nào được chọn!",
-                });
-                return;
-            }
-
-            $.ajax({
-                url: "{{ route('cart.selected') }}",
-                method: "POST",
-                data: {
-                    selected_items: selectedItems,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    if (response.status) {
-                        window.location.href = "{{ route('checkout') }}";
-                    } else {
-                        Toast.fire({
-                            icon: 'error',
-                            title: response.message,
-                        });
-                    }
-
-                }
-            });
-        });
+        
 
     });
 </script>
+<script src="{{ asset('theme/client/library/library.js') }}"></script>
 @endsection

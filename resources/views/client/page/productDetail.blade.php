@@ -252,11 +252,11 @@
                                                 @foreach($rv->replies as $reply)
                                                 <div class="ec-t-review-item mt-2">
                                                     <div class="ec-t-review-avtar">
-                                                        <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" class="rounded-circle" alt="" />
+                                                        <img src="{{ asset('theme/client/assets/images/logo/logo1.png') }}" class="rounded-circle border" style="width: 90px; height: 90px;" alt="" />
                                                     </div>
                                                     <div class="ec-t-review-content border bg-light p-3" style="width:45rem">
                                                         <div class="ec-t-review-top">
-                                                            <div class="ec-t-review-name">{{ $reply->user->name }}</div>
+                                                            <div class="ec-t-review-name">PolyFit </div>
                                                             <div class="ec-t-review-rating">
                                                                 @for($i = 1; $i <= 5; $i++)
                                                                     @if($i <=$rv->score)

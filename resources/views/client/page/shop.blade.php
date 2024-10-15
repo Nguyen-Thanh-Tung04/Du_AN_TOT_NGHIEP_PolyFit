@@ -65,14 +65,6 @@
                                 @endforeach
                             </div>
                         </div>
-
-                        {{-- Uncomment if you need pagination --}}
-                        {{-- <div class="ec-pro-pagination"> --}}
-                        {{--     <span>Hiển thị {{ $products->firstItem() }}-{{ $products->lastItem() }} trong tổng số {{ $products->total() }} sản phẩm</span> --}}
-                        {{--     <ul class="ec-pro-pagination-inner"> --}}
-                        {{--         <li>{{ $products->links('pagination::bootstrap-4') }}</li> --}}
-                        {{--     </ul> --}}
-                        {{-- </div> --}}
                     </div>
                 </div>
 
@@ -95,7 +87,7 @@
                                             @foreach($categories as $categorie)
                                                 <li>
                                                     <div class="ec-sidebar-block-item">
-                                                        <input type="radio" name="categories[]"
+                                                        <input type="checkbox" name="categories[]"
                                                                value="{{ $categorie->id }}"
                                                                onchange="document.getElementById('category-filter-form').submit();"
                                                             {{ in_array($categorie->id, request()->get('categories', [])) ? 'checked' : '' }} />
@@ -125,7 +117,7 @@
                                                 @if($size)
                                                     <li>
                                                         <div class="ec-sidebar-block-item">
-                                                            <input type="radio" class="filter-size" name="sizes[]" value="{{ $size->id }}"
+                                                            <input type="checkbox" class="filter-size" name="sizes[]" value="{{ $size->id }}"
                                                                    {{ in_array($size->id, $selectedSizes) ? 'checked' : '' }}
                                                                    onchange="document.getElementById('size-filter-form').submit();" />
                                                             <a href="#">{{ $size->name }}</a><span class="checked"></span>
@@ -155,7 +147,7 @@
                                                 @if($color)
                                                     <li>
                                                         <div class="ec-sidebar-block-item">
-                                                            <input type="radio" class="filter-color" name="colors[]" value="{{ $color->id }}"
+                                                            <input type="checkbox" class="filter-color" name="colors[]" value="{{ $color->id }}"
                                                                    {{ in_array($color->id, $selectedColors) ? 'checked' : '' }}
                                                                    onchange="document.getElementById('color-filter-form').submit();" />
                                                             <a href="#">{{ $color->name }}</a><span class="checked"></span>

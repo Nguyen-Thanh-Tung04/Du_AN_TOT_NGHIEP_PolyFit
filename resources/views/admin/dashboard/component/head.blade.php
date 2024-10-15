@@ -7,6 +7,7 @@
     <link href="admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="admin/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="admin/plugins/jquery-ui.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @if (isset($config['css']) && is_array($config['css']))
         @foreach ($config['css'] as $key => $val)
