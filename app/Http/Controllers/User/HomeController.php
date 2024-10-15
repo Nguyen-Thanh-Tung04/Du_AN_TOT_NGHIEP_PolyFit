@@ -98,31 +98,44 @@ class HomeController extends Controller
 
     // }
     public function postForgetPass(Request $req)
-{
-    $req->validate([
-        'email' => 'required|exists:users,email'
-    ],[
-        'email.required' => 'Vui lòng nhập địa chỉ email hợp lệ',
-        'email.exists' => 'Email này không tồn tại trong hệ thống'
-    ]);
+    {
+        $req->validate([
+            'email' => 'required|exists:users,email'
+        ],[
+            'email.required' => 'Vui lòng nhập địa chỉ email hợp lệ',
+            'email.exists' => 'Email này không tồn tại trong hệ thống'
+        ]);
+            $token = strtoupper(Str::random(10));
+            $customer = User::where('email', $req->email)->first();
+            $customer->update(['token' => $token]);
 
-    $token = strtoupper(Str::random(10));
-    $customer = User::where('email', $req->email)->first();
-    if (!$customer) {
-        return back()->with('error', 'Email không tồn tại trong hệ thống.');
+        Mail::send('passwords.check_forget', compact('customer'), function($email) use($customer) {
+            $email->subject('Lấy lại mật khẩu tài khoản');
+            $email->to($customer->email, $customer->name);
+        });
+
+        if (Mail::failures()) {
+            return back()->with('error', 'Không thể gửi email. Vui lòng thử lại.');
+        }
+
+        return redirect()->route('auth.client-login')->with('yes', 'Vui lòng check email để thực hiện thay đổi mật khẩu');
     }
 
-    $customer->update(['token' => $token]);
-
-    Mail::send('emails.check_email_forget', compact('customer'), function($email) use($customer) {
-        $email->subject('MyShoping - Lấy lại mật khẩu tài khoản');
-        $email->to($customer->email, $customer->name);
-    });
-
-    if (Mail::failures()) {
-        return back()->with('error', 'Không thể gửi email. Vui lòng thử lại.');
+    public function getPass (User $customer, $token){
+        if($customer->token === $token) {
+            return view('client.passwords.getPass');
+        }else{
+        return abort(404);
+        }
     }
 
-    return redirect()->route('auth.client-login')->with('yes', 'Vui lòng check email để thực hiện thay đổi mật khẩu');
-}
+    public function postGetPass(User $customer, $token, Request $req) {
+        $req->validate([
+            'password' => 'required',
+            'password_confirmation' => 'required|same:password',
+        ]);
+        $password_h = bcrypt($req->password);
+        $customer->update(['password' => $password_h, 'token' => null]);
+        return redirect()->route('auth.client-login')->with('yes', 'Đặt lại mật khẩu thành công');
+    }
 }

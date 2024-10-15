@@ -35,15 +35,16 @@
                     <div class="ec-contact-leftside">
                         <div class="ec-contact-container">
                             <div class="ec-contact-form">
-                                <form action="#" method="post">
+                                <form action="{{route('sendMail')}}" method="post">
+                                    @csrf
                                     <span class="ec-contact-wrap">
-                                        <label>Tên</label>
-                                        <input type="text" name="firstname" placeholder="Nhập tên của bạn"
+                                        <label>Họ</label>
+                                        <input type="text" name="firstname" placeholder="Nhập họ của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
-                                        <label>Họ</label>
-                                        <input type="text" name="lastname" placeholder="Nhập họ của bạn"
+                                        <label>Tên</label>
+                                        <input type="text" name="lastname" placeholder="Nhập tên của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">

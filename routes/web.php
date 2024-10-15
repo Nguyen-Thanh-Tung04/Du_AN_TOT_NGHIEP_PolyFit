@@ -18,7 +18,7 @@ use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\admin\ReviewController;
-
+use App\Http\Controllers\User\LienheController;
 use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
@@ -42,9 +42,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//gửi mail
+Route::get('send', [LienheController::class, 'create'])->name('create');
+Route::post('send', [LienheController::class, 'sendMail'])->name('sendMail');
 
-Route::get('/get-password', [HomeController::class, 'getPass'])->name('getPass');
-Route::post('/get-password', [HomeController::class, 'postGetPass']);
+
+Route::get('/get-password/{User}/{token}', [HomeController::class, 'getPass'])->name('getPass');
+Route::post('/get-password/{User}/{token}', [HomeController::class, 'postGetPass']);
 Route::get('/forget-pass', [HomeController::class, 'forgetPass'])->name('forget');
 Route::post('/forget-pass', [HomeController::class, 'postForgetPass']);
 
