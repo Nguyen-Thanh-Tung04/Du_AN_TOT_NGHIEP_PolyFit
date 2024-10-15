@@ -18,9 +18,9 @@ class Category extends Model
 
     protected $table = 'categories';
     
-    protected $casts = [
-        'is_active' => 'boolean'
-    ];
+    // protected $casts = [
+    //     'is_active' => 'boolean'
+    // ];
 
     public function products() {
         return $this->hasMany(Product::class, 'category_id', 'id');

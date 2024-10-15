@@ -60,3 +60,23 @@
 .colored-toast .swal2-html-container {
     color: white;
 }
+
+#voucherList li:hover {
+    background: #e2e6ea; /* Màu nền khi hover */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+}
+
+#voucherList li {
+    margin-right: 5px;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f8f9fa;
+    border: 1px solid #ced4da;
+    color: #333;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+.mb-50 {
+    margin-bottom: 50px;
+}

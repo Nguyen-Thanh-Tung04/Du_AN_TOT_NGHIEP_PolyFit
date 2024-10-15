@@ -256,7 +256,7 @@
                                                     </div>
                                                     <div class="ec-t-review-content border bg-light p-3" style="width:45rem">
                                                         <div class="ec-t-review-top">
-                                                            <div class="ec-t-review-name">{{ $reply->user->name }}</div>
+                                                            <div class="ec-t-review-name">Người bán </div>
                                                             <div class="ec-t-review-rating">
                                                                 @for($i = 1; $i <= 5; $i++)
                                                                     @if($i <=$rv->score)

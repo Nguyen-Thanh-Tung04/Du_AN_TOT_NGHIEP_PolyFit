@@ -13,4 +13,12 @@ class Voucher extends Model
         'min_order_value', 'discount_type', 'quantity',
         'start_time', 'end_time', 'status'
     ];
+
+
+    protected $table = 'vouchers';
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'voucher_id', 'id');
+    }
 }

@@ -14,12 +14,12 @@ return [
     'is_active' => [
         '' => 'Chọn tất cả tình trạng',
         '1' => 'Hoạt động',
-        '0' => 'Không hoạt động',
+        '2' => 'Không hoạt động',
     ],
     'status' => [
         '' => 'Chọn tất cả tình trạng',
         '1' => 'Hoạt động',
-        '0' => 'Không hoạt động',
+        '2' => 'Không hoạt động',
     ],
     'suffix' => '.html',
 ];

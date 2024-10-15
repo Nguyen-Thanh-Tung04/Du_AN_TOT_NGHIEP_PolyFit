@@ -26801,6 +26801,16 @@ i.ecicon.eci-star-o {
   flex-flow: row wrap;
   margin: 0 -15px;
 }
+.ec-checkout-wrap .ec-check-bill-form .form-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  margin: 0 -15px;
+}
 
 .ec-checkout-wrap .ec-check-bill-form label {
   margin-bottom: 7px;
