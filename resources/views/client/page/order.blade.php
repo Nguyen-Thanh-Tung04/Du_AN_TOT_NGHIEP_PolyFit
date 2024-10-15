@@ -94,8 +94,11 @@
                 Đơn hàng này đã bị hủy. Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với dịch vụ khách hàng.
             </div>
             @endif
-
+                @php
+                $totalPrice = 0;
+                @endphp
             @foreach ($order->orderItems as $orderItem)
+           {{ $totalPrice += $orderItem->price * $orderItem->quantity;}}
             @php
             $gallery = json_decode($orderItem->product->gallery);
             @endphp
@@ -118,34 +121,91 @@
             </div>
             @endforeach
 
-            <div class="row border-bottom border-top">
-                <div class="col-8 text-end border-end p-2">Tổng tiền hàng</div>
-                <div class="col-4 text-end p-2">
-                    @php
-                        $totalItemPrice = 0;
-                        foreach ($order->orderItems as $orderItem) {
-                            $totalItemPrice += $orderItem->price * $orderItem->quantity;
-                        }
-                    @endphp
-                    ₫{{ number_format($totalItemPrice, 0, ',', '.') }}
+    
+            <div class="row">
+                
+                <div class="col-12">
+                    <form class="sc-shipping-address" id="form-order" role="form" method="POST"
+                        action="https://demo.s-cart.org/order-add">
+                        <input type="hidden" name="_token" value="iVEYxp5y3lPVUVDFyMO3aJvIsN7llsz8GfbGpEy7">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <h3 class="control-label"><i class="fa fa-truck" aria-hidden="true"></i>
+                                    Địa chỉ giao hàng:<br></h3>
+                                <table class="table box table-bordered" id="showTotal">
+                                    <tr>
+                                        <th>Tên:</td>
+                                        <td>{{ $order->full_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Điện thoại:</td>
+                                        <td>{{ $order->phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Địa chỉ:</td>
+                                        <td>{{ $order->address }}, {{ optional($order->ward)->name }},
+                                            {{ optional($order->district)->name }},{{ optional($order->province)->name ?? '' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ghi chú:</td>
+                                        <td>{{ $order->note }}</td>
+                                    </tr>
+                                </table>
+                               
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <h3 class="control-label"><br></h3>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table box table-bordered" id="showTotal">
+                                            <tr class="showTotal">
+                                                <th>Phương thức thanh toán :</th>
+                                                <td style="text-align: right" id="subtotal">
+                                                    <div>Thanh toán khi nhận hàng</div>
+                                                </td>
+                                            </tr>
+                                            <tr class="showTotal">
+                                                <th>Tổng tiền hàng</th>
+                                                <td style="text-align: right" id="subtotal">
+                                                    ₫{{ number_format($totalPrice, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            <tr class="showTotal">
+                                                <th>Phí vận chuyển</th>
+                                                <td style="text-align: right" id="subtotal">
+                                                    ₫{{ number_format($order->shipping_cost, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            <tr class="showTotal">
+                                                <th>Voucher giảm giá</th>
+                                                <td style="text-align: right" id="tax">
+                                                    -₫{{ number_format($order->discount_amount, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            <tr class="showTotal" style="background:#f5f3f3;font-weight: bold;">
+                                                <th>Tổng tiền</th>
+                                                <td style="text-align: right" id="total">
+                                                    ₫{{ number_format($order->total_price, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="row border-bottom">
-                <div class="col-8 text-end border-end p-2">Phí vận chuyển</div>
-                <div class="col-4 text-end p-2">₫{{ number_format($order->shipping_cost, 0, ',', '.') }}</div>
-            </div>
-            <div class="row border-bottom">
-                <div class="col-8 text-end border-end p-2">Voucher từ Shop</div>
-                <div class="col-4 text-end p-2">-₫{{ number_format($order->discount_amount, 0, ',', '.') }}</div>
-            </div>
-            <div class="row border-bottom">
-                <div class="col-8 text-end fw-bold border-end p-2">Thành tiền</div>
-                <div class="col-4 text-end text-primary fw-bold p-2">₫{{ number_format($order->total_price - $order->discount_amount + $order->shipping_cost, 0, ',', '.') }}</div>
-            </div>
-            <div class="row">
-                <div class="col-8 text-end border-end p-2">Phương thức thanh toán</div>
-                <div class="col-4 text-end p-2">{{ $order->paymentMethodName }}</div>
+            <div class="row text-center">
+                <div class="col-12 mr-a">
+                    <button onClick="location.href='{{ url('/history') }}'" class="btn btn-primary btn-lg" type="button">
+                        <i class="fa fa-arrow-left"></i> Trở lại giỏ hàng
+                    </button>
+                </div>
             </div>
         </div>
-    </section>
+        <!-- Track Order Content end -->
+    </div>
+</section>
 @endsection

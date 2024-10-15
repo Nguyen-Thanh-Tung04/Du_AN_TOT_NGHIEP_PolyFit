@@ -81,43 +81,8 @@
                             </div>
                         <div class="ec-vendor-card-table">
                             <table class="table ec-table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Mã Đơn hàng</th>
-                                        <th scope="col">Khách hàng</th>
-                                        <th scope="col">Ngày đặt</th>
-                                        <th scope="col">Tổng tiền</th>
-                                        <th scope="col">Trạng thái</th>
-                                        <th scope="col">Hành động</th>
-                                    </tr>
-                                </thead>
                                 <tbody>
                                     @foreach($orders as $order)
-                                            <tr>
-                                                <td>{{ $order->id }}</td>
-                                                <td>{{ $order->user->name }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
-                                                <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
-                                                <td style="font-weight: bold; ">{{ $order->status_name }}</td>
-                                                <td>
-                                                    <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary">Xem</a>
-                                                    <!-- Viết đánh giá Button -->
-                                                    <!-- Viết đánh giá Button -->
-                                                    <button type="button" class="btn btn-primary open-review-modal" 
-                                                        data-order-id="{{ $order->id }}" 
-                                                        data-products="{{ json_encode($order->orderItems->map(function($item) {
-                                                            return [
-                                                                'id' => $item->variant->product->id,
-                                                                'name' => $item->variant->product->name,
-                                                                'image' => $item->image,
-                                                                'color' => $item->color,
-                                                                'size' => $item->size,
-                                                            ];
-                                                        })) }}">
-                                                        Viết đánh giá
-                                                    </button>
-                                                </td>
-                                            </tr>
                                             <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">

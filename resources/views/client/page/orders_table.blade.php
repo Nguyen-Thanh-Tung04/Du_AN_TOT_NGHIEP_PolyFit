@@ -30,7 +30,31 @@
                     }), 0, ',', '.') }} VND</td>
                     <td>{{ $order->status_name }}</td>
                     <td>
-                        <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-info text-white">Xem</a>
+                        <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary text-white">Xem</a>
+                         <!-- Viết đánh giá Button -->
+                         @if($order->status_name == 'Đã giao hàng') <!-- Check if the order is delivered -->
+                            @if(!$order->has_review) <!-- Check if a review has already been submitted -->
+                                <!-- Write Review Button -->
+                                <button type="button" class="btn btn-primary open-review-modal" 
+                                    data-order-id="{{ $order->id }}" 
+                                    data-products="{{ json_encode($order->orderItems->map(function($item) {
+                                        return [
+                                            'id' => $item->variant->product->id,
+                                            'name' => $item->variant->product->name,
+                                            'image' => $item->image,
+                                            'color' => $item->color,
+                                            'size' => $item->size,
+                                        ];
+                                    })) }}">
+                                    Viết đánh giá
+                                </button>
+                            @else
+                                <!-- View Review Button -->
+                                <a href="#" class="btn btn-secondary">
+                                    Xem đánh giá
+                                </a>
+                            @endif
+                        @endif
                     </td>
                 </tr>
             @endforeach
