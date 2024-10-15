@@ -32,9 +32,7 @@
                 </div>
                 <!-- Header Top social End -->
                 <!-- Header Top Message Start -->
-                <div class="col-8 header-right">
-                    <marquee behavior="scroll" class="fw-bold" direction="left">🚛Nguyễn Thanh Tùng đẹp zai phải không mọi người!</marquee>
-                </div>
+              
 
                 <!-- Header Top responsive Action -->
                 <div class="col d-lg-none ">

@@ -32,83 +32,98 @@
                 <div class="ec-trackorder-top">
                     <h2 class="ec-order-id">Mã Đơn Hàng #{{ $order->id }}</h2>
                     <div class="ec-order-detail">
-                        <div>Dự kiến giao đến bạn ngày {{ $order->estimated_delivery_date }}</div>
+                        @if ($order->status === \App\Models\Order::STATUS_HUY_DON_HANG)
+                            <div class="alert alert-danger">
+                                Đơn hàng đã bị hủy.
+                            </div>
+                        @else
+                            <div>Dự kiến giao đến bạn ngày {{ $order->estimated_delivery_date }}</div>
+                        @endif
                     </div>
                 </div>
+
+                @if ($order->status !== \App\Models\Order::STATUS_HUY_DON_HANG)
                 <div class="ec-trackorder-bottom">
                     <div class="ec-progress-track">
                         <ul id="ec-progressbar">
                             <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_1.png') }}"
-                                        alt="track_order"></span><span class="ec-progressbar-track"></span><span
-                                    class="ec-track-title">Đơn hàng đã đặt</span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_2.png') }}"
-                                        alt="track_order"></span><span class="ec-progressbar-track"></span><span
-                                    class="ec-track-title">Đã xác nhận thông tin thanh toán</span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_3.png') }}"
-                                        alt="track_order"></span><span class="ec-progressbar-track"></span><span
-                                    class="ec-track-title">Đã giao cho ĐVVC</span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_4.png') }}"
-                                        alt="track_order"></span><span class="ec-progressbar-track"></span><span
-                                    class="ec-track-title">Đang giao tới bạn <br> </span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_5.png') }}"
-                                        alt="track_order"></span><span class="ec-progressbar-track"></span><span
-                                    class="ec-track-title">Đã nhận được hàng</span></li>
+                                        src="{{ asset('theme/client/assets/images/icons/track_1.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Chờ xác nhận</span></li>
+                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_2.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận</span></li>
+                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_3.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
+                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_4.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang vận chuyển <br> </span></li>
+                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
+                                        src="{{ asset('theme/client/assets/images/icons/track_5.png') }}" alt="track_order"></span><span
+                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
                         </ul>
                     </div>
                 </div>
+                <div class="text-right mt-5">
+                    <form action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PUT')
+                        @if ($order->status === \App\Models\Order::STATUS_CHO_XAC_NHAN) 
+                            <input type="hidden" name="huy_don_hang" value="1">
+                            <button type="submit" class="custom-btn danger-btn"
+                                onclick="return confirm('Bạn có xác nhận hủy đơn hàng không?')">
+                                <i class="fas fa-times-circle"></i> Hủy đơn hàng
+                            </button>
+                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN) 
+                            <input type="hidden" name="da_giao_hang" value="1">
+                            <button type="submit" class="custom-btn success-btn"
+                                onclick="return confirm('Xác nhận đã nhận hàng?')">
+                                <i class="fas fa-check-circle"></i> Đã nhận hàng
+                            </button>
+                        @endif
+                    </form>
+                </div>
+                
+                
+                @endif
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <table class="table box table-bordered">
-                            <thead>
-                                <tr style="background: #eaebec">
-                                    <th style="width: 50px;">STT</th>
-                                    <th>Tên</th>
-                                    <th>Phân loại hàng</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá sản phẩm</th>
-                                    <th>Tổng cộng</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $totalPrice = 0;
-                                @endphp
-                                @foreach ($order->orderItems as $index => $item)
-                                    @php
-                                        $totalPrice += $item->price * $item->quantity;
-                                    @endphp
 
-                                    <tr class="row_cart">
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>
-                                            {{ $item->variant->product->name }}<br>
-                                            <a href=""><img width="100" src="{{ $item->image }}" alt></a>
-                                        </td>
-                                        <td>
-                                            <div class="product-price-wrap">
-                                                <div class="product-price product-price-old">Màu: {{ $item->color }}</div>
-                                                <div class="product-price">Kích cỡ: {{ $item->size }}</div>
-                                            </div>
-                                        </td>
-
-                                        <td>{{ $item->quantity }}</td>
-                                        <td>₫{{ number_format($item->price, 0, ',', '.') }}</td>
-                                        <td align="left">
-                                            ₫{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
+            <!-- Canceled Order Section -->
+            @if ($order->status === \App\Models\Order::STATUS_HUY_DON_HANG)
+            <div class="alert alert-warning mt-4">
+                Đơn hàng này đã bị hủy. Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với dịch vụ khách hàng.
+            </div>
+            @endif
+                @php
+                $totalPrice = 0;
+                @endphp
+            @foreach ($order->orderItems as $orderItem)
+           {{ $totalPrice += $orderItem->price * $orderItem->quantity;}}
+            @php
+            $gallery = json_decode($orderItem->product->gallery);
+            @endphp
+            <div class="ec-trackorder-inner">
+                <div class="row align-items-center p-3">
+                    <div class="col-1">
+                        <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
+                    </div>
+                    <div class="col-8">
+                        <h6>{{ $orderItem->variant->product->name }}</h6>
+                        <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
+                        <div class="text-muted">x{{ $orderItem->quantity }}</div>
+                    </div>
+                    <div class="col-3 text-right">
+                        <del class="fs-6 fw-light text-dark">₫{{ number_format($orderItem->price, 0, ',', '.') }}</del>
+                        <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
                     </div>
                 </div>
+                </a>
+            </div>
+            @endforeach
+
+    
+            <div class="row">
+                
                 <div class="col-12">
                     <form class="sc-shipping-address" id="form-order" role="form" method="POST"
                         action="https://demo.s-cart.org/order-add">
@@ -137,15 +152,19 @@
                                         <td>{{ $order->note }}</td>
                                     </tr>
                                 </table>
-                                <div class="text-end">
-                                    <button class="btn btn-secondary">Hủy đơn hàng</button>
-                                </div>
+                               
                             </div>
                             <div class="col-12 col-sm-12 col-md-6">
                                 <h3 class="control-label"><br></h3>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <table class="table box table-bordered" id="showTotal">
+                                            <tr class="showTotal">
+                                                <th>Phương thức thanh toán :</th>
+                                                <td style="text-align: right" id="subtotal">
+                                                    <div>Thanh toán khi nhận hàng</div>
+                                                </td>
+                                            </tr>
                                             <tr class="showTotal">
                                                 <th>Tổng tiền hàng</th>
                                                 <td style="text-align: right" id="subtotal">
@@ -171,30 +190,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <h3 class="control-label"><i class="fas fa-credit-card"></i>
-                                                        Phương thức thanh toán:<br></h3>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label class="radio-inline">
-                                                            <div>Thanh toán khi nhận hàng</div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-bottom: 20px;">
-                                    <div class="col-md-12 text-center">
-                                        <div class="pull-left">
-                                            <button onClick="location.href=' https://demo.s-cart.org/cart.html '" style
-                                                class=" button button-lg " type="button"><i
-                                                    class="fa fa-arrow-left"></i>Trở lại giỏ hàng</button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -202,6 +197,15 @@
                     </form>
                 </div>
             </div>
+            <div class="row text-center">
+                <div class="col-12 mr-a">
+                    <button onClick="location.href='{{ url('/history') }}'" class="btn btn-primary btn-lg" type="button">
+                        <i class="fa fa-arrow-left"></i> Trở lại giỏ hàng
+                    </button>
+                </div>
+            </div>
         </div>
-    </section>
+        <!-- Track Order Content end -->
+    </div>
+</section>
 @endsection

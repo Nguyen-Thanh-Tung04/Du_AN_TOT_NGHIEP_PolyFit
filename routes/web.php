@@ -257,6 +257,7 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
 });
 Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
 Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
 
 
 
@@ -331,4 +332,4 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
-Route::post('/submit-review', [App\Http\Controllers\ReviewController::class, 'store']);
+Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);

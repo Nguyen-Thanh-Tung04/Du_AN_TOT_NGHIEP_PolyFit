@@ -92,7 +92,7 @@
                     <div class="row">
                         <div class="col-lg-12 mb-15">
                             <div class="form-row">
-                                <label class="control-label text-left">Người đã trả lời đánh giá : <span style="color:brown">{{$reply->user->name}}</span></label>                                <!-- Kiểm tra nếu có reply, nếu có thì hiển thị giá trị của reply -->
+                                <label class="control-label text-left">Người đã trả lời đánh giá : <span style="color:brown">{{isset($reply)?$reply->user->name:"Chưa ai trả lời"}}</span></label>                                <!-- Kiểm tra nếu có reply, nếu có thì hiển thị giá trị của reply -->
                             </div>
                         </div>
                     </div>
