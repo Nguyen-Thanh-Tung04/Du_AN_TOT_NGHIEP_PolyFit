@@ -109,6 +109,10 @@ class ProductCatalogueController
                 $product->setAttribute('min_listed_price', null);
             }
         }
+         // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
+         foreach ($products as $product) {
+            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
+        }
 
         return view('client.page.shop', compact('products', 'categories', 'colors', 'sizes'));
     }

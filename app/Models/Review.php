@@ -9,8 +9,9 @@ class Review extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'product_id',
-        'account_id',
+        'order_id',      // Liên kết với đơn hàng
+        'product_id',    // Liên kết với sản phẩm trong đơn hàng
+        'account_id',    // Người dùng đánh giá
         'content',
         'image',
         'score',
@@ -28,5 +29,10 @@ class Review extends Model
     public function replies()
     {
         return $this->hasMany(ReviewReply::class, 'review_id');
+    }
+    // Quan hệ với đơn hàng (Order)
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
     }
 }
