@@ -67,7 +67,7 @@
                                             data-sitekey="6LfKURIUAAAAAO50vlwWZkyK_G2ywqE52NU7YO0S"
                                             data-callback="verifyRecaptchaCallback"
                                             data-expired-callback="expiredRecaptchaCallback"></span>
-                                        <input class="form-control d-none" data-recaptcha="true" required
+                                        <input class="form-control d-none" data-recaptcha="true" 
                                             data-error="Please complete the Captcha">
                                         <span class="help-block with-errors"></span>
                                     </span>

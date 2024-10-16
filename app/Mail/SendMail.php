@@ -46,7 +46,7 @@ class SendMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'page.lienhe',
+            view: 'client.page.lienhe',
         );
     }
 
