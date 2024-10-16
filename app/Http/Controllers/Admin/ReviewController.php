@@ -48,8 +48,9 @@ class ReviewController extends Controller
         $reviews = $this->ReviewRepository->find($id);
     
         // Lấy phản hồi nếu có, bạn có thể sử dụng where để tìm phản hồi theo review_id
-        $reply = ReviewReply::where('review_id', $id)->first();  // Lấy phản hồi đầu tiên (nếu có)
-    
+        $reply = ReviewReply::where('review_id', $id)
+        ->with('user') // Load quan hệ với User
+        ->first();    
         // Cấu hình các file JS, CSS cần thiết
         $template = 'admin.reviews.update';
         $config = [

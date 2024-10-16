@@ -27,13 +27,13 @@ class CategoryService
             'is_active' => $request->input('is_active')
         ];
         $perPage = $request->input('perpage') ?? 10; // Sử dụng giá trị mặc định nếu perpage là null
-    
+
         $categories = $this->CategoryRepository->pagination(
             ['id', 'code', 'name', 'image', 'is_active'],
             $condition,
             $perPage
         );
-    
+
         return $categories;
     }
     public function create(array $data, $request)
@@ -98,11 +98,25 @@ class CategoryService
         try {
             $category = $this->CategoryRepository->find($id);
 
-            if ($category && $category->image) {
-                // Xóa ảnh cũ từ hệ thống trước khi lưu ảnh mới
-                Storage::delete($category->image);
-            }
-            $category = $this->CategoryRepository->delete($id);
+            // Thực hiện xóa danh mục
+            $category->delete();
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+    }
+
+    public function updateStatus($post = [])
+    {
+        DB::beginTransaction();
+        try {
+            $payload[$post['field']] =  (($post['value'] == 1) ? 1 : 2);
+            $user = $this->CategoryRepository->update($post['modelId'], $payload);
+            $this->changCategoryStatus($post, $payload[$post['field']]);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -113,24 +127,9 @@ class CategoryService
             return false;
         }
     }
-    public function updateStatus($post = []) {
-        DB::beginTransaction();
-        try {
-            $payload[$post['field']] = (($post['value'] == 0)?1:0);
-            $user = $this->CategoryRepository->update($post['modelId'], $payload);
-            $this->changCategoryStatus($post, $payload[$post['field']]);
 
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
-
-    public function updateStatusAll($post) {
+    public function updateStatusAll($post)
+    {
         DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
@@ -142,17 +141,19 @@ class CategoryService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    private function changCategoryStatus($post, $value) {
+    private function changCategoryStatus($post, $value)
+    {
 
         DB::beginTransaction();
         try {
             $array = [];
-            if(isset($post['modelId'])) {
+            if (isset($post['modelId'])) {
                 $array[] = $post['modelId'];
             } else {
                 $array = $post['id'];
@@ -165,7 +166,8 @@ class CategoryService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }

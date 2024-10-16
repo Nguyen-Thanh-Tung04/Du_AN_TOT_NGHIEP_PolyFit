@@ -3,8 +3,8 @@
 return [
     'publish' => [
         '0' => 'Chọn tình trạng',
-        '1' => 'Active',
-        '2' => 'UnActive',
+        '1' => 'Hoạt động',
+        '2' => 'Không hoạt động',
     ],
     'follow' => [
         '0' => 'Chọn điều hướng',
@@ -13,13 +13,13 @@ return [
     ],
     'is_active' => [
         '' => 'Chọn tất cả tình trạng',
-        '1' => 'Active',
-        '0' => 'UnActive',
+        '1' => 'Hoạt động',
+        '2' => 'Không hoạt động',
     ],
     'status' => [
         '' => 'Chọn tất cả tình trạng',
-        '1' => 'Active',
-        '0' => 'UnActive',
+        '1' => 'Hoạt động',
+        '2' => 'Không hoạt động',
     ],
     'suffix' => '.html',
 ];

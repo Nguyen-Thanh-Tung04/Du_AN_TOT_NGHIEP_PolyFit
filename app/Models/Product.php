@@ -20,11 +20,18 @@ class Product extends Model
 
     protected $table = 'products';
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function variants() {
+    public function variants()
+    {
         return $this->hasMany(Variant::class, 'product_id', 'id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id', 'id');
     }
 }

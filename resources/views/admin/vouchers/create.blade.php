@@ -154,7 +154,7 @@
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Trạng thái
-                                        <span class="text-danger">(*)</span></label>
+                                        </label>
                                     <select name="status" class="form-control">
                                         <option value="1" {{ old('status', true) ? 'selected' : '' }}>Hoạt động</option>
                                         <option value="0" {{ old('status') == false ? 'selected' : '' }}>Không hoạt động</option>

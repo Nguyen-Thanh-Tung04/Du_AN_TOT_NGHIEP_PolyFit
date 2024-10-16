@@ -24428,7 +24428,7 @@ h4.ec-faq-title::after {
   justify-content: space-between;
   margin-bottom: 15px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
 }
 
 .single-pro-content .ec-single-price-stoke>* {
@@ -24468,7 +24468,7 @@ h4.ec-faq-title::after {
 .single-pro-content .ec-pro-variation {
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
 }
 
 .single-pro-content .ec-pro-variation .ec-pro-variation-inner {
@@ -24547,11 +24547,11 @@ h4.ec-faq-title::after {
   width: 100%;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
 }
 
 .single-pro-content .ec-single-qty .qty-plus-minus {
-  border: 1px solid #eeeeee;
+  border: 1px solid rgba(0, 0, 0, .09);
   display: inline-block;
   height: 40px;
   overflow: hidden;
@@ -24832,7 +24832,7 @@ i.ecicon.eci-star-o {
 }
 
 .ec-single-pro-tab-nav .nav-tabs .nav-link {
-  border: 1px solid #eeeeee;
+  border: 1px solid rgba(0, 0, 0, .09);
   text-transform: capitalize;
   line-height: 24px;
   color: #444444;
@@ -26792,6 +26792,17 @@ i.ecicon.eci-star-o {
 }
 
 .ec-checkout-wrap .ec-check-bill-form form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  margin: 0 -15px;
+}
+
+.ec-checkout-wrap .ec-check-bill-form .form-flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

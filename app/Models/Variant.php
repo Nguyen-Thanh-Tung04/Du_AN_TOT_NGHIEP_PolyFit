@@ -33,4 +33,8 @@ class Variant extends Model
     public function size() {
         return $this->belongsTo(Size::class, 'size_id', 'id');
     }
+
+    public function order_items() {
+        return $this->hasMany(OrderItem::class, 'variant_id', 'id');
+    }
 }

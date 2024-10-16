@@ -60,4 +60,8 @@ class User extends Authenticatable
     public function user_catalogues() {
         return $this->belongsTo(UserCatalogue::class, 'user_catalogue_id', 'id');
     }
+
+    public function orders() {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
 }

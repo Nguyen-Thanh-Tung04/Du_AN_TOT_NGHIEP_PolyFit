@@ -32,9 +32,7 @@
                 </div>
                 <!-- Header Top social End -->
                 <!-- Header Top Message Start -->
-                <div class="col-8 header-right">
-                    <marquee behavior="scroll" class="fw-bold" direction="left">🚛Nguyễn Thanh Tùng đẹp zai phải không mọi người!</marquee>
-                </div>
+              
 
                 <!-- Header Top responsive Action -->
                 <div class="col d-lg-none ">
@@ -112,12 +110,19 @@
                             <div class="ec-header-user dropdown">
                                 <button class="dropdown-toggle" data-bs-toggle="dropdown"><i
                                         class="fi-rr-user"></i></button>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a class="dropdown-item" href="{{ url('/account') }}">Tài khoản</a></li>
-                                    <li><a class="dropdown-item" href="{{ url('/history') }}">Đơn hàng</a></li>
-                                    <li><a class="dropdown-item" href="{{ url('/login') }}">Đăng nhập</a></li>
-                                    <li><a class="dropdown-item" href="{{ url('/register') }}">Đăng ký</a></li>
-                                </ul>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
+                                            @auth
+                                                <li><a class="dropdown-item" href="{{ url('/account') }}">Tài khoản</a></li>
+                                                <li><a class="dropdown-item" href="{{ url('/history') }}">Đơn hàng</a></li>
+                                                <li><a class="dropdown-item" href="{{ route('auth.logout') }}">Đăng xuất</a></li>
+                                            @else
+                                                <!-- Hiển thị Đăng nhập và Đăng ký nếu chưa đăng nhập -->
+                                                <li><a class="dropdown-item" href="{{ url('/login') }}">Đăng nhập</a></li>
+                                                <li><a class="dropdown-item" href="{{ url('/register') }}">Đăng ký</a></li>
+                                            @endauth
+                                        </ul>
+                                        
                             </div>
                             <!-- Header User End -->
 

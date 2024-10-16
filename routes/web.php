@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
@@ -17,10 +18,13 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
+use App\Http\Controllers\Client\OrderHistoryController;
 use App\Http\Controllers\User\LienheController;
 use App\Models\Cart;
 use App\Models\Category;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,9 +62,11 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/shop', function () {
-    return view('client.page.shop');
-});
+
+Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
+
+
+
 Route::get('/history', function () {
     return view('client.page.history');
 });
@@ -73,10 +79,27 @@ Route::get('/contact', function () {
 Route::get('/account', function () {
     return view('client.page.profile');
 });
-
-Route::get('/order', function () {
-    return view('client.page.order');
-})->name('order');
+// Route::get('/cart', function () {
+//     return view('client.page.cart');
+// })->name('cart');
+Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.show');
+Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.process');
+Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.applyVoucher');
+Route::post('/checkout/available-vouchers', [CheckoutController::class, 'getAvailableVouchers'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.availableVouchers');
+Route::post('/order/store', [CheckoutController::class, 'orderStore'])
+    ->middleware('checkLoginClient')
+    ->name('order.store');
+Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
+    ->middleware('checkLoginClient')
+    ->name('order.show');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -162,6 +185,8 @@ Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
 
 // AJAX
 Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])
@@ -238,7 +263,15 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
     Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
     Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
 });
-
+Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
+    Route::get('index',                 [OrderController::class, 'index'])->name('index');
+    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
+});
+Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
+Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
 
 
 
@@ -313,4 +346,4 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
-Route::post('/submit-review', [App\Http\Controllers\ReviewController::class, 'store']);
+Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);

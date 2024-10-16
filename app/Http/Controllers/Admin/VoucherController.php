@@ -32,7 +32,7 @@ class VoucherController extends Controller
      */
     public function store(StoreVoucherRequest $request)
     {
-        Voucher::create($request->validated()); // Sử dụng validated để lấy dữ liệu đã được xác thực
+        Voucher::create($request->validated());
         return redirect()->route('vouchers.index')->with('success', 'Voucher đã được tạo thành công');
     }
 
