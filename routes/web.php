@@ -48,13 +48,8 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/shop', function () {
-    return view('client.page.shop');
-});
+
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
-//Route::get('/shop-category/{id}', [ProductCatalogueController::class, 'show'])->name('shop.show');
-Route::get('/shop-category/', [ProductCatalogueController::class, 'show'])->name('products.show');
-Route::get('/products/filter', [ProductCatalogueController::class, 'filter'])->name('products.filter');
 
 
 
