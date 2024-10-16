@@ -26,7 +26,6 @@
                                 <th>Mã sản phẩm</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Danh mục</th>
-                                <th>Mô tả</th>
                                 <th class="text-center">Tình Trạng</th>
                             </tr>
                             </thead>
@@ -42,7 +41,6 @@
                                         <td>{{ $product->code }}</td>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->category->name }}</td>
-                                        <td>{{ $product->description }}</td>
                                         <td class="text-center js-switch-{{ $product->id }}">
                                             <input readonly type="checkbox" value="{{ $product->status }}" 
                                             class="js-switch status "
@@ -115,6 +113,24 @@
                                         </tbody>
                                         @endif
                                     </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 mb-15">
+                                <div class="form-row">
+                                    <div class="uk-flex uk-middle uk-flex-space-between">
+                                        <label for="" class="control-label text-left">Mô tả sản phẩm</label>
+                                    </div>
+                                    <textarea readonly
+                                        type="text"
+                                        id="ckContent"
+                                        class="form-control ck-editor"
+                                        placeholder=""
+                                        autocomplete="off"
+                                        data-height="500">
+                                        {!! $product->description !!}
+                                    </textarea>
                                 </div>
                             </div>
                         </div>

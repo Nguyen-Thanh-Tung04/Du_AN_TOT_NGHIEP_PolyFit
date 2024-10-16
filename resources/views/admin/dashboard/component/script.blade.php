@@ -16,6 +16,9 @@
 
     <!-- jQuery UI -->
     <script src="admin/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="admin/plugins/sweetalert/sweetalert.min.js"></script>
+    
     
     @if (isset($config['js']) && is_array($config['js']))
         @foreach ($config['js'] as $key => $val)

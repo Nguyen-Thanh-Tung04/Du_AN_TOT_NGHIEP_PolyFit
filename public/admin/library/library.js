@@ -120,7 +120,7 @@
             });
 
             if (isDuplicate) {
-                alert('Biến thể đã tồn tại!');
+                toastr.success('Biến thể đã tồn tại!')
                 $(this).val('0'); // Đặt lại giá trị về mặc định
             }
         });
@@ -145,21 +145,55 @@
         })
     }
 
+    HT.removeProduct = () => {
+        $(document).on('click', '.remove-product', function(e) {
+            e.preventDefault();
+
+            swal({
+                title: "Bạn có chắc chắn?",
+                text: "Bạn sẽ không thể khôi phục lại mục này!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa!",
+                cancelButtonText: "Hủy",
+                closeOnConfirm: true // Đóng SweetAlert sau khi người dùng xác nhận
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $('#submitDelProduct').submit();
+                }
+            });
+        });
+    };
+
     HT.removeVariantDetail = () => {
-        $(document).on('click', '.remove-variant-detail', function () {
-            var _this = $(this);
-            var variantId = _this.data('variant-id');
-
-            if (confirm("Bạn có chắc chắn muốn xóa biến thể này không?")) {
-                var arrVariantIdDel = $('#delete_variant_id').val();
-                arrVariantIdDel += variantId + ',';
-                $('#delete_variant_id').val(arrVariantIdDel);
-
-            } else {
-                return false;
-            }
-        })
-    }
+        $(document).on('click', '.remove-variant-detail', function(e) {
+            e.preventDefault();  // Ngăn chặn hành động mặc định khi bấm nút "Xóa"
+    
+            var _this = $(this); // Lấy đối tượng nút bấm
+            var variantId = _this.data('variant-id'); // Lấy ID của biến thể từ thuộc tính data-variant-id
+    
+            // Sử dụng SweetAlert để hiển thị hộp thoại xác nhận
+            swal({
+                title: "Bạn có chắc chắn?",
+                text: "Bạn sẽ không thể khôi phục lại mục này!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa!",
+                cancelButtonText: "Hủy",
+                closeOnConfirm: true // Đóng SweetAlert sau khi người dùng xác nhận
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    var arrVariantIdDel = $('#delete_variant_id').val(); // Lấy giá trị hiện tại của input ẩn
+                    arrVariantIdDel += variantId + ','; // Thêm variant ID vào danh sách
+                    $('#delete_variant_id').val(arrVariantIdDel); // Cập nhật lại giá trị của input ẩn
+    
+                    $('#submitDelVariant').submit();
+                }
+            });
+        });
+    };
 
     HT.changeStatus = () => {
         $(document).on('change', '.status', function (e) {
@@ -334,6 +368,7 @@
         HT.cloneVariant();
         HT.removeVariant();
         HT.removeVariantDetail();
+        HT.removeProduct();
         HT.colorAttrDuplicate();
     });
 

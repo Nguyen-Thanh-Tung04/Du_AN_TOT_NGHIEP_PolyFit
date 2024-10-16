@@ -29,7 +29,7 @@ class CheckProductChildrenRule implements ValidationRule
     {
         $product = Product::with('variants')->find($this->id);
         if ($product && $product->variants->count() > 0) {
-            $fail('Không thể xóa sản phẩm vì còn biến thể.');
+            $fail('Vui lòng xóa biến thể trong sản phẩm này trước khi xóa.');
         }
     }
 }

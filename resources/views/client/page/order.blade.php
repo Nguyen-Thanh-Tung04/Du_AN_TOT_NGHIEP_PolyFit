@@ -30,7 +30,7 @@
             </div>
             <div class="ec-trackorder-inner mb-50">
                 <div class="ec-trackorder-top">
-                    <h2 class="ec-order-id">Mã Đơn Hàng #{{ $order->id }}</h2>
+                    <h2 class="ec-order-id">Mã Đơn Hàng {{ $order->code }}</h2>
                     <div class="ec-order-detail">
                         @if ($order->status === \App\Models\Order::STATUS_HUY_DON_HANG)
                             <div class="alert alert-danger">
@@ -190,6 +190,38 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <h3 class="control-label"><i class="fas fa-credit-card"></i>
+                                                        Phương thức thanh toán:<br></h3>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label class="radio-inline">
+                                                            <div>
+                                                                @if ($order->payment_method == 1)
+                                                                    Thanh toán khi nhận hàng
+                                                                @elseif ($order->payment_method == 2)
+                                                                    Thanh toán VnPay
+                                                                @elseif ($order->payment_method == 3)
+                                                                    Thanh toán MoMo
+                                                                @endif
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom: 20px;">
+                                    <div class="col-md-12 text-center">
+                                        <div class="pull-left">
+                                            <a href="{{ route('cart.index') }}" style
+                                                class=" button button-lg " type="button"><i
+                                                    class="fa fa-arrow-left"></i>Trở lại giỏ hàng</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
