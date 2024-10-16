@@ -39,9 +39,22 @@
                     {{ ($review->status == 1) ? 'checked' : '' }} />
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                    <a href="{{ route('reviews.delete', $review->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                    <div class="d-inline-flex">
+                        <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                       
+                    </div>
                 </td>
+                
+                
             </tr>
             @php $lastOrderId = $review->order->id; // Update lastOrderId to current one @endphp
         @endif

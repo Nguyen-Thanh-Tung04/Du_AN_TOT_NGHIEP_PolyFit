@@ -262,9 +262,9 @@
             $('.rate-text').removeClass('uk-hidden');
         }
     });
-
+   
     // Khi bấm nút 'Xem đánh giá'
-    $('.open-view-review-modal').on('click', function() {
+    $(document).on('click', '.open-view-review-modal', function() {
         const orderId = $(this).data('order-id');
         const products = $(this).data('products');
         console.log(products);
@@ -397,13 +397,8 @@
 
                     button.removeClass('btn-primary open-review-modal')
                         .addClass('btn-secondary open-view-review-modal')
-                        .text('Xem đánh giá')
-                        .off('click') // Remove the previous click event for writing a review
-                        .on('click', function() {
-                            // Open the view review modal here
-                            // You can trigger the modal opening logic or add further actions
-                            alert('Xem đánh giá cho đơn hàng #' + orderId);
-                        });
+                         .text('Xem đánh giá')
+                         .attr('data-order-id', orderId);
 
                     
                 } else {

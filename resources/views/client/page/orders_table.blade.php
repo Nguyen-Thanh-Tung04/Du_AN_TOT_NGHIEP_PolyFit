@@ -2,7 +2,6 @@
     <thead>
         <tr>
             <th scope="col">Mã Đơn hàng</th>
-            <th scope="col">Khách hàng</th>
             <th scope="col">Ngày đặt</th>
             <th scope="col">Tổng tiền</th>
             <th scope="col">Trạng thái</th>
@@ -23,7 +22,6 @@
             @foreach($orders as $order)
                 <tr>
                     <td>{{ $order->id }}</td>
-                    <td>{{ $order->user->name }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                     <td>{{ number_format($order->orderItems->sum(function($item) {
                         return $item->price * $item->quantity;
