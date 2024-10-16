@@ -7,6 +7,8 @@
     <link href="admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="admin/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="admin/plugins/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="admin/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 
     @if (isset($config['css']) && is_array($config['css']))
         @foreach ($config['css'] as $key => $val)

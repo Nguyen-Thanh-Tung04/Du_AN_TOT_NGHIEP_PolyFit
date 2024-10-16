@@ -30,7 +30,7 @@
             </div>
             <div class="ec-trackorder-inner mb-50">
                 <div class="ec-trackorder-top">
-                    <h2 class="ec-order-id">Mã Đơn Hàng #{{ $order->id }}</h2>
+                    <h2 class="ec-order-id">Mã Đơn Hàng {{ $order->code }}</h2>
                     <div class="ec-order-detail">
                         <div>Dự kiến giao đến bạn ngày {{ $order->estimated_delivery_date }}</div>
                     </div>
@@ -42,19 +42,19 @@
                                         src="{{ asset('theme/client/assets/images/icons/track_1.png') }}"
                                         alt="track_order"></span><span class="ec-progressbar-track"></span><span
                                     class="ec-track-title">Đơn hàng đã đặt</span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
+                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_2.png') }}"
                                         alt="track_order"></span><span class="ec-progressbar-track"></span><span
                                     class="ec-track-title">Đã xác nhận thông tin thanh toán</span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
+                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_3.png') }}"
                                         alt="track_order"></span><span class="ec-progressbar-track"></span><span
                                     class="ec-track-title">Đã giao cho ĐVVC</span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
+                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_4.png') }}"
                                         alt="track_order"></span><span class="ec-progressbar-track"></span><span
                                     class="ec-track-title">Đang giao tới bạn <br> </span></li>
-                            <li class="step0"><span class="ec-track-icon"> <img
+                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
                                         src="{{ asset('theme/client/assets/images/icons/track_5.png') }}"
                                         alt="track_order"></span><span class="ec-progressbar-track"></span><span
                                     class="ec-track-title">Đã nhận được hàng</span></li>
@@ -180,7 +180,15 @@
                                                 <div class="form-group">
                                                     <div>
                                                         <label class="radio-inline">
-                                                            <div>Thanh toán khi nhận hàng</div>
+                                                            <div>
+                                                                @if ($order->payment_method == 1)
+                                                                    Thanh toán khi nhận hàng
+                                                                @elseif ($order->payment_method == 2)
+                                                                    Thanh toán VnPay
+                                                                @elseif ($order->payment_method == 3)
+                                                                    Thanh toán MoMo
+                                                                @endif
+                                                            </div>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -191,9 +199,9 @@
                                 <div class="row" style="padding-bottom: 20px;">
                                     <div class="col-md-12 text-center">
                                         <div class="pull-left">
-                                            <button onClick="location.href=' https://demo.s-cart.org/cart.html '" style
+                                            <a href="{{ route('cart.index') }}" style
                                                 class=" button button-lg " type="button"><i
-                                                    class="fa fa-arrow-left"></i>Trở lại giỏ hàng</button>
+                                                    class="fa fa-arrow-left"></i>Trở lại giỏ hàng</a>
                                         </div>
                                     </div>
                                 </div>

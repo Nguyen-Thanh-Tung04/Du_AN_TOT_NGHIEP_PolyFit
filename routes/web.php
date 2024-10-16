@@ -91,6 +91,10 @@ Route::post('/order/store', [CheckoutController::class, 'orderStore'])
 Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
 ->middleware('checkLoginClient')
 ->name('order.show');
+Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
+->middleware('checkLoginClient')
+->name('vnpay.payment');
+Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
