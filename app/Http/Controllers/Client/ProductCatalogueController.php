@@ -10,18 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class ProductCatalogueController
 {
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     public function index(Request $request)
     {
         // Khởi tạo truy vấn sản phẩm với thông tin biến thể
-        $query = Product::select('products.*',
+        $query = Product::select(
+            'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->groupBy('products.id');
 
@@ -47,9 +46,11 @@ class ProductCatalogueController
         $products = $query->get();
 
         // Lấy danh sách các sản phẩm có giảm giá
-        $discounted = Product::select('products.*',
+        $discounted = Product::select(
+            'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->whereColumn('variants.listed_price', '>', 'variants.sale_price')
             ->groupBy('products.id')
@@ -78,10 +79,12 @@ class ProductCatalogueController
         $minPrice = $request->get('min_price', 0);
         $maxPrice = $request->get('max_price', 250);
 
-        $query = Product::select('products.*',
+        $query = Product::select(
+            'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->groupBy('products.id');
 
@@ -140,10 +143,12 @@ class ProductCatalogueController
         $categories = $request->get('categories', []);
         $colors = $request->get('colors', []);
 
-        $query = Product::select('products.*',
+        $query = Product::select(
+            'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->groupBy('products.id');
 
@@ -191,9 +196,11 @@ class ProductCatalogueController
         $variants = Variant::all();
         $categories = Category::all(); // Để hiển thị lại các danh mục
 
+        // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
+        foreach ($products as $product) {
+            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
+        }
+
         return view('client.page.shop', compact('products', 'variants', 'categories'));
     }
-
-
-
 }

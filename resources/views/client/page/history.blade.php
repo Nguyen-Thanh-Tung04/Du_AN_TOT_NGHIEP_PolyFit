@@ -120,11 +120,12 @@
                                                         <div class="modal-body">
                                                             <!-- Phần hiển thị danh sách sản phẩm -->
                                                             <h5>Danh sách sản phẩm đã mua</h5>
-                                                            <div id="products-list"></div>
+                                                            <div id="pr-list"></div>
                                                         </div>
 
                                                         <div class="modal-body">
                                                             <!-- Phần hiển thị danh sách đánh giá -->
+                                                            <h5>Đánh giá của bạn</h5>
                                                             <div id="view-review-list"></div>
                                                         </div>
 
@@ -160,22 +161,7 @@
         3: "Bình thường",
         4: "Hài lòng",
         5: "Rất hài lòng"
-    };
-
-    // Khi người dùng chọn sao
-    $('.rate input[type="radio"]').on('change', function () {
-        // Lấy giá trị của sao đã chọn
-        var starValue = $(this).val();
-
-        // Cập nhật nội dung mô tả dựa trên giá trị sao
-        $('.rate-text').text(starDescriptions[starValue]);
-
-        // Hiển thị lại phần mô tả nếu nó đang bị ẩn
-        if ($('.rate-text').hasClass('uk-hidden')) {
-            $('.rate-text').removeClass('uk-hidden');
-        }
-    });
-
+    };    
 
     // khi bấm đánh giá
     $(document).on('click', '.open-review-modal', function () {
@@ -213,7 +199,7 @@
         // Đổ form
         $('#review-list').append(`
                 <!-- Form để đánh giá cả đơn hàng -->
-                <div id="review-form-{{ $order->id }}">
+                <div id="review-form-${orderId}">
                     <input type="hidden" name="order_id" value="${orderId}">
 
                     <!-- Rating Section -->
@@ -265,16 +251,28 @@
         
     });
 
+    $(document).on('change', '.rate input[type="radio"]', function () {
+        var starValue = $(this).val();
+
+        // Cập nhật nội dung mô tả dựa trên giá trị sao
+        $('.rate-text').text(starDescriptions[starValue]);
+
+        // Hiển thị lại phần mô tả nếu nó đang bị ẩn
+        if ($('.rate-text').hasClass('uk-hidden')) {
+            $('.rate-text').removeClass('uk-hidden');
+        }
+    });
+
     // Khi bấm nút 'Xem đánh giá'
     $('.open-view-review-modal').on('click', function() {
         const orderId = $(this).data('order-id');
         const products = $(this).data('products');
-
-          // Xóa danh sách sản phẩm cũ
-          $('#products-list').empty();
-          // Đổ sản phẩm vào danh sách
-        products.forEach(function(product) {
-            $('#products-list').append(`
+        console.log(products);
+        // Xóa danh sách sản phẩm cũ
+        $('#pr-list').empty();
+        // Đổ sản phẩm vào danh sách
+         products.forEach(function(product) {
+            $('#pr-list').append(`
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-3 col-12 text-center">
                         <img class="img-fluid rounded" src="${product.image}" alt="${product.name}" style="max-width: 60px;">
@@ -291,56 +289,57 @@
                 </div>
             `);
         });
-
         // Gọi AJAX để lấy danh sách đánh giá
         $.ajax({
-    url: `/reviews/${orderId}`, // Đường dẫn API để lấy đánh giá
-    method: 'GET',
-    success: function(response) {
-        let reviewsHtml = '';
-        
-        // Check if there are reviews
-        if (response.reviews && response.reviews.length > 0) {
-            const review = response.reviews[0]; // Get the first review only
-            
-            reviewsHtml = `
-                <div class="ec-t-review-item d-flex">
-    <div class="ec-t-review-avtar">
-        <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" width="70px" class="rounded-circle" alt="" />
-    </div>
-    <div class="mx-5 ec-t-review-content">
-        <div class="ec-t-review-top">
-            <div class="ec-t-review-name">${review.user.name}</div>
-            <div class="ec-t-review-rating">
-                ${Array.from({length: 5}, (v, i) => `
-                    <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
-                `).join('')}
+                url: `/reviews/${orderId}`, // Đường dẫn API để lấy đánh giá
+                method: 'GET',
+                success: function(response) {
+                    let reviewsHtml = '';
+                    
+                    // Check if there are reviews
+                    if (response.reviews && response.reviews.length > 0) {
+                        const review = response.reviews[0]; // Get the first review only
+                        
+                        reviewsHtml = `
+                            <div class="ec-t-review-item d-flex">
+                <div class="ec-t-review-avtar">
+                    <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" width="70px" class="rounded-circle" alt="" />
+                </div>
+                <div class="mx-5 ec-t-review-content">
+                    <div class="ec-t-review-top">
+                        <div class="ec-t-review-name">${review.user.name}</div>
+                        <div class="ec-t-review-rating">
+                            ${Array.from({length: 5}, (v, i) => `
+                                <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="ec-t-review-bottom">
+                        <p>${review.content}</p>
+                    </div>
+                    ${review.image ? `<img src="/storage/${review.image}" alt="Review Image" width="100">` : ''}
+                    <div class="ec-t-review-bottom">
+                        <p>${new Date(review.created_at).toLocaleDateString()}</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="ec-t-review-bottom">
-            <p>${review.content}</p>
-        </div>
-        ${review.image ? `<img src="/storage/${review.image}" alt="Review Image" width="100">` : ''}
-        <div class="ec-t-review-bottom">
-            <p>${new Date(review.created_at).toLocaleDateString()}</p>
-        </div>
-    </div>
-</div>
-            `;
-        } else {
-            reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
-        }
-        
-        // Display the review (or message if no reviews)
-        $('#view-review-list').html(reviewsHtml);
+                        `;
+                    } else {
+                        reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
+                    }
+                    
+                    // Display the review (or message if no reviews)
+                    $('#view-review-list').html(reviewsHtml);
 
-        // Show the modal to view the review
+                    // Show the modal to view the review
+                    $('#viewReviewModal').modal('show');
+                },
+                error: function() {
+                    alert('Không thể tải danh sách đánh giá.');
+                }
+        });
+        // Hiển thị modal sau khi đã đổ sản phẩm
         $('#viewReviewModal').modal('show');
-    },
-    error: function() {
-        alert('Không thể tải danh sách đánh giá.');
-    }
-});
 
     });
 
@@ -362,12 +361,6 @@
         if (reviewImage) {
             formData.append('review_image', reviewImage); // Thêm file ảnh vào formData, không chỉ tên file
         }
-        // var files = $('#review_image').prop('files');
-        // if (files.length > 0) {
-        //     var fileName = files[0].name; // Lấy tên file
-        //     formData.append('review_image', fileName); // Chỉ lưu tên file vào formData
-        // }
-
 
         // Add CSRF token if Laravel is using CSRF protection
         formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
@@ -396,6 +389,23 @@
                         timer: 6000,
                         showCloseButton: true
                     });
+                     // Đóng modal sau khi đánh giá thành công
+                     $('#reviewModal').modal('hide');
+                     // Change the "Write Review" button to "View Review" after successful submission
+                    var orderId = $('input[name="order_id"]').val();
+                    var button = $('button.open-review-modal[data-order-id="' + orderId + '"]');
+
+                    button.removeClass('btn-primary open-review-modal')
+                        .addClass('btn-secondary open-view-review-modal')
+                        .text('Xem đánh giá')
+                        .off('click') // Remove the previous click event for writing a review
+                        .on('click', function() {
+                            // Open the view review modal here
+                            // You can trigger the modal opening logic or add further actions
+                            alert('Xem đánh giá cho đơn hàng #' + orderId);
+                        });
+
+                    
                 } else {
                     alert(response.message || 'Có lỗi xảy ra.');
                 }

@@ -68,15 +68,15 @@ class ReviewController extends Controller
         }
     }
     public function getReviews($orderId)
-{
-    $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
-    $reviews = Review::whereIn('product_id', $order->orderItems->pluck('variant.product_id'))
-        ->with('user')
-        ->get();
+    {
+        $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
+        $reviews = Review::whereIn('product_id', $order->orderItems->pluck('variant.product_id'))
+            ->with('user')
+            ->get();
 
-    return response()->json([
-        'reviews' => $reviews,
-    ]);
-}
+        return response()->json([
+            'reviews' => $reviews,
+        ]);
+    }
 
 }

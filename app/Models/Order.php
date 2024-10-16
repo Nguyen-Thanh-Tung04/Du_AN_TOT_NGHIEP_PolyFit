@@ -97,7 +97,7 @@ class Order extends Model
     {
         return self::PAYMENT_METHOD_NAMES[$this->payment_method] ?? 'Phương thức thanh toán không xác định';
     }
-   
+
     // Lấy tất cả các đánh giá liên quan đến các sản phẩm trong đơn hàng
     public function reviews()
     {
@@ -111,9 +111,13 @@ class Order extends Model
         );
     }
 
-    // Kiểm tra xem đơn hàng có đánh giá nào không
     public function getHasReviewAttribute()
     {
-        return $this->reviews()->exists();
+        // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
+        return $this->orderItems->every(function ($item) {
+            return Review::where('product_id', $item->variant->product_id)
+                ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
+                ->exists();
+        });
     }
 }

@@ -38,19 +38,22 @@ class ReviewRepository implements ReviewInterface
         $query = Review::query()
             ->join('users', 'reviews.account_id', '=', 'users.id')
             ->join('products', 'reviews.product_id', '=', 'products.id')
+            ->join('orders', 'reviews.order_id', '=', 'orders.id') // Join with the orders table
             ->select(
                 'reviews.*',
                 'users.email',
                 'users.name',
                 'users.image',
-                'products.code as product_code'
+                'products.code as product_code',
+                'orders.id as order_id' // Select order ID
+
             )
             ->orderBy('reviews.created_at', 'desc');
     
         // Thêm điều kiện tìm kiếm vào query
         if (!empty($conditions['keyword'])) {
             $query->where(function ($q) use ($conditions) {
-                $q->where('products.code', 'like', '%' . $conditions['keyword'] . '%')
+                $q->where('orders.id', 'like', '%' . $conditions['keyword'] . '%')
                     ->orWhere('users.email', 'like', '%' . $conditions['keyword'] . '%');
             });
         }
