@@ -9,15 +9,13 @@
             <div class="col-12">
                 <div class="row ec_breadcrumb_inner">
                     <div class="col-md-6 col-sm-12">
-                        <h2 class="ec-breadcrumb-title">Đăng Nhập</h2>
+                        <h2 class="ec-breadcrumb-title">Lấy lại mật khẩu</h2>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <!-- ec-breadcrumb-list start -->
                         <ul class="ec-breadcrumb-list">
                             <li class="ec-breadcrumb-item"><a href="index.html">Trang chủ</a></li>
-                            <li class="ec-breadcrumb-item active">Đăng nhập</li>
+                            <li class="ec-breadcrumb-item active">Lấy lại mật khẩu</li>
                         </ul>
-                        <!-- ec-breadcrumb-list end -->
                     </div>
                 </div>
             </div>
@@ -39,8 +37,19 @@
             </div>
             <div class="ec-login-wrapper">
                 <div class="ec-login-container">
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                     <div class="ec-login-form">
-                        <form action="{{ route('auth.login-client') }}" method="post">
+                        <form action="{{ route('forget') }}" method="post">
                             @csrf
                             <span class="ec-login-wrap">
                                 <label>Email*</label>

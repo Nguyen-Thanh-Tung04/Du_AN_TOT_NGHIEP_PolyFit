@@ -12,12 +12,10 @@
                         <h2 class="ec-breadcrumb-title">Đặt lại mật khẩu</h2>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <!-- ec-breadcrumb-list start -->
                         <ul class="ec-breadcrumb-list">
                             <li class="ec-breadcrumb-item"><a href="index.html">Trang chủ</a></li>
                             <li class="ec-breadcrumb-item active">Đặt lại mật khẩu</li>
                         </ul>
-                        <!-- ec-breadcrumb-list end -->
                     </div>
                 </div>
             </div>
@@ -34,13 +32,13 @@
                 <div class="section-title">
                     <h2 class="ec-bg-title">Đặt lại mật khẩu</h2>
                     <h2 class="ec-title">Đặt lại mật khẩu</h2>
-                    <p class="sub-title mb-3">Để trải nghiệm tốt nhất .</p>
+                    <p class="sub-title mb-3">Để trải nghiệm tốt nhất.</p>
                 </div>
             </div>
             <div class="ec-register-wrapper col-md-6">
                 <div class="ec-register-container">
                     <div class="ec-register-form">
-                        <form action="{{ route('auth.register') }}" method="post">
+                        <form action="{{ route('getPass', ['customer' => $customer->id, 'token' => $customer->token]) }}" method="post">
                             @csrf
                             <span class="ec-register-wrap">
                                 <label>Mật khẩu*</label>
