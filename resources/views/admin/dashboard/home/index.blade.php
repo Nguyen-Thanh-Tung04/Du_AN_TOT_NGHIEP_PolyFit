@@ -117,9 +117,9 @@
                 <div class="ibox-title">
                     <h5 style="padding-top: 5px"> BIỂU ĐỒ DOANH SỐ</h5>
                     <div class="right">
-                        <form action="{{ route('dashboard.post') }}" method="POST">
+                        <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST">
                             @csrf
-                            <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN </h5>
+                            <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN</h5>
 
                             <input type="date" name="date_start" class="btn btn-xs btn-white" value="{{ old('date_start') }}">
                             <input type="date" name="end_date" class="btn btn-xs btn-white" value="{{ old('end_date') }}">
@@ -131,8 +131,20 @@
                                 <option value="day" {{ old('choose_time') == 'day' ? 'selected' : '' }}>Ngày</option>
                             </select>
 
-                            <input type="submit" value="Lọc" class="btn btn-primary">
+                            <button class="btn btn-primary">Lọc</button>
                         </form>
+
+                        <script>
+                            document.getElementById('filterForm').addEventListener('submit', function(event) {
+                                let dateStart = document.querySelector('input[name="date_start"]').value;
+                                let endDate = document.querySelector('input[name="end_date"]').value;
+
+                                if (!dateStart || !endDate) {
+                                    event.preventDefault(); // Ngăn không cho submit form
+                                    toastr.error('Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc!', 'Thông báo');
+                                }
+                            });
+                        </script>
 
                     </div>
                 </div>
