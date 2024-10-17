@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
@@ -10,20 +11,25 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function welcome(){
+    public function welcome()
+    {
         // Sử dụng join để kết nối bảng product và variants
-        $products = Product::select('products.*',
+        $products = Product::select(
+            'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->groupBy('products.id')
             ->get();
 
         // câu lệnh hiển thị sản phẩm giảm giá
-        $discounted = Product::select('products.*',
+        $discounted = Product::select(
+            'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->whereColumn('variants.listed_price', '>', 'variants.sale_price')
             ->groupBy('products.id')
@@ -37,9 +43,14 @@ class HomeController extends Controller
 
         $category = Category::all();
 
+        // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
+        foreach ($products as $product) {
+            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
+        }
+
         // Debug để kiểm tra dữ liệu
         // dd($data);
 
-        return view('welcome', $data, compact('category') );
+        return view('welcome', $data, compact('category'));
     }
 }

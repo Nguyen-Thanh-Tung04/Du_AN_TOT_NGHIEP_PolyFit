@@ -16,6 +16,9 @@ class ProductRepository
     public function getAttr(string $table, array $column = ['*']){
         return $table::select($column)->get();
     }
+    public function getSearchAttr(string $table, array $column = ['*']){
+        return $table::select($column)->get()->toArray();
+    }
     public function pagination(
         array $column = ['*'], 
         array $condition = [],
@@ -30,7 +33,6 @@ class ProductRepository
                     $query->where('products.name', 'LIKE', '%'.$condition['keyword'].'%')
                     ->orWhere('products.code', 'LIKE', '%'.$condition['keyword'].'%')
                     ->orWhere('categories.name', 'LIKE', '%'.$condition['keyword'].'%')
-                    ->orWhere('products.description', 'LIKE', '%'.$condition['keyword'].'%')
                     ->orWhere('products.status', 'LIKE', '%'.$condition['keyword'].'%')
                     ->orWhere('products.category_id', 'LIKE', '%'.$condition['keyword'].'%');
                 }
@@ -39,7 +41,10 @@ class ProductRepository
                 } elseif (isset($condition['status']) && $condition['status'] == 2) {
                     $query->where('status', '=', '2');
                 }
-                // return $query;
+
+                if (isset($condition['category_id']) && $condition['category_id']) {
+                    $query->where('products.category_id', 'LIKE', '%'.$condition['category_id'].'%');;
+                }
             })->with('category');
 
             if(isset($orderBy) && !empty($orderBy)) {

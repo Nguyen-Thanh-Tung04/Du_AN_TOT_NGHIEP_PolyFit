@@ -48,13 +48,8 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/shop', function () {
-    return view('client.page.shop');
-});
+
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
-//Route::get('/shop-category/{id}', [ProductCatalogueController::class, 'show'])->name('shop.show');
-Route::get('/shop-category/', [ProductCatalogueController::class, 'show'])->name('products.show');
-Route::get('/products/filter', [ProductCatalogueController::class, 'filter'])->name('products.filter');
 
 
 
@@ -89,8 +84,12 @@ Route::post('/order/store', [CheckoutController::class, 'orderStore'])
     ->middleware('checkLoginClient')
     ->name('order.store');
 Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
-    ->middleware('checkLoginClient')
-    ->name('order.show');
+->middleware('checkLoginClient')
+->name('order.show');
+Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
+->middleware('checkLoginClient')
+->name('vnpay.payment');
+Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -261,6 +260,8 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
+    // Route::put('{id}/confirm-cancellation', [OrderController::class, 'confirmCancellation'])->name('order.history.confirm-cancellation');
+
 });
 Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
 Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
@@ -340,3 +341,5 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+// Route để xem đánh giá cho một đơn hàng cụ thể
+Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

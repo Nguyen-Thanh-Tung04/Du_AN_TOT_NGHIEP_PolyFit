@@ -28,22 +28,15 @@ class ProductController
 
     public function index(Request $request) {
         $products = $this->productService->paginate($request);
-        $config = [
-            'js' => [
-                'admin/js/plugins/switchery/switchery.js',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-            ],
-            'css' => [
-                'admin/css/plugins/switchery/switchery.css',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-            ]
-        ];
+        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $config = $this->configData();
         $config['seo'] = config('apps.product');
         $template = 'admin.product.product.index';
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
             'products',
+            'getCategoryAttr',
         ));
     }
 
@@ -161,6 +154,7 @@ class ProductController
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
                 'admin/plugins/ckfinder_2/ckfinder.js',
                 'admin/library/finder.js',
+                'admin/plugins/ckeditor/ckeditor.js',
             ],
             'css' => [
                 'admin/css/plugins/switchery/switchery.css',

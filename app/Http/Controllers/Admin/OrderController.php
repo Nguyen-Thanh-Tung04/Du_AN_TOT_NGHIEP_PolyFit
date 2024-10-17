@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -109,6 +110,5 @@ class OrderController extends Controller
         }
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
     }
-    // Tính doanh thu theo tháng
 
 }

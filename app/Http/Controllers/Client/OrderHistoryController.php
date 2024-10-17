@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,16 +48,34 @@ class OrderHistoryController extends Controller
         DB::beginTransaction();
 
         try {
+            $previousStatus = $donHang->status;
+
             if ($request->has('huy_don_hang')) {
-                if ($donHang->status !== Order::STATUS_CHO_XAC_NHAN) {
+                if ($previousStatus !== Order::STATUS_CHO_XAC_NHAN) {
                     return redirect()->back()->withErrors(['msg' => 'Không thể hủy đơn hàng khi nó không ở trạng thái "Chờ xác nhận".']);
                 }
+
                 $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
+                OrderStatusHistory::create([
+                    'order_id' => $donHang->id,
+                    'previous_status' => $previousStatus,
+                    'new_status' => Order::STATUS_HUY_DON_HANG,
+                    'cancel_reason' => $request->cancel_reason,
+                    'changed_by' => auth()->id(),
+                ]);
             } elseif ($request->has('da_giao_hang')) {
-                if ($donHang->status !== Order::STATUS_DANG_VAN_CHUYEN) {
+                if ($previousStatus !== Order::STATUS_DANG_VAN_CHUYEN) {
                     return redirect()->back()->withErrors(['msg' => 'Không thể xác nhận đã nhận hàng khi nó không ở trạng thái "Đang vận chuyển".']);
                 }
+
                 $donHang->update(['status' => Order::STATUS_DA_GIAO_HANG]);
+                OrderStatusHistory::create([
+                    'order_id' => $donHang->id,
+                    'previous_status' => $previousStatus, 
+                    'new_status' => Order::STATUS_DA_GIAO_HANG,
+                    'cancel_reason' => null,
+                    'changed_by' => auth()->id(),
+                ]);
             }
 
             DB::commit();

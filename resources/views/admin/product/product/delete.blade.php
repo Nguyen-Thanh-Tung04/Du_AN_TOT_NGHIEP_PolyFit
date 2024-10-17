@@ -8,7 +8,7 @@
         </ul>
     </div>
 @endif
-<form action="{{ route('product.destroy', $product->id) }}" method="POST" class="box">
+<form id="submitDelProduct" action="{{ route('product.destroy', $product->id) }}" method="POST" class="box">
     @csrf
     @method('DELETE')
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -65,14 +65,14 @@
             </div>
         </div>
         <div class="text-right mb-15">
-            <button type="submit" class="btn btn-danger" name="send" value="send">Xóa dữ liệu</button>
+            <button type="button" class="remove-product btn btn-danger" name="send" value="send">Xóa dữ liệu</button>
         </div>
     </div>
 </form>
 @php
     $url = route('product.destroyVariant', $product->id);
 @endphp
-<form action="{{ $url }}" method="post" class="box">
+<form id="submitDelVariant" action="{{ $url }}" method="post" class="box">
     @csrf
     @method('DELETE')
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -133,7 +133,7 @@
                                                     </td>
                                                     <input type="hidden" name="variant_id[]" value="{{ $variant->id ?? '' }}">
                                                     <td class="text-center">
-                                                        <button type="submit" class="btn btn-danger remove-variant-detail" data-variant-id="{{ $variant->id }}"><i class="fa fa-trash "></i></button>
+                                                        <button type="button" class="sweetalert btn btn-danger remove-variant-detail" data-variant-id="{{ $variant->id }}"><i class="fa fa-trash "></i></button>
                                                     </td>
                                                 </tr>
                                             @endforeach

@@ -8,6 +8,8 @@
     <link href="admin/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="admin/css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <link href="admin/plugins/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="admin/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @if (isset($config['css']) && is_array($config['css']))

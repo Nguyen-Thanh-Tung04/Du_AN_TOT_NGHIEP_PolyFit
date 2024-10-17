@@ -2,7 +2,6 @@
     <thead>
         <tr>
             <th scope="col">Mã Đơn hàng</th>
-            <th scope="col">Khách hàng</th>
             <th scope="col">Ngày đặt</th>
             <th scope="col">Tổng tiền</th>
             <th scope="col">Trạng thái</th>
@@ -22,12 +21,11 @@
         @else
             @foreach($orders as $order)
                 <tr>
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $order->user->name }}</td>
+                    <td>{{ $order->code }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                     <td>{{ number_format($order->orderItems->sum(function($item) {
                         return $item->price * $item->quantity;
-                    }), 0, ',', '.') }} VND</td>
+                    }), 0, ',', '.') }} đ</td>
                     <td>{{ $order->status_name }}</td>
                     <td>
                         <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary text-white">Xem</a>
@@ -50,9 +48,21 @@
                                 </button>
                             @else
                                 <!-- View Review Button -->
-                                <a href="#" class="btn btn-secondary">
-                                    Xem đánh giá
-                                </a>
+                                <button type="button" class="btn btn-secondary open-view-review-modal"
+                                data-order-id="{{ $order->id }}" 
+                                {{ !$order->has_review ? 'disabled' : '' }}
+                                data-products="{{ json_encode($order->orderItems->map(function($item) {
+                                    return [
+                                        'id' => $item->variant->product->id,
+                                        'name' => $item->variant->product->name,
+                                        'image' => $item->image,
+                                        'color' => $item->color,
+                                        'size' => $item->size,
+                                    ];
+                                })) }}"
+                                >
+                                Xem đánh giá
+                            </button>
                             @endif
                         @endif
                     </td>
