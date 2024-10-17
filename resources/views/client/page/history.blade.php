@@ -246,7 +246,7 @@
             `);
 
         // Hiển thị modal
-        $('#reviewModalLabel').text('Viết đánh giá cho đơn hàng ' + orderId);
+        $('#reviewModalLabel').text('Viết đánh giá cho đơn hàng ');
         $('#reviewModal').modal('show');
         
     });
@@ -406,6 +406,7 @@
                 }
             },
             error: function (xhr) {
+                console.log(xhr);
                 if (xhr.status === 422) {
                     var errors = xhr.responseJSON.errors;
 
@@ -414,7 +415,7 @@
                         $('#review_text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
                     }
                     if (errors.rate) {
-                        $('input[name="rate"]').closest('.rate-group').after('<div class="error-message text-danger">' + errors.rate[0] + '</div>');
+                        $('input[name="rate"]').closest('.rate').after('<div class="error-message text-danger">Mời bạn đánh giá sao !</div>');
                     }
                     if (errors.review_image) {
                         $('#review_image').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');

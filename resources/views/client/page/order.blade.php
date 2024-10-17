@@ -163,66 +163,42 @@
                                             <tr class="showTotal">
                                                 <th>Phương thức thanh toán :</th>
                                                 <td style="text-align: right" id="subtotal">
-                                                    <div>Thanh toán khi nhận hàng</div>
+                                                    <div>
+                                                        @if ($order->payment_method == 1)
+                                                            Thanh toán khi nhận hàng
+                                                        @elseif ($order->payment_method == 2)
+                                                            Thanh toán VnPay
+                                                        @elseif ($order->payment_method == 3)
+                                                            Thanh toán MoMo
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr class="showTotal">
                                                 <th>Tổng tiền hàng</th>
                                                 <td style="text-align: right" id="subtotal">
-                                                    ₫{{ number_format($totalPrice, 0, ',', '.') }}
+                                                    {{ number_format($totalPrice, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                             <tr class="showTotal">
                                                 <th>Phí vận chuyển</th>
                                                 <td style="text-align: right" id="subtotal">
-                                                    ₫{{ number_format($order->shipping_cost, 0, ',', '.') }}
+                                                    {{ number_format($order->shipping_cost, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                             <tr class="showTotal">
                                                 <th>Voucher giảm giá</th>
                                                 <td style="text-align: right" id="tax">
-                                                    -₫{{ number_format($order->discount_amount, 0, ',', '.') }}
+                                                    -{{ number_format($order->discount_amount, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                             <tr class="showTotal" style="background:#f5f3f3;font-weight: bold;">
                                                 <th>Tổng tiền</th>
                                                 <td style="text-align: right" id="total">
-                                                    ₫{{ number_format($order->total_price, 0, ',', '.') }}
+                                                    {{ number_format($order->total_price, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                         </table>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <h3 class="control-label"><i class="fas fa-credit-card"></i>
-                                                        Phương thức thanh toán:<br></h3>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label class="radio-inline">
-                                                            <div>
-                                                                @if ($order->payment_method == 1)
-                                                                    Thanh toán khi nhận hàng
-                                                                @elseif ($order->payment_method == 2)
-                                                                    Thanh toán VnPay
-                                                                @elseif ($order->payment_method == 3)
-                                                                    Thanh toán MoMo
-                                                                @endif
-                                                            </div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-bottom: 20px;">
-                                    <div class="col-md-12 text-center">
-                                        <div class="pull-left">
-                                            <a href="{{ route('cart.index') }}" style
-                                                class=" button button-lg " type="button"><i
-                                                    class="fa fa-arrow-left"></i>Trở lại giỏ hàng</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

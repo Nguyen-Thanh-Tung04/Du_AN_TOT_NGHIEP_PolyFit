@@ -21,11 +21,11 @@
         @else
             @foreach($orders as $order)
                 <tr>
-                    <td>{{ $order->id }}</td>
+                    <td>{{ $order->code }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                     <td>{{ number_format($order->orderItems->sum(function($item) {
                         return $item->price * $item->quantity;
-                    }), 0, ',', '.') }} VND</td>
+                    }), 0, ',', '.') }} đ</td>
                     <td>{{ $order->status_name }}</td>
                     <td>
                         <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary text-white">Xem</a>

@@ -11,7 +11,7 @@
 @endif
 
 
-    <div class="col-lg-6">
+    <div class="col-lg-6" style="margin-top: 30px">
         <div class="ibox">
             <div class="ibox-content">
                 <div class="row">
@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('reviews.reply', $reviews->id) }}" method="post" class="box" enctype="multipart/form-data">
+    <form action="{{ route('reviews.reply', $reviews->id) }}" method="post" class="box" style="margin-top: 30px" enctype="multipart/form-data">
         @csrf
         <div class="col-lg-6">
             <div class="ibox">
