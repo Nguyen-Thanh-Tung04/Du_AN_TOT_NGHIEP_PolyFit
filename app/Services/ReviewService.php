@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Review;
+use App\Models\ReviewReply;
 use App\Repositories\Interfaces\ReviewInterface as ReviewRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,8 @@ class ReviewService {
                 ->delete();
         }
 
+        // Xóa phản hồi của đánh giá ban đầu
+        ReviewReply::where('review_id', $review->id)->delete(); // Xóa các phản hồi của đánh giá ban đầu
         // Xóa chính đánh giá ban đầu
         $this->ReviewRepository->delete($id);
 
@@ -84,7 +87,7 @@ class ReviewService {
     public function updateStatus($post = []) {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = (($post['value'] == 1)?1:2);
+            $payload[$post['field']] = (($post['value'] == 1)?2:1);
             $user = $this->ReviewRepository->update($post['modelId'], $payload);
             $this->changReviewStatus($post, $payload[$post['field']]);
 
