@@ -87,7 +87,7 @@ class CheckoutController
         ->where('start_time', '<=', now())
         ->where('end_time', '>=', now())
         ->where('min_order_value', '<=', $totalAmount)
-        ->where('max_discount_value', '>=', $totalAmount)
+        ->where('max_order_value', '>=', $totalAmount)
         ->where('quantity', '>', 0)
         ->where('status', 1)
         ->first();
@@ -117,17 +117,24 @@ class CheckoutController
         ]);
     }
 
-    if ($voucher->max_discount_value && $totalAmount > $voucher->max_discount_value) {
+    if ($voucher->max_order_value && $totalAmount > $voucher->max_order_value) {
         return response()->json([
             'success' => false,
             'message' => 'Đơn hàng của bạn vượt mức số tiền cho phép để áp dụng mã voucher này.'
         ]);
     }
     
+    // Tính toán giảm giá
     $discount = 0;
     if ($voucher->discount_type == 'percentage') {
         // Tính giảm giá theo phần trăm
         $discount = ($voucher->value / 100) * $totalAmount;
+
+        // Kiểm tra nếu giảm giá vượt quá max_discount_value
+        if ($voucher->max_discount_value && $discount > $voucher->max_discount_value) {
+            $discount = $voucher->max_discount_value;
+            $discount = floor($discount);
+        }
     } elseif ($voucher->discount_type == 'fixed') {
         // Giảm giá theo số tiền cụ thể
         $discount = $voucher->value;
@@ -137,6 +144,7 @@ class CheckoutController
             $discount = $totalAmount;
         }
     }
+    
     // Tính toán tổng tiền sau khi áp dụng giảm giá
     $finalTotal = $totalAmount - $discount;
 
@@ -173,7 +181,7 @@ class CheckoutController
         ->where('start_time', '<=', now())
         ->where('end_time', '>=', now())
         ->where('min_order_value', '<=', $totalAmount)
-        ->where('max_discount_value', '>=', $totalAmount)
+        ->where('max_order_value', '>=', $totalAmount)
         ->where('quantity', '>', 0)
         ->where('status', 1)
         ->first();
@@ -282,7 +290,7 @@ class CheckoutController
         ->where('start_time', '<=', now())
         ->where('end_time', '>=', now())
         ->where('min_order_value', '<=', $checkoutData['total_amount'])
-        ->where('max_discount_value', '>=', $checkoutData['total_amount'])
+        ->where('max_order_value', '>=', $checkoutData['total_amount'])
         ->where('quantity', '>', 0)
         ->where('status', 1)
         ->first();
@@ -373,7 +381,7 @@ class CheckoutController
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
             ->where('min_order_value', '<=', $checkoutData['total_amount'])
-            ->where('max_discount_value', '>=', $checkoutData['total_amount'])
+            ->where('max_order_value', '>=', $checkoutData['total_amount'])
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();

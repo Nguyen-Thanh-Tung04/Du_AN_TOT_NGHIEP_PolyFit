@@ -55,7 +55,6 @@ class StoreProductRequest extends FormRequest
             'listed_price.*.max' => 'Giá niêm yết quá lớn.',
             'sale_price.*.required' => 'Bạn chưa nhập giá sale.',
             'sale_price.*.integer' => 'Giá sale phải là dạng số nguyên.',
-            'sale_price.*.min' => 'Giá sale phải lớn hơn 1.',
             'sale_price.*.max' => 'Giá sale quá lớn.',
             'quantity.*.required' => 'Bạn chưa nhập số lượng.',
             'quantity.*.integer' => 'Số lượng phải là dạng số nguyên.',
