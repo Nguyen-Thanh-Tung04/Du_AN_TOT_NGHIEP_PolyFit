@@ -83,7 +83,7 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'previous_status' => $order->status,
             'new_status' => $request->status,
-            'cancel_reason' => $request->cancel_reason, 
+            'cancel_reason' => $request->cancel_reason,
             'changed_by' => auth()->id(),
             'changed_at' => now(),
         ]);
@@ -110,31 +110,5 @@ class OrderController extends Controller
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
     }
     // Tính doanh thu theo tháng
-    public function revenueByYear($year)
-    {
-        $query = $this->model->newQuery();
-
-        return $query->selectRaw('months.month, COALESCE(SUM(orders.total), 0) as monthly_revenue')
-            ->from(DB::raw('(SELECT 1 AS month
-                         UNION SELECT 2
-                         UNION SELECT 3
-                         UNION SELECT 4
-                         UNION SELECT 5
-                         UNION SELECT 6
-                         UNION SELECT 7
-                         UNION SELECT 8
-                         UNION SELECT 9
-                         UNION SELECT 10
-                         UNION SELECT 11
-                         UNION SELECT 12) as months'))
-            ->leftJoin('orders', function ($join) use ($year) {
-                $join->on(DB::raw('months.month'), '=', DB::raw('MONTH(orders.created_at)'))
-                    ->where('orders.payment', '=', 1)
-                    ->whereYear('orders.created_at', '=', $year);
-            })
-            ->groupBy('months.month')
-            ->orderBy('months.month')
-            ->get();
-    }
 
 }
