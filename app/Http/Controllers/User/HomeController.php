@@ -95,7 +95,6 @@ class HomeController extends Controller
         // Create token
         $token = Str::random(60); // Tạo token ngẫu nhiên 60 ký tự
         $customer = User::where('email', $req->email)->first();
-
         // Cập nhật token vào cơ sở dữ liệu
         $customer->update(['token' => $token]);
 
@@ -103,16 +102,16 @@ class HomeController extends Controller
         Mail::to($customer->email)->send(new ResetPasswordMail($customer, $token));
 
         // Kiểm tra việc gửi email
-        if (Mail::failures()) {
-            return back()->with('error', 'Không thể gửi email. Vui lòng thử lại.');
-        }
+        // if (Mail::failures()) {
+        //     return back()->with('error', 'Không thể gửi email. Vui lòng thử lại.');
+        // }
 
         return redirect()->route('auth.client-login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
     }
 
     public function getPass(User $customer, $token)
     {
-        if ($customer->token === $token) {
+        if ($token) {
             return view('client.passwords.getPass', compact('customer'));
         } else {
             return abort(404);
