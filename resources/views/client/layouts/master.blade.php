@@ -63,8 +63,6 @@
     <!-- Thêm JS cho noUiSlider -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
     <!-- Thêm vào phần <head> của bạn -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <!-- UIkit JS -->
@@ -113,6 +111,23 @@
             timer: 1500,
             timerProgressBar: true,
         })
+
+        function updateCartCount() {
+            $.ajax({
+                url: '{{ route("cart.count") }}',
+                type: 'GET',
+                success: function(data) {
+
+                    if (data.count > 0) {
+                        $('.cart-count-lable').text(data.count).show();
+                    } else {
+                        $('.cart-count-lable').hide();
+                    }
+                }
+            });
+        }
+
+        updateCartCount();
     </script>
 
     <!-- Main Js -->
@@ -120,6 +135,7 @@
     <script src="{{asset('theme/client/assets/js/main.js')}}"></script>
     <script src="{{ asset('theme/client/library/library.js') }}"></script>
     <script src="{{asset('theme/client/assets/js/review.js')}}"></script>
+
     @yield('scripts')
 </body>
 
