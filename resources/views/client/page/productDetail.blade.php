@@ -41,20 +41,22 @@
                             <div class="single-pro-img single-pro-img-no-sidebar">
                                 <div class="single-product-scroll">
                                     <div class="single-product-cover">
+                                        @if (!empty($galleryImages))
                                         @foreach($galleryImages as $image)
                                         <div class="single-slide zoom-image-hover">
-                                            <img class="img-responsive" src="{{ $image }}"
-                                                alt="{{ $product->name }}">
+                                            <img class="img-responsive" src="{{ $image }}" alt="{{ $product->name }}">
                                         </div>
                                         @endforeach
+                                        @endif
                                     </div>
                                     <div class="single-nav-thumb">
+                                        @if (!empty($galleryImages))
                                         @foreach($galleryImages as $image)
-                                        <div class="single-slide">
-                                            <img class="img-responsive" src="{{ $image }}"
-                                                alt="{{ $product->name }}">
+                                        <div class="single-slide zoom-image-hover">
+                                            <img class="img-responsive" src="{{ $image }}" alt="{{ $product->name }}">
                                         </div>
                                         @endforeach
+                                        @endif
 
                                     </div>
                                 </div>
@@ -65,22 +67,22 @@
                                     <div class="ec-single-rating-wrap">
                                         <div class="ec-single-rating">
                                             @if ($averageScore)
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <=$averageScore)
-                                                        <i class="ecicon eci-star text-warning"></i>
-                                                    @else
-                                                         <i class="ecicon eci-star-o"></i>
-                                                    @endif
-                                                @endfor           
-                                            @else
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <=$averageScore)
+                                                <i class="ecicon eci-star text-warning"></i>
+                                                @else
+                                                <i class="ecicon eci-star-o"></i>
+                                                @endif
+                                                @endfor
+                                                @else
                                                 @for($i = 1; $i <= 5; $i++)
                                                     @if($i <=5)
-                                                        <i class="ecicon eci-star text-warning"></i>
+                                                    <i class="ecicon eci-star text-warning"></i>
                                                     @else
-                                                        <i class="ecicon eci-star-o"></i>
+                                                    <i class="ecicon eci-star-o"></i>
                                                     @endif
-                                                @endfor   
-                                            @endif
+                                                    @endfor
+                                                    @endif
                                         </div>
                                     </div>
 
@@ -206,17 +208,17 @@
                                         @if ($averageScore)
                                         <h4 class="mb-2"> {{ number_format($averageScore, 1) }} trên 5</h4>
                                         @else
-                                            Chưa có đánh giá
+                                        Chưa có đánh giá
                                         @endif
-                                        
+
                                         <div class="ec-t-review-rating">
                                             @for($i = 1; $i <= 5; $i++)
                                                 @if($i <=$averageScore)
-                                                    <i class="ecicon eci-star text-warning"></i>
+                                                <i class="ecicon eci-star text-warning"></i>
                                                 @else
                                                 <i class="ecicon eci-star-o"></i>
                                                 @endif
-                                            @endfor
+                                                @endfor
                                         </div>
                                     </div>
                                 </div>
@@ -239,7 +241,7 @@
                                                             @else
                                                             <i class="ecicon eci-star-o"></i>
                                                             @endif
-                                                        @endfor
+                                                            @endfor
                                                     </div>
                                                 </div>
                                                 <div class="ec-t-review-bottom">
