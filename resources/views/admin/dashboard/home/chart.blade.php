@@ -161,38 +161,41 @@
                             $chartData = [];
                             $labels = []; // Khai báo mảng để chứa nhãn
 
-                            // Kiểm tra lựa chọn thời gian
+// Kiểm tra lựa chọn thời gian
                             $timeFilter = request('choose_time'); // Nhận giá trị từ dropdown
 
-                            // Lấy dữ liệu doanh thu theo thời gian
+// Lấy dữ liệu doanh thu theo thời gian
                             foreach ($results_one as $value) {
-                                $date = strtotime($value['date']);
+                                $date = $value['date']; // Lấy ngày ở định dạng 'Y-W' cho tuần
                                 $doanh_thu = $value['doanh_thu'];
 
-                                // Kiểm tra khoảng thời gian
                                 if ($timeFilter == 'month') {
-                                    $month = date('n', $date);
+                                    // Nếu lọc theo tháng
+                                    $month = date('n', strtotime($date)); // Lấy tháng từ ngày
                                     $chartData[$month] = ($chartData[$month] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo tháng
                                     // Thêm nhãn cho tháng
                                     if (!in_array("Tháng $month", $labels)) {
                                         $labels[] = "Tháng $month";
                                     }
                                 } elseif ($timeFilter == 'week') {
-                                    $week = date('W', $date);
+                                    // Nếu lọc theo tuần
+                                    list($year, $week) = explode('-', $date); // Lấy năm và tuần từ chuỗi
                                     $chartData[$week] = ($chartData[$week] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo tuần
                                     // Thêm nhãn cho tuần
                                     if (!in_array("Tuần $week", $labels)) {
                                         $labels[] = "Tuần $week";
                                     }
                                 } elseif ($timeFilter == 'day') {
-                                    $day = date('j', $date); // Sử dụng 'j' để lấy ngày trong tháng (1-31)
+                                    // Nếu lọc theo ngày
+                                    $day = date('j', strtotime($date)); // Lấy ngày trong tháng (1-31)
                                     $chartData[$day] = ($chartData[$day] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo ngày
                                     // Thêm nhãn cho ngày
                                     if (!in_array("Ngày $day", $labels)) {
                                         $labels[] = "Ngày $day";
                                     }
                                 } elseif ($timeFilter == 'year') {
-                                    $year = date('Y', $date);
+                                    // Nếu lọc theo năm
+                                    $year = date('Y', strtotime($date)); // Lấy năm từ ngày
                                     $chartData[$year] = ($chartData[$year] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo năm
                                     // Thêm nhãn cho năm
                                     if (!in_array("$year", $labels)) {
@@ -201,11 +204,11 @@
                                 }
                             }
 
-                            // Xử lý để đảm bảo dữ liệu cho tất cả các tháng, tuần, ngày hoặc năm
-                            $maxLabels = count($labels); // Sử dụng số nhãn thực tế
-                            for ($i = 1; $i <= $maxLabels; $i++) {
-                                if (!isset($chartData[$i])) {
-                                    $chartData[$i] = 0; // Gán 0 cho các khoảng không có dữ liệu
+// Xử lý để đảm bảo dữ liệu cho tất cả các khoảng thời gian
+                            foreach ($labels as $label) {
+                                $num = (int) filter_var($label, FILTER_SANITIZE_NUMBER_INT); // Lấy số từ nhãn
+                                if (!isset($chartData[$num])) {
+                                    $chartData[$num] = 0; // Gán 0 cho các khoảng không có dữ liệu
                                 }
                             }
                             ?>
@@ -221,10 +224,9 @@
                                             label: 'Doanh thu',
                                             data: [
                                                 <?php
-                                                // Ghi dữ liệu doanh thu dựa trên nhãn
                                                 foreach ($labels as $label) {
-                                                    $day = (int) filter_var($label, FILTER_SANITIZE_NUMBER_INT); // Lấy số từ nhãn
-                                                    echo isset($chartData[$day]) ? $chartData[$day] : 0;
+                                                    $num = (int) filter_var($label, FILTER_SANITIZE_NUMBER_INT); // Lấy số từ nhãn
+                                                    echo isset($chartData[$num]) ? $chartData[$num] : 0;
                                                     echo ($label !== end($labels)) ? ',' : ''; // Thêm dấu phẩy nếu không phải nhãn cuối cùng
                                                 }
                                                 ?>
@@ -243,6 +245,7 @@
                                     }
                                 });
                             </script>
+
                         </div>
                         <div class="col-lg-3">
                             <ul class="stat-list">
