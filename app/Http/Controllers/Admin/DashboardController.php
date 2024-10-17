@@ -74,7 +74,7 @@ class DashboardController extends Controller
 
         // Nếu không có dữ liệu
         if ($monthlyOrders->isEmpty()) {
-            return view('admin.dashboard.layout', compact('template', 'config', 'totalOrders', 'canceledOrders', 'cancellationRate', 'totalCustomers', 'latestOrders', 'latestUser'));
+            return view('admin.dashboard.layout', compact('template', 'config', 'totalOrders', 'canceledOrders', 'cancellationRate', 'totalCustomers', 'latestOrders', 'latestUsers'));
         }
 
         // Lấy dữ liệu tháng mới nhất

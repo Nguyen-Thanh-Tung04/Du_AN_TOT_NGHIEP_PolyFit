@@ -116,7 +116,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 style="padding-top: 5px"> BIỂU ĐỒ DOANH SỐ</h5>
-                    <div class="right">
+                    <div class="right" style="margin-left: 62%">
                         <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST">
                             @csrf
                             <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN</h5>

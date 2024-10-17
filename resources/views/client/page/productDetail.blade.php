@@ -426,6 +426,7 @@
                             showConfirmButton: false,
                             timer: 1000
                         });
+                        updateCartCount();
                     } else {
                         Toast.fire({
                             icon: 'error',

@@ -32,7 +32,7 @@
                 </div>
                 <!-- Header Top social End -->
                 <!-- Header Top Message Start -->
-              
+
 
                 <!-- Header Top responsive Action -->
                 <div class="col d-lg-none ">
@@ -48,17 +48,11 @@
                                 <li><a class="dropdown-item" href="login.html">Login</a></li>
                             </ul>
                         </div>
-                        <!-- Header User End -->
-                        <!-- Header Cart Start -->
-                        <a href="wishlist.html" class="ec-header-btn ec-header-wishlist">
-                            <div class="header-icon"><i class="fi-rr-heart"></i></div>
-                            <span class="ec-header-count">4</span>
-                        </a>
-                        <!-- Header Cart End -->
-                        <!-- Header Cart Start -->
                         <a href="{{route('cart.index')}}" class="ec-header-btn">
                             <div class="header-icon"><i class="fi-rr-shopping-bag"></i></div>
-                            <span class="ec-header-count cart-count-lable">3</span>
+                            @auth
+                            <span class="ec-header-count cart-count-lable" style="display: none;">0</span>
+                            @endauth
                         </a>
                         <!-- Header Cart End -->
                         <a href="javascript:void(0)" class="ec-header-btn ec-sidebar-toggle">
@@ -111,26 +105,28 @@
                             <div class="ec-header-user dropdown">
                                 <button class="dropdown-toggle" data-bs-toggle="dropdown"><i
                                         class="fi-rr-user"></i></button>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
-                                            @auth
-                                                <li><a class="dropdown-item" href="{{ url('/account') }}">Tài khoản</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('/history') }}">Đơn hàng</a></li>
-                                                <li><a class="dropdown-item" href="{{ route('auth.logout') }}">Đăng xuất</a></li>
-                                            @else
-                                                <!-- Hiển thị Đăng nhập và Đăng ký nếu chưa đăng nhập -->
-                                                <li><a class="dropdown-item" href="{{ url('/login') }}">Đăng nhập</a></li>
-                                                <li><a class="dropdown-item" href="{{ url('/register') }}">Đăng ký</a></li>
-                                            @endauth
-                                        </ul>
-                                        
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <!-- Kiểm tra nếu người dùng đã đăng nhập -->
+                                    @auth
+                                    <li><a class="dropdown-item" href="{{ url('/account') }}">Tài khoản</a></li>
+                                    <li><a class="dropdown-item" href="{{ url('/history') }}">Đơn hàng</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('auth.logout') }}">Đăng xuất</a></li>
+                                    @else
+                                    <!-- Hiển thị Đăng nhập và Đăng ký nếu chưa đăng nhập -->
+                                    <li><a class="dropdown-item" href="{{ url('/login') }}">Đăng nhập</a></li>
+                                    <li><a class="dropdown-item" href="{{ url('/register') }}">Đăng ký</a></li>
+                                    @endauth
+                                </ul>
+
                             </div>
                             <!-- Header User End -->
 
                             <!-- Header Cart Start -->
                             <a href="{{route('cart.index')}}" class="ec-header-btn">
                                 <div class="header-icon"><i class="fi-rr-shopping-bag"></i></div>
-                                <span class="ec-header-count cart-count-lable">3</span>
+                                @auth
+                                <span class="ec-header-count cart-count-lable" style="display: none;">0</span>
+                                @endauth
                             </a>
                             <!-- Header Cart End -->
                         </div>
@@ -141,7 +137,7 @@
     </div>
     <!-- Ec Header Button End -->
     <!-- Header responsive Bottom  Start -->
-    <div class="ec-header-bottom d-lg-none">
+    <div class=" ec-header-bottom d-lg-none">
         <div class="container position-relative">
             <div class="row ">
 

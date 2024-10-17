@@ -65,9 +65,7 @@ Route::get('/contact', function () {
 Route::get('/account', function () {
     return view('client.page.profile');
 });
-// Route::get('/cart', function () {
-//     return view('client.page.cart');
-// })->name('cart');
+
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
     ->middleware('checkLoginClient')
     ->name('checkout.show');
@@ -84,11 +82,11 @@ Route::post('/order/store', [CheckoutController::class, 'orderStore'])
     ->middleware('checkLoginClient')
     ->name('order.store');
 Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
-->middleware('checkLoginClient')
-->name('order.show');
+    ->middleware('checkLoginClient')
+    ->name('order.show');
 Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
-->middleware('checkLoginClient')
-->name('vnpay.payment');
+    ->middleware('checkLoginClient')
+    ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 
 // BACKEND ROUTES
@@ -335,6 +333,7 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
     Route::delete('/delete', [CartController::class, 'deleteCartItem'])->name('delete');
     Route::get('/calculate', [CartController::class, 'calculateTotal'])->name('calculate');
     Route::post('/save-selected', [CartController::class, 'saveSelectedItems'])->name('selected');
+    Route::get('/count', [CartController::class, 'countCartItems'])->name('count');
 });
 
 

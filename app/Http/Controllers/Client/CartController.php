@@ -72,6 +72,15 @@ class CartController extends Controller
         ]);
     }
 
+    public function countCartItems()
+    {
+        $count = 0;
+
+        $count = Cart::where('user_id', Auth::id())->count();
+
+        return response()->json(['count' => $count]);
+    }
+
     public function saveSelectedItems(Request $request)
     {
         $selectedItems = $request->input('selected_items', []);

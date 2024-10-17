@@ -319,6 +319,7 @@
                             $('#selectAll').prop('checked', false);
                         }
                         calculateTotal();
+                        updateCartCount();
                     } else {
                         Toast.fire({
                             icon: 'error',
