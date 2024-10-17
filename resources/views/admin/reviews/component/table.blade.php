@@ -25,7 +25,7 @@
                 <td>
                     <input type="checkbox" value="{{ $review->id }}" class="input-checkbox checkBoxItem">
                 </td>
-                <td class="text-center">{{ $review->order->id }}</td> 
+                <td class="text-center">{{ $review->order->code }}</td> 
                 <td class="text-center">{{ $review->email }}</td>
                 <td class="text-center">{{ $review->content }}</td>
                 <td class="text-center">{{ $review->score }}</td>

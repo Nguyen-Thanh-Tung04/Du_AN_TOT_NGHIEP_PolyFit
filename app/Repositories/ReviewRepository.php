@@ -53,7 +53,7 @@ class ReviewRepository implements ReviewInterface
         // Thêm điều kiện tìm kiếm vào query
         if (!empty($conditions['keyword'])) {
             $query->where(function ($q) use ($conditions) {
-                $q->where('orders.id', 'like', '%' . $conditions['keyword'] . '%')
+                $q->where('orders.code', 'like', '%' . $conditions['keyword'] . '%')
                     ->orWhere('users.email', 'like', '%' . $conditions['keyword'] . '%');
             });
         }
