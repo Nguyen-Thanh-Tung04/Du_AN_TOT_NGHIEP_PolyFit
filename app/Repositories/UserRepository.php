@@ -3,18 +3,17 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
 use Faker\Provider\Base;
 
 /**
  * Class UserRepository
  * @package App\Repositories
  */
-class UserRepository implements UserRepositoryInterface
+class UserRepository
 {
 
     public function pagination(
-        array $column = ['*'], 
+        array $column = ['*'],
         array $condition = [],
         int $perpage = 1,
         array $extend = [],
@@ -32,6 +31,7 @@ class UserRepository implements UserRepositoryInterface
                 } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
                     $query->where('publish', '=', '2');
                 }
+                $query->where('user_catalogue_id', '>', 0);
                 return $query;
             })->with('user_catalogues');
 

@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Size extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
     ];
+
+    protected $table = 'sizes';
+
+    public function variants() {
+        return $this->hasMany(Variant::class, 'size_id', 'id');
+    }
 }

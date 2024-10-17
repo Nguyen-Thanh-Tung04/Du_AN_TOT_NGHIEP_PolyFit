@@ -3,18 +3,52 @@
 return [
     'module' => [
         [
-            'title' => 'QL Người dùng',
+            'title' => 'Quản lý Tài Khoản',
             'icon' => 'fa fa-dashboard',
             'name' => ['user'],
             'subModule' => [
                 [
-                    'title' => 'QL Vai Trò',
+                    'title' => 'Quản lý Vai Trò',
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL Người dùng',
+                    'title' => 'Quản lý Thành Viên',
                     'route' => 'user/index',
                 ],
+                [
+                    'title' => 'Quản lý Khách Hàng',
+                    'route' => 'member/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Quản lý Danh mục',
+            'icon' => 'fa fa-sitemap',
+            'name' => ['category'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý Danh Mục',
+                    'route' => 'categories/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Quản lý Sản Phẩm',
+            'icon' => 'fa fa-dashboard',
+            'name' => ['product'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý Sản Phẩm',
+                    'route' => 'product/index',
+                ],
+                [
+                    'title' => 'Quản lý Màu Sắc',
+                    'route' => 'product/color/index',
+                ],
+                [
+                    'title' => 'Quản lý Kích Cỡ',
+                    'route' => 'product/size/index',
+                ]
             ],
         ],
         [
@@ -29,15 +63,39 @@ return [
             ],
         ],
         [
-            'title' => 'QL Danh mục',
-            'icon' => 'fa fa-sitemap',
-            'name' => ['category'],
+            'title' => 'Quản lý Khuyến ',
+            'icon' => 'fa fa-money',
+            'name' => ['vouchers'],
             'subModule' => [
                 [
-                    'title' => 'QL Danh Mục',
-                    'route' => 'categories/index',
+                    'title' => 'Quản lý Voucher',
+                    'route' => 'vouchers/index',
                 ],
             ],
         ],
-    ],
+
+        [
+            'title' => 'Quản lý đánh giá',
+            'icon' => 'fa fa-money',
+            'name' => ['reviews'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý đánh giá',
+                    'route' => 'reviews/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Quản lý Đơn hàng',
+            'icon' => 'fa fa-money',
+            'name' => ['orders'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý Đơn hàng',
+                    'route' => 'orders/index',
+                ],
+            ],
+        ]
+
+    ]
 ];

@@ -20,7 +20,7 @@
                     @endphp
                     <select name="publish" class="form-control mr-10 setupSelect2">
                         @foreach (config('apps.general.publish') as $key => $val)
-                            <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>   
+                            <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
                         @endforeach
                     </select>
                     <select name="user_catalogue_id" class="form-control mr-10 setupSelect2">
@@ -45,5 +45,5 @@
             </div>
         </div>
     </div>
-    
+
 </form>

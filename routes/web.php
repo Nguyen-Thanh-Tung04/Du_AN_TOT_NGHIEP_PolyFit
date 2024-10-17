@@ -1,17 +1,33 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductColorController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\Admin\UserCatalogueController;
-
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Ajax\LocationController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ClientProductController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ShopController;
+use App\Http\Controllers\Client\ProductCatalogueController;
+use App\Http\Controllers\admin\ReviewController;
+use App\Http\Controllers\Client\OrderHistoryController;
+use App\Models\Cart;
+use App\Models\Category;
+
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -30,18 +46,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'welcome']);
-
+Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/shop', [ShopController::class,'shop']
-);
+// Route::get('/shop', [ShopController::class,'shop']
+// );
 Route::get('/history', function () {
     return view('client.page.history');
 });
 Route::get('/product_detail', function () {
-    return view('client.page.product-detail');
+    return view('client.page.productDetail');
 });
 Route::get('/contact', function () {
     return view('client.page.contact');
@@ -61,6 +76,30 @@ Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');
 
+Route::get('/account', function () {
+    return view('client.page.profile');
+});
+// Route::get('/cart', function () {
+//     return view('client.page.cart');
+// })->name('cart');
+Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.show');
+Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.process');
+Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.applyVoucher');
+Route::post('/checkout/available-vouchers', [CheckoutController::class, 'getAvailableVouchers'])
+    ->middleware('checkLoginClient')
+    ->name('checkout.availableVouchers');
+Route::post('/order/store', [CheckoutController::class, 'orderStore'])
+    ->middleware('checkLoginClient')
+    ->name('order.store');
+Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
+    ->middleware('checkLoginClient')
+    ->name('order.show');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -86,7 +125,24 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
     Route::delete('{id}/destroy', [UserController::class, 'destroy'])
         ->name('destroy');
 });
-
+Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [MemberController::class, 'index'])
+        ->name('index');
+    Route::get('create', [MemberController::class, 'create'])
+        ->name('create');
+    Route::post('store', [MemberController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [MemberController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/edit', [MemberController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [MemberController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [MemberController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
+        ->name('destroy');
+});
 Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])
         ->name('index');
@@ -105,16 +161,32 @@ Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(f
 });
 
 // AUTH
-Route::get('login', [AuthController::class, 'index'])
+// Login client
+Route::get('login', [AuthController::class, 'login'])
+    ->name('auth.client-login');
+Route::post('login-client', [AuthController::class, 'loginclient'])
+    ->name('auth.login-client');
+
+// Login admin
+Route::get('admin-login', [AuthController::class, 'index'])
     ->name('auth.login');
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');
+// Quên mật khẩu
+Route::get('forget-password', [AuthController::class, 'forget'])->name('auth.forgot');
+Route::post('forget-password', [AuthController::class, 'postForgetPass']);
 
-Route::get('register', [AuthController::class, 'showFormRegister']);
+// Nhập lại mật khẩu
+Route::get('get-password/{customer}/{token}', [AuthController::class, 'getPass'])->name('auth.forgot');
+Route::post('get-password/{customer}/{token}', [AuthController::class, 'postPass']);
+
+Route::get('register', [AuthController::class, 'showFormRegister'])->name('auth.client.register');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
 
 // AJAX
 Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])
@@ -165,3 +237,113 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+// reviews
+Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [ReviewController::class, 'index'])->name('index');
+
+    Route::get('{id}/edit', [ReviewController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [ReviewController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [ReviewController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [ReviewController::class, 'destroy'])
+        ->name('destroy');
+});
+// Review reply
+Route::post('reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply');
+
+// voucher
+Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [VoucherController::class, 'index'])->name('index');
+    Route::get('create', [VoucherController::class, 'create'])->name('create');
+    Route::post('store', [VoucherController::class, 'store'])->name('store');
+    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit');
+    Route::put('{voucher}/update', [VoucherController::class, 'update'])->name('update');
+    Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
+    Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
+});
+Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
+    Route::get('index',                 [OrderController::class, 'index'])->name('index');
+    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
+});
+Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
+Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+
+
+
+// Products
+Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [ProductController::class, 'index'])
+        ->name('index');
+    Route::get('{id}/detail', [ProductController::class, 'detail'])
+        ->name('detail');
+    Route::get('create', [ProductController::class, 'create'])
+        ->name('create');
+    Route::post('store', [ProductController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [ProductController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [ProductController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [ProductController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
+        ->name('destroy');
+    Route::delete('{id}/destroyVariant', [ProductController::class, 'destroyVariantDetail'])
+        ->name('destroyVariant');
+
+    Route::prefix('size')->name('size.')->group(function () {
+        Route::get('index', [ProductSizeController::class, 'index'])
+            ->name('index');
+        Route::get('create', [ProductSizeController::class, 'create'])
+            ->name('create');
+        Route::post('store', [ProductSizeController::class, 'store'])
+            ->name('store');
+        Route::get('{id}/edit', [ProductSizeController::class, 'edit'])
+            ->name('edit');
+        Route::post('{id}/update', [ProductSizeController::class, 'update'])
+            ->name('update');
+        Route::get('{id}/delete', [ProductSizeController::class, 'delete'])
+            ->name('delete');
+        Route::delete('{id}/destroy', [ProductSizeController::class, 'destroy'])
+            ->name('destroy');
+    });
+
+    Route::prefix('color')->name('color.')->group(function () {
+        Route::get('index', [ProductColorController::class, 'index'])
+            ->name('index');
+        Route::get('create', [ProductColorController::class, 'create'])
+            ->name('create');
+        Route::post('store', [ProductColorController::class, 'store'])
+            ->name('store');
+        Route::get('{id}/edit', [ProductColorController::class, 'edit'])
+            ->name('edit');
+        Route::post('{id}/update', [ProductColorController::class, 'update'])
+            ->name('update');
+        Route::get('{id}/delete', [ProductColorController::class, 'delete'])
+            ->name('delete');
+        Route::delete('{id}/destroy', [ProductColorController::class, 'destroy'])
+            ->name('destroy');
+    });
+});
+
+Route::get('/product/variant-details', [ClientProductController::class, 'getVariantDetails'])->name('client.product.variant');
+Route::get('/product/{id}', [ClientProductController::class, 'show'])->name('client.product.show');
+
+Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(function () {
+    Route::get('', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'addToCart'])->name('add');
+    Route::put('/update', [CartController::class, 'updateCart'])->name('update');
+    Route::delete('/delete', [CartController::class, 'deleteCartItem'])->name('delete');
+    Route::get('/calculate', [CartController::class, 'calculateTotal'])->name('calculate');
+    Route::post('/save-selected', [CartController::class, 'saveSelectedItems'])->name('selected');
+});
+
+
+Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
+//Reviews
+Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);

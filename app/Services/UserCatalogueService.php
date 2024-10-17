@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\UserCatalogueRepository;
+use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +36,7 @@ class UserCatalogueService
             'description',
             'publish',
         ], $condition, $perPage, ['path' => 'user/index']);
-        
+
         return $userCatalogues;
     }
 
@@ -119,7 +119,7 @@ class UserCatalogueService
     }
 
     private function changeUserStatus($post, $value) {
-        
+
         DB::beginTransaction();
         try {
             $array = [];
@@ -141,6 +141,6 @@ class UserCatalogueService
         }
     }
 
-    
-    
+
+
 }

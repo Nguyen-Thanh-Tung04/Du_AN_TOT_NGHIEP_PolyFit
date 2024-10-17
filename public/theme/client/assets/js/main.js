@@ -603,7 +603,7 @@ function ecCheckCookie() {
                 QtynewVal = 1;
             }
         }
-        $qtybutton.parent().find("input").val(QtynewVal);
+        $qtybutton.parent().find("input").val(QtynewVal).trigger('change');
     });
 
     /*----------------------------- Single Product Slider ---------------------------------*/
@@ -1299,7 +1299,7 @@ function ecCheckCookie() {
                 CartQtynewVal = 1;
             }
         }
-        $cartqtybutton.parent().parent().find("input").val(CartQtynewVal);
+        $cartqtybutton.parent().parent().find("input").val(CartQtynewVal).trigger('change');
     });
 
     /*----------------------------- Cart  Shipping Toggle -------------------------------- */

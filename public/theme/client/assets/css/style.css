@@ -16047,7 +16047,6 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   font-family: "Montserrat, sans-serif";
-  font-weight: 300;
   top: 0 !important;
 }
 
@@ -16056,7 +16055,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat";
+  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 /*----  Section  ----*/
@@ -16218,7 +16217,7 @@ h6 {
 }
 
 .section-title .ec-title {
-  font-family: "Montserrat";
+  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 30px;
   font-weight: 800;
   margin-bottom: 7px;
@@ -19639,7 +19638,7 @@ body.ec-open:before {
 .ec-side-cart .ec-cart-inner .ec-cart-title .cart_title {
   font-size: 17px;
   color: #555;
-  font-family: "Montserrat";
+  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: 600;
 }
 
@@ -21395,7 +21394,7 @@ section.ec-test-section {
 }
 
 .ec-test-section .ec-test-name {
-  font-family: "Montserrat";
+  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -21614,7 +21613,7 @@ section.ec-instagram-section {
 }
 
 .ec-footer .footer-top .ec-footer-widget .ec-footer-heading {
-  font-family: "Montserrat";
+  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 11px;
@@ -22834,10 +22833,10 @@ select::-ms-expand {
   letter-spacing: 0.4px;
 }
 
-.ec-sidebar-wrap .ec-sb-block-content {
+/* .ec-sidebar-wrap .ec-sb-block-content {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 10px;
-}
+} */
 
 .ec-sidebar-wrap .ec-sb-block-content li a span {
   float: right;
@@ -26793,6 +26792,16 @@ i.ecicon.eci-star-o {
 }
 
 .ec-checkout-wrap .ec-check-bill-form form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  margin: 0 -15px;
+}
+.ec-checkout-wrap .ec-check-bill-form .form-flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

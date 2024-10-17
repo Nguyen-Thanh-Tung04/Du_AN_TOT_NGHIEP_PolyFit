@@ -10,20 +10,21 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id',
         'name',
         'code',
+        'gallery',
         'description',
-        'status'
+        'status',
+        'category_id',
     ];
-    public function category(){
-        return $this->belongsTo(Category::class);
-    }
-    public function size(){
-        return $this->belongsTo(Size::class);
-    }
-    public function color(){
-        return $this->belongsTo(Color::class);
+
+    protected $table = 'products';
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
+    public function variants() {
+        return $this->hasMany(Variant::class, 'product_id', 'id');
+    }
 }

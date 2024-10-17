@@ -16,13 +16,16 @@
             <div class="action">
                 <div class="uk-flex uk-flex-middle">
                     @php
-                        $publish = request('publish') ?: old('publish');
-                    @endphp
-                    <select name="publish" class="form-control mr-10 setupSelect2">
-                        @foreach (config('apps.general.publish') as $key => $val)
-                            <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>   
-                        @endforeach
-                    </select>
+                    // Lấy giá trị từ request hoặc giá trị cũ, nếu không có thì mặc định là ''
+                    $is_active = request('is_active') ?: old('is_active', '');
+                @endphp
+                
+                <select name="is_active" class="form-control mr-10 setupSelect2">
+                    @foreach (config('apps.general.is_active') ?? [] as $key => $val)
+                        <option {{ ($is_active === (string)$key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
+                    @endforeach
+                </select>
+                
                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
                         <div class="input-group">
                             <input type="text"
