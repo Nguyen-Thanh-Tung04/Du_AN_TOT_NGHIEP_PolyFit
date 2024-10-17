@@ -16,6 +16,7 @@ class Order extends Model
     const STATUS_DANG_VAN_CHUYEN = 4;
     const STATUS_DA_GIAO_HANG = 5;
     const STATUS_HUY_DON_HANG = 6;
+    // const STATUS_CHO_XAC_NHAN_HUY = 7;
 
     const STATUS_NAMES = [
         self::STATUS_CHO_XAC_NHAN => 'Chờ xác nhận',
@@ -24,6 +25,7 @@ class Order extends Model
         self::STATUS_DANG_VAN_CHUYEN => 'Đang vận chuyển',
         self::STATUS_DA_GIAO_HANG => 'Đã giao hàng',
         self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
+        // self::STATUS_CHO_XAC_NHAN_HUY => 'Chờ xác nhận hủy',
     ];
     const PAYMENT_METHOD_COD = 1;
     const PAYMENT_METHOD_ONLINE = 2;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -83,7 +84,7 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'previous_status' => $order->status,
             'new_status' => $request->status,
-            'cancel_reason' => $request->cancel_reason, 
+            'cancel_reason' => $request->cancel_reason,
             'changed_by' => auth()->id(),
             'changed_at' => now(),
         ]);
@@ -109,4 +110,40 @@ class OrderController extends Controller
         }
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
     }
+    // public function confirmCancellation(Request $request, string $id)
+    // {
+    //     $donHang = Order::findOrFail($id);
+
+        
+    //     $request->validate([
+    //         'cancel_reason' => 'required|string|max:255',
+    //     ]);
+
+    //     DB::beginTransaction();
+
+    //     try {
+    //         if ($donHang->status === Order::STATUS_CHO_XAC_NHAN_HUY) {
+    //             $previousStatus = $donHang->status; // Lưu trạng thái trước khi cập nhật
+
+    //             $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
+
+    //             OrderStatusHistory::create([
+    //                 'order_id' => $donHang->id,
+    //                 'previous_status' => $previousStatus,
+    //                 'new_status' => Order::STATUS_HUY_DON_HANG,
+    //                 'cancel_reason' => $request->cancel_reason, // Lưu lý do hủy
+    //                 'changed_by' => auth()->id(),
+    //             ]);
+    //         } else {
+    //             return redirect()->back()->withErrors(['msg' => 'Đơn hàng không ở trạng thái "Chờ xác nhận hủy".']);
+    //         }
+
+    //         DB::commit();
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return redirect()->back()->withErrors(['msg' => 'Có lỗi xảy ra trong quá trình xác nhận hủy đơn hàng: ' . $e->getMessage()]);
+    //     }
+
+    //     return redirect()->back()->with('success', 'Đã xác nhận hủy đơn hàng.');
+    // }
 }

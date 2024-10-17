@@ -62,6 +62,9 @@
 
     <!-- Thêm JS cho noUiSlider -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <!-- Thêm vào phần <head> của bạn -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <!-- UIkit JS -->
