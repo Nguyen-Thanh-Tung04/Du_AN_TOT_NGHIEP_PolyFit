@@ -55,16 +55,12 @@ class ReviewController extends Controller
                 'success' => true,
                 'message' => 'Đánh giá của bạn đã được lưu.',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in review submission: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đã xảy ra lỗi khi lưu đánh giá.',
-                'error' => $e->getMessage(),
-            ], 500);
+                'message' => 'Dữ liệu nhập vào không hợp lệ.',
+                'errors' => $e->errors(),
+            ], 422);
         }
     }
     public function getReviews($orderId)

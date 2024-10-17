@@ -84,7 +84,7 @@
                     <!-- Ec Header Logo Start -->
                     <div class="align-self-center">
                         <div class="header-logo">
-                            <a href="index.html"><img src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo" /><img
+                            <a href="{{ url('/') }}"><img src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo" /><img
                                     class="dark-logo" src="{{asset('theme/client/assets/images/logo/logo1.png')}}" alt="Site Logo"
                                     style="display: none;" /></a>
                         </div>

@@ -46,7 +46,7 @@
                         <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
+                            <button type="submit" class="btn btn-danger btn-delete" >
                                 <i class="fa fa-trash"></i>
                             </button>
                         </form>
