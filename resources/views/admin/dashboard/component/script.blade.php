@@ -23,80 +23,107 @@
         @endforeach
     @endif
 
-     <script>
-         $(document).ready(function() {
-             var data = [
-                 [1, 700000], // Tháng 1
-                 [2, 950000], // Tháng 2
-                 [3, 0],      // Tháng 3
-                 [4, 119900],      // Tháng 4
-                 [5, 0],      // Tháng 5
-                 [6, 0],      // Tháng 6
-                 [7, 0],      // Tháng 7
-                 [8, 0],      // Tháng 8
-                 [9, 0],      // Tháng 9
-                 [10, 0],     // Tháng 10
-                 [11, 0],     // Tháng 11
-                 [12, 0]      // Tháng 12
-             ];
 
-             var dataset = [
-                 {
-                     label: "Doanh thu",
-                     text: "center",
-                     data: data,
-                     color: "#1ab394",
-                     bars: {
-                         show: true,
-                         align: "center",
-                         barWidth: 0.5,
-                         lineWidth: 1,
-                         fill: true,
-                         fillColor: {
-                             colors: [
-                                 { opacity: 0.8 },
-                                 { opacity: 0.1 }
-                             ]
-                         }
-                     }
-                 }
-             ];
+    <!-- Toastr script -->
+    <script src="admin/js/plugins/toastr/toastr.min.js"></script>
 
-             var options = {
-                 xaxis: {
-                     ticks: [
-                         [1, "Tháng 1"], [2, "Tháng 2"], [3, "Tháng 3"], [4, "Tháng 4"], [5, "Tháng 5"],
-                         [6, "Tháng 6"], [7, "Tháng 7"], [8, "Tháng 8"], [9, "Tháng 9"], [10, "Tháng 10"],
-                         [11, "Tháng 11"], [12, "Tháng 12"]
-                     ],
-                     color: "#d5d5d5"
-                 },
-                 yaxis: {
-                     min: 0,
-                     max: 1000000,
-                     color: "#d5d5d5"
-                 },
-                 legend: {
-                     labelBoxBorderColor: "#000000",
-                     position: "nw"
-                 },
-                 grid: {
-                     hoverable: true,
-                     borderWidth: 0,
-                     color: "#f0f0f0"
-                 },
-                 tooltip: true,
-                 tooltipOpts: {
-                     content: "%s: %y.0",
-                     shifts: {
-                         x: -60,
-                         y: 25
-                     },
-                     defaultTheme: false
-                 }
-             };
+    <script type="text/javascript">
+        $(function () {
+            var i = -1;
+            var toastCount = 0;
+            var $toastlast;
+            var getMessage = function () {
+                var msg = 'Hi, welcome to Inspinia. This is example of Toastr notification box.';
+                return msg;
+            };
 
-             $.plot($("#flot-dashboard-chart"), dataset, options);
-         });
-
-     </script>
+            $('#showsimple').click(function (){
+                // Display a success toast, with a title
+                toastr.success('Without any options','Simple notification!')
+            });
+            $('#showtoast').click(function () {
+                var shortCutFunction = $("#toastTypeGroup input:radio:checked").val();
+                var msg = $('#message').val();
+                var title = $('#title').val() || '';
+                var $showDuration = $('#showDuration');
+                var $hideDuration = $('#hideDuration');
+                var $timeOut = $('#timeOut');
+                var $extendedTimeOut = $('#extendedTimeOut');
+                var $showEasing = $('#showEasing');
+                var $hideEasing = $('#hideEasing');
+                var $showMethod = $('#showMethod');
+                var $hideMethod = $('#hideMethod');
+                var toastIndex = toastCount++;
+                toastr.options = {
+                    closeButton: $('#closeButton').prop('checked'),
+                    debug: $('#debugInfo').prop('checked'),
+                    progressBar: $('#progressBar').prop('checked'),
+                    preventDuplicates: $('#preventDuplicates').prop('checked'),
+                    positionClass: $('#positionGroup input:radio:checked').val() || 'toast-top-right',
+                    onclick: null
+                };
+                if ($('#addBehaviorOnToastClick').prop('checked')) {
+                    toastr.options.onclick = function () {
+                        alert('You can perform some custom action after a toast goes away');
+                    };
+                }
+                if ($showDuration.val().length) {
+                    toastr.options.showDuration = $showDuration.val();
+                }
+                if ($hideDuration.val().length) {
+                    toastr.options.hideDuration = $hideDuration.val();
+                }
+                if ($timeOut.val().length) {
+                    toastr.options.timeOut = $timeOut.val();
+                }
+                if ($extendedTimeOut.val().length) {
+                    toastr.options.extendedTimeOut = $extendedTimeOut.val();
+                }
+                if ($showEasing.val().length) {
+                    toastr.options.showEasing = $showEasing.val();
+                }
+                if ($hideEasing.val().length) {
+                    toastr.options.hideEasing = $hideEasing.val();
+                }
+                if ($showMethod.val().length) {
+                    toastr.options.showMethod = $showMethod.val();
+                }
+                if ($hideMethod.val().length) {
+                    toastr.options.hideMethod = $hideMethod.val();
+                }
+                if (!msg) {
+                    msg = getMessage();
+                }
+                $("#toastrOptions").text("Command: toastr["
+                    + shortCutFunction
+                    + "](\""
+                    + msg
+                    + (title ? "\", \"" + title : '')
+                    + "\")\n\ntoastr.options = "
+                    + JSON.stringify(toastr.options, null, 2)
+                );
+                var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+                $toastlast = $toast;
+                if ($toast.find('#okBtn').length) {
+                    $toast.delegate('#okBtn', 'click', function () {
+                        alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                        $toast.remove();
+                    });
+                }
+                if ($toast.find('#surpriseBtn').length) {
+                    $toast.delegate('#surpriseBtn', 'click', function () {
+                        alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+                    });
+                }
+            });
+            function getLastToast(){
+                return $toastlast;
+            }
+            $('#clearlasttoast').click(function () {
+                toastr.clear(getLastToast());
+            });
+            $('#cleartoasts').click(function () {
+                toastr.clear();
+            });
+        })
+    </script>

@@ -29,7 +29,7 @@ table .image {
     object-fit: cover;
 }
 table strong {
-    min-width: 88px;
+    min-width: 18px;
     display: inline-block;
 }
 

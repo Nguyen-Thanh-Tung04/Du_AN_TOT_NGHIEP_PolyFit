@@ -21,6 +21,7 @@
         });
     </script>
 @endif
+
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-3">
@@ -44,7 +45,7 @@
                     </div>
 
                     <small>
-{{--                        @dd($results)--}}
+                        {{--                        @dd($results)--}}
                         @if(isset($results[0]['growth']))
                             @if($results[0]['growth'] > 0)
                                 Tăng so với tháng trước
@@ -139,18 +140,60 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-9">
-                            <div>
+                            <div style="height: 400px; width: 100%;">
                                 <canvas id="myChart"></canvas>
                             </div>
-                            <?php
-                            // Giả sử $results đã được khai báo và chứa dữ liệu của bạn
-                            $chartData = array_fill(1, 12, 0); // Khởi tạo tất cả tháng với giá trị 0
 
-                            // Giả sử $results chứa dữ liệu doanh thu cho từng tháng
-                            foreach ($results as $result) {
-                                $month = (int)$results[0]['month']; // Lấy số tháng từ ngày
-                                $doanh_thu = $result['total_revenue']; // Doanh thu từ kết quả
-                                $chartData[$month] += $doanh_thu; // Cộng dồn doanh thu cho tháng tương ứng
+                            <?php
+                            $chartData = [];
+                            $labels = []; // Khai báo mảng để chứa nhãn
+
+                            // Kiểm tra lựa chọn thời gian
+                            $timeFilter = request('choose_time'); // Nhận giá trị từ dropdown
+
+                            // Lấy dữ liệu doanh thu theo thời gian
+                            foreach ($results_one as $value) {
+                                $date = strtotime($value['date']);
+                                $doanh_thu = $value['doanh_thu'];
+
+                                // Kiểm tra khoảng thời gian
+                                if ($timeFilter == 'month') {
+                                    $month = date('n', $date);
+                                    $chartData[$month] = ($chartData[$month] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo tháng
+                                    // Thêm nhãn cho tháng
+                                    if (!in_array("Tháng $month", $labels)) {
+                                        $labels[] = "Tháng $month";
+                                    }
+                                } elseif ($timeFilter == 'week') {
+                                    $week = date('W', $date);
+                                    $chartData[$week] = ($chartData[$week] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo tuần
+                                    // Thêm nhãn cho tuần
+                                    if (!in_array("Tuần $week", $labels)) {
+                                        $labels[] = "Tuần $week";
+                                    }
+                                } elseif ($timeFilter == 'day') {
+                                    $day = date('j', $date); // Sử dụng 'j' để lấy ngày trong tháng (1-31)
+                                    $chartData[$day] = ($chartData[$day] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo ngày
+                                    // Thêm nhãn cho ngày
+                                    if (!in_array("Ngày $day", $labels)) {
+                                        $labels[] = "Ngày $day";
+                                    }
+                                } elseif ($timeFilter == 'year') {
+                                    $year = date('Y', $date);
+                                    $chartData[$year] = ($chartData[$year] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo năm
+                                    // Thêm nhãn cho năm
+                                    if (!in_array("$year", $labels)) {
+                                        $labels[] = "$year";
+                                    }
+                                }
+                            }
+
+                            // Xử lý để đảm bảo dữ liệu cho tất cả các tháng, tuần, ngày hoặc năm
+                            $maxLabels = count($labels); // Sử dụng số nhãn thực tế
+                            for ($i = 1; $i <= $maxLabels; $i++) {
+                                if (!isset($chartData[$i])) {
+                                    $chartData[$i] = 0; // Gán 0 cho các khoảng không có dữ liệu
+                                }
                             }
                             ?>
 
@@ -160,17 +203,18 @@
                                 new Chart(ctx, {
                                     type: 'bar',
                                     data: {
-                                        labels: [
-                                            'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5',
-                                            'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10',
-                                            'Tháng 11', 'Tháng 12'
-                                        ],
+                                        labels: <?= json_encode($labels) ?>, // Sử dụng mảng nhãn
                                         datasets: [{
                                             label: 'Doanh thu',
                                             data: [
-                                                <?php for ($i = 1; $i <= 12; $i++): ?>
-                                                    <?= $chartData[$i] ?><?= $i < 12 ? ',' : '' ?>
-                                                <?php endfor; ?>
+                                                <?php
+                                                // Ghi dữ liệu doanh thu dựa trên nhãn
+                                                foreach ($labels as $label) {
+                                                    $day = (int) filter_var($label, FILTER_SANITIZE_NUMBER_INT); // Lấy số từ nhãn
+                                                    echo isset($chartData[$day]) ? $chartData[$day] : 0;
+                                                    echo ($label !== end($labels)) ? ',' : ''; // Thêm dấu phẩy nếu không phải nhãn cuối cùng
+                                                }
+                                                ?>
                                             ],
                                             borderWidth: 0.2,
                                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -193,14 +237,14 @@
                                     @php
                                         // Tính tổng số đơn hàng từ dữ liệu mới gửi lên nếu có
                                         $totalOrders1 = isset($results_one) ? collect($results_one)->sum('so_luong_don_hang') : 0;
-
-                                        // Kiểm tra nếu đã có tổng số đơn hàng mặc định
-                                        $totalOrders = isset($totalOrders) ? $totalOrders : 0;
-
-                                        // Quyết định hiển thị giá trị nào
-                                        $displayTotalOrders = $totalOrders1 > 0 ? $totalOrders1 : $totalOrders;
+//
+//                                        // Kiểm tra nếu đã có tổng số đơn hàng mặc định
+//                                        $totalOrders = isset($totalOrders) ? $totalOrders : 0;
+//
+//                                        // Quyết định hiển thị giá trị nào
+//                                        $displayTotalOrders = $totalOrders1 > 0 ? $totalOrders1 : $totalOrders;
                                     @endphp
-                                    <h2 class="no-margins">{{ $displayTotalOrders }}</h2>
+                                    <h2 class="no-margins">{{ $totalOrders1 }}</h2>
                                     <small>Tổng số đơn đặt hàng</small>
                                     <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
                                     <div class="progress progress-mini">
@@ -211,10 +255,10 @@
                                 <li>
                                     @php
                                         $totalCancelOrders = isset($results_one) ? collect($results_one)->sum('tong_so_don_hang_huy') : 0; // Tính tổng số đơn hàng đã hủy
-                                        $canceledOrders = isset($canceledOrders) ? $canceledOrders : 0;
-                                        $TotalCancelOrders = $totalCancelOrders > 0 ? $totalCancelOrders : $canceledOrders;
+//                                        $canceledOrders = isset($canceledOrders) ? $canceledOrders : 0;
+//                                        $TotalCancelOrders = $totalCancelOrders > 0 ? $totalCancelOrders : $canceledOrders;
                                     @endphp
-                                    <h2 class="no-margins">{{ $TotalCancelOrders }}</h2>
+                                    <h2 class="no-margins">{{ $totalCancelOrders }}</h2>
                                     <small>Tổng số đơn hàng đã hủy</small>
                                     <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i></div>
                                     <div class="progress progress-mini">
@@ -225,13 +269,13 @@
                                     @php
                                         $totalRevenue = isset($results_one) ? collect($results_one)->sum('doanh_thu') : 0; // Tính tổng doanh thu
 
-                                        // Kiểm tra nếu đã có tổng số doanh thu mặc định
-                                        $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00'; // Đã thêm dấu chấm phẩy
-
-                                        // Quyết định hiển thị giá trị nào
-                                        $displayTotalRevenue = $totalRevenue > 0 ? $totalRevenue : $totalRevenue_month;
+//                                        // Kiểm tra nếu đã có tổng số doanh thu mặc định
+//                                        $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00'; // Đã thêm dấu chấm phẩy
+//
+//                                        // Quyết định hiển thị giá trị nào
+//                                        $displayTotalRevenue = $totalRevenue > 0 ? $totalRevenue : $totalRevenue_month;
                                     @endphp
-                                    <h2 class="no-margins">{{ $displayTotalRevenue }}</h2>
+                                    <h2 class="no-margins">{{ $totalRevenue }}</h2>
                                     <small>Doanh thu</small>
                                     <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
                                     <div class="progress progress-mini">
@@ -248,7 +292,6 @@
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-lg-6">
             <div class="row">
@@ -331,39 +374,39 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                                @foreach($latestOrders as $latestOrder)
-                                                    <tr>
-                                                        <td class="text-center">{{ $latestOrder->id }}</td>
-                                                        <td>
-                                                            <ul class="list-unstyled mb-0">
-                                                                <li><strong>Tên:</strong> {{ $latestOrder->full_name }}</li>
-                                                                <li><strong>Địa chỉ:</strong> {{ $latestOrder->address }}</li>
-                                                                <li><strong>Điện thoại:</strong> {{ $latestOrder->phone }}</li>
-                                                            </ul>
-                                                        </td>
-                                                        <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
-                                                        <td class="text-center">
-                                                            @php
-                                                                // Định nghĩa các trạng thái và màu sắc tương ứng
-                                                                $statuses = [
-                                                                    1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
-                                                                    2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
-                                                                    3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
-                                                                    4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
-                                                                    5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
-                                                                    6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
-                                                                ];
-                                                            @endphp
-                                                            @php
-                                                                // Lấy trạng thái tương ứng
-                                                                $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
-                                                            @endphp
-                                                            <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
-                                                        </td>
+                                        @foreach($latestOrders as $latestOrder)
+                                            <tr>
+                                                <td class="text-center">{{ $latestOrder->id }}</td>
+                                                <td>
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li><strong>Tên:</strong> {{ $latestOrder->full_name }}</li>
+                                                        <li><strong>Địa chỉ:</strong> {{ $latestOrder->address }}</li>
+                                                        <li><strong>Điện thoại:</strong> {{ $latestOrder->phone }}</li>
+                                                    </ul>
+                                                </td>
+                                                <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
+                                                <td class="text-center">
+                                                    @php
+                                                        // Định nghĩa các trạng thái và màu sắc tương ứng
+                                                        $statuses = [
+                                                            1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
+                                                            2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
+                                                            3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
+                                                            4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
+                                                            5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
+                                                            6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
+                                                        ];
+                                                    @endphp
+                                                    @php
+                                                        // Lấy trạng thái tương ứng
+                                                        $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
+                                                    @endphp
+                                                    <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
+                                                </td>
 
-                                                        <td class="text-center">{{ $latestOrder->created_at }}</td>
-                                                    </tr>
-                                                @endforeach
+                                                <td class="text-center">{{ $latestOrder->created_at }}</td>
+                                            </tr>
+                                        @endforeach
 
                                         </tbody>
                                     </table>
