@@ -120,6 +120,7 @@
                             <div class="ec-vendor-block-items">
                                 <ul>
                                     <li><a href="user-profile.html">User Profile</a></li>
+                                    <li><a href="{{route('changePassword')}}">Change Password</a></li>
                                     <li><a href="user-history.html">History</a></li>
                                     <li><a href="wishlist.html">Wishlist</a></li>
                                     <li><a href="cart.html">Cart</a></li>
@@ -137,21 +138,20 @@
                     <div class="ec-vendor-card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @foreach ($profile as $profile )
+                                @foreach ($profile as $profile)
                                 <div class="ec-vendor-block-profile">
                                     <div class="ec-vendor-block-img space-bottom-30">
                                         <div class="ec-vendor-block-bg">
-                                            <a href="{{route('updateProfile',$profile->id)}}" class="btn btn-lg btn-primary"
+                                            <a href="{{route('updateProfile',$profile->id)}}" class="btn btn-lg btn-primary "
                                                 data-link-action="editmodal" title="Edit Detail"
-                                                data-bs-toggle="modal" data-bs-target="#edit_modal">Chỉnh sửa</a>
+                                                data-bs-toggle="modal" data-bs-target="#edit_modal">Chỉnh sửa thông tin</a>
                                         </div>
                                         <div class="ec-vendor-block-detail">
-                                            <img class="v-img" src="..." alt="vendor image">
+                                            <img class="v-img" src="{{Storage::url($profile->image)}}" alt="vendor image">
                                             <h5 class="name">{{$profile->name}}</h5>
-
                                         </div>
-                                        <p>Xin Chào<span> {{$profile->name}}</span></p>
-                                        <p>Từ tài khoản của bạn, bạn có thể dễ dàng xem và theo dõi đơn hàng. Bạn có thể quản lý và thay đổi thông tin tài khoản của mình như địa chỉ, thông tin liên hệ và lịch sử đơn hàng.</p>
+                                        <p>Xin chào<span> {{$profile->name}}</span></p>
+                                        <p>Từ tài khoản của bạn, bạn có thể dễ dàng xem . Bạn có thể quản lý và thay đổi thông tin tài khoản của mình như địa chỉ, thông tin liên hệ.</p>
                                     </div>
                                     <h5>Thông tin tài khoản</h5>
 
@@ -219,56 +219,68 @@
                                 </div>
                             </div>
                         </div>
+                    <form class="row g-3" action="{{route('updateProfile',$profile->id)}}" method="post" enctype="multipart/form-data">
+                            @method('put')
+                            @csrf
                         <div class="ec-vendor-block-detail">
                             <div class="thumb-upload">
                                 <div class="thumb-edit">
-                                    <input type='file' id="thumbUpload02" name="imageUser" class="ec-image-upload"
+                                    <input type='file' id="thumbUpload02" name="image" class="ec-image-upload"
                                         accept=".png, .jpg, .jpeg" />
                                     <label><i class="fi-rr-edit"></i></label>
                                 </div>
                                 <div class="thumb-preview ec-preview">
                                     <div class="image-thumb-preview">
                                         <img class="image-thumb-preview ec-image-preview v-img"
-                                            src="assets/images/user/1.jpg" alt="edit" />
+                                            src="{{Storage::url($profile->image)}}" alt="edit" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="ec-vendor-upload-detail">
-                            <form class="row g-3" action="{{route('updateProfile',$profile->id)}}" method="post" enctype="multipart/form-data">
-                                @method('patch')
-                                @csrf
                                 <div class="col-md-6 space-t-15">
                                     <label class="form-label">Tên</label>
                                     <input type="text" name="name" class="form-control" value="{{$profile->name}}">
+                                    @error('name')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <label class="form-label">Email</label>
                                     <input type="text" name="email" class="form-control" value="{{$profile->email}}">
-                                </div>
-                                <div class="col-md-6 space-t-15">
-                                    <label class="form-label">Mật khẩu</label>
-                                    <input type="password" disabled class="form-control">
+                                    @error('email')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <label class="form-label">Số điện thoại</label>
                                     <input type="number" name="phone" class="form-control" value="{{$profile->phone}}">
+                                    @error('phone')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <label class="form-label">Ngày sinh</label>
                                     <input type="text" name="birthday" class="form-control" value="{{$profile->birthday}}">
+                                    @error('birthday')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <label class="form-label">Địa chỉ</label>
                                     <input type="text" name="address" class="form-control" value="{{$profile->address}}">
+                                    @error('address')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 space-t-15">
                                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                                     <a href="#" class="btn btn-lg btn-secondary qty_close" data-bs-dismiss="modal"
                                         aria-label="Close">Đóng</a>
                                 </div>
-                            </form>
+
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>

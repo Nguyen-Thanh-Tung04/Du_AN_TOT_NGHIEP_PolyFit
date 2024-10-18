@@ -63,8 +63,10 @@ Route::get('/contact', function () {
 });
 
 Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
-// Route::get('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
-Route::patch('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+Route::put('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+Route::get('/changePassword',[ProfileController::class,'changePassword'])->name('changePassword');
+Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('user.updatePassword');
+
 
 Route::get('/cart', function () {
     return view('client.page.cart');
@@ -76,9 +78,6 @@ Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');
 
-Route::get('/account', function () {
-    return view('client.page.profile');
-});
 // Route::get('/cart', function () {
 //     return view('client.page.cart');
 // })->name('cart');

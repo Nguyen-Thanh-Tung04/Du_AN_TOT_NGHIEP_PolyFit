@@ -12,41 +12,45 @@ class ProfileController extends Controller
 {
     public function listProfile(){
         $profile = User::all();
-        return view('client.page.profile')->with([
-            'profile' => $profile
-        ]);
+        return view('client.page.profile', compact('profile') );
     }
-    // public function updateProfile($idUser){
-    //     $profile = User::where('id',$idUser)->first();
-    //     return view('client.page.profile')->with([
-    //         'profile' => $profile
-    //     ]);
-    // }
+
     public function updateProfile($idUser,Request $req){
-        $profile = User::where('id', $idUser)->first();
-        $linkImage = $profile->image;
 
-        if($req->hasFile('imageUser')){
-            File::delete(public_path($profile->image));
-            $image = $req->file('imageUser');
-            $newName = time(). '.' . $image->getClientOriginalExtension();
-            $linkStorage = 'theme/client/assets/images/user';
-            $image->move(public_path($linkStorage), $newName);
+        $req->validate([
+            'name' => 'required|alpha|max:255',
+            'email' => 'required|email|',
+            'phone' => 'required|digits:10',
+            'birthday' =>'required|date',
+            'address' => 'required|max:255',
+        ]);
 
-            $linkImage = $linkStorage.$newName;
+        $profile = User::find( $idUser)->first();
+        $data = $req->except('image');
+        if($req->hasFile('image')){
+            $path_image = $req->file('image')->store('user','public');
+            $data['image'] = $path_image;
         }
-        $data = [
-            'name'=> $req->name,
-            'phone' => $req->phone,
-            'email' => $req->email,
-            'birthday' => $req->birthday,
-            'address' => $req->address
-        ];
-        User::where('id',$idUser)->update($data);
-        return redirect()->route('listProfile');
+        else{
+            $data['image'] =$profile->image;
+        }
+        $profile->update($data);
+
+        return redirect()->back();
 
 
 
+    }
+    public function changePassword(){
+        $password = User::all();
+        return view('client.page.changeword',compact('password'));
+    }
+    public function updatePassword(Request $req){
+        $req->validate([
+            'password'=>'required|alpha_num|unique:users,password|min:8',
+            'newPassword'=>'required|alpha_num|min:8',
+            're-enter password'=> 'required|same:newPassword'
+        ]);
     }
 
 
