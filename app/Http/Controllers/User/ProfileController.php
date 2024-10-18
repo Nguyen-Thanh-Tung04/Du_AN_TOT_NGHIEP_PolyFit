@@ -1,11 +1,14 @@
 <?php
-
 namespace App\Http\Controllers\User;
-
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\TryCatch;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class ProfileController extends Controller
@@ -17,40 +20,52 @@ class ProfileController extends Controller
 
     public function updateProfile($idUser,Request $req){
 
-        $req->validate([
-            'name' => 'required|alpha|max:255',
+        $validator = Validator::make($req->all(),[
+            'name' => 'required|max:255',
             'email' => 'required|email|',
             'phone' => 'required|digits:10',
             'birthday' =>'required|date',
             'address' => 'required|max:255',
         ]);
 
-        $profile = User::find( $idUser)->first();
-        $data = $req->except('image');
-        if($req->hasFile('image')){
-            $path_image = $req->file('image')->store('user','public');
-            $data['image'] = $path_image;
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', 'Cập nhật không thành công.');
+
         }
-        else{
-            $data['image'] =$profile->image;
-        }
-        $profile->update($data);
-
-        return redirect()->back();
-
-
+            $profile = User::find( $idUser)->first();
+            $data = $req->except('image');
+            if($req->hasFile('image')){
+                $path_image = $req->file('image')->store('user','public');
+                $data['image'] = $path_image;
+            }
+            else{
+                $data['image'] =$profile->image;
+            }
+            $profile->update($data);
+            return redirect()->back()->with('success', 'Cập nhật thành công.');
 
     }
     public function changePassword(){
-        $password = User::all();
-        return view('client.page.changeword',compact('password'));
+        return view('client.page.changepassword');
     }
-    public function updatePassword(Request $req){
-        $req->validate([
-            'password'=>'required|alpha_num|unique:users,password|min:8',
-            'newPassword'=>'required|alpha_num|min:8',
-            're-enter password'=> 'required|same:newPassword'
+    public function updatePassword(Request $request)
+    {
+         // Validate request
+         $request->validate([
+            'current_password' => ['required', 'string', 'min:8'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
+       // Kiểm tra xem mật khẩu hiện tại có khớp không
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
+        }
+        // Cập nhật mật khẩu
+        Auth::user()->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with('success', 'Mật khẩu đã được thay đổi thành công');
     }
 
 

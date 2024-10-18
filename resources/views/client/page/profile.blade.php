@@ -105,6 +105,7 @@
 <!-- User profile section -->
 <section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
     <div class="container">
+        @foreach ($profile as $profile)
         <div class="row">
             <!-- Sidebar Area Start -->
             <div class="ec-shop-leftside ec-vendor-sidebar col-lg-3 col-md-12">
@@ -138,7 +139,7 @@
                     <div class="ec-vendor-card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @foreach ($profile as $profile)
+
                                 <div class="ec-vendor-block-profile">
                                     <div class="ec-vendor-block-img space-bottom-30">
                                         <div class="ec-vendor-block-bg">
@@ -193,12 +194,13 @@
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
 </section>
 <!-- End User profile section -->

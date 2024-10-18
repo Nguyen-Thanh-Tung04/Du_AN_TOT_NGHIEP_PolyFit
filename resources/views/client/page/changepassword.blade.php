@@ -85,13 +85,13 @@
             <div class="col-12">
                 <div class="row ec_breadcrumb_inner">
                     <div class="col-md-6 col-sm-12">
-                        <h2 class="ec-breadcrumb-title">User Profile</h2>
+                        <h2 class="ec-breadcrumb-title">Change Password</h2>
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <!-- ec-breadcrumb-list start -->
                         <ul class="ec-breadcrumb-list">
                             <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="ec-breadcrumb-item active">Profile</li>
+                            <li class="ec-breadcrumb-item active">Change Password</li>
                         </ul>
                         <!-- ec-breadcrumb-list end -->
                     </div>
@@ -139,25 +139,34 @@
                         <div class="row">
                             <div class="col-md-12">
                                     <h5>Đổi mật khẩu</h5>
-                                    <form class="row g-3" action="" method="post" enctype="multipart/form-data">
-                                    <div class="ec-vendor-upload-detail">
-                                            <div class="col-md-6 space-t-15">
-                                                <label class="form-label">Mật khẩu hiện tại</label>
-                                                <input type="password" name="password" class="form-control" value="">
-                                            </div>
-                                            <div class="col-md-6 space-t-15">
-                                                <label class="form-label">Mật khẩu mới</label>
-                                                <input type="password" name="newPassword" class="form-control" value="">
-                                            </div>
-                                            <div class="col-md-6 space-t-15">
-                                                <label class="form-label">Nhập lại mật khẩu mới</label>
-                                                <input type="password" name="re-enter password" class="form-control" value="">
-                                            </div>
-                                            <div class="col-md-6 space-t-15">
-                                                <button type="submit" class="btn btn-primary mt-2">Cập nhật</button>
-                                            </div>
-                                    </div>
-                                </form>
+                                    <form class="row g-3" action="{{ route('updatePassword')}}" method="POST">
+                                        @method('patch')
+                                        @csrf
+                                        <div class=" col-md-6 space-t-15">
+                                            <label class="form-label">Mật khẩu hiện tại</label>
+                                            <input type="password" name="current_password" class="form-control" required>
+                                            @error('current_password')
+                                            <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class=" col-md-6 space-t-15">
+                                            <label class="form-label">Mật khẩu mới</label>
+                                            <input type="password" name="new_password" class="form-control" required>
+                                            @error('new_password')
+                                            <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class=" col-md-6 space-t-15">
+                                            <label class="form-label">Nhập lại mật khẩu mới</label>
+                                            <input type="password" name="new_password_confirmation" class="form-control" required>
+                                            @error('new_password_confirmation')
+                                            <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class=" col-md-6 space-t-15">
+                                            <button type="submit" class="btn btn-primary mt-2">Cập nhật</button>
+                                        </div>
+                                    </form>
                                     </div>
                                 </div>
                             </div>

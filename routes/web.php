@@ -64,8 +64,10 @@ Route::get('/contact', function () {
 
 Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
 Route::put('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
-Route::get('/changePassword',[ProfileController::class,'changePassword'])->name('changePassword');
-Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('user.updatePassword');
+// Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
+// Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
+Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
+Route::patch('/updatePassword', [ProfileController::class, 'updatePassword'])->name('updatePassword');
 
 
 Route::get('/cart', function () {
