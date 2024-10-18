@@ -84,15 +84,18 @@ class CheckoutController
     $totalAmount = $request->input('total_amount');
    
     $voucher = Voucher::where('code', $voucherCode)
-    ->where('status', 1)
-    ->where('start_time', '<=', now())
-    ->where('end_time', '>=', now())
-    ->first();
+        ->where('start_time', '<=', now())
+        ->where('end_time', '>=', now())
+        ->where('min_order_value', '<=', $totalAmount)
+        ->where('max_order_value', '>=', $totalAmount)
+        ->where('quantity', '>', 0)
+        ->where('status', 1)
+        ->first();
     
     if (!$voucher) {
         return response()->json([
             'success' => false, 
-            'message' => 'Mã voucher không hợp lệ hoặc đã hết hạn.'
+            'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.'
         ]);
     }
     if ($voucher->start_time > now()) {
@@ -114,17 +117,24 @@ class CheckoutController
         ]);
     }
 
-    if ($voucher->max_discount_value && $totalAmount > $voucher->max_discount_value) {
+    if ($voucher->max_order_value && $totalAmount > $voucher->max_order_value) {
         return response()->json([
             'success' => false,
             'message' => 'Đơn hàng của bạn vượt mức số tiền cho phép để áp dụng mã voucher này.'
         ]);
     }
     
+    // Tính toán giảm giá
     $discount = 0;
     if ($voucher->discount_type == 'percentage') {
         // Tính giảm giá theo phần trăm
         $discount = ($voucher->value / 100) * $totalAmount;
+
+        // Kiểm tra nếu giảm giá vượt quá max_discount_value
+        if ($voucher->max_discount_value && $discount > $voucher->max_discount_value) {
+            $discount = $voucher->max_discount_value;
+            $discount = floor($discount);
+        }
     } elseif ($voucher->discount_type == 'fixed') {
         // Giảm giá theo số tiền cụ thể
         $discount = $voucher->value;
@@ -134,6 +144,7 @@ class CheckoutController
             $discount = $totalAmount;
         }
     }
+    
     // Tính toán tổng tiền sau khi áp dụng giảm giá
     $finalTotal = $totalAmount - $discount;
 
@@ -170,10 +181,20 @@ class CheckoutController
         ->where('start_time', '<=', now())
         ->where('end_time', '>=', now())
         ->where('min_order_value', '<=', $totalAmount)
-        ->where('max_discount_value', '>=', $totalAmount)
+        ->where('max_order_value', '>=', $totalAmount)
+        ->where('quantity', '>', 0)
         ->where('status', 1)
         ->first();
-        
+
+        if ($voucherCode) {
+            if (!$voucher) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.',
+                ]);
+            }
+        }
+
         $user = Auth::user();
 
         $order = Order::create([
@@ -263,6 +284,25 @@ class CheckoutController
     {
         $data = $request->all(); // Lấy tất cả dữ liệu từ form checkout
         session()->put('checkout_data', $data);
+        $checkoutData = session()->get('checkout_data');
+
+        $voucher = Voucher::where('code', $checkoutData['voucher_code'])
+        ->where('start_time', '<=', now())
+        ->where('end_time', '>=', now())
+        ->where('min_order_value', '<=', $checkoutData['total_amount'])
+        ->where('max_order_value', '>=', $checkoutData['total_amount'])
+        ->where('quantity', '>', 0)
+        ->where('status', 1)
+        ->first();
+
+        if ($request->input('voucher_code')) {
+            if (!$voucher) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.',
+                ]);
+            }
+        }
 
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('vnpay.return');
@@ -341,7 +381,8 @@ class CheckoutController
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
             ->where('min_order_value', '<=', $checkoutData['total_amount'])
-            ->where('max_discount_value', '>=', $checkoutData['total_amount'])
+            ->where('max_order_value', '>=', $checkoutData['total_amount'])
+            ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
             
