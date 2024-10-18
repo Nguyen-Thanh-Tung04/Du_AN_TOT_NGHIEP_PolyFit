@@ -107,7 +107,6 @@ class DashboardController extends Controller
             ? (($latestMonthRevenue - $previousMonthRevenue) / $previousMonthRevenue) * 100
             : ($latestMonthRevenue > 0 ? 100 : 0);
         $revenueGrowth = min($revenueGrowth, 100);
-
         // Chuẩn bị dữ liệu kết quả
         $results = [
             [
@@ -119,6 +118,8 @@ class DashboardController extends Controller
             ]
         ];
 //        dd($latestUser);
+//        dd($results);
+
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
