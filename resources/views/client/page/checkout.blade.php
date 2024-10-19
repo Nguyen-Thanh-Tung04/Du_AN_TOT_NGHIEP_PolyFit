@@ -471,6 +471,7 @@
                     if (response.success) {
                         // Cập nhật giá trị giảm giá dựa trên mã voucher
                         discountAmount = response.discount;
+                        console.log(discountAmount);
 
                         // Cập nhật lại giá trị hiển thị cho giảm giá
                         $('#discountAmount').text('-' + formatCurrency(discountAmount));
