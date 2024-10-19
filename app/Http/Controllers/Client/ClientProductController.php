@@ -44,9 +44,15 @@ class ClientProductController extends Controller
 
         $galleryImages = json_decode($galleryString);
 
-        $reviews = Review::with('replies')->where('product_id', $id)->get();
+        $reviews = Review::with('replies')
+            ->where('product_id', $id)
+            ->where('status', '!=', 2) // Exclude reviews with status 2
+            ->get();
 
-        return view('client.page.productDetail', compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'reviews', 'similar_products'));
+        // Lấy điểm đánh giá trung bình
+        $averageScore = $product->averageScore();
+
+        return view('client.page.productDetail', compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'averageScore', 'reviews', 'similar_products'));
     }
 
     public function getVariantDetails(Request $request)

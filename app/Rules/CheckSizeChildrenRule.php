@@ -29,7 +29,7 @@ class CheckSizeChildrenRule implements ValidationRule
     {
         $product = Size::with('variants')->find($this->id);
         if ($product && $product->variants->count() > 0) {
-            $fail('Không thể xóa kích thước vì còn sản phẩm chứa thuộc tính này.');
+            $fail('Vui lòng xóa sản phẩm có thuộc tính kích thước này trước khi xóa.');
         }
     }
 }

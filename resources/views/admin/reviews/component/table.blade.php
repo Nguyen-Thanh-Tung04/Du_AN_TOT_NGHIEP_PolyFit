@@ -5,10 +5,9 @@
                 <th>
                     <input type="checkbox" value="" id="checkAll" class="input-checkbox">
                 </th>
-                <th class="text-center">Mã sản phẩm</th>
+                <th class="text-center">Mã đơn hàng</th> <!-- Changed from product code -->
                 <th class="text-center">Email</th>
                 <th class="text-center">Nội dung</th>
-                {{-- <th class="text-center">Ảnh trải nghiệm</th> --}}
                 <th class="text-center">Số sao</th>
                 <th class="text-center">Ngày đánh giá</th>
                 <th class="text-center">Tình Trạng</th>
@@ -17,55 +16,51 @@
         </thead>
         <tbody>
             @if (isset($reviews) && is_object($reviews))
-                @foreach($reviews as $reviews)
-                @php
-                         // Định nghĩa một danh sách các từ không lành mạnh (có thể mở rộng)
-                         $unhealthyWords = ['đểu', 'vc', 'rách'];
+             @php
+             $lastOrderId = null; // Biến để theo dõi ID đơn hàng được hiển thị lần cuối
+             @endphp
+    @foreach($reviews as $review)
+        @if ($review->order->id !== $lastOrderId)  <!-- Kiểm tra xem ID đơn hàng hiện tại có khác không -->
+            <tr class="{{ stripos($review->content, 'đểu') !== false ? 'bg-danger text-white' : '' }}">
+                <td>
+                    <input type="checkbox" value="{{ $review->id }}" class="input-checkbox checkBoxItem">
+                </td>
+                <td class="text-center">{{ $review->order->code }}</td> 
+                <td class="text-center">{{ $review->email }}</td>
+                <td class="text-center">{{ $review->content }}</td>
+                <td class="text-center">{{ $review->score }}</td>
+                <td class="text-center">{{ $review->created_at->format('Y-m-d') }}</td>
+                <td class="text-center js-switch-{{ $review->id }}">
+                    <input type="checkbox" value="{{ $review->status }}" 
+                    class="js-switch status" 
+                    data-field="status" 
+                    data-model="Review"
+                    data-modelId="{{ $review->id }}" 
+                    {{ ($review->status == 1) ? 'checked' : '' }} />
+                </td>
+                <td class="text-center">
+                    <div class="d-inline-flex">
+                        <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0" style="display: inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-delete" >
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                       
+                    </div>
+                </td>
+                
+                
+            </tr>
+            @php $lastOrderId = $review->order->id; // Update lastOrderId to current one @endphp
+        @endif
+    @endforeach
+@endif
 
-                         // Kiểm tra xem nội dung có chứa từ không lành mạnh hay không
-                         $isUnhealthy = false;
-                         foreach ($unhealthyWords as $word) {
-                             if (stripos($reviews->content, $word) !== false) {
-                                 $isUnhealthy = true;
-                                 break;
-                             }
-                         }
-                        @endphp
-                    <tr class=" {{ $isUnhealthy ? 'bg-danger text-white' : '' }}">
-                        <td>
-                            <input type="checkbox" value="{{ $reviews->id }}" class="input-checkbox checkBoxItem">
-                        </td>
-                        <td class="text-center">{{ $reviews->product_code }}</td>
-                        <td class="text-center">{{ $reviews->email }}</td>
-                        
-
-                        <!-- Áp dụng class dựa trên $isUnhealthy -->
-                        <td class="text-center">                       
-                            {{ $reviews->content }}
-                        </td>
-                        {{-- <td class="text-center">
-                            <img width="100px" src="{{ asset(Storage::url($reviews->image)) }}" alt="">
-                        </td> --}}
-                        <td class="text-center">{{ $reviews->score }}</td>
-                        <td class="text-center">{{ $reviews->created_at->format('Y-m-d') }}</td>
-
-                        <td class="text-center js-switch-{{ $reviews->id }}">
-                            <input type="checkbox" value="{{ $reviews->status }}" 
-                            class="js-switch status " 
-                            data-field="status" 
-                            data-model="Review"
-                            data-modelId="{{ $reviews->id }}"
-                            {{ ($reviews->status == 1) ? 'checked' : '' }} />
-                        </td>   
-                        <td class="text-center">
-                            <a href="{{ route('reviews.edit', $reviews->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-    
-                            <a href="{{ route('reviews.delete', $reviews->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
         </tbody>
     </table>
-    {{-- {{ $categories->links('pagination::bootstrap-5') }} --}}
 </div>

@@ -32,13 +32,13 @@
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/plugins/bootstrap.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/plugins/sweetalert2.min.css')}}" />
     <!-- Include Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<!-- Include jQuery (cần thiết cho Bootstrap) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Include jQuery (cần thiết cho Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-<!-- Include Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Include Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
     <!-- Main Style -->
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/demo1.css')}}" />
@@ -55,18 +55,19 @@
     {{-- Reviews --}}
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/review.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-  <!-- UIkit CSS -->
+    <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/css/uikit.min.css" />
     <!-- Thêm CSS cho noUiSlider -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" rel="stylesheet" />
 
     <!-- Thêm JS cho noUiSlider -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <!-- Thêm vào phần <head> của bạn -->
 
 
     <!-- UIkit JS -->
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
 </head>
 
 <body>
@@ -81,7 +82,7 @@
 
 
     <!-- Vendor JS -->
-    
+
     <script src="{{asset('theme/client/library/library.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/popper.min.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/vendor/bootstrap.min.js')}}"></script>
@@ -98,7 +99,7 @@
     <script src="{{asset('theme/client/assets/js/vendor/jquery.magnific-popup.min.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/plugins/jquery.sticky-sidebar.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/plugins/sweetalert2.js')}}"></script>
-    {{-- <script>
+    <script>
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -110,13 +111,31 @@
             timer: 1500,
             timerProgressBar: true,
         })
-    </script> --}}
+
+        function updateCartCount() {
+            $.ajax({
+                url: '{{ route("cart.count") }}',
+                type: 'GET',
+                success: function(data) {
+
+                    if (data.count > 0) {
+                        $('.cart-count-lable').text(data.count).show();
+                    } else {
+                        $('.cart-count-lable').hide();
+                    }
+                }
+            });
+        }
+
+        updateCartCount();
+    </script>
 
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>
     <script src="{{asset('theme/client/assets/js/main.js')}}"></script>
     <script src="{{ asset('theme/client/library/library.js') }}"></script>
     <script src="{{asset('theme/client/assets/js/review.js')}}"></script>
+
     @yield('scripts')
 </body>
 

@@ -38,28 +38,31 @@ class ReviewRepository implements ReviewInterface
         $query = Review::query()
             ->join('users', 'reviews.account_id', '=', 'users.id')
             ->join('products', 'reviews.product_id', '=', 'products.id')
+            ->join('orders', 'reviews.order_id', '=', 'orders.id') // Join with the orders table
             ->select(
                 'reviews.*',
                 'users.email',
                 'users.name',
                 'users.image',
-                'products.code as product_code'
+                'products.code as product_code',
+                'orders.id as order_id' // Select order ID
+
             )
             ->orderBy('reviews.created_at', 'desc');
-    
+
         // Thêm điều kiện tìm kiếm vào query
         if (!empty($conditions['keyword'])) {
             $query->where(function ($q) use ($conditions) {
-                $q->where('products.code', 'like', '%' . $conditions['keyword'] . '%')
+                $q->where('orders.code', 'like', '%' . $conditions['keyword'] . '%')
                     ->orWhere('users.email', 'like', '%' . $conditions['keyword'] . '%');
             });
         }
-    
+
         // Thêm điều kiện lọc theo trạng thái
         if (isset($conditions['status'])) {
             $query->where('reviews.status', $conditions['status']);
         }
-    
+
         // Lọc theo trạng thái đã trả lời hay chưa
         if (isset($conditions['repluy'])) {
             if ($conditions['repluy'] == 1) {
@@ -68,18 +71,24 @@ class ReviewRepository implements ReviewInterface
                 $query->doesntHave('replies'); // Đánh giá chưa trả lời
             }
         }
-    
+
         // Thực hiện paginate và trả về kết quả
         return $query->paginate($perPage, $columns);
     }
-    
+
 
 
     public function delete(int $id = 0)
     {
-        $review = Review::findOrFail($id);
-        return $review->delete();
+        $review = Review::find($id);
+    
+        if (!$review) {
+            return false;  // Chỉ trả về false nếu không tìm thấy review
+        }
+    
+        return $review->delete();  // Trả về true nếu xóa thành công, false nếu xóa thất bại
     }
+    
 
     // Cập nhật trạng thái
     public function update(int $id = 0, array $payload = [])

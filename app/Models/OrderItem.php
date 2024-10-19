@@ -22,16 +22,23 @@ class OrderItem extends Model
 
     protected $table = 'order_items';
 
-    public function order() {
+    public function order()
+    {
         return $this->belongsTo(Order::class, 'order_id', 'id');
     }
 
-    public function variant() {
+    public function variant()
+    {
         return $this->belongsTo(Variant::class, 'variant_id', 'id');
     }
 
     public function product()
     {
         return $this->variant->product(); // Nếu Variant có quan hệ với Product
+    }
+    // Lấy tất cả đánh giá của sản phẩm thuộc OrderItem
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id', 'variant_id');
     }
 }
