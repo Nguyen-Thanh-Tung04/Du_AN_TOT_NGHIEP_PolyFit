@@ -136,3 +136,18 @@
 .alert-danger i {
     margin-right: 10px;
 }
+
+.btn-buy {
+    background-color: #dc2626;
+    color: #fff;
+    margin-left: 0 !important;
+}
+
+.btn-buy:hover {
+    background-color: #b91c1c;
+    color: #fff;
+}
+
+.btn-cart:hover {
+    background-color: #1d4fa1;
+}
