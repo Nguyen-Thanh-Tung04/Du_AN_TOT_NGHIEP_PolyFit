@@ -35,32 +35,42 @@
                     <div class="ec-vendor-card-body">
                         <ul class="nav nav-tabs" id="orderTabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="all-orders-tab" data-toggle="tab" href="#all-orders" role="tab">Tất cả</a>
+                                <a class="nav-link" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">
+                                    Chờ xác nhận @if($pendingCount > 0) <span class="text-danger">({{ $pendingCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">Chờ xác nhận</a>
+                                <a class="nav-link" id="confirmed-orders-tab" data-toggle="tab" href="#confirmed-orders" role="tab">
+                                    Đã xác nhận @if($confirmedCount > 0) <span class="text-danger">({{ $confirmedCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="confirmed-orders-tab" data-toggle="tab" href="#confirmed-orders" role="tab">Đã xác nhận</a>
+                                <a class="nav-link" id="preparing-orders-tab" data-toggle="tab" href="#preparing-orders" role="tab">
+                                    Đang chuẩn bị @if($preparingCount > 0) <span class="text-danger">({{ $preparingCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="preparing-orders-tab" data-toggle="tab" href="#preparing-orders" role="tab">Đang chuẩn bị</a>
+                                <a class="nav-link" id="shipping-orders-tab" data-toggle="tab" href="#shipping-orders" role="tab">
+                                    Đang vận chuyển @if($shippingCount > 0) <span class="text-danger">({{ $shippingCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="shipping-orders-tab" data-toggle="tab" href="#shipping-orders" role="tab">Đang vận chuyển</a>
+                                <a class="nav-link" id="delivered-orders-tab" data-toggle="tab" href="#delivered-orders" role="tab">
+                                    Đã giao hàng @if($deliveredCount > 0) <span class="text-danger">({{ $deliveredCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="delivered-orders-tab" data-toggle="tab" href="#delivered-orders" role="tab">Đã giao hàng</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="cancelled-orders-tab" data-toggle="tab" href="#cancelled-orders" role="tab">Đã hủy</a>
+                                <a class="nav-link" id="cancelled-orders-tab" data-toggle="tab" href="#cancelled-orders" role="tab">
+                                    Đã hủy @if($cancelledCount > 0) <span class="text-danger">({{ $cancelledCount }})</span> @endif
+                                </a>
                             </li>
                         </ul>
+                        
+                        
+                        
+                        
 
                         <div class="tab-content" id="orderTabContent">
-                            <div class="tab-pane fade show active" id="all-orders" role="tabpanel">
-                                @include('client.page.orders_table', ['orders' => $orders])
-                            </div>
                             <div class="tab-pane fade" id="pending-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $pendingOrders])
                             </div>
