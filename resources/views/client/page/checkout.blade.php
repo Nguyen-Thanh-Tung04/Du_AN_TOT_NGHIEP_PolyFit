@@ -112,7 +112,7 @@
 
                         </div>
                         <span class="ec-check-order-btn">
-                            <button type="button" name="redirect" id="placeOrder" class="btn btn-primary">Đặt hàng</button>
+                            <button type="button" id="placeOrder" class="btn btn-primary">Đặt hàng</button>
                         </span>
                     </div>
                 </form>
@@ -363,23 +363,35 @@
                 //lưu trạng thái hiện tại trước khi chuyển hướng
                 window.history.pushState({ page: 'checkout' }, 'Checkout', '/checkout');
                 sendAjaxRequest('{{ route("vnpay.payment") }}', 'POST', function(response) {
-                // Khi thành công, chuyển hướng người dùng đến URL VNPAY
-                if (response.code == '00') {
-                    window.location.href = response.vnpay_url;
-                    // Xử lý sự kiện khi nhấn nút back (trở về)
-                    window.onpopstate = function(event) {
-                        if (event.state && event.state.page === 'checkout') {
-                            // Trả về trang checkout khi người dùng nhấn back
-                            window.location.href = '/checkout';  // Điều hướng về trang checkout
-                        }
-                    };
-                } else {
-                    toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
-                }
-    }, function(response) {
-        // Xử lý lỗi
-        console.error('Thanh toán không thành công:', response.message);
-    });
+                    // Khi thành công, chuyển hướng người dùng đến URL VNPAY
+                    if (response.code == '00') {
+                        window.location.href = response.vnpay_url;
+                        // Xử lý sự kiện khi nhấn nút back (trở về)
+                        window.onpopstate = function(event) {
+                            if (event.state && event.state.page === 'checkout') {
+                                // Trả về trang checkout khi người dùng nhấn back
+                                window.location.href = '/checkout';  // Điều hướng về trang checkout
+                            }
+                        };
+                    } else {
+                        toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
+                    }
+                }, function(response) {
+                    // Xử lý lỗi
+                    console.error('Thanh toán không thành công:', response.message);
+                });
+            }else if (paymentMethod == '3') {
+                // Thanh toán qua MoMo
+                sendAjaxRequest('{{ route("momo.payment") }}', 'POST', function(response) {
+                    // Khi thành công, chuyển hướng người dùng đến URL MoMo
+                    if (response.success) {
+                        window.location.href = response.momo_url;
+                    } else {
+                        toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
+                    }
+                }, function(response) {
+                    console.error('Thanh toán không thành công:', response.message);
+                });
             }
 
             function sendAjaxRequest(url, method, successCallback, errorCallback) {
