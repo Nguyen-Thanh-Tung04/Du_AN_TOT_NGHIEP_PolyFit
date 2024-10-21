@@ -27,7 +27,9 @@ class ReviewService {
         $condition = [
             'keyword' => $request->input('keyword'),
             'status' => $request->input('status'),
-            'repluy' => $request->input('repluy')
+            'repluy' => $request->input('repluy'),
+            'score'  => $request->input('score'), 
+
         ];
         $perPage = $request->input('perpage') ?? 10; // Sử dụng giá trị mặc định nếu perpage là null
     

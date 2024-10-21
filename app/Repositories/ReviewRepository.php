@@ -71,6 +71,12 @@ class ReviewRepository implements ReviewInterface
                 $query->doesntHave('replies'); // Đánh giá chưa trả lời
             }
         }
+        
+        // Thêm điều kiện lọc theo score
+        if (isset($conditions['score']) && !empty($conditions['score'])) {
+            $query->where('reviews.score', '=', $conditions['score']);
+        }
+
 
         // Thực hiện paginate và trả về kết quả
         return $query->paginate($perPage, $columns);
@@ -81,14 +87,14 @@ class ReviewRepository implements ReviewInterface
     public function delete(int $id = 0)
     {
         $review = Review::find($id);
-    
+
         if (!$review) {
             return false;  // Chỉ trả về false nếu không tìm thấy review
         }
-    
+
         return $review->delete();  // Trả về true nếu xóa thành công, false nếu xóa thất bại
     }
-    
+
 
     // Cập nhật trạng thái
     public function update(int $id = 0, array $payload = [])
