@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\StoreCheckoutRequest;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
 use App\Models\Variant;
 use App\Models\Voucher;
 use App\Repositories\ProvinceRepository;
@@ -16,7 +13,6 @@ use App\Repositories\UserRepository;
 use App\Services\CheckoutService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController
@@ -76,7 +72,6 @@ class CheckoutController
             'totalPrice'
         ));
     }
-    // session()->forget('selected_items'); xóa khi order xong
 
     public function applyVoucher(Request $request)
 {
@@ -249,14 +244,10 @@ class CheckoutController
             }
         }
 
-         // Trừ số lượng hoặc số lần sử dụng của voucher (nếu voucher tồn tại và có cột để quản lý số lượng)
         if ($voucher) {
-            // Giả sử bạn có cột `quantity` để quản lý số lượng hoặc `uses` để đếm số lần sử dụng voucher
             if ($voucher->quantity > 0) {
                 $voucher->decrement('quantity', 1); // Trừ số lượng voucher nếu có cột quantity
-            }//  elseif ($voucher->uses > 0) {
-            //     $voucher->decrement('uses', 1); // Trừ số lần sử dụng voucher nếu có cột uses
-            // }
+            }
         }
 
         // Xóa những sản phẩm đã được chọn mua trong giỏ hàng
@@ -280,7 +271,7 @@ class CheckoutController
         ]));
     }
 
-    public function vnpayPayment(Request $request)
+    public function vnpayPayment(StoreCheckoutRequest $request)
     {
         $data = $request->all(); // Lấy tất cả dữ liệu từ form checkout
         session()->put('checkout_data', $data);
@@ -311,7 +302,7 @@ class CheckoutController
 
         $dateCode = date('Ymd');
         $randomNumberCode = mt_rand(10000000, 99999999);
-        $code = '#SP-' . $dateCode . $randomNumberCode;
+        $code = 'SP-' . $dateCode . $randomNumberCode;
 
         $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = 'Thanh toán đơn hàng';
@@ -364,16 +355,104 @@ class CheckoutController
         return response()->json([
             'success' => true,
             'code' => '00', 
-            'message' => 'success', 
-            'a' => session()->get('checkout_data'),
+            'message' => 'success',
             'vnpay_url' => $vnp_Url
         ]);
     }
 
+    public function execPostRequest($url, $data)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data))
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        //execute post
+        $result = curl_exec($ch);
+        //close connection
+        curl_close($ch);
+        return $result;
+    }
+
+    public function momoPayment(Request $request) {
+        $data = $request->all(); // Lấy tất cả dữ liệu từ form checkout
+        session()->put('checkout_data', $data);
+        $checkoutData = session()->get('checkout_data');
+
+        $voucher = Voucher::where('code', $checkoutData['voucher_code'])
+        ->where('start_time', '<=', now())
+        ->where('end_time', '>=', now())
+        ->where('min_order_value', '<=', $checkoutData['total_amount'])
+        ->where('max_order_value', '>=', $checkoutData['total_amount'])
+        ->where('quantity', '>', 0)
+        ->where('status', 1)
+        ->first();
+
+        if ($request->input('voucher_code')) {
+            if (!$voucher) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.',
+                ]);
+            }
+        }
+
+        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+        
+        $dateOrderId = date('Ymd');
+        $randomNumberOrderId = mt_rand(10000000, 99999999);
+
+        $amount = $request->input('final_total');
+        $partnerCode = 'MOMOBKUN20180529';
+        $accessKey = 'klm05TvNBzhg7h7j';
+        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+        $orderInfo = "Thanh toán qua ATM MoMo";
+        $orderId = 'SP-' . $dateOrderId . $randomNumberOrderId ."";
+        $redirectUrl = route('vnpay.return');
+        $ipnUrl = route('vnpay.return');
+        
+        $extraData = "";
+    
+        $requestId = time() . "";
+        $requestType = "payWithATM";
+        // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+        //before sign HMAC SHA256 signature
+        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+        $signature = hash_hmac("sha256", $rawHash, $secretKey);
+        $data = array('partnerCode' => $partnerCode,
+            'partnerName' => "Test",
+            "storeId" => "MomoTestStore",
+            'requestId' => $requestId,
+            'amount' => $amount,
+            'orderId' => $orderId,
+            'orderInfo' => $orderInfo,
+            'redirectUrl' => $redirectUrl,
+            'ipnUrl' => $ipnUrl,
+            'lang' => 'vi',
+            'extraData' => $extraData,
+            'requestType' => $requestType,
+            'signature' => $signature);
+        $result = $this->execPostRequest($endpoint, json_encode($data));
+        $jsonResult = json_decode($result, true);  // decode json
+        
+        //Just a example, please check more in there
+        return response()->json([
+            'success' => true,
+            'message' => 'success',
+            'momo_url' => $jsonResult['payUrl']
+        ]);
+    
+    }
+
     public function vnpayReturn(Request $request)
     {
-        $vnp_ResponseCode = $request->input('vnp_ResponseCode'); // Mã phản hồi của VNPAY
-        if ($vnp_ResponseCode == '00') {
+        $vnp_ResponseCode = $request->input('vnp_ResponseCode') ?? $request->input('resultCode'); // Mã phản hồi của VNPAY
+        if ($vnp_ResponseCode == '00' || $vnp_ResponseCode == '0') {
             $checkoutData = session()->get('checkout_data');
             
             $user = Auth::user();
@@ -388,7 +467,7 @@ class CheckoutController
             
             $order = Order::create([
                 'user_id' => $user->id,
-                'code' => $request->input('vnp_TxnRef'),
+                'code' => $request->input('vnp_TxnRef') ?? $request->input('orderId'),
                 'voucher_id' => $voucher->id ?? null,
                 'voucher_code' => $checkoutData['voucher_code'] ?? null,
                 'full_name' => $checkoutData['full_name'],
