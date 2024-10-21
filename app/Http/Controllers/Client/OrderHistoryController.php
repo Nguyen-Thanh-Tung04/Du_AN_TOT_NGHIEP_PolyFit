@@ -15,6 +15,7 @@ class OrderHistoryController extends Controller
     {
         $orders = Order::with(['user', 'orderItems.variant.product'])
             ->where('user_id', auth()->id())
+            ->orderBy('id', 'desc')
             ->get();
 
         // Phân loại đơn hàng
