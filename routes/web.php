@@ -73,6 +73,7 @@ Route::get('/changePassword', [ProfileController::class, 'changePassword'])->nam
 Route::patch('/updatePassword', [ProfileController::class, 'updatePassword'])->name('updatePassword');
 
 
+
 Route::get('/cart', function () {
     return view('client.page.cart');
 })->name('cart');

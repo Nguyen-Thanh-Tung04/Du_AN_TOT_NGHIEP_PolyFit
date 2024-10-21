@@ -25,11 +25,14 @@ class ProfileController extends Controller
             'email' => 'required|email|',
             'phone' => 'required|digits:10',
             'birthday' =>'required|date',
+            'province_id' => 'required|max:255',
+            'district_id' => 'required|max:255',
+            'ward_id' => 'required|max:255',
             'address' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Cập nhật không thành công.');
+            return redirect()->back()->with('error', 'Cập nhật không thành công');
 
         }
             $profile = User::find( $idUser)->first();
@@ -44,16 +47,20 @@ class ProfileController extends Controller
             $profile->update($data);
             return redirect()->back()->with('success', 'Cập nhật thành công.');
 
+
     }
+
     public function changePassword(){
         return view('client.page.changepassword');
     }
     public function updatePassword(Request $request)
     {
-         // Validate request
+
          $request->validate([
-            'current_password' => ['required', 'string', 'min:8'],
-            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+
+            'new_password' => ['required', 'string', 'min:8','confirmed'],
+            'new_password_confirmation'=>['required','string','min8',],
+
         ]);
 
        // Kiểm tra xem mật khẩu hiện tại có khớp không
@@ -61,9 +68,7 @@ class ProfileController extends Controller
             return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
         }
         // Cập nhật mật khẩu
-        Auth::user()->update([
-            'password' => Hash::make($request->new_password)
-        ]);
+        Auth::user()->update(['password' => Hash::make($request->new_password)]);
 
         return back()->with('success', 'Mật khẩu đã được thay đổi thành công');
     }

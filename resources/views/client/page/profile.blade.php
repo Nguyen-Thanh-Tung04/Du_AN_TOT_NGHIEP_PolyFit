@@ -186,7 +186,22 @@
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <div class="ec-vendor-detail-block ec-vendor-block-address">
-                                                <h6>Địa chỉ: {{$profile->address}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
+                                                <h6>Tỉnh/Thành phố: {{$profile->province_id}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
+                                                <h6>Quận/Huyện: {{$profile->district_id}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
+                                                <h6>Phường/Xã: {{$profile->ward_id}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
+                                                <h6>Địa chỉ cụ thể: {{$profile->address}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
                                             </div>
                                         </div>
 
@@ -269,7 +284,28 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 space-t-15">
-                                    <label class="form-label">Địa chỉ</label>
+                                    <label class="form-label">Tỉnh/Thành phố:</label>
+                                    <input type="text" name="province_id" class="form-control" value="{{$profile->province_id}}">
+                                    @error('province_id')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 space-t-15">
+                                    <label class="form-label">Quận/Huyện:</label>
+                                    <input type="text" name="district_id" class="form-control" value="{{$profile->district_id}}">
+                                    @error('district_id')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 space-t-15">
+                                    <label class="form-label">Phường/Xã:</label>
+                                    <input type="text" name="ward_id" class="form-control" value="{{$profile->ward_id}}">
+                                    @error('ward_id')
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 space-t-15">
+                                    <label class="form-label">Địa chỉ cụ thể:</label>
                                     <input type="text" name="address" class="form-control" value="{{$profile->address}}">
                                     @error('address')
                                     <p class="text-danger">{{$message}}</p>

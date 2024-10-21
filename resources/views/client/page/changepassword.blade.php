@@ -144,21 +144,21 @@
                                         @csrf
                                         <div class=" col-md-6 space-t-15">
                                             <label class="form-label">Mật khẩu hiện tại</label>
-                                            <input type="password" name="current_password" class="form-control" required>
+                                            <input type="password" name="current_password" class="form-control">
                                             @error('current_password')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                         </div>
                                         <div class=" col-md-6 space-t-15">
                                             <label class="form-label">Mật khẩu mới</label>
-                                            <input type="password" name="new_password" class="form-control" required>
+                                            <input type="password" name="new_password" class="form-control" >
                                             @error('new_password')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                         </div>
                                         <div class=" col-md-6 space-t-15">
                                             <label class="form-label">Nhập lại mật khẩu mới</label>
-                                            <input type="password" name="new_password_confirmation" class="form-control" required>
+                                            <input type="password" name="new_password_confirmation" class="form-control" >
                                             @error('new_password_confirmation')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
