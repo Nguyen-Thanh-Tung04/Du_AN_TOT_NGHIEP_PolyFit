@@ -53,9 +53,8 @@ Route::post('send', [LienheController::class, 'sendMail'])->name('sendMail');
 
 Route::get('/forget-pass', [HomeController::class, 'forgetPass'])->name('forget');
 Route::post('/forget-pass', [HomeController::class, 'postForgetPass']);
-Route::get('/get-pass/{customer}/{token}', [HomeController::class, 'getPass'])->name('getPass');
-Route::post('/get-pass/{customer}/{token}', [HomeController::class, 'postGetPass']);
-
+Route::get('/get-pass', [HomeController::class, 'getPass'])->name('getPass');
+Route::post('/get-pass', [HomeController::class, 'postGetPass'])->name('postGetPass');
 
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');

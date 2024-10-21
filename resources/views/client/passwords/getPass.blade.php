@@ -38,8 +38,10 @@
             <div class="ec-register-wrapper col-md-6">
                 <div class="ec-register-container">
                     <div class="ec-register-form">
-                        <form action="{{ route('getPass', ['customer' => $customer->id, 'token' => $customer->token]) }}" method="post">
+                        <form action="{{ route('postGetPass')}}" method="post">
                             @csrf
+                            <input type="hidden" name="email" value="{{ $email }}">
+                            <input type="hidden" name="expires" value="{{ $expires }}">
                             <span class="ec-register-wrap">
                                 <label>Mật khẩu*</label>
                                 <input type="password" name="password" placeholder="Nhập mật khẩu" style="margin-bottom: 10px"/>

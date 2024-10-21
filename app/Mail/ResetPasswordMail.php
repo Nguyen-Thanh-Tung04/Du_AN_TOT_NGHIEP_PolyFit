@@ -12,21 +12,15 @@ class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $customer;
-    public $token;
+    public $email;
+    public $resetLink;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($customer, $token)
+    public function __construct($email, $resetLink)
     {
-        $this->customer = $customer;
-        $this->token = $token;
+        $this->email = $email;
+        $this->resetLink = $resetLink;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -34,9 +28,6 @@ class ResetPasswordMail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
@@ -44,9 +35,6 @@ class ResetPasswordMail extends Mailable
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     */
     public function attachments(): array
     {
         return [];

@@ -11,10 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\ResetPasswordMail;
-
-
-
-
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -92,33 +89,35 @@ class HomeController extends Controller
             'email.exists' => 'Email này không tồn tại trong hệ thống'
         ]);
 
-        // Create token
-        $token = Str::random(60); // Tạo token ngẫu nhiên 60 ký tự
-        $customer = User::where('email', $req->email)->first();
-        // Cập nhật token vào cơ sở dữ liệu
-        $customer->update(['token' => $token]);
+        // Gửi email với liên kết chứa email và thời gian hết hạn
+        $expirationTime = now()->addHours(1)->timestamp; // Thời gian hết hạn là 1 giờ
+        $resetLink = route('getPass', ['email' => $req->email, 'expires' => $expirationTime]);
 
-        // Gửi email
-        Mail::to($customer->email)->send(new ResetPasswordMail($customer, $token));
-
-        // Kiểm tra việc gửi email
-        // if (Mail::failures()) {
-        //     return back()->with('error', 'Không thể gửi email. Vui lòng thử lại.');
-        // }
+        Mail::to($req->email)->send(new ResetPasswordMail($req->email, $resetLink));
 
         return redirect()->route('auth.client-login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
     }
 
-    public function getPass(User $customer, $token)
+    public function getPass(Request $req)
     {
-        if ($token) {
-            return view('client.passwords.getPass', compact('customer'));
-        } else {
-            return abort(404);
+        $email = $req->query('email');
+        $expires = $req->query('expires');
+
+        // Kiểm tra nếu liên kết đã hết hạn
+        if (now()->timestamp > $expires) {
+            return abort(404, 'Liên kết đã hết hạn');
         }
+
+        // Kiểm tra email có hợp lệ không
+        $customer = User::where('email', $email)->first();
+        if (!$customer) {
+            return abort(404, 'Email không hợp lệ');
+        }
+
+        return view('client.passwords.getPass', compact('customer', 'email', 'expires'));
     }
 
-    public function postGetPass(User $customer, $token, Request $req)
+    public function postGetPass(Request $req)
     {
         $req->validate([
             'password' => 'required|min:8', // Đảm bảo mật khẩu dài tối thiểu 8 ký tự
@@ -127,9 +126,10 @@ class HomeController extends Controller
 
         // Mã hóa mật khẩu
         $password_h = bcrypt($req->password);
-        $customer->update(['password' => $password_h, 'token' => null]);
+        $customer = User::where('email', $req->email)->first();
+        $customer->update(['password' => $password_h]);
 
-        return redirect()->route('auth.client-login')->with('yes', 'Đặt lại mật khẩu thành công');
+        return redirect()->route('auth.client-login')->with('success', 'Đặt lại mật khẩu thành công');
     }
 
 }
