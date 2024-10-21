@@ -24,6 +24,6 @@ class LienheController extends Controller
         Mail::mailer()
         ->to('hunglqph43302@fpt.edu.vn')
         ->send(new SendMail($firstname, $lastname, $email, $phonenumber, $address));
-        return "Gửi liên hệ thành công.";
+        return redirect()->back()->with('success', 'Gửi liên hệ thành công.');
     }
 }
