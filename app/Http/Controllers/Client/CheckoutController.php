@@ -379,7 +379,7 @@ class CheckoutController
         return $result;
     }
 
-    public function momoPayment(Request $request) {
+    public function momoPayment(StoreCheckoutRequest $request) {
         $data = $request->all(); // Lấy tất cả dữ liệu từ form checkout
         session()->put('checkout_data', $data);
         $checkoutData = session()->get('checkout_data');
