@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\StoreCheckoutRequest;
+use App\Mail\OrderPlacedMail;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -14,6 +15,7 @@ use App\Services\CheckoutService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController
 {
@@ -254,6 +256,8 @@ class CheckoutController
         Cart::where('user_id', $user->id)
             ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
             ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
+         //Send Mail
+        Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
         return response()->json([
             'success' => true, 
