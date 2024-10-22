@@ -32,17 +32,15 @@ class Product extends Model
     // Phương thức tính trung bình đánh giá
     public function averageScore()
     {
-        // Sử dụng quan hệ reviews để tính điểm trung bình
-        // return $this->reviews()
-        //     ->where('status', 1)  // Nếu có status để xác nhận đánh giá hợp lệ
-        //     ->avg('score');  // Tính trung bình điểm số
-
-            $avgScore = $this->reviews()
+        // Lấy điểm trung bình của các đánh giá có status = 1 và chưa bị xóa mềm
+        $avgScore = $this->reviews()
             ->where('status', 1) // Chỉ tính các đánh giá hợp lệ
-            ->avg('score');
-    
-        return $avgScore ? round($avgScore) : null;  // Làm tròn đến số nguyên
+            ->whereNull('deleted_at') // Loại bỏ các đánh giá đã bị xóa mềm
+            ->avg('score'); // Tính trung bình điểm số
+
+        return $avgScore ? round($avgScore) : null; // Làm tròn đến số nguyên
     }
+
 
     // Quan hệ với Review
     public function reviews()

@@ -43,8 +43,8 @@
     <!-- Main Style -->
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/demo1.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/style.css')}}" />
-    <link rel="stylesheet" href="{{asset('theme/client/assets/css/custom.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/responsive.css')}}" />
+    <link rel="stylesheet" href="{{asset('theme/client/assets/css/custom.css')}}" />
 
     <!-- Background css -->
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/backgrounds/bg-4.css')}}">
@@ -67,6 +67,7 @@
 
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
 </head>
 

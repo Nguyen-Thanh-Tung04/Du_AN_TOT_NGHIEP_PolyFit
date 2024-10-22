@@ -109,6 +109,10 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->middleware('checkLoginClient')
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
+->middleware('checkLoginClient')
+->name('momo.payment');
+Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -251,6 +255,8 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ReviewController::class, 'index'])->name('index');
+    Route::get('history', [ReviewController::class, 'history'])->name("history");
+    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail');
 
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
         ->name('edit');
