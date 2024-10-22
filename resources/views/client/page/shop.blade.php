@@ -46,13 +46,25 @@
                                         <span class="ec-product-discount-label">-33%</span>
                                     </div>
                                     <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
+                                        @if ($product->averageScore())
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            @if($i <= round($product->averageScore()))
+                                                                <li class="ecicon eci-star fill"></li>
+                                                            @else
+                                                                <li class="ecicon eci-star"></li>
+                                                            @endif
+                                                        @endfor
+                                                    @else
+                                                     <!-- Hiển thị 5 sao trống nếu không có đánh giá -->
+                                                @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= 5)
+                                                <li class="ecicon eci-star fill"></li>
+                                                @else
+                                                    <li class="ecicon eci-star"></li>
+                                                @endif                                                    @endfor
+                                            @endif
+
+                                                </ul>
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                         <div class="ec-price">
                                             <span>{{ number_format($product->min_listed_price, 0) }} ₫</span>

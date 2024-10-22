@@ -102,7 +102,7 @@
                                             </span>
                                             <span class="ec-bill-wrap">
                                                 <label>Địa chỉ cụ thể</label>
-                                                <input type="text" name="address" id="address" value="{{ $user->address }}" placeholder="" />
+                                                <textarea name="address" style="border: 1px solid #dee2e6" id="address" cols="20" rows="7">{{ $user->address }}</textarea>
                                             </span>
                                         </div>
                                     </div>
@@ -112,7 +112,7 @@
 
                         </div>
                         <span class="ec-check-order-btn">
-                            <button type="submit" id="placeOrder" class="btn btn-primary">Đặt hàng</button>
+                            <button type="button" id="placeOrder" class="btn btn-primary">Đặt hàng</button>
                         </span>
                     </div>
                 </form>
@@ -350,41 +350,99 @@
             let totalAmount = $('#totalAmount').text().replace(/đ/, '').replace(/\./g, '').trim();
             let finalTotal = $('#finalTotal').text().replace(/đ/, '').replace(/\./g, '').trim();
 
-
-            // Gửi dữ liệu đến server
-            $.ajax({
-                url: '{{ route("order.store") }}', // Route xử lý đặt hàng
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}', // CSRF token
-                    shipping_cost: shippingCost,
-                    final_total: finalTotal,
-                    full_name: fullName,
-                    phone: phone,
-                    province_id: provinceId,
-                    district_id: districtId,
-                    ward_id: wardId,
-                    address: address,
-                    note: note,
-                    total_amount: totalAmount,
-                    discount_amount: discountAmount,
-                    voucher_code: voucherCode,
-                    product_variants: productVariants,
-                    payment_method: paymentMethod,
-                },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        window.location.href = '{{ url("order") }}/' + response.order_id;
+            if (paymentMethod == '1') {
+                sendAjaxRequest('{{ route("order.store") }}', 'POST', function(response) {
+                    // Success callback
+                    toastr.success(response.message);
+                    window.location.href = '{{ url("order") }}/' + response.order_id;
+                }, function(response) {
+                    // Error callback (nếu cần thêm xử lý lỗi khác)
+                    console.error('Đặt hàng không thành công:', response.message);
+                });
+            } else if (paymentMethod == '2') {
+                //lưu trạng thái hiện tại trước khi chuyển hướng
+                window.history.pushState({ page: 'checkout' }, 'Checkout', '/checkout');
+                sendAjaxRequest('{{ route("vnpay.payment") }}', 'POST', function(response) {
+                    // Khi thành công, chuyển hướng người dùng đến URL VNPAY
+                    if (response.code == '00') {
+                        window.location.href = response.vnpay_url;
+                        // Xử lý sự kiện khi nhấn nút back (trở về)
+                        window.onpopstate = function(event) {
+                            if (event.state && event.state.page === 'checkout') {
+                                // Trả về trang checkout khi người dùng nhấn back
+                                window.location.href = '/checkout';  // Điều hướng về trang checkout
+                            }
+                        };
                     } else {
-                        console.error('Đặt hàng không thành công:', response.message);
-                        toastr.error('Có lỗi xảy ra khi đặt hàng.');
+                        toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Có lỗi xảy ra:', error);
-                }
-            });
+                }, function(response) {
+                    // Xử lý lỗi
+                    console.error('Thanh toán không thành công:', response.message);
+                });
+            }else if (paymentMethod == '3') {
+                // Thanh toán qua MoMo
+                sendAjaxRequest('{{ route("momo.payment") }}', 'POST', function(response) {
+                    // Khi thành công, chuyển hướng người dùng đến URL MoMo
+                    if (response.success) {
+                        window.location.href = response.momo_url;
+                    } else {
+                        toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
+                    }
+                }, function(response) {
+                    console.error('Thanh toán không thành công:', response.message);
+                });
+            }
+
+            function sendAjaxRequest(url, method, successCallback, errorCallback) {
+                $.ajax({
+                    url: url,
+                    type: method,
+                    data: {
+                        _token: '{{ csrf_token() }}', // CSRF token
+                        shipping_cost: shippingCost,
+                        final_total: finalTotal,
+                        full_name: fullName,
+                        phone: phone,
+                        province_id: provinceId,
+                        district_id: districtId,
+                        ward_id: wardId,
+                        address: address,
+                        note: note,
+                        total_amount: totalAmount,
+                        discount_amount: discountAmount,
+                        voucher_code: voucherCode,
+                        product_variants: productVariants,
+                        payment_method: paymentMethod,
+                    },                              
+                    success: function (response) {
+                        if (response.success) {
+                            successCallback(response);
+                        } else {
+                            toastr.error(response.message || 'Có lỗi xảy ra khi đặt hàng.');
+                            if (errorCallback) {
+                                errorCallback(response);
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            for (let field in errors) {
+                                if (errors.hasOwnProperty(field)) {
+                                    toastr.error(errors[field][0]); // Hiển thị lỗi đầu tiên cho mỗi trường
+                                }
+                            }
+                        } else {
+                            toastr.error('Có lỗi xảy ra: ' + error);
+                        }
+                        if (errorCallback) {
+                            errorCallback(xhr, status, error);
+                        }
+                    }
+                });
+            }
+            
         });
     });
 
@@ -425,6 +483,7 @@
                     if (response.success) {
                         // Cập nhật giá trị giảm giá dựa trên mã voucher
                         discountAmount = response.discount;
+                        console.log(discountAmount);
 
                         // Cập nhật lại giá trị hiển thị cho giảm giá
                         $('#discountAmount').text('-' + formatCurrency(discountAmount));

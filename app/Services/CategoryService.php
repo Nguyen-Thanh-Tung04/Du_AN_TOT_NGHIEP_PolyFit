@@ -113,20 +113,29 @@ class CategoryService
     {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] =  (($post['value'] == 1) ? 1 : 2);
-            $user = $this->CategoryRepository->update($post['modelId'], $payload);
-            $this->changCategoryStatus($post, $payload[$post['field']]);
-
+            // Thay đổi trạng thái của danh mục
+            $newStatus = ($post['value'] == 1) ? 2 : 1;  // Thay đổi trạng thái (1 -> 2, 2 -> 1)
+            $payload[$post['field']] = $newStatus;
+            
+            // Cập nhật trạng thái danh mục
+            $category = $this->CategoryRepository->update($post['modelId'], $payload);
+    
+            // Cập nhật trạng thái của tất cả các sản phẩm thuộc danh mục
+            $category->products()->update(['status' => $newStatus]);
+    
+            // Gọi hàm phụ nếu cần thay đổi trạng thái ở các phần khác
+            $this->changCategoryStatus($post, $newStatus);
+    
             DB::commit();
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-
             echo $e->getMessage();
             die();
             return false;
         }
     }
+    
 
     public function updateStatusAll($post)
     {

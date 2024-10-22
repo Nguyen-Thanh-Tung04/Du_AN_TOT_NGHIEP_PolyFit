@@ -16,20 +16,24 @@
             <div class="action">
                 <div class="uk-flex uk-flex-middle">
                     @php
-                        $publish = request('publish') ?: old('publish');
+                        $publish = request('status') ?: old('status');
+                        $category_id = request('category_id') ?: old('category_id');
                     @endphp
+                       
                     <select name="status" class="form-control mr-10 setupSelect2">
                         @foreach (config('apps.general.publish') as $key => $val)
                             <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>   
                         @endforeach
                     </select>
-                    {{-- <select name="category_id" class="form-control mr-10 setupSelect2">
-                        @foreach ($getCategoryAttr as $item)
+                    <select name="category_id" class="form-control mr-10 setupSelect2">
+                        <option value="">Chọn danh mục</option>
+                        @foreach ($getCategoryAttr as $val)
                             <option
-                                value="{{ $item->id }}">{{ $item->name }}
+                                value="{{ $val->id }}"
+                                {{ $category_id == $val->id ? 'selected' : '' }}>{{ $val->name }}
                             </option>
                         @endforeach
-                    </select> --}}
+                    </select>
                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
                         <div class="input-group">
                             <input type="text"

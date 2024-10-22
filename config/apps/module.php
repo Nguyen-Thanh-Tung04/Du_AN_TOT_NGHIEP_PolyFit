@@ -83,6 +83,10 @@ return [
                     'title' => 'Quản lý đánh giá',
                     'route' => 'reviews/index',
                 ],
+                [
+                    'title' => 'Lịch sử đánh giá',
+                    'route' => 'reviews/history',
+                ]
             ],
         ],
         [

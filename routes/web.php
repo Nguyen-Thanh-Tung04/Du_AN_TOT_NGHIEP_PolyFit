@@ -79,9 +79,7 @@ Route::get('/contact', function () {
 Route::get('/account', function () {
     return view('client.page.profile');
 });
-// Route::get('/cart', function () {
-//     return view('client.page.cart');
-// })->name('cart');
+
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
     ->middleware('checkLoginClient')
     ->name('checkout.show');
@@ -100,12 +98,22 @@ Route::post('/order/store', [CheckoutController::class, 'orderStore'])
 Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])
     ->middleware('checkLoginClient')
     ->name('order.show');
+Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
+    ->middleware('checkLoginClient')
+    ->name('vnpay.payment');
+Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
+->middleware('checkLoginClient')
+->name('momo.payment');
+Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
     ->name('dashboard.index')
     ->middleware('checkLogin');
-
+Route::post('dashboard/index', [DashboardController::class, 'statistical_sale'])
+    ->name('dashboard.post')
+    ->middleware('checkLogin');
 // USER
 Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserController::class, 'index'])
@@ -240,6 +248,8 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ReviewController::class, 'index'])->name('index');
+    Route::get('history', [ReviewController::class, 'history'])->name("history");
+    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail');
 
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
         ->name('edit');
@@ -268,6 +278,8 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
+    // Route::put('{id}/confirm-cancellation', [OrderController::class, 'confirmCancellation'])->name('order.history.confirm-cancellation');
+
 });
 Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
 Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
@@ -341,9 +353,12 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
     Route::delete('/delete', [CartController::class, 'deleteCartItem'])->name('delete');
     Route::get('/calculate', [CartController::class, 'calculateTotal'])->name('calculate');
     Route::post('/save-selected', [CartController::class, 'saveSelectedItems'])->name('selected');
+    Route::get('/count', [CartController::class, 'countCartItems'])->name('count');
 });
 
 
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+// Route để xem đánh giá cho một đơn hàng cụ thể
+Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

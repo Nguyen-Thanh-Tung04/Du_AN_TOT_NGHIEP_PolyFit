@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -83,7 +84,7 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'previous_status' => $order->status,
             'new_status' => $request->status,
-            'cancel_reason' => $request->cancel_reason, 
+            'cancel_reason' => $request->cancel_reason,
             'changed_by' => auth()->id(),
             'changed_at' => now(),
         ]);
@@ -109,4 +110,5 @@ class OrderController extends Controller
         }
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
     }
+
 }

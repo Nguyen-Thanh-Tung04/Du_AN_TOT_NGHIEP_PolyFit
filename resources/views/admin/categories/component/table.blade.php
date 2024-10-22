@@ -34,8 +34,15 @@
                         </td>   
                          <td class="text-center">
                             <a href="{{ route('category.edit', $category->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-    
-                            <a href="{{ route('category.delete', $category->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                            <form action="{{ route('category.destroy', $category->id) }}" method="POST" class="m-0" style="display: inline-block;"
+                                >
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                            
                         </td>
                     </tr>
                 @endforeach

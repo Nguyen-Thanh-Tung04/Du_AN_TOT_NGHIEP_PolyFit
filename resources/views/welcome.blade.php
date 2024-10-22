@@ -131,17 +131,29 @@
                                     </div>
                                     <div class="ec-product-body">
                                         <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
+                                            @if ($product->averageScore)
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= round($product->averageScore))
+                                                        <li class="ecicon eci-star fill"></li>
+                                                    @else
+                                                        <li class="ecicon eci-star"></li>
+                                                    @endif
+                                                @endfor
+                                            @else
+                                                <!-- Hiển thị 5 sao trống nếu không có đánh giá -->
+                                                @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= 5)
+                                                <li class="ecicon eci-star fill"></li>
+                                                @else
+                                                    <li class="ecicon eci-star"></li>
+                                                @endif                                                    @endfor
+                                            @endif
                                         </ul>
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                         <div class="ec-price">
-                                            <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
-                                            {{ number_format($product->min_price, 0) }} VNĐ
-                                            {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
+                                            <span>{{ number_format($product->listed_price, 0) }}đ </span>
+                                            {{ number_format($product->min_price, 0) }} đ
+                                            {{-- - {{ number_format($product->max_price, 0) }} đ --}}
                                         </div>
                                         <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
                                     </div>
@@ -230,7 +242,7 @@
                     <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
                             alt="offer image" /></span>
                     <span class="ec-offer-desc">Mũ</span>
-                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} VNĐ</span>
+                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} đ</span>
                     <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
                 </div> --}}
             </div>
@@ -271,17 +283,30 @@
                                         </div>
                                         <div class="ec-product-body">
                                             <ul class="ec-rating">
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star"></li>
+                                                @if ($product->averageScore)
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        @if($i <= round($product->averageScore))
+                                                            <li class="ecicon eci-star fill"></li>
+                                                        @else
+                                                            <li class="ecicon eci-star"></li>
+                                                        @endif
+                                                    @endfor
+                                                @else
+                                                    <!-- Hiển thị 5 sao trống nếu không có đánh giá -->
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= 5)
+                                                    <li class="ecicon eci-star fill"></li>
+                                                    @else
+                                                        <li class="ecicon eci-star"></li>
+                                                    @endif                                                    @endfor
+                                                @endif
                                             </ul>
+                                            
                                             <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
-                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
-                                                {{ number_format($product->min_price, 0) }} VNĐ
-                                                {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
+                                                <span>{{ number_format($product->listed_price, 0) }}đ </span>
+                                                {{ number_format($product->min_price, 0) }} đ
+                                                {{-- - {{ number_format($product->max_price, 0) }} đ --}}
                                             </div>
                                             <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
                                         </div>

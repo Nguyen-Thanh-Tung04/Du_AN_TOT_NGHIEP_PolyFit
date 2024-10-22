@@ -10,24 +10,17 @@
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ Auth::user()->name }}</strong>
-                             {{-- </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
-                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a href="profile.html">Profile</a></li>
-                        <li><a href="contacts.html">Contacts</a></li>
-                        <li><a href="mailbox.html">Mailbox</a></li>
-                        <li class="divider"></li>
-                        <li><a href="login.html">Logout</a></li>
-                    </ul> --}}
+                              </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
                 </div>
-                <div class="logo-element">
-                    IN+
-                </div>
+            </li>
+            <li class="active">
+                <a href="{{ route('dashboard.index') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Thống Kê</span> <span class="fa arrow"></span></a>
             </li>
                 @foreach (config('apps.module.module') as $val)
                     <li class="{{ (in_array($segment, $val['name'])) ? 'active' : '' }}">
                         <a @if(isset($val['subModule'])) href="#" @else href="{{ $val['route'] }}" @endif>
-                            <i class="{{ $val['icon'] }}"></i> 
-                            <span class="nav-label">{{ $val['title'] }}</span> 
+                            <i class="{{ $val['icon'] }}"></i>
+                            <span class="nav-label">{{ $val['title'] }}</span>
                             @if (isset($val['subModule']) && count($val['subModule']) > 0)
                                 <span class="fa arrow"></span>
                             @endif

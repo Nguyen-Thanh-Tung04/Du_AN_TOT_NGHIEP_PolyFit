@@ -35,32 +35,42 @@
                     <div class="ec-vendor-card-body">
                         <ul class="nav nav-tabs" id="orderTabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="all-orders-tab" data-toggle="tab" href="#all-orders" role="tab">Tất cả</a>
+                                <a class="nav-link" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">
+                                    Chờ xác nhận @if($pendingCount > 0) <span class="text-danger">({{ $pendingCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">Chờ xác nhận</a>
+                                <a class="nav-link" id="confirmed-orders-tab" data-toggle="tab" href="#confirmed-orders" role="tab">
+                                    Đã xác nhận @if($confirmedCount > 0) <span class="text-danger">({{ $confirmedCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="confirmed-orders-tab" data-toggle="tab" href="#confirmed-orders" role="tab">Đã xác nhận</a>
+                                <a class="nav-link" id="preparing-orders-tab" data-toggle="tab" href="#preparing-orders" role="tab">
+                                    Đang chuẩn bị @if($preparingCount > 0) <span class="text-danger">({{ $preparingCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="preparing-orders-tab" data-toggle="tab" href="#preparing-orders" role="tab">Đang chuẩn bị</a>
+                                <a class="nav-link" id="shipping-orders-tab" data-toggle="tab" href="#shipping-orders" role="tab">
+                                    Đang vận chuyển @if($shippingCount > 0) <span class="text-danger">({{ $shippingCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="shipping-orders-tab" data-toggle="tab" href="#shipping-orders" role="tab">Đang vận chuyển</a>
+                                <a class="nav-link" id="delivered-orders-tab" data-toggle="tab" href="#delivered-orders" role="tab">
+                                    Đã giao hàng @if($deliveredCount > 0) <span class="text-danger">({{ $deliveredCount }})</span> @endif
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="delivered-orders-tab" data-toggle="tab" href="#delivered-orders" role="tab">Đã giao hàng</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="cancelled-orders-tab" data-toggle="tab" href="#cancelled-orders" role="tab">Đã hủy</a>
+                                <a class="nav-link" id="cancelled-orders-tab" data-toggle="tab" href="#cancelled-orders" role="tab">
+                                    Đã hủy @if($cancelledCount > 0) <span class="text-danger">({{ $cancelledCount }})</span> @endif
+                                </a>
                             </li>
                         </ul>
+                        
+                        
+                        
+                        
 
                         <div class="tab-content" id="orderTabContent">
-                            <div class="tab-pane fade show active" id="all-orders" role="tabpanel">
-                                @include('client.page.orders_table', ['orders' => $orders])
-                            </div>
                             <div class="tab-pane fade" id="pending-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $pendingOrders])
                             </div>
@@ -107,7 +117,35 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>      
+                                            <!-- Modal Xem đánh giá -->
+                                            <div class="modal fade" id="viewReviewModal" tabindex="-1" aria-labelledby="viewReviewModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h3 class="modal-title" id="viewReviewModalLabel">Xem đánh giá</h3>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <!-- Phần hiển thị danh sách sản phẩm -->
+                                                            <h5>Danh sách sản phẩm đã mua</h5>
+                                                            <div id="pr-list"></div>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <!-- Phần hiển thị danh sách đánh giá -->
+                                                            <h5>Đánh giá của bạn</h5>
+                                                            <div id="view-review-list"></div>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                      
                                       @endforeach
                                 </tbody>
                             </table>
@@ -133,22 +171,7 @@
         3: "Bình thường",
         4: "Hài lòng",
         5: "Rất hài lòng"
-    };
-
-    // Khi người dùng chọn sao
-    $('.rate input[type="radio"]').on('change', function () {
-        // Lấy giá trị của sao đã chọn
-        var starValue = $(this).val();
-
-        // Cập nhật nội dung mô tả dựa trên giá trị sao
-        $('.rate-text').text(starDescriptions[starValue]);
-
-        // Hiển thị lại phần mô tả nếu nó đang bị ẩn
-        if ($('.rate-text').hasClass('uk-hidden')) {
-            $('.rate-text').removeClass('uk-hidden');
-        }
-    });
-
+    };    
 
     // khi bấm đánh giá
     $(document).on('click', '.open-review-modal', function () {
@@ -186,7 +209,7 @@
         // Đổ form
         $('#review-list').append(`
                 <!-- Form để đánh giá cả đơn hàng -->
-                <div id="review-form-{{ $order->id }}">
+                <div id="review-form-${orderId}">
                     <input type="hidden" name="order_id" value="${orderId}">
 
                     <!-- Rating Section -->
@@ -233,11 +256,105 @@
             `);
 
         // Hiển thị modal
-        $('#reviewModalLabel').text('Viết đánh giá cho đơn hàng ' + orderId);
+        $('#reviewModalLabel').text('Viết đánh giá cho đơn hàng ');
         $('#reviewModal').modal('show');
         
     });
 
+    $(document).on('change', '.rate input[type="radio"]', function () {
+        var starValue = $(this).val();
+
+        // Cập nhật nội dung mô tả dựa trên giá trị sao
+        $('.rate-text').text(starDescriptions[starValue]);
+
+        // Hiển thị lại phần mô tả nếu nó đang bị ẩn
+        if ($('.rate-text').hasClass('uk-hidden')) {
+            $('.rate-text').removeClass('uk-hidden');
+        }
+    });
+   
+    // Khi bấm nút 'Xem đánh giá'
+    $(document).on('click', '.open-view-review-modal', function() {
+        const orderId = $(this).data('order-id');
+        const products = $(this).data('products');
+        console.log(products);
+        // Xóa danh sách sản phẩm cũ
+        $('#pr-list').empty();
+        // Đổ sản phẩm vào danh sách
+         products.forEach(function(product) {
+            $('#pr-list').append(`
+                <div class="row mb-4 align-items-center">
+                    <div class="col-md-3 col-12 text-center">
+                        <img class="img-fluid rounded" src="${product.image}" alt="${product.name}" style="max-width: 60px;">
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <h5 class="mb-0">${product.name}</h5>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div>Màu: <span class="fw-bold">${product.color}</span></div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div>Kích cỡ: <span class="fw-bold">${product.size}</span></div>
+                    </div>
+                </div>
+            `);
+        });
+        // Gọi AJAX để lấy danh sách đánh giá
+        $.ajax({
+                url: `/reviews/${orderId}`, // Đường dẫn API để lấy đánh giá
+                method: 'GET',
+                success: function(response) {
+                    let reviewsHtml = '';
+                    
+                    // Check if there are reviews
+                    if (response.reviews && response.reviews.length > 0) {
+                        const review = response.reviews[0]; // Get the first review only
+                        
+                        reviewsHtml = `
+                            <div class="ec-t-review-item d-flex">
+                <div class="ec-t-review-avtar">
+                    <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" width="70px" class="rounded-circle" alt="" />
+                </div>
+                <div class="mx-5 ec-t-review-content">
+                    <div class="ec-t-review-top">
+                        <div class="ec-t-review-name">${review.user.name}</div>
+                        <div class="ec-t-review-rating">
+                            ${Array.from({length: 5}, (v, i) => `
+                                <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="ec-t-review-bottom">
+                        <p>${review.content}</p>
+                    </div>
+                    ${review.image ? `<img src="/storage/${review.image}" alt="Review Image" width="100">` : ''}
+                    <div class="ec-t-review-bottom">
+                        <p>${new Date(review.created_at).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            </div>
+                        `;
+                    } else {
+                        reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
+                    }
+                    
+                    // Display the review (or message if no reviews)
+                    $('#view-review-list').html(reviewsHtml);
+
+                    // Show the modal to view the review
+                    $('#viewReviewModal').modal('show');
+                },
+                error: function() {
+                    alert('Không thể tải danh sách đánh giá.');
+                }
+        });
+        // Hiển thị modal sau khi đã đổ sản phẩm
+        $('#viewReviewModal').modal('show');
+
+    });
+
+
+    // Submit
     $('#submit-review').on('click', function (e) {
         e.preventDefault();
 
@@ -254,12 +371,6 @@
         if (reviewImage) {
             formData.append('review_image', reviewImage); // Thêm file ảnh vào formData, không chỉ tên file
         }
-        // var files = $('#review_image').prop('files');
-        // if (files.length > 0) {
-        //     var fileName = files[0].name; // Lấy tên file
-        //     formData.append('review_image', fileName); // Chỉ lưu tên file vào formData
-        // }
-
 
         // Add CSRF token if Laravel is using CSRF protection
         formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
@@ -288,11 +399,24 @@
                         timer: 6000,
                         showCloseButton: true
                     });
+                     // Đóng modal sau khi đánh giá thành công
+                     $('#reviewModal').modal('hide');
+                     // Change the "Write Review" button to "View Review" after successful submission
+                    var orderId = $('input[name="order_id"]').val();
+                    var button = $('button.open-review-modal[data-order-id="' + orderId + '"]');
+
+                    button.removeClass('btn-primary open-review-modal')
+                        .addClass('btn-secondary open-view-review-modal')
+                         .text('Xem đánh giá')
+                         .attr('data-order-id', orderId);
+
+                    
                 } else {
                     alert(response.message || 'Có lỗi xảy ra.');
                 }
             },
             error: function (xhr) {
+                console.log(xhr);
                 if (xhr.status === 422) {
                     var errors = xhr.responseJSON.errors;
 
@@ -301,7 +425,7 @@
                         $('#review_text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
                     }
                     if (errors.rate) {
-                        $('input[name="rate"]').closest('.rate-group').after('<div class="error-message text-danger">' + errors.rate[0] + '</div>');
+                        $('input[name="rate"]').closest('.rate').after('<div class="error-message text-danger">Mời bạn đánh giá sao !</div>');
                     }
                     if (errors.review_image) {
                         $('#review_image').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');
@@ -313,7 +437,7 @@
         });
     });         
 
-
+    // Cập nhật ảnh
     $(document).on('change', '#review_image', function (event) {
         console.log('File input changed'); // Debugging line
 

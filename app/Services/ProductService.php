@@ -26,6 +26,13 @@ class ProductService
         return $getCategory;
     }
 
+    public function getSearchCategoryAttr() {
+        $getCategory = $this->productRepository->getSearchAttr(
+            'App\Models\Category',['id','name']
+        );
+        return $getCategory;
+    }
+
     public function getColorAttr() {
         $getColor = $this->productRepository->getAttr(
             'App\Models\Color',['id','name']
@@ -43,6 +50,7 @@ class ProductService
     public function paginate($request) {
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['status'] = $request->integer('status');
+        $condition['category_id'] = $request->integer('category_id');
         $perPage = $request->integer('perpage');
         $products = $this->productRepository->pagination([
             'products.id',
@@ -66,7 +74,7 @@ class ProductService
                 'gallery',
                 'description',
             ]);
-            $payloadProduct['gallery'] = json_encode($payloadProduct['gallery']);
+            $payloadProduct['gallery'] = (!empty($payloadProduct['gallery'])) ? json_encode($payloadProduct['gallery']) : null;
             $product = $this->productRepository->create($payloadProduct);
 
             if ($product && $product->id > 0) {

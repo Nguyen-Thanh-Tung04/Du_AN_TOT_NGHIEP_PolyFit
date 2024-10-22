@@ -11,7 +11,7 @@
 @endif
 
 
-    <div class="col-lg-6">
+    <div class="col-lg-6" style="margin-top: 30px">
         <div class="ibox">
             <div class="ibox-content">
                 <div class="row">
@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('reviews.reply', $reviews->id) }}" method="post" class="box" enctype="multipart/form-data">
+    <form action="{{ route('reviews.reply', $reviews->id) }}" method="post" class="box" style="margin-top: 30px" enctype="multipart/form-data">
         @csrf
         <div class="col-lg-6">
             <div class="ibox">
@@ -92,7 +92,11 @@
                     <div class="row">
                         <div class="col-lg-12 mb-15">
                             <div class="form-row">
-                                <label class="control-label text-left">Người đã trả lời đánh giá : <span style="color:brown">{{isset($reply)?$reply->user->name:"Chưa ai trả lời"}}</span></label>                                <!-- Kiểm tra nếu có reply, nếu có thì hiển thị giá trị của reply -->
+                             <!-- Kiểm tra nếu có reply, nếu có thì hiển thị giá trị của reply -->
+                                <label class="control-label text-left">Người đã trả lời đánh giá : <span style="color:brown">{{isset($reply)?$reply->user->name:"Chưa ai trả lời"}}</span></label>        
+                                <input type="hidden" name="">  
+                                <!-- Input hidden để lưu lại user_id của người đã trả lời -->
+                                <input type="hidden" name="reply_user_id" value="{{ isset($reply) ? $reply->user_id : '' }}">              
                             </div>
                         </div>
                     </div>

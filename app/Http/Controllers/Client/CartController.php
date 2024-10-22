@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -20,56 +21,92 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|integer|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'color_id' => 'nullable|integer|exists:colors,id',
-            'size_id' => 'nullable|integer|exists:sizes,id',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'product_id' => 'required|integer|exists:products,id',
+                'quantity' => 'required|integer|min:1',
+                'color_id' => 'nullable|integer|exists:colors,id',
+                'size_id' => 'nullable|integer|exists:sizes,id',
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Dữ liệu không hợp lệ'
+                ]);
+            }
 
-        if (!$request->color_id && !$request->size_id) {
-            $variant = Variant::where('product_id', $request->product_id)
-                ->where('quantity', '>', 0)
-                ->first();
-        } else {
-            $variant = Variant::where('product_id', $request->product_id)
-                ->when($request->color_id, function ($query) use ($request) {
-                    return $query->where('color_id', $request->color_id);
-                })
-                ->when($request->size_id, function ($query) use ($request) {
-                    return $query->where('size_id', $request->size_id);
-                })
-                ->where('quantity', '>', 0)
-                ->first();
-        }
+            if (!$request->color_id && !$request->size_id) {
+                $variant = Variant::where('product_id', $request->product_id)
+                    ->where('quantity', '>', 0)
+                    ->first();
+            } else {
+                $variant = Variant::where('product_id', $request->product_id)
+                    ->when($request->color_id, function ($query) use ($request) {
+                        return $query->where('color_id', $request->color_id);
+                    })
+                    ->when($request->size_id, function ($query) use ($request) {
+                        return $query->where('size_id', $request->size_id);
+                    })
+                    ->where('quantity', '>', 0)
+                    ->first();
+            }
 
-        if (!$variant) {
+            if (!$variant) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Thuộc tính không hợp lệ'
+                ], 400);
+            }
+
+            if ($request->quantity > $variant->quantity) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "Hiện tại, chỉ còn {$variant->quantity} sản phẩm có sẵn. Vui lòng chọn số lượng ít hơn."
+                ]);
+            }
+
+            $cartItem = Cart::where('user_id', Auth::id())
+                ->where('variant_id', $variant->id)
+                ->first();
+
+            if ($cartItem) {
+                if ($cartItem->quantity + $request->quantity > $variant->quantity) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => "Hiện tại, chỉ còn {$variant->quantity} sản phẩm có sẵn. Vui lòng chọn số lượng ít hơn."
+                    ]);
+                }
+                $cartItem->quantity += $request->quantity;
+                $cartItem->save();
+            } else {
+                $cartItem = Cart::create([
+                    'user_id' => Auth::id(),
+                    'variant_id' => $variant->id,
+                    'quantity' => $request->quantity,
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Thêm sản phẩm vào giỏ hàng thành công',
+                'data' => $cartItem
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Thuộc tính không hợp lệ'
-            ], 400);
-        }
-
-        $cartItem = Cart::where('user_id', Auth::id())
-            ->where('variant_id', $variant->id)
-            ->first();
-
-        if ($cartItem) {
-            $cartItem->quantity += $request->quantity;
-            $cartItem->save();
-        } else {
-            $cartItem = Cart::create([
-                'user_id' => Auth::id(),
-                'variant_id' => $variant->id,
-                'quantity' => $request->quantity,
+                'message' => 'Đã xảy ra lỗi.',
+                'errors' => $e->getMessage()
             ]);
         }
+    }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Thêm sản phẩm vào giỏ hàng thành công',
-            'data' => $cartItem
-        ]);
+    public function countCartItems()
+    {
+        $count = 0;
+
+        $count = Cart::where('user_id', Auth::id())->count();
+
+        return response()->json(['count' => $count]);
     }
 
     public function saveSelectedItems(Request $request)
@@ -114,7 +151,7 @@ class CartController extends Controller
             if ($newQuantity <= 0 || $newQuantity > $variant->quantity) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Số lượng không hợp lệ',
+                    'message' => 'Số lượng sản phẩm không hợp lệ',
                 ]);
             }
 
