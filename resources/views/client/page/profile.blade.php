@@ -105,7 +105,6 @@
 <!-- User profile section -->
 <section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
     <div class="container">
-        @foreach ($profile as $profile)
         <div class="row">
             <!-- Sidebar Area Start -->
             <div class="ec-shop-leftside ec-vendor-sidebar col-lg-3 col-md-12">
@@ -215,7 +214,6 @@
                 </div>
             </div>
         </div>
-        @endforeach
     </div>
 </section>
 <!-- End User profile section -->

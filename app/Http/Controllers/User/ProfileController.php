@@ -2,23 +2,19 @@
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Stmt\TryCatch;
-use Symfony\Component\HttpKernel\Profiler\Profile;
+
 
 class ProfileController extends Controller
 {
-
-
     public function listProfile() {
-    $profile = Auth::user(); // Lấy thông tin tài khoản đang đăng nhập
-    return view('client.page.profile', compact('profile') );
-}
+        $profile = Auth::user(); // Lấy thông tin tài khoản đang đăng nhập
+        return view('client.page.profile', compact('profile'));
+    }
 
     public function updateProfile($idUser,Request $req){
 
@@ -31,13 +27,29 @@ class ProfileController extends Controller
             'district_id' => 'required|max:255',
             'ward_id' => 'required|max:255',
             'address' => 'required|max:255',
+        ],[
+            'name.required'=> 'Không được để trống tên ',
+            'email.required'=>'Không được để trống email',
+            'email.email'=>'Email không đúng định dạng',
+            'phone.required'=>'Số điện thoại không được để trống',
+            'phone.digits:10'=>'Số điện thoại không đúng',
+            'birthday.required'=>'Không được để trống ngày sinh',
+            'birthday.date'=>'Ngày sinh không đúng',
+            'province_id.require'=>'Không được để trống địa chỉ',
+            'district_id'=>'Không được để trống địa chỉ',
+            'ward_id'=>'Không được để trống địa chỉ',
+            'address'=>'Không được để trống địa chỉ'
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Cập nhật không thành công');
+            $e= "";
+            foreach ($validator->errors()->all() as $error){
+                $e .= $error . ' ';
+            }
+            return redirect()->back()->with('error', 'Cập nhật không thành công! '.$e);
 
         }
-            $profile = User::find( $idUser)->first();
+            $profile = User::find( $idUser);
             $data = $req->except('image');
             if($req->hasFile('image')){
                 $path_image = $req->file('image')->store('user','public');
@@ -49,7 +61,6 @@ class ProfileController extends Controller
             $profile->update($data);
             return redirect()->back()->with('success', 'Cập nhật thành công.');
 
-
     }
 
     public function changePassword(){
@@ -59,9 +70,21 @@ class ProfileController extends Controller
     {
 
          $request->validate([
-
+            'current_password'=>['required'],
             'new_password' => ['required', 'string', 'min:8','confirmed'],
-            'new_password_confirmation'=>['required','string','min8',],
+            'new_password_confirmation'=>['required','string','min:8'],
+
+        ],[
+            'current_password.require'=>'Không được để trống mật khẩu',
+            'new_password.required'=>'Không được để trống mật khẩu',
+            'new_password.string'=>'Mật khẩu phải là một chuỗi ký tự',
+            'new_password.min:8'=>'Mật khẩu tối thiểu 8 ký tự',
+            'new_password.confirmed'=>'Mật khẩu phải trùng khớp',
+            'new_password_confirmation.required'=>'Mật khẩu không được để trống',
+            'new_password_confirmation.string'=>'Mật khẩu phải là một chuỗi ký tự',
+            'new_password_confirmation.min:8'=>'Mật khẩu tối thiểu 8 ký tự',
+
+
 
         ]);
 
@@ -76,4 +99,4 @@ class ProfileController extends Controller
     }
 
 
-}
+ }
