@@ -51,7 +51,7 @@
                                     <!-- Thêm bộ lọc đánh giá đã bị xóa mềm -->
                                     <select name="trashed" class="form-control mr-10 setupSelect2">
                                         <option value="">Tất cả đánh giá</option>
-                                        <option value="1" {{ request('trashed') == 1 ? 'selected' : '' }}>Đánh giá đã xóa</option>
+                                        <option value="1" {{ request('trashed') == 1 ? 'selected' : '' }}>Đánh giá đã bị xóa</option>
                                     </select>
                                 
                                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">

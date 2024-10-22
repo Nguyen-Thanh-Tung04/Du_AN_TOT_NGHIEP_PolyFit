@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\ReviewHistory;
+use Illuminate\Support\Facades\Log;
+
 
 class Review extends Model
 {
@@ -45,6 +47,8 @@ class Review extends Model
     // Ghi lại lịch sử khi tạo mới, cập nhật hoặc xóa đánh giá
     protected static function booted()
     {
+        parent::boot(); // Gọi phương thức boot() của lớp cha
+
         static::created(function ($review) {
             ReviewHistory::create([
                 'review_id' => $review->id,
@@ -67,7 +71,7 @@ class Review extends Model
             ]);
         });
 
-        static::deleting(function ($review) {
+        static::softDeleted(function ($review) {
             ReviewHistory::create([
                 'review_id' => $review->id,
                 'user_id' => $review->account_id,

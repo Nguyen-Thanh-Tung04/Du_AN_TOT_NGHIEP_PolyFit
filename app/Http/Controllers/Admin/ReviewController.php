@@ -51,16 +51,22 @@ class ReviewController extends Controller
             ->join('users', 'reviews.account_id', '=', 'users.id')
             ->join('products', 'reviews.product_id', '=', 'products.id')
             ->join('orders', 'reviews.order_id', '=', 'orders.id') // Join với bảng orders
+            ->leftJoin('review_histories', 'reviews.id', '=', 'review_histories.review_id') // Join với bảng review_histories
+            ->where('review_histories.action', 'create') // Điều kiện lọc theo action 'create'
+            ->where('review_histories.type', 'review') // Điều kiện lọc theo type 'review'
             ->select(
                 'reviews.*',
                 'users.email',
                 'users.name',
                 'users.image',
                 'products.code as product_code',
-                'orders.id as order_id' // Select order ID
+                'orders.id as order_id', // Select order ID
+                'review_histories.id as history_id',
+                'review_histories.action as history_action',
+                'review_histories.type as history_type'
             )
-            ->orderBy('reviews.created_at', 'desc');
-
+            ->orderBy('reviews.id', 'desc'); // Sắp xếp theo review ID
+    
         // Lấy điều kiện tìm kiếm từ request
         $conditions = [
             'keyword' => $request->input('keyword'),
@@ -69,7 +75,7 @@ class ReviewController extends Controller
             'score' => $request->input('score'),
             'trashed' => $request->input('trashed') // Lọc theo đánh giá bị xóa mềm
         ];
-
+    
         // Thêm điều kiện tìm kiếm theo từ khóa
         if (!empty($conditions['keyword'])) {
             $query->where(function ($q) use ($conditions) {
@@ -77,12 +83,12 @@ class ReviewController extends Controller
                     ->orWhere('users.email', 'like', '%' . $conditions['keyword'] . '%');
             });
         }
-
+    
         // Thêm điều kiện lọc theo trạng thái (nếu có)
         if (!is_null($conditions['status'])) {
             $query->where('reviews.status', $conditions['status']);
         }
-
+    
         // Lọc theo trạng thái trả lời hay chưa (repluy)
         if (!is_null($conditions['repluy'])) {
             if ($conditions['repluy'] == 1) {
@@ -91,25 +97,25 @@ class ReviewController extends Controller
                 $query->doesntHave('replies'); // Đánh giá chưa trả lời
             }
         }
-
+    
         // Thêm điều kiện lọc theo score (điểm đánh giá)
         if (!empty($conditions['score'])) {
             $query->where('reviews.score', '=', $conditions['score']);
         }
-
+    
         // Thêm điều kiện lọc theo đánh giá đã bị xóa mềm
         if (!is_null($conditions['trashed'])) {
             if ($conditions['trashed'] == 1) {
                 $query->onlyTrashed(); // Chỉ lấy đánh giá đã bị xóa mềm
             }
         }
-
+    
         // Lấy số bản ghi trên mỗi trang từ request (mặc định là 10)
         $perPage = $request->input('perpage', 10);
-
+    
         // Thực hiện phân trang và lấy kết quả
         $reviewHistories = $query->paginate($perPage);
-
+    
         // Cấu hình JS và CSS cho trang
         $config = [
             'js' => [
@@ -123,10 +129,11 @@ class ReviewController extends Controller
         ];
         $config['seo'] = config('apps.review');
         $template = 'admin.reviews.history';
-
+    
         // Trả về view với dữ liệu đã phân trang
         return view('admin.dashboard.layout', compact('template', 'config', 'reviewHistories'));
     }
+    
 
 
     public function showReviewHistory($reviewId)
