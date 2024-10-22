@@ -89,11 +89,11 @@ class AuthController extends Controller
 
         Auth::logout();
         session()->forget('selected_items');
-        
+
         // Làm sạch phiên người dùng
         // $request->session()->invalidate();
         // $request->session()->regenerateToken();
-        
+
         // Kiểm tra vai trò người dùng và điều hướng đến trang đăng nhập tương ứng
         if ($user->publish === 1) {
             // dd("admin");

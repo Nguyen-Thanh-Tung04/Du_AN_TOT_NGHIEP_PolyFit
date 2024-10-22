@@ -13,10 +13,12 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class ProfileController extends Controller
 {
-    public function listProfile(){
-        $profile = User::all();
-        return view('client.page.profile', compact('profile') );
-    }
+
+
+    public function listProfile() {
+    $profile = Auth::user(); // Lấy thông tin tài khoản đang đăng nhập
+    return view('client.page.profile', compact('profile') );
+}
 
     public function updateProfile($idUser,Request $req){
 
