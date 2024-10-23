@@ -131,7 +131,8 @@
                      <div class="col footer-bottom-right">
                          <div class="footer-bottom-payment d-flex justify-content-end">
                              <div class="payment-link">
-                                 <img src="theme/client/assets/images/icons/payment.png" alt="">
+                                 <img src="{{ asset('theme/client/assets/images/icons/payment.png')}}" alt="">
+                                
                              </div>
 
                          </div>
@@ -169,7 +170,21 @@
 
 
  <!-- Recent Purchase Popup  -->
- <div class="recent-purchase">
+    <div class="recent-purchase-container">
+        <!-- Recent Purchase Popup sẽ được chèn vào đây -->
+    </div>
+{{-- <div class="recent-purchase">
+    <img src="{{asset('theme/client/assets/images/product-image/1.jpg')}}" alt="payment image">
+    <div class="detail">
+        <p>Có người mới mua</p>
+        <h6>{{ $product_name }}</h6>
+        <p>{{ $time_ago }}</p>
+    </div>
+    <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
+</div> --}}
+
+
+ {{-- <div class="recent-purchase">
      <img src="{{asset('theme/client/assets/images/product-image/1.jpg')}}" alt="payment image">
      <div class="detail">
          <p>Có người mới mua</p>
@@ -177,7 +192,7 @@
          <p>10 phút trước</p>
      </div>
      <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
- </div>
+ </div> --}}
  <!-- Recent Purchase Popup end -->
 
  <!-- Cart Floating Button -->
@@ -313,3 +328,51 @@
      <!--/ End Right Floating Button-->
  </div>
  <!-- Whatsapp end -->
+ <script>
+    // console.log(window.Echo); // Kiểm tra xem Echo có khởi tạo đúng không
+    // console.log(window.Echo.channel('orders-channel'));
+    // window.Echo.channel('orders-channel')
+    // .listen('OrderPlaced', (e) => {
+    //     console.log('New order placed:', e);
+    // });
+
+
+
+//    function timeSince(date) {
+//     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+//     let interval = Math.floor(seconds / 60);
+
+//     if (interval < 1) return 'Vừa mới';
+//     if (interval == 1) return '1 phút trước';
+//     return `${interval} phút trước`;
+//     }
+
+// // Lắng nghe sự kiện 'order.placed'
+// window.Echo.channel('orders-channel')
+//     .listen('order.placed', (e) => {
+//         const timeAgo = timeSince(e.order.created_at);
+        
+//         let recentPurchaseHtml = `
+//             <div class="recent-purchase">
+//                 <img src="/storage/${e.image}" alt="payment image">
+//                 <div class="detail">
+//                     <p>Có người mới mua</p>
+//                     <h6>${e.product_name}</h6>
+//                     <p>${timeAgo}</p>
+//                 </div>
+//                 <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
+//             </div>`;
+//         // Console log thông tin trước khi hiển thị
+//         console.log('Sự kiện đơn hàng mới:', {
+//             product_name: e.product_name,
+//             image: e.image,
+//             created_at: e.order.created_at,
+//             timeAgo: timeAgo
+//         });
+
+
+//         document.querySelector('.recent-purchase-container').innerHTML = recentPurchaseHtml;
+//     });
+
+
+ </script>
