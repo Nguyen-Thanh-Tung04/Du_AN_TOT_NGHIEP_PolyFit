@@ -14,17 +14,10 @@
 <form action="{{ $url }}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
+        
+        
         <div class="row">
-            <div class="col-lg-4">
-                <div class="panel-heading">
-                    <div class="panel-title">Thông tin chung</div>
-                    <div class="panel-description">
-                        <p>- Nhập thông tin chung của người sử dụng</p>
-                        <p>- Lưu ý: Những trường đánh dấu <span class="text-danger">(*) </span>là bắt buộc</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
@@ -57,7 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-15">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Danh mục
@@ -74,14 +67,79 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 mb-15">
-                                <div class="form-row">
-                                    <label class="control-label text-left">Mô tả</label>
-                                    <textarea name="description" class="form-control" id="" cols="30" rows="10">{{ old('description') }}</textarea>
+                            <div class="col-lg-12">
+                                <div class="ibox">
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-lg-12 mb-15">
+                                                
+                                                <div class="table-responsive">
+                                                    <div style="margin: 10px 0 20px 0;">
+                                                        <a href="http://127.0.0.1:8000/product/create" class="btn btn-danger" id="addVariant">
+                                                            <i class="fa fa-plus mr-5"></i>
+                                                            Thêm mới biến thể</a>
+                                                    </div>
+                                                    <table class="table table-sm table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">Màu Sắc <span class="text-danger">(*)</span></th>
+                                                                <th class="text-center">Kích cỡ <span class="text-danger">(*)</span></th>
+                                                                <th class="text-center">Giá nhập kho <span class="text-danger">(*)</span></th>
+                                                                <th class="text-center">Giá niêm yết <span class="text-danger">(*)</span></th>
+                                                                <th class="text-center">Giá sale</th>
+                                                                <th class="text-center">Số lượng <span class="text-danger">(*)</span></th>
+                                                                <th class="text-center">Hành động</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="variant-tbody">
+                                                                <tr class="variant-row">
+                                                                    <td class="text-center">
+                                                                        <select name="color[]" class="form-control">
+                                                                            <option value="0">Màu Sắc</option>
+                                                                            @foreach ($getColorAttr as $item)
+                                                                                <option {{ old("color.$loop->index") == $item->id ? 'selected' : '' }}
+                                                                                    value="{{ $item->id }}">{{ $item->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="text-center" style="padding: 20px 0">
+                                                                        <select name="size[]" class="form-control">
+                                                                            <option value="0">Kích cỡ</option>
+                                                                            @foreach ($getSizeAttr as $item)
+                                                                                <option {{ old("size.$loop->index") == $item->id ? 'selected' : '' }}
+                                                                                    value="{{ $item->id }}">{{ $item->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <input type="text" name="purchase_price[]" value="{{ old('purchase_price.0') }}" placeholder="Giá nhập kho" class="form-control">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <input type="text" name="listed_price[]" value="{{ old('listed_price.0') }}" placeholder="Giá niêm yết" class="form-control">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <input type="text" name="sale_price[]" value="{{ old('sale_price.0') }}" placeholder="Giá sale" class="form-control">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <input type="text" name="quantity[]" value="{{ old('quantity.0') }}" placeholder="Số lượng" class="form-control">
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <a href="" class="btn btn-danger remove-variant"><i class="fa fa-trash "></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                        </tbody>
+                                                        
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-15">
                             <div class="ibox" style="margin:15px;">
                                 <div class="ibox-title">
                                     <div class="uk-flex uk-flex-middle uk-flex-space-between">
@@ -93,7 +151,7 @@
                                 <div class="ibox-content">
                                     @php
                                         $album = (!empty($product->gallery)) ? json_decode($product->gallery) : [];
-                                        $gallery = (isset($album) && count($album) ) ? $album : old('gallery');
+                                        $gallery = (isset($album) && count($album) > 0) ? $album : old('gallery', []);
                                     @endphp
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -110,7 +168,7 @@
                                             </div>
                                             @endif
                                             
-                                            <div class="upload-list {{ (isset($gallery) && count($gallery)) ? '' : 'hidden' }}">
+                                            <div class="upload-list">
                                                 <ul id="sortable" class="clearfix data-album sortui ui-sortable">
                                                     @if(isset($gallery) && count($gallery))
                                                         @foreach($gallery as $key => $val)
@@ -133,77 +191,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox">
-                    <div class="ibox-content">
                         <div class="row">
                             <div class="col-lg-12 mb-15">
-                                
-                                <div class="table-responsive">
-                                    <div style="margin: 10px 0 20px 0;">
-                                        <a href="http://127.0.0.1:8000/product/create" class="btn btn-danger" id="addVariant">
-                                            <i class="fa fa-plus mr-5"></i>
-                                            Thêm mới biến thể</a>
+                                <div class="form-row">
+                                    <div class="uk-flex uk-middle uk-flex-space-between">
+                                        <label for="" class="control-label text-left">Mô tả sản phẩm</label>
+                                        <a href="" class="multipleUploadImageCkeditor" data-target="ckContent">Chọn nhiều hình ảnh</a>
                                     </div>
-                                    <table class="table table-sm table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Màu Sắc</th>
-                                                <th class="text-center">Kích cỡ</th>
-                                                <th class="text-center">Giá nhập kho</th>
-                                                <th class="text-center">Giá niêm yết</th>
-                                                <th class="text-center">Giá sale</th>
-                                                <th class="text-center">Số lượng</th>
-                                                <th class="text-center">Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="variant-tbody">
-                                                <tr class="variant-row">
-                                                    <td class="text-center">
-                                                        <select name="color[]" class="form-control">
-                                                            <option value="0">Màu Sắc</option>
-                                                            @foreach ($getColorAttr as $item)
-                                                                <option {{ old("color.$loop->index") == $item->id ? 'selected' : '' }}
-                                                                    value="{{ $item->id }}">{{ $item->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </td>
-                                                    <td class="text-center" style="padding: 20px 0">
-                                                        <select name="size[]" class="form-control">
-                                                            <option value="0">Kích cỡ</option>
-                                                            @foreach ($getSizeAttr as $item)
-                                                                <option {{ old("size.$loop->index") == $item->id ? 'selected' : '' }}
-                                                                    value="{{ $item->id }}">{{ $item->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="text" name="purchase_price[]" value="{{ old('purchase_price.0') }}" placeholder="Giá nhập kho" class="form-control">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="text" name="listed_price[]" value="{{ old('listed_price.0') }}" placeholder="Giá niêm yết" class="form-control">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="text" name="sale_price[]" value="{{ old('sale_price.0') }}" placeholder="Giá sale" class="form-control">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="text" name="quantity[]" value="{{ old('quantity.0') }}" placeholder="Số lượng" class="form-control">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="" class="btn btn-danger remove-variant"><i class="fa fa-trash "></i></a>
-                                                    </td>
-                                                </tr>
-                                        </tbody>
-                                        
-                                    </table>
+                                    <textarea
+                                        type="text"
+                                        name="description"
+                                        id="ckContent"
+                                        class="form-control ck-editor"
+                                        placeholder=""
+                                        autocomplete="off"
+                                        data-height="300">
+                                        {{ old('description') }}
+                                    </textarea>
                                 </div>
                             </div>
                         </div>
@@ -211,6 +215,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="text-right mb-15">
             <button type="submit" class="btn btn-primary" name="send" value="send">Lưu thay đổi</button>
         </div>

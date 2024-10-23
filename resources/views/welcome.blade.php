@@ -63,22 +63,22 @@
         </div>
         <div class="row margin-minus-tb-15">
 
-                <div class="ec_cat_slider">
-                    @foreach ($category as $category)
-                    <div class="ec_cat_content">
-                        <div class="ec_cat_inner text-center p-5">
-                            <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
-                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
-                            width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                            height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                            object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
-                            />
-                            <p class="text-black fw-bold">{{$category->name}}</p>
-                        </div>
+            <div class="ec_cat_slider">
+                @foreach ($category as $category)
+                <div class="ec_cat_content">
+                    <div class="ec_cat_inner text-center p-5">
+                        <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
+                        <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
+                        width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
+                        height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
+                        object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
+                        />
+                        {{-- <p class="text-black fw-bold">{{$category->name}}</p> --}}
                     </div>
-                    @endforeach
                 </div>
-            
+                @endforeach
+            </div>
+
         </div>
 
     </div>
@@ -125,18 +125,31 @@
                                     <div class="ec-product-image">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                             <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" style="height: 250px"  />
+                                                alt="" style="height: 300px"  />
                                         </a>
                                         <span class="ec-product-discount-label">-33%</span>
                                     </div>
                                     <div class="ec-product-body">
                                         <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
+                                            @php
+                                                $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                            @endphp
+
+                                            @if ($averageScore)
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $averageScore)
+                                                        <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                    @else
+                                                        <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                @endfor
+                                            @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <li class="ecicon eci-star"></li> <!-- Nếu không có đánh giá nào -->
+                                                @endfor
+                                            @endif
                                         </ul>
+
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                         <div class="ec-price">
                                             <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
@@ -230,7 +243,7 @@
                     <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
                             alt="offer image" /></span>
                     <span class="ec-offer-desc">Mũ</span>
-                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} VNĐ</span>
+                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} đ</span>
                     <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
                 </div> --}}
             </div>
@@ -271,11 +284,23 @@
                                         </div>
                                         <div class="ec-product-body">
                                             <ul class="ec-rating">
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star fill"></li>
-                                                <li class="ecicon eci-star"></li>
+                                                @php
+                                                    $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                                @endphp
+
+                                                @if ($averageScore)
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        @if ($i <= $averageScore)
+                                                            <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                        @else
+                                                            <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                        @endif
+                                                    @endfor
+                                                @else
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <li class="ecicon eci-star"></li> <!-- Nếu không có đánh giá nào -->
+                                                    @endfor
+                                                @endif
                                             </ul>
                                             <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">

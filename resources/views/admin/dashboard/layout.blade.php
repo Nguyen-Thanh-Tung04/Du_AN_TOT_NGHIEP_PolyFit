@@ -12,7 +12,7 @@
 
         <div id="page-wrapper" class="gray-bg">
             @include('admin.dashboard.component.nav')
-            @include($template)
+            @include(isset($template) ? $template : $template1)
             @include('admin.dashboard.component.footer')
         </div>
     </div>

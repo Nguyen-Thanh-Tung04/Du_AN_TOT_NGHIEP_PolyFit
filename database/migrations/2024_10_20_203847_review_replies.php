@@ -17,11 +17,11 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');    // Khóa ngoại tới bảng users (người trả lời)
             $table->text('content');                  // Nội dung phản hồi
             $table->timestamps();
+            $table->softDeletes();                    // Thêm soft deletes
 
             // Khóa ngoại
             $table->foreign('review_id')->references('id')->on('reviews')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
         });
     }
 

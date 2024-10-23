@@ -9,7 +9,6 @@
             <th>Mã sản phẩm</th>
             <th>Tên sản phẩm</th>
             <th>Danh mục</th>
-            <th>Mô tả</th>
             <th class="text-center">Tình Trạng</th>
             <th class="text-center">Thao Tác</th>
         </tr>
@@ -30,7 +29,6 @@
                     <td>{{ $product->code }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->description }}</td>
                     <td class="text-center js-switch-{{ $product->id }}">
                         <input type="checkbox" value="{{ $product->status }}" 
                         class="js-switch status " 

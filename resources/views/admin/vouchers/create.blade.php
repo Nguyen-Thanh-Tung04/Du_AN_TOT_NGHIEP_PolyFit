@@ -16,7 +16,7 @@
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-            <div class="col-lg-5">
+            <div class="col-lg-12">
                 <div class="panel-heading">
                     <div class="panel-title">Thông tin voucher</div>
                     <div class="panel-description">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">

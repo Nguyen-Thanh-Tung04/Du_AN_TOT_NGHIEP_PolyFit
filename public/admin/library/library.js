@@ -120,7 +120,7 @@
             });
 
             if (isDuplicate) {
-                alert('Biến thể đã tồn tại!');
+                toastr.success('Biến thể đã tồn tại!')
                 $(this).val('0'); // Đặt lại giá trị về mặc định
             }
         });
@@ -145,86 +145,141 @@
         })
     }
 
+    HT.removeProduct = () => {
+        $(document).on('click', '.remove-product', function (e) {
+            e.preventDefault();
+
+            swal({
+                title: "Bạn có chắc chắn?",
+                text: "Bạn sẽ không thể khôi phục lại mục này!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa!",
+                cancelButtonText: "Hủy",
+                closeOnConfirm: true // Đóng SweetAlert sau khi người dùng xác nhận
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $('#submitDelProduct').submit();
+                }
+            });
+        });
+    };
+
     HT.removeVariantDetail = () => {
-        $(document).on('click', '.remove-variant-detail', function () {
-            var _this = $(this);
-            var variantId = _this.data('variant-id');
+        $(document).on('click', '.remove-variant-detail', function (e) {
+            e.preventDefault();  // Ngăn chặn hành động mặc định khi bấm nút "Xóa"
 
-            if (confirm("Bạn có chắc chắn muốn xóa biến thể này không?")) {
-                var arrVariantIdDel = $('#delete_variant_id').val();
-                arrVariantIdDel += variantId + ',';
-                $('#delete_variant_id').val(arrVariantIdDel);
+            var _this = $(this); // Lấy đối tượng nút bấm
+            var variantId = _this.data('variant-id'); // Lấy ID của biến thể từ thuộc tính data-variant-id
 
-            } else {
-                return false;
-            }
-        })
-    }
+            // Sử dụng SweetAlert để hiển thị hộp thoại xác nhận
+            swal({
+                title: "Bạn có chắc chắn?",
+                text: "Bạn sẽ không thể khôi phục lại mục này!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa!",
+                cancelButtonText: "Hủy",
+                closeOnConfirm: true // Đóng SweetAlert sau khi người dùng xác nhận
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    var arrVariantIdDel = $('#delete_variant_id').val(); // Lấy giá trị hiện tại của input ẩn
+                    arrVariantIdDel += variantId + ','; // Thêm variant ID vào danh sách
+                    $('#delete_variant_id').val(arrVariantIdDel); // Cập nhật lại giá trị của input ẩn
+
+                    $('#submitDelVariant').submit();
+                }
+            });
+        });
+    };
 
     HT.changeStatus = () => {
         $(document).on('change', '.status', function (e) {
             let _this = $(this);
-            let isChecked = _this.prop('checked'); // Lấy trạng thái checkbox hiện tại
+            let currentValue = _this.val(); // Giá trị hiện tại trước khi thay đổi
             let option = {
-                'value': isChecked ? 1 : 2, // Thay đổi giá trị tùy theo trạng thái
+                'value': currentValue,
                 'modelId': _this.attr('data-modelId'),
                 'model': _this.attr('data-model'),
                 'field': _this.attr('data-field'),
                 '_token': _token,
-            };
-
-            // Ngăn sự thay đổi trạng thái ngay lập tức
-            e.preventDefault();
-
-            // Hiển thị thông báo xác nhận trước khi thay đổi
-            Swal.fire({
-                title: "Bạn có chắc không?",
-                text: "Khi bạn tắt tất cả phần liên quan sẽ tắt theo ?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Đúng, hãy thay đổi nó!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log(option)
-                    // Nếu người dùng xác nhận, thực hiện yêu cầu AJAX để thay đổi trạng thái
-                    $.ajax({
-                        url: 'ajax/dashboard/changeStatus',
-                        type: 'POST',
-                        data: option,
-                        dataType: 'json',
-                        success: function (res) {
-                            console.log(res);
-                            if (res.flag == true) {
-                                // Cập nhật giá trị mới cho checkbox
-                                _this.prop('checked', isChecked);
-
-                                // Hiển thị thông báo thành công
-                                Swal.fire({
-                                    title: "Thay đổi thành công !",
-                                    text: "Trạng thái đã được cập nhật.",
-                                    icon: "Thành công",
-                                    confirmButtonColor: "#3085d6",
-                                });
-                            } else {
-                                // Nếu có lỗi, hoàn tác thay đổi trạng thái
-                                _this.prop('checked', !isChecked);
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
-                            // Hoàn tác thay đổi trạng thái nếu có lỗi
-                            _this.prop('checked', !isChecked);
+            }
+    
+            $.ajax({
+                url: 'ajax/dashboard/changeStatus',
+                type: 'POST',
+                data: option,
+                dataType: 'json',
+                success: function (res) {
+                    // Giá trị sau khi thay đổi (nếu là 1 thì đổi thành 2, và ngược lại)
+                    let inputValue = (currentValue == 1) ? 2 : 1;
+                    
+                    if (res.flag == true) {
+                        // Cập nhật giá trị mới cho input
+                        _this.val(inputValue);
+    
+                        // Tùy thuộc vào trạng thái mới, hiển thị thông báo tương ứng
+                        if (inputValue == 1) {
+                            Swal.fire({
+                                title: "Bật trạng thái thành công!",
+                                text: "Trạng thái đã được bật.",
+                                icon: "success",
+                                confirmButtonColor: "#3085d6",
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Đã tắt trạng thái thành công!",
+                                text: "Trạng thái đã được tắt và tắt tất cả những dữ liệu trong nó.",
+                                icon: "success",
+                                confirmButtonColor: "#3085d6",
+                            });
                         }
-                    });
-                } else {
-                    // Nếu người dùng hủy, hoàn tác thay đổi trạng thái
-                    _this.prop('checked', !isChecked);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
                 }
             });
+    
+            e.preventDefault();
         });
     }
+    
+
+    // Sự kiện click cho nút xóa
+    $('.btn-delete').on('click', function (e) {
+        e.preventDefault(); // Ngăn không cho form submit ngay lập tức
+
+        var _this = $(this); // Lưu lại tham chiếu của nút để dùng sau
+        var form = _this.closest('form'); // Tìm form chứa nút xóa
+
+        // Hiển thị SweetAlert2 để xác nhận
+        Swal.fire({
+            title: "Bạn có chắc không?",
+            text: "Bạn có chắc chắn muốn xóa?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Đúng, hãy xóa nó!",
+            cancelButtonText: "Hủy bỏ",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Người dùng xác nhận, tiến hành submit form để xóa
+                form.submit();
+            } else {
+                // Nếu người dùng hủy, không làm gì cả
+                Swal.fire({
+                    title: "Đã hủy",
+                    text: "Không có thay đổi nào được thực hiện",
+                    icon: "info",
+                    confirmButtonColor: "#3085d6",
+                });
+            }
+        });
+    });
 
 
     HT.checkAll = () => {
@@ -334,6 +389,7 @@
         HT.cloneVariant();
         HT.removeVariant();
         HT.removeVariantDetail();
+        HT.removeProduct();
         HT.colorAttrDuplicate();
     });
 

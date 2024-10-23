@@ -29,7 +29,7 @@ class CheckColorChildrenRule implements ValidationRule
     {
         $product = Color::with('variants')->find($this->id);
         if ($product && $product->variants->count() > 0) {
-            $fail('Không thể xóa màu sắc vì còn sản phẩm chứa thuộc tính này.');
+            $fail('Vui lòng xóa sản phẩm có thuộc tính màu sắc này trước khi xóa.');
         }
     }
 }

@@ -41,6 +41,7 @@ class ReviewController extends Controller
             // Create a new review for each product
             foreach ($products as $productId) {
                 Review::create([
+                    'order_id' => $order->id,
                     'product_id' => $productId,
                     'account_id' => auth()->id(),
                     'content' => $request->input('review_text'),
@@ -54,16 +55,24 @@ class ReviewController extends Controller
                 'success' => true,
                 'message' => 'Đánh giá của bạn đã được lưu.',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in review submission: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đã xảy ra lỗi khi lưu đánh giá.',
-                'error' => $e->getMessage(),
-            ], 500);
+                'message' => 'Dữ liệu nhập vào không hợp lệ.',
+                'errors' => $e->errors(),
+            ], 422);
         }
     }
+    public function getReviews($orderId)
+    {
+        $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
+        $reviews = Review::whereIn('product_id', $order->orderItems->pluck('variant.product_id'))
+            ->with('user')
+            ->get();
+
+        return response()->json([
+            'reviews' => $reviews,
+        ]);
+    }
+
 }

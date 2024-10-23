@@ -30,7 +30,7 @@
             </div>
             <div class="ec-trackorder-inner mb-50">
                 <div class="ec-trackorder-top">
-                    <h2 class="ec-order-id">Mã Đơn Hàng #{{ $order->id }}</h2>
+                    <h2 class="ec-order-id">Mã Đơn Hàng {{ $order->code }}</h2>
                     <div class="ec-order-detail">
                         @if ($order->status === \App\Models\Order::STATUS_HUY_DON_HANG)
                             <div class="alert alert-danger">
@@ -65,13 +65,12 @@
                     </div>
                 </div>
                 <div class="text-right mt-5">
-                    <form action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
+                    <form id="cancelOrderForm" action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
                         @csrf
                         @method('PUT')
                         @if ($order->status === \App\Models\Order::STATUS_CHO_XAC_NHAN) 
                             <input type="hidden" name="huy_don_hang" value="1">
-                            <button type="submit" class="custom-btn danger-btn"
-                                onclick="return confirm('Bạn có xác nhận hủy đơn hàng không?')">
+                            <button type="button" id="cancelOrderButton" class="custom-btn danger-btn">
                                 <i class="fas fa-times-circle"></i> Hủy đơn hàng
                             </button>
                         @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN) 
@@ -83,6 +82,8 @@
                         @endif
                     </form>
                 </div>
+                
+                
                 
                 
                 @endif
@@ -162,31 +163,39 @@
                                             <tr class="showTotal">
                                                 <th>Phương thức thanh toán :</th>
                                                 <td style="text-align: right" id="subtotal">
-                                                    <div>Thanh toán khi nhận hàng</div>
+                                                    <div>
+                                                        @if ($order->payment_method == 1)
+                                                            Thanh toán khi nhận hàng
+                                                        @elseif ($order->payment_method == 2)
+                                                            Thanh toán VnPay
+                                                        @elseif ($order->payment_method == 3)
+                                                            Thanh toán MoMo
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr class="showTotal">
                                                 <th>Tổng tiền hàng</th>
                                                 <td style="text-align: right" id="subtotal">
-                                                    ₫{{ number_format($totalPrice, 0, ',', '.') }}
+                                                    {{ number_format($totalPrice, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                             <tr class="showTotal">
                                                 <th>Phí vận chuyển</th>
                                                 <td style="text-align: right" id="subtotal">
-                                                    ₫{{ number_format($order->shipping_cost, 0, ',', '.') }}
+                                                    {{ number_format($order->shipping_cost, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                             <tr class="showTotal">
                                                 <th>Voucher giảm giá</th>
                                                 <td style="text-align: right" id="tax">
-                                                    -₫{{ number_format($order->discount_amount, 0, ',', '.') }}
+                                                    -{{ number_format($order->discount_amount, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                             <tr class="showTotal" style="background:#f5f3f3;font-weight: bold;">
                                                 <th>Tổng tiền</th>
                                                 <td style="text-align: right" id="total">
-                                                    ₫{{ number_format($order->total_price, 0, ',', '.') }}
+                                                    {{ number_format($order->total_price, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>
                                         </table>
@@ -208,4 +217,43 @@
         <!-- Track Order Content end -->
     </div>
 </section>
+@section('scripts')
+<script>
+    document.getElementById('cancelOrderButton').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Lý do hủy đơn hàng',
+            input: 'select',
+            inputOptions: {
+                'Thay đổi địa chỉ giao hàng': 'Muốn thay đổi địa chỉ giao hàng',
+                'Thay đổi mã voucher': 'Muốn nhập/thay đổi mã Voucher',
+                'Thay đổi sản phẩm': 'Muốn thay đổi sản phẩm trong đơn hàng (size, màu sắc, số lượng...)',
+                'Thanh toán rắc rối': 'Thủ tục thanh toán quá rắc rối',
+                'Tìm giá rẻ hơn': 'Tìm thấy giá rẻ hơn ở chỗ khác',
+                'Không muốn mua nữa': 'Đổi ý, không muốn mua nữa'
+            },
+            inputPlaceholder: 'Chọn lý do...',
+            showCancelButton: true,
+            confirmButtonText: 'Gửi',
+            cancelButtonText: 'Hủy',
+            preConfirm: (selectedReason) => {
+                if (!selectedReason) {
+                    Swal.showValidationMessage('Vui lòng chọn lý do');
+                } else {
+                    // Gửi lý do hủy vào form
+                    const form = document.getElementById('cancelOrderForm');
+                    const reasonInput = document.createElement('input');
+                    reasonInput.type = 'hidden';
+                    reasonInput.name = 'cancel_reason';
+                    reasonInput.value = selectedReason;
+                    form.appendChild(reasonInput);
+                    form.submit();
+                }
+            }
+        });
+    });
+</script>
+
+
+
+@endsection
 @endsection
