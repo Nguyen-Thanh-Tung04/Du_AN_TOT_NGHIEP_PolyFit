@@ -239,6 +239,3 @@ class HomeController extends Controller
     }
 
 }
-=========
-}
->>>>>>>>> Temporary merge branch 2
