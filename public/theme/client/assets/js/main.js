@@ -1347,7 +1347,9 @@ function ecCheckCookie() {
     // $(".recent-close").click(function () {
     //     $(".recent-purchase").stop().slideToggle('slow');
     // });
-
+    $(document).on('click', '.recent-close', function () {
+        $(".recent-purchase").stop().slideToggle('slow');
+    })
     /*----------------------------- Whatsapp chat --------------------------------*/
     $(document).ready(function () {
 

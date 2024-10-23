@@ -15,7 +15,7 @@ window.Echo.channel('orders-channel')
 
         let recentPurchaseHtml = `
             <div class="recent-purchase">
-                <img src="/storage/${e.image}" alt="payment image">
+                <img src="${e.image}" alt="payment image">
                 <div class="detail">
                     <p>Có người mới mua</p>
                     <h6>${e.product_name}</h6>
@@ -33,4 +33,7 @@ window.Echo.channel('orders-channel')
 
 
         document.querySelector('.recent-purchase-container').innerHTML = recentPurchaseHtml;
+        setTimeout(function () {
+            $(".recent-purchase").stop().slideToggle('slow');
+        }, 8000);
     });

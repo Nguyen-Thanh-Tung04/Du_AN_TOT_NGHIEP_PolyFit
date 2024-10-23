@@ -131,10 +131,12 @@
                 }
             });
         }
-
-        updateCartCount();
+        var isLoggedIn = "{{ auth()->check() ? 'true' : 'false' }}";
+        if (isLoggedIn == 'true') {
+            updateCartCount();
+        }
     </script>
-    
+
 
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>

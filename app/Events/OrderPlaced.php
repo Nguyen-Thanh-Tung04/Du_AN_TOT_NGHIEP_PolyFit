@@ -34,8 +34,8 @@ class OrderPlaced implements ShouldBroadcast
 
         if ($firstItem && $firstItem->variant && $firstItem->variant->product) {
             $this->product_name = $firstItem->variant->product->name;
-            $gallery = $firstItem->variant->product->gallery;
-            $this->image = empty($gallery) ? $gallery[0] : ""; // Ảnh mặc định nếu không có ảnh
+            $gallery = json_decode($firstItem->variant->product->gallery);
+            $this->image = !empty($gallery) ? $gallery[0] : "";
         } else {
             $this->product_name = 'Sản phẩm không xác định';
             $this->image = 'default-image.jpg'; // Ảnh mặc định

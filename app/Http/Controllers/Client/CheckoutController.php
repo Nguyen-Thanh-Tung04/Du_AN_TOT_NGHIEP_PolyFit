@@ -243,8 +243,6 @@ class CheckoutController
                     'size' => $variant['size'],
                     'quantity' => $variant['quantity'],
                 ]);
-                // Sau khi đơn hàng được tạo, phát sự kiện realtime
-                event(new OrderPlaced($order));
                 // Trừ số lượng sản phẩm
                 $productVariant->decrement('quantity', $variant['quantity']);
 
@@ -258,6 +256,8 @@ class CheckoutController
                 ], 400);
             }
         }
+        // Sau khi đơn hàng được tạo, phát sự kiện realtime
+        event(new OrderPlaced($order));
 
         if ($voucher) {
             if ($voucher->quantity > 0) {
@@ -556,6 +556,9 @@ class CheckoutController
 
             // Xóa thông tin trong session
             session()->forget('checkout_data');
+
+            // Sau khi đơn hàng được tạo, phát sự kiện realtime
+            event(new OrderPlaced($order));
 
             // Chuyển hướng đến trang bill với thông tin đơn hàng
             return redirect()->route('order.show', $order->id);
