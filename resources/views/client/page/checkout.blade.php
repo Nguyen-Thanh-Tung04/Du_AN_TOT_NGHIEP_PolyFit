@@ -28,12 +28,12 @@
 
 <section class="ec-page-content section-space-p checkout_page">
     <div class="container">
-        
+
         <div class="row">
             <div class="ec-checkout-leftside col-lg-8 col-md-12 ">
                 <!-- checkout content Start -->
                 <div class="ec-checkout-content">
-                    
+
                     <div class="ec-checkout-inner">
                         <div class="ec-checkout-wrap margin-bottom-30 padding-bottom-3">
                             <div class="ec-checkout-block ec-check-bill">
@@ -109,7 +109,6 @@
 
                                 </div>
                             </div>
-
                         </div>
                         <span class="ec-check-order-btn">
                             <button type="button" id="placeOrder" class="btn btn-primary">Đặt hàng</button>
@@ -161,9 +160,9 @@
                                             </p>
                                             <ul id="voucherList" class="list-inline d-flex">
                                                 <!-- Danh sách voucher sẽ được thêm ở đây bằng jQuery -->
-                                                
+
                                             </ul>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -213,7 +212,7 @@
                                                 <span class="new-price">đ{{ number_format($item->listed_price, 0, '', '.') }} </span>
                                                 @endif
                                             </span>
-                                            
+
                                             <div class="ec-pro-option">
                                                 <div class="ec-pro-color">
                                                     Phân loại: {{ $item->size->name }}, {{ $item->color->name }}
@@ -305,7 +304,7 @@
     "use strict";
 
     $(document).ready(function () {
-        
+
         let voucherCode = "";
         $('#applyVoucher').click(function () {
             voucherCode = $('#voucherCode').val();
@@ -414,7 +413,7 @@
                         voucher_code: voucherCode,
                         product_variants: productVariants,
                         payment_method: paymentMethod,
-                    },                              
+                    },
                     success: function (response) {
                         if (response.success) {
                             successCallback(response);
@@ -442,7 +441,7 @@
                     }
                 });
             }
-            
+
         });
     });
 
@@ -458,10 +457,10 @@
         // Tính toán tổng cộng khi chọn hình thức vận chuyển
         $('input[name="shipping_method"]').change(function () {
             let shippingCost = parseInt($(this).val());
-            
+
             // Giữ nguyên giá trị giảm giá, không lấy lại từ HTML vì có thể bị sai
             let finalTotal = totalAmount + shippingCost - discountAmount;
-            
+
             // Cập nhật lại các giá trị hiển thị
             $('#shippingCost').text(formatCurrency(shippingCost));
             $('#finalTotal').text(formatCurrency(finalTotal));
@@ -470,7 +469,7 @@
         // Áp dụng mã voucher khi nhấn nút OK
         $('#applyVoucher').click(function () {
             let voucherCode = $('#voucherCode').val();
-            
+
             $.ajax({
                 url: '{{ route("checkout.applyVoucher") }}',
                 type: 'POST',
@@ -567,13 +566,13 @@ $(document).ready(function () {
                     let endTime = $(this).data('end-time');
                     let now = new Date();
                     let endDate = new Date(endTime);
-                    
+
                     let remainingTime = endDate - now;
-                    
+
                     if (remainingTime > 0) {
                         let daysLeft = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
                         let hoursLeft = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        
+
                         // Tạo thông báo
                         let message = `${daysLeft} Ngày/ ${hoursLeft} Giờ`;
                         $('#voucherMessage').html(`<span class="text-success">HSD: ${message}</span>`).show();
@@ -591,7 +590,7 @@ $(document).ready(function () {
     });
 });
 })(jQuery);
-    
+
 </script>
 
 @endsection

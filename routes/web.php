@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -279,6 +280,13 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
     Route::put('{voucher}/update', [VoucherController::class, 'update'])->name('update');
     Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
     Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
+});
+// banner
+Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [BannerController::class, 'index'])->name('index');
+    Route::get('create', [BannerController::class, 'create'])->name('create');
+    Route::post('store', [BannerController::class, 'store'])->name('store');
+
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
     Route::get('index',                 [OrderController::class, 'index'])->name('index');

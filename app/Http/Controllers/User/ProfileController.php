@@ -110,7 +110,6 @@ class ProfileController extends Controller
         }
         // Cập nhật mật khẩu
         Auth::user()->update(['password' => Hash::make($request->new_password)]);
-
         return back()->with('success', 'Mật khẩu đã được thay đổi thành công');
     }
 

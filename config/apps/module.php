@@ -99,6 +99,17 @@ return [
                     'route' => 'orders/index',
                 ],
             ],
+        ],
+        [
+            'title' => 'Quản lý Banner',
+            'icon' => 'fa fa-money',
+            'name' => ['banners'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý Banner',
+                    'route' => 'banners/index',
+                ],
+            ],
         ]
 
     ]

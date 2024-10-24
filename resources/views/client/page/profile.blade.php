@@ -138,7 +138,6 @@
                     <div class="ec-vendor-card-body">
                         <div class="row">
                             <div class="col-md-12">
-
                                 <div class="ec-vendor-block-profile">
                                     <div class="ec-vendor-block-img space-bottom-30">
                                         <div class="ec-vendor-block-bg">
@@ -168,11 +167,6 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-12">
-                                            <div class="ec-vendor-detail-block ec-vendor-block-email space-bottom-30">
-                                                <h6>Mật khẩu: ********<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-sm-12">
                                             <div class="ec-vendor-detail-block ec-vendor-block-contact space-bottom-30">
                                                 <h6>Số điện thoại:{{$profile->phone}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
                                             </div>
@@ -181,6 +175,22 @@
                                             <div class="ec-vendor-detail-block ec-vendor-block-address mar-b-30">
                                                 <h6>Ngày sinh: {{$profile->birthday}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
+                                                <h6>Phường/Xã:
+                                                @foreach($wards as $ward)
+                                                    {{ $profile->ward_id == $ward->code ? $ward->name : ''}}
+                                                @endforeach <a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
+                                                <h6>Quận/Huyện:
+                                                    @foreach($districts as $district)
+                                                    {{ $profile->district_id == $district->code ? $district->name : ''}}
+                                                @endforeach <a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-12">
@@ -194,31 +204,12 @@
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <div class="ec-vendor-detail-block ec-vendor-block-address">
-                                                <h6>Quận/Huyện:
-                                                    @foreach($districts as $district)
-                                                    {{ $profile->district_id == $district->code ? $district->name : ''}}
-                                                @endforeach <a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
-                                                <h6>Phường/Xã:
-                                                @foreach($wards as $ward)
-                                                    {{ $profile->ward_id == $ward->code ? $ward->name : ''}}
-                                                @endforeach <a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="ec-vendor-detail-block ec-vendor-block-address">
                                                 <h6>Địa chỉ cụ thể: {{$profile->address}}<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"></a></h6>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -312,20 +303,19 @@
                                 <p class="text-danger">{{$message}}</p>
                                 @enderror
                                 </div>
-
                                 <div class="col-md-12 space-t-15">
                                 <span class="ec-bill-wrap ec-bill-half">
                                     <label>Quận/Huyện </label><br>
                                     <span class="ec-bl-select-inner">
-                                        <select name="district_id" id="districtId" class="ec-bill-select districts location col-md-12" data-target="wards">
+                                        <select name="district_id" id="districtId" class="ec-bill-select districts location col-md-12" data-target="wards" value="{{$profile->district_id}}">
                                             <option value="">[Chọn Quận/Huyện]</option>
-                                        </select><br>
+                                        </select>
                                     </span>
                                 </span>
                                 @error('district_id')
                                 <p class="text-danger">{{$message}}</p>
                                 @enderror
-                                 </div>
+                                </div>
                                 <div class="col-md-12 space-t-15">
                                 <span class="ec-bill-wrap ec-bill-half">
                                     <label>Phường/Xã</label><br>
@@ -333,7 +323,7 @@
                                         <select id="wardId" name="ward_id"
                                             class="ec-bill-select wards col-md-12">
                                             <option value="">[Chọn Phường/Xã]</option>
-                                        </select><br>
+                                        </select>
                                     </span>
                                 </span>
                                 @error('ward_id')
