@@ -2,6 +2,9 @@
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Repositories\DistrictRepository;
+use App\Repositories\ProvinceRepository;
+use App\Repositories\WardRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -11,9 +14,25 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
+    protected $provinceRepository;
+    protected $wardRepository;
+    protected $districtRepository;
+    public function __construct(
+         ProvinceRepository $provinceRepository,
+         WardRepository $wardRepository,
+         DistrictRepository $districtRepository
+
+    ){
+        $this->provinceRepository = $provinceRepository;
+        $this->wardRepository = $wardRepository;
+        $this->districtRepository =$districtRepository;
+    }
     public function listProfile() {
         $profile = Auth::user(); // Lấy thông tin tài khoản đang đăng nhập
-        return view('client.page.profile', compact('profile'));
+        $provinces = $this->provinceRepository->all();
+        $wards = $this->wardRepository->all();
+        $districts = $this->districtRepository->all();
+        return view('client.page.profile', compact(['profile','provinces','wards','districts']));
     }
 
     public function updateProfile($idUser,Request $req){
@@ -35,11 +54,12 @@ class ProfileController extends Controller
             'phone.digits:10'=>'Số điện thoại không đúng',
             'birthday.required'=>'Không được để trống ngày sinh',
             'birthday.date'=>'Ngày sinh không đúng',
-            'province_id.require'=>'Không được để trống địa chỉ',
-            'district_id'=>'Không được để trống địa chỉ',
-            'ward_id'=>'Không được để trống địa chỉ',
-            'address'=>'Không được để trống địa chỉ'
+            'province_id.required'=>'Không được để trống địa chỉ',
+            'district_id.required'=>'Không được để trống địa chỉ',
+            'ward_id.required'=>'Không được để trống địa chỉ',
+            'address.required'=>'Không được để trống địa chỉ'
         ]);
+
 
         if ($validator->fails()) {
             $e= "";
@@ -73,7 +93,6 @@ class ProfileController extends Controller
             'current_password'=>['required'],
             'new_password' => ['required', 'string', 'min:8','confirmed'],
             'new_password_confirmation'=>['required','string','min:8'],
-
         ],[
             'current_password.require'=>'Không được để trống mật khẩu',
             'new_password.required'=>'Không được để trống mật khẩu',
@@ -83,9 +102,6 @@ class ProfileController extends Controller
             'new_password_confirmation.required'=>'Mật khẩu không được để trống',
             'new_password_confirmation.string'=>'Mật khẩu phải là một chuỗi ký tự',
             'new_password_confirmation.min:8'=>'Mật khẩu tối thiểu 8 ký tự',
-
-
-
         ]);
 
        // Kiểm tra xem mật khẩu hiện tại có khớp không
