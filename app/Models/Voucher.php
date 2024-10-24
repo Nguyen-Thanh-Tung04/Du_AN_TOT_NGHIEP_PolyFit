@@ -10,7 +10,7 @@ class Voucher extends Model
     use HasFactory;
     protected $fillable = [
         'code', 'name', 'value', 'max_discount_value',
-        'min_order_value', 'discount_type', 'quantity',
+        'min_order_value', 'max_order_value', 'discount_type', 'quantity',
         'start_time', 'end_time', 'status'
     ];
 

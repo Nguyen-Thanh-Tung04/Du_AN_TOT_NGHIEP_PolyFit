@@ -121,6 +121,7 @@
                     <th>Giá Trị</th>
                     <th>Giá Trị Giảm Tối Đa</th>
                     <th>Giá Trị Đơn Hàng Tối Thiểu</th>
+                    <th>Giá Trị Đơn Hàng Tối Đa</th>
                     <th>Loại Giảm Giá</th>
                     <th>Số Lượng</th>
                     <th>Ngày Bắt Đầu</th>
@@ -139,7 +140,8 @@
                         <td>{{ $voucher->name }}</td>
                         <td>{{ $voucher->value }}</td>
                         <td>{{ $voucher->max_discount_value }}</td>
-                        <td>{{ $voucher->min_order_value }}</td>
+                        <td>{{ $voucher->min_order_value}}</td>
+                        <td>{{ $voucher->max_order_value}}</td>
                         <td>{{ $voucher->discount_type == 'fixed' ? 'Giảm giá cố định' : 'Giảm giá theo tỷ lệ' }}</td>
                         <td>{{ $voucher->quantity }}</td>
                         <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>

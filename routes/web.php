@@ -278,12 +278,14 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
-    // Route::put('{id}/confirm-cancellation', [OrderController::class, 'confirmCancellation'])->name('order.history.confirm-cancellation');
 
 });
-Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
-Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
-Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+Route::middleware(['checkLoginClient'])->group(function () {
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
+    Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+    Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+});
+
 
 
 
