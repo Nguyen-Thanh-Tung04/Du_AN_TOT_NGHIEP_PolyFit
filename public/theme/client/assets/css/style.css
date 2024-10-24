@@ -16365,12 +16365,15 @@ h6 {
 .recent-purchase .detail h6 {
   color: #444;
   font-size: 14px;
+  margin-top: 0 !important;
+  margin-bottom: 5px !important;
 }
 
 .recent-purchase .detail p {
   margin-bottom: 10px;
   font-size: 11px;
   color: #777;
+  margin-top: 0 !important;
 }
 
 .recent-purchase a {
@@ -16381,6 +16384,7 @@ h6 {
   top: 0;
   font-size: 20px;
   color: #777;
+  text-decoration: none;
 }
 
 .recent-purchase a:hover {

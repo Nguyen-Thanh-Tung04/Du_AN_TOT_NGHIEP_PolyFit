@@ -35,12 +35,12 @@
                         @endif
                     </td>
                     <td class="text-center js-switch-{{ $member->id }}">
-                        <input type="checkbox" value="{{ $member->status }}"
-                        class="js-switch status "
-                        data-field="status"
-                        data-model="User"
-                        data-modelId="{{ $member->id }}"
-                        {{ ($member->status == 1) ? 'checked' : '' }}/>
+                        <input type="checkbox" value="{{ $member->publish }}"
+                               class="js-switch status "
+                               data-field="publish"
+                               data-model="User"
+                               data-modelId="{{ $member->id }}"
+                            {{ ($member->publish == 1) ? 'checked' : '' }}/>
                     </td>
                     <td class="text-center">
                         <a href="{{ route('member.edit', $member->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>

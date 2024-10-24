@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://*.pusher.com; object-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"> --}}
+
 
 
     <title>PolyFit</title>
@@ -78,8 +80,10 @@
         <h1>@yield('title')</h1>
         <p>@yield('content')</p>
     </main>
+    @vite(['resources/js/order.js'])
 
     @include('client.layouts.footer')
+
 
 
     <!-- Vendor JS -->
@@ -127,9 +131,12 @@
                 }
             });
         }
-
-        updateCartCount();
+        var isLoggedIn = "{{ auth()->check() ? 'true' : 'false' }}";
+        if (isLoggedIn == 'true') {
+            updateCartCount();
+        }
     </script>
+
 
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>

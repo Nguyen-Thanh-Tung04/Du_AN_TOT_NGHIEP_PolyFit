@@ -163,6 +163,7 @@
                 @else
                 <div class="ec-cart-leftside col-lg-12 col-md-12 ">
                     <div class="d-flex justify-content-center flex-column align-items-center">
+                        <img src="{{ asset('theme/client/assets/images/icons/nothing.png') }}" alt="" class="img-fluid" width="80px"/>
                         <h4 class="text-center">Giỏ hàng của bạn đang trống!</h4>
                         <div>
                             <a href="{{ route('home')}}" class="btn btn-primary text-center">Mua ngay</a>

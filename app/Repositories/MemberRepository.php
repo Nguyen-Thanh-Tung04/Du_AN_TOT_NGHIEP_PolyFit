@@ -28,10 +28,10 @@ class MemberRepository implements MemberRepositoryInterface
                         ->orWhere('phone', 'LIKE', '%'.$condition['keyword'].'%')
                         ->orWhere('address', 'LIKE', '%'.$condition['keyword'].'%');
                 }
-                if (isset($condition['status']) && $condition['status'] == 1) {
-                    $query->where('status', '=', '1');
-                } elseif (isset($condition['status']) && $condition['status'] == 2) {
-                    $query->where('status', '=', '2');
+                if (isset($condition['publish']) && $condition['publish'] == 1) {
+                    $query->where('publish', '=', '1');
+                } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
+                    $query->where('publish', '=', '2');
                 }
                 $query->where('user_catalogue_id', '=', null);
                 return $query;

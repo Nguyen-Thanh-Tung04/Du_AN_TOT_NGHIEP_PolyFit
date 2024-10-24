@@ -34,16 +34,34 @@
                 <div class="ec-common-wrapper">
                     <div class="ec-contact-leftside">
                         <div class="ec-contact-container">
+                            <!-- Hiển thị thông báo thành công -->
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            <!-- Hiển thị lỗi validation nếu có -->
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="ec-contact-form">
-                                <form action="#" method="post">
+                                <form action="{{route('sendMail')}}" method="post">
+                                    @csrf
                                     <span class="ec-contact-wrap">
-                                        <label>Tên</label>
-                                        <input type="text" name="firstname" placeholder="Nhập tên của bạn"
+                                        <label>Họ</label>
+                                        <input type="text" name="firstname" placeholder="Nhập họ của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
-                                        <label>Họ</label>
-                                        <input type="text" name="lastname" placeholder="Nhập họ của bạn"
+                                        <label>Tên</label>
+                                        <input type="text" name="lastname" placeholder="Nhập tên của bạn"
                                             required />
                                     </span>
                                     <span class="ec-contact-wrap">
@@ -66,7 +84,7 @@
                                             data-sitekey="6LfKURIUAAAAAO50vlwWZkyK_G2ywqE52NU7YO0S"
                                             data-callback="verifyRecaptchaCallback"
                                             data-expired-callback="expiredRecaptchaCallback"></span>
-                                        <input class="form-control d-none" data-recaptcha="true" required
+                                        <input class="form-control d-none" data-recaptcha="true"
                                             data-error="Please complete the Captcha">
                                         <span class="help-block with-errors"></span>
                                     </span>

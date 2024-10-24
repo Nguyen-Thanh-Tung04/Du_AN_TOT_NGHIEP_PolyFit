@@ -119,14 +119,13 @@
             @endforeach
         </table>
 
-        <a href="{{ route('order.history.show', $order->code) }}" class="button">Xem chi tiết đơn hàng</a>
+        <a href="{{ route('order.history.show', $order->id) }}" class="button">Xem chi tiết đơn hàng</a>
 
         <p>Cảm ơn bạn đã mua sản phẩm tại PolyFit!</p>
         <p>Chúc bạn một ngày tốt lành!</p>
 
         <div class="footer">
             <p>Trân trọng,</p>
-            <p>{{ config('app.name') }}</p>
         </div>
     </div>
 </body>

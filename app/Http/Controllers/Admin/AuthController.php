@@ -82,27 +82,41 @@ class AuthController extends Controller
         return redirect()->route('auth.client-login')->with('success', 'Đăng ký thành công. Vui lòng đăng nhập.');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         $user = Auth::user();
-        // dd($user->publish);
 
-        Auth::logout();
-        session()->forget('selected_items');
+        // Kiểm tra trạng thái người dùng trước khi đăng xuất
+        if ($user && $user->user_catalogue_id  > 0) {
+            // Nếu người dùng là admin hoặc có điều kiện bạn mong muốn, thực hiện đăng xuất
+            Auth::logout();
 
-        // Làm sạch phiên người dùng
-        // $request->session()->invalidate();
-        // $request->session()->regenerateToken();
+            // Xóa phiên tùy chỉnh nếu có
+            session()->forget('selected_items');
 
-        // Kiểm tra vai trò người dùng và điều hướng đến trang đăng nhập tương ứng
-        if ($user->publish === 1) {
-            // dd("admin");
+            // Làm sạch phiên người dùng để bảo mật
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
             // Chuyển hướng tới trang đăng nhập của admin
-            return redirect()->route('auth.login'); // Đây là route admin login
-        } else {
-            // dd("user");
+            return redirect()->route('auth.login');
+        } else if ($user && $user->publish == null) {
+            // Nếu người dùng không phải là admin, hoặc điều kiện khác
+            Auth::logout();
+
+            // Xóa phiên tùy chỉnh nếu có
+            session()->forget('selected_items');
+
+            // Làm sạch phiên người dùng để bảo mật
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
             // Chuyển hướng tới trang đăng nhập của client
-            return redirect()->route('auth.client-login'); // Đây là route client login
+            return redirect()->route('auth.client-login');
         }
+
+        // Trường hợp người dùng không hợp lệ (chưa đăng nhập)
+        return redirect()->route('auth.client-login');
     }
+
 }

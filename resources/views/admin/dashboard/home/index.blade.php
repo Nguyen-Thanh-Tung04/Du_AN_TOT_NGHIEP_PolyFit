@@ -26,6 +26,18 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <span class="label label-warning pull-right">Xác nhận</span>
+                    <h5>ĐƠN HÀNG CHỜ</h5>
+                </div>
+                <div class="ibox-content">
+                    <a href="{{ route('orders.index') }}"><h1 class="no-margins">{{ isset($totalOrdersConfirm) ? $totalOrdersConfirm : 0 }}</h1></a>
+                    <small>Trên tổng số đơn hàng</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
                 <span class="label label-success pull-right">
                     Tháng {{ isset($results[0]['month']) ? $results[0]['month'] : 0 }}
                 </span>
@@ -61,22 +73,22 @@
             </div>
         </div>
 
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-info pull-right">Tổng số đơn hàng</span>
-                    <h5>ĐƠN HÀNG</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">{{ isset($totalOrders) ? $totalOrders : 0 }}</h1>
-                    <div class="stat-percent font-bold text-info">
-                        {{ isset($cancellationRate) ? $cancellationRate : '0%' }}
-                        <i class="fa fa-level-up"></i>
-                    </div>
-                    <small>Số đơn hủy {{ isset($canceledOrders) ? $canceledOrders : 0 }} chiếm</small>
-                </div>
-            </div>
-        </div>
+{{--        <div class="col-lg-3">--}}
+{{--            <div class="ibox float-e-margins">--}}
+{{--                <div class="ibox-title">--}}
+{{--                    <span class="label label-info pull-right">Tổng số đơn hàng</span>--}}
+{{--                    <h5>ĐƠN HÀNG</h5>--}}
+{{--                </div>--}}
+{{--                <div class="ibox-content">--}}
+{{--                    <h1 class="no-margins">{{ isset($totalOrders) ? $totalOrders : 0 }}</h1>--}}
+{{--                    <div class="stat-percent font-bold text-info">--}}
+{{--                        {{ isset($cancellationRate) ? $cancellationRate : '0%' }}--}}
+{{--                        <i class="fa fa-level-up"></i>--}}
+{{--                    </div>--}}
+{{--                    <small>Số đơn hủy {{ isset($canceledOrders) ? $canceledOrders : 0 }} chiếm</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
 
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
@@ -85,7 +97,7 @@
                     <h5>TỔNG DOANH THU</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{ isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00' }}</h1>
+                    <h1 class="no-margins">{{ isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue']) : '0.00' }}</h1>
                     <div class="stat-percent font-bold
                     {{ isset($results[0]['revenue_growth']) && $results[0]['revenue_growth'] > 0 ? 'text-navy' : 'text-danger' }}">
                         {{ isset($results[0]['revenue_growth']) ? $results[0]['revenue_growth'] : '0%' }}
@@ -115,8 +127,8 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5 style="padding-top: 5px"> BIỂU ĐỒ DOANH SỐ</h5>
-                    <div class="right" style="margin-left: 62%">
+                    <h5 style="padding-top: 5px"> BIỂU ĐỒ THỐNG KÊ DOANH THU</h5>
+                    <div class="right" style="margin-left: 70%">
                         <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST">
                             @csrf
                             <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN</h5>
@@ -152,17 +164,19 @@
                     <div class="row">
                         <div class="col-lg-9">
                             <div>
-                                <canvas id="myChart"></canvas>
+                                <canvas id="myChart" ></canvas>
                             </div>
                             <?php
                             // Giả sử $results đã được khai báo và chứa dữ liệu của bạn
                             $chartData = array_fill(1, 12, 0); // Khởi tạo tất cả tháng với giá trị 0
 
-                            // Giả sử $results chứa dữ liệu doanh thu cho từng tháng
-                            foreach ($results as $result) {
-                                $month = (int)$results[0]['month']; // Lấy số tháng từ ngày
-                                $doanh_thu = $result['total_revenue']; // Doanh thu từ kết quả
-                                $chartData[$month] += $doanh_thu; // Cộng dồn doanh thu cho tháng tương ứng
+                            // Kiểm tra nếu $results tồn tại và có dữ liệu
+                            if (isset($results) && !empty($results)) {
+                                foreach ($results as $result) {
+                                    $month = (int)$result['month']; // Lấy số tháng từ ngày
+                                    $doanh_thu = $result['total_revenue']; // Doanh thu từ kết quả
+                                    $chartData[$month] += $doanh_thu; // Cộng dồn doanh thu cho tháng tương ứng
+                                }
                             }
                             ?>
 
@@ -198,6 +212,7 @@
                                     }
                                 });
                             </script>
+
                         </div>
                         <div class="col-lg-3">
                             <ul class="stat-list">
@@ -238,7 +253,7 @@
                                         $totalRevenue = isset($results_one) ? collect($results_one)->sum('doanh_thu') : 0; // Tính tổng doanh thu
 
                                         // Kiểm tra nếu đã có tổng số doanh thu mặc định
-                                        $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00'; // Đã thêm dấu chấm phẩy
+                                        $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue']) : '0.00'; // Đã thêm dấu chấm phẩy
 
                                         // Quyết định hiển thị giá trị nào
                                         $displayTotalRevenue = $totalRevenue > 0 ? $totalRevenue : $totalRevenue_month;
@@ -261,6 +276,202 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>BIỂU ĐỒ THỐNG KÊ LỢI NHUẬN</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="myChart_bar"></canvas>
+                    <script>
+                        // Tạo các mảng để lưu trữ nhãn và dữ liệu
+                        const labels = []; // Mảng nhãn cho các sản phẩm
+                        const barData = []; // Dữ liệu cho biểu đồ cột
+                        const lineData = []; // Dữ liệu cho biểu đồ đường
+
+                        // Kiểm tra xem $grossProfit có tồn tại không
+                        @if (isset($grossProfit) && count($grossProfit) > 0)
+                        // Duyệt qua $grossProfit để lấy tên sản phẩm, lợi nhuận gộp và số lượng
+                        @foreach ($grossProfit as $item)
+                        labels.push('{{ $item->product_name }} - Tháng {{ $item->month }}');
+                        barData.push({{ $item->gross_profit }}); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
+                        lineData.push({{ $item->total_quantity }}); // Thêm số lượng vào dữ liệu cho biểu đồ đường
+                        @endforeach
+                        @else
+                        // Nếu không có dữ liệu, thêm giá trị mặc định
+                        labels.push('Không có dữ liệu');
+                        barData.push(0); // Giá trị mặc định cho lợi nhuận gộp
+                        lineData.push(0); // Giá trị mặc định cho số lượng bán
+                        @endif
+
+                        const ctxBar = document.getElementById('myChart_bar').getContext('2d');
+
+                        // Hiển thị biểu đồ
+                        document.getElementById('myChart_bar').style.display = 'block'; // Hiển thị biểu đồ
+
+                        const dataBar = {
+                            labels: labels,
+                            datasets: [{
+                                type: 'bar',
+                                label: 'Lợi Nhuận Gộp',
+                                data: barData,
+                                borderColor: 'rgb(255, 99, 132)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                yAxisID: 'y', // Chỉ định trục y cho lợi nhuận
+                            }, {
+                                type: 'line',
+                                label: 'Số Lượng Bán',
+                                data: lineData,
+                                fill: false,
+                                borderColor: 'rgb(54, 162, 235)',
+                                yAxisID: 'y1', // Chỉ định trục y cho số lượng
+                            }]
+                        };
+
+                        const configBar = {
+                            type: 'bar',
+                            data: dataBar,
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        position: 'left', // Vị trí của trục y
+                                        title: {
+                                            display: true,
+                                            text: 'Lợi Nhuận Gộp'
+                                        }
+                                    },
+                                    y1: {
+                                        beginAtZero: true,
+                                        position: 'right', // Vị trí của trục y cho số lượng
+                                        title: {
+                                            display: true,
+                                            text: 'Số Lượng Bán'
+                                        },
+                                        grid: {
+                                            drawOnChartArea: false // Không vẽ lưới cho trục này
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            title: function(tooltipItems) {
+                                                // Hiển thị thông tin về tháng trong tooltip
+                                                return `Tháng: ${tooltipItems[0].label.split(' - ')[1] || 'N/A'}`; // Tách tháng hoặc N/A nếu không có
+                                            },
+                                            label: function(tooltipItem) {
+                                                // Hiển thị thêm thông tin trong tooltip
+                                                return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                        };
+
+                        const myChartBar = new Chart(ctxBar, configBar); // Vẽ biểu đồ
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>THỐNG KÊ TRẠNG THÁI ĐƠN HÀNG</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="myChartPie"></canvas>
+                    <script>
+                        const dataPie = {
+                            labels: [
+                                <?php
+                                if (count($orderStatus) > 0) {
+                                    // Nếu có dữ liệu thì tạo các nhãn từ trạng thái đơn hàng
+                                    foreach ($orderStatus as $status) {
+                                        echo "'" . App\Models\Order::STATUS_NAMES[$status->status] . "',";
+                                    }
+                                } else {
+                                    // Nếu không có dữ liệu, tạo nhãn mặc định
+                                    echo "'No Data',";
+                                }
+                                ?>
+                            ],
+                            datasets: [{
+                                label: 'Total Orders by Status',
+                                data: [
+                                    <?php
+                                    if (count($orderStatus) > 0) {
+                                        // Nếu có dữ liệu thì tạo các giá trị từ trạng thái đơn hàng
+                                        foreach ($orderStatus as $status) {
+                                            echo $status->total . ',';
+                                        }
+                                    } else {
+                                        // Nếu không có dữ liệu, cung cấp giá trị mặc định
+                                        echo '0,';
+                                    }
+                                    ?>
+                                ],
+                                backgroundColor: [
+                                    <?php
+                                    if (count($orderStatus) > 0) {
+                                        // Nếu có dữ liệu, sử dụng màu sắc phù hợp cho từng trạng thái
+                                        foreach ($orderStatus as $status) {
+                                            switch ($status->status) {
+                                                case 1: echo "'rgb(255, 205, 86)',"; break;
+                                                case 2: echo "'rgba(75, 192, 192, 0.2)',"; break;
+                                                case 3: echo "'rgb(201, 203, 207)',"; break;
+                                                case 4: echo "'rgb(54, 162, 235)',"; break;
+                                                case 5: echo "'rgb(75, 192, 192)',"; break;
+                                                case 6: echo "'rgb(255, 99, 99)',"; break;
+                                                default: echo "'rgb(0, 0, 0)',"; break;
+                                            }
+                                        }
+                                    } else {
+                                        // Màu mặc định nếu không có dữ liệu
+                                        echo "'rgb(128, 128, 128)',";
+                                    }
+                                    ?>
+                                ],
+                                hoverOffset: 4
+                            }]
+                        };
+
+                        const configPie = {
+                            type: 'polarArea',
+                            data: dataPie,
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(tooltipItem) {
+                                                const label = tooltipItem.label || '';
+                                                const value = tooltipItem.raw || 0;
+                                                return `${label}: ${value}`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        };
+
+                        const myChartPie = new Chart(
+                            document.getElementById('myChartPie'),
+                            configPie
+                        );
+                    </script>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div class="row">
         <div class="col-lg-6">
             <div class="row">
@@ -285,7 +496,7 @@
                                         <tr>
                                             <th style="width: 1%" class="text-center">STT</th>
                                             <th class="text-center">Email</th>
-                                            <th class="text-center">Trạng Thái</th>
+                                            <th >Trạng Thái</th>
                                             <th class="text-center">Thời Gian</th>
                                         </tr>
                                         </thead>
@@ -295,8 +506,8 @@
                                                 <td class="text-center">{{ $latestUser->id }}</td>
                                                 <td class="text-center">{{ $latestUser->email }}</td>
                                                 <td>
-                                                    <span class="label {{ $latestUser->status == 1 ? 'label-primary' : 'label-warning' }}">
-                                                        {{ $latestUser->status == 1 ? 'Hoạt động' : 'Khóa' }}
+                                                    <span class="label {{ $latestUser->publish == 1 ? 'label-primary' : 'label-warning' }}">
+                                                        {{ $latestUser->publish == 1 ? 'Hoạt động' : 'Khóa' }}
                                                     </span>
                                                 </td>
 
@@ -343,39 +554,39 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                                @foreach($latestOrders as $latestOrder)
-                                                    <tr>
-                                                        <td class="text-center">{{ $latestOrder->id }}</td>
-                                                        <td>
-                                                            <ul class="list-unstyled mb-0">
-                                                                <li><strong>Tên:</strong> {{ $latestOrder->full_name }}</li>
-                                                                <li><strong>Địa chỉ:</strong> {{ $latestOrder->address }}</li>
-                                                                <li><strong>Điện thoại:</strong> {{ $latestOrder->phone }}</li>
-                                                            </ul>
-                                                        </td>
-                                                        <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
-                                                        <td class="text-center">
-                                                            @php
-                                                                // Định nghĩa các trạng thái và màu sắc tương ứng
-                                                                $statuses = [
-                                                                    1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
-                                                                    2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
-                                                                    3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
-                                                                    4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
-                                                                    5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
-                                                                    6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
-                                                                ];
-                                                            @endphp
-                                                            @php
-                                                                // Lấy trạng thái tương ứng
-                                                                $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
-                                                            @endphp
-                                                            <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
-                                                        </td>
+                                        @foreach($latestOrders as $latestOrder)
+                                            <tr>
+                                                <td class="text-center">{{ $latestOrder->id }}</td>
+                                                <td>
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li><strong>Tên:</strong> {{ $latestOrder->full_name }}</li>
+                                                        <li><strong>Địa chỉ:</strong> {{ $latestOrder->address }}</li>
+                                                        <li><strong>Điện thoại:</strong> {{ $latestOrder->phone }}</li>
+                                                    </ul>
+                                                </td>
+                                                <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
+                                                <td class="text-center">
+                                                    @php
+                                                        // Định nghĩa các trạng thái và màu sắc tương ứng
+                                                        $statuses = [
+                                                            1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
+                                                            2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
+                                                            3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
+                                                            4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
+                                                            5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
+                                                            6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
+                                                        ];
+                                                    @endphp
+                                                    @php
+                                                        // Lấy trạng thái tương ứng
+                                                        $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
+                                                    @endphp
+                                                    <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
+                                                </td>
 
-                                                        <td class="text-center">{{ $latestOrder->created_at }}</td>
-                                                    </tr>
-                                                @endforeach
+                                                <td class="text-center">{{ $latestOrder->created_at }}</td>
+                                            </tr>
+                                        @endforeach
 
                                         </tbody>
                                     </table>
