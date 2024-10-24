@@ -33,6 +33,7 @@ class ReviewReply extends Model
     {
         static::created(function ($reply) {
             ReviewHistory::create([
+                'review_id' => $reply->review_id,  // Lưu review_id từ review liên quan
                 'reply_id' => $reply->id,
                 'user_id' => $reply->user_id,
                 'content' => $reply->content,
@@ -43,6 +44,7 @@ class ReviewReply extends Model
 
         static::updated(function ($reply) {
             ReviewHistory::create([
+                'review_id' => $reply->review_id,  // Lưu review_id từ review liên quan
                 'reply_id' => $reply->id,
                 'user_id' => $reply->user_id,
                 'content' => $reply->content,
@@ -53,6 +55,7 @@ class ReviewReply extends Model
 
         static::deleted(function ($reply) {
             ReviewHistory::create([
+                'review_id' => $reply->review_id,  // Lưu review_id từ review liên quan
                 'reply_id' => $reply->id,
                 'user_id' => $reply->user_id,
                 'content' => $reply->content,

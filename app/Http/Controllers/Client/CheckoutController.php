@@ -266,9 +266,9 @@ class CheckoutController
         }
 
         // Xóa những sản phẩm đã được chọn mua trong giỏ hàng
-        // Cart::where('user_id', $user->id)
-        //     ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
-        //     ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
+        Cart::where('user_id', $user->id)
+            ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
+            ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
         //Send Mail
         Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
@@ -538,6 +538,8 @@ class CheckoutController
                     ], 400);
                 }
             }
+            // Sau khi đơn hàng được tạo, phát sự kiện realtime
+            // event(new OrderPlaced($order));
 
             // Trừ số lượng hoặc số lần sử dụng của voucher (nếu voucher tồn tại và có cột để quản lý số lượng)
             if ($voucher) {
@@ -554,11 +556,15 @@ class CheckoutController
                 ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
                 ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
 
+            //Send Mail
+            Mail::to($user->email)->queue(new OrderPlacedMail($order));
+
             // Xóa thông tin trong session
             session()->forget('checkout_data');
 
             // Sau khi đơn hàng được tạo, phát sự kiện realtime
             event(new OrderPlaced($order));
+
 
             // Chuyển hướng đến trang bill với thông tin đơn hàng
             return redirect()->route('order.show', $order->id);

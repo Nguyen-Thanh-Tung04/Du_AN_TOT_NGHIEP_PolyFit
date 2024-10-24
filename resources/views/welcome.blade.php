@@ -144,9 +144,13 @@
                                                     @endif
                                                 @endfor
                                             @else
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <li class="ecicon eci-star"></li> <!-- Nếu không có đánh giá nào -->
-                                                @endfor
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= 5)
+                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                            @endfor
                                             @endif
                                         </ul>
 
@@ -297,9 +301,13 @@
                                                         @endif
                                                     @endfor
                                                 @else
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <li class="ecicon eci-star"></li> <!-- Nếu không có đánh giá nào -->
-                                                    @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= 5)
+                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                            @endfor
                                                 @endif
                                             </ul>
                                             <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>

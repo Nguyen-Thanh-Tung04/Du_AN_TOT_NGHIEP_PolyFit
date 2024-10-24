@@ -63,11 +63,15 @@
                                                     @endfor
                                                 </ul>
                                             @else
-                                                <ul class="ec-rating">
-                                                    @for($i = 1; $i <= 5; $i++)
+                                            <ul class="ec-rating">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= 5)
+                                                        <li class="ecicon eci-star fill"></li>
+                                                    @else
                                                         <li class="ecicon eci-star"></li>
-                                                    @endfor
-                                                </ul>
+                                                    @endif
+                                                @endfor
+                                            </ul>
                                             @endif
                                             <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
