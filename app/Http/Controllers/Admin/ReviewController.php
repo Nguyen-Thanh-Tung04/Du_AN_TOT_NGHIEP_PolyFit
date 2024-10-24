@@ -46,27 +46,28 @@ class ReviewController extends Controller
     }
     public function history(StoreReviewRequest $request)
     {
-        // Chuẩn bị query để lấy dữ liệu đánh giá và lịch sử, bao gồm cả đánh giá đã xóa mềm
-        $query = Review::withTrashed()  // Lấy cả dữ liệu đã bị xóa mềm
+        // Chuẩn bị query để lấy dữ liệu từ review_histories và các bảng liên quan
+        $query = ReviewHistory::withTrashed()
+            ->join('reviews', 'review_histories.review_id', '=', 'reviews.id')
             ->join('users', 'reviews.account_id', '=', 'users.id')
             ->join('products', 'reviews.product_id', '=', 'products.id')
-            ->join('orders', 'reviews.order_id', '=', 'orders.id') // Join với bảng orders
-            ->leftJoin('review_histories', 'reviews.id', '=', 'review_histories.review_id') // Join với bảng review_histories
-            ->where('review_histories.action', 'create') // Điều kiện lọc theo action 'create'
-            ->where('review_histories.type', 'review') // Điều kiện lọc theo type 'review'
+            ->join('orders', 'reviews.order_id', '=', 'orders.id')
+            ->where('review_histories.action', 'create')
+            ->where('review_histories.type', 'review')
             ->select(
-                'reviews.*',
-                'users.email',
-                'users.name',
-                'users.image',
-                'products.code as product_code',
-                'orders.id as order_id', // Select order ID
-                'review_histories.id as history_id',
-                'review_histories.action as history_action',
-                'review_histories.type as history_type'
+                'review_histories.*',  // Lấy tất cả các cột từ bảng review_histories
+                'users.email',         // Lấy email từ bảng users
+                'users.name',          // Lấy tên người dùng
+                'users.image',         // Lấy hình ảnh của người dùng
+                'products.code as product_code',  // Lấy mã sản phẩm từ bảng products
+                'orders.id as order_id',          // Lấy id đơn hàng từ bảng orders
+                'orders.code as code',          // Lấy code đơn hàng từ bảng orders
+                'reviews.score as review_score',  // Lấy điểm đánh giá từ bảng reviews
+                'reviews.content as review_content'  // Lấy nội dung đánh giá từ bảng reviews
             )
-            ->orderBy('reviews.id', 'desc'); // Sắp xếp theo review ID
-    
+            ->orderBy('review_histories.id', 'desc');  // Sắp xếp theo id review history
+        // dd($query->toSql());
+
         // Lấy điều kiện tìm kiếm từ request
         $conditions = [
             'keyword' => $request->input('keyword'),
@@ -75,7 +76,7 @@ class ReviewController extends Controller
             'score' => $request->input('score'),
             'trashed' => $request->input('trashed') // Lọc theo đánh giá bị xóa mềm
         ];
-    
+
         // Thêm điều kiện tìm kiếm theo từ khóa
         if (!empty($conditions['keyword'])) {
             $query->where(function ($q) use ($conditions) {
@@ -83,39 +84,41 @@ class ReviewController extends Controller
                     ->orWhere('users.email', 'like', '%' . $conditions['keyword'] . '%');
             });
         }
-    
+
         // Thêm điều kiện lọc theo trạng thái (nếu có)
         if (!is_null($conditions['status'])) {
             $query->where('reviews.status', $conditions['status']);
         }
-    
+
         // Lọc theo trạng thái trả lời hay chưa (repluy)
         if (!is_null($conditions['repluy'])) {
             if ($conditions['repluy'] == 1) {
-                $query->whereHas('replies'); // Đánh giá đã trả lời
+                $query->whereHas('reviews.replies'); // Đánh giá đã trả lời
             } elseif ($conditions['repluy'] == 2) {
-                $query->doesntHave('replies'); // Đánh giá chưa trả lời
+                $query->doesntHave('reviews.replies'); // Đánh giá chưa trả lời
             }
         }
-    
+
         // Thêm điều kiện lọc theo score (điểm đánh giá)
         if (!empty($conditions['score'])) {
             $query->where('reviews.score', '=', $conditions['score']);
         }
-    
-        // Thêm điều kiện lọc theo đánh giá đã bị xóa mềm
+
+        // Thêm điều kiện lọc theo đánh giá đã bị xóa mềm ở bảng reviews
         if (!is_null($conditions['trashed'])) {
             if ($conditions['trashed'] == 1) {
-                $query->onlyTrashed(); // Chỉ lấy đánh giá đã bị xóa mềm
+                $query->whereNotNull('reviews.deleted_at'); // Lấy đánh giá đã bị xóa mềm
+            } else {
+                $query->whereNull('reviews.deleted_at'); // Lấy đánh giá chưa bị xóa mềm
             }
         }
-    
+        
         // Lấy số bản ghi trên mỗi trang từ request (mặc định là 10)
         $perPage = $request->input('perpage', 10);
-    
+
         // Thực hiện phân trang và lấy kết quả
         $reviewHistories = $query->paginate($perPage);
-    
+
         // Cấu hình JS và CSS cho trang
         $config = [
             'js' => [
@@ -129,11 +132,11 @@ class ReviewController extends Controller
         ];
         $config['seo'] = config('apps.review');
         $template = 'admin.reviews.history';
-    
+
         // Trả về view với dữ liệu đã phân trang
         return view('admin.dashboard.layout', compact('template', 'config', 'reviewHistories'));
     }
-    
+
 
 
     public function showReviewHistory($reviewId)
@@ -144,7 +147,7 @@ class ReviewController extends Controller
         // Lấy toàn bộ lịch sử của đánh giá và phản hồi, bao gồm cả những bản ghi đã bị xóa mềm
         $reviewsHistory = ReviewHistory::withTrashed() // Thêm withTrashed để lấy cả các bản ghi đã bị xóa mềm
             ->where('review_id', $reviewId)
-            ->orWhere('reply_id', $review->id)
+            ->orWhere('reply_id', $reviewId)
             ->orderBy('created_at', 'desc')
             ->get();
 

@@ -57,7 +57,7 @@ class OrderHistoryController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $donHang = Order::findOrFail($id);
+        $donHang = Order::with('orderItems.variant')->findOrFail($id); // Load cả orderItems và variant để xử lý
         DB::beginTransaction();
 
         try {
@@ -65,7 +65,12 @@ class OrderHistoryController extends Controller
 
             if ($request->has('huy_don_hang')) {
                 if ($previousStatus !== Order::STATUS_CHO_XAC_NHAN) {
-                    return redirect()->back()->with('error' , 'Không thể hủy vì đơn hàng đã chuyển trạng thái');
+                    return redirect()->back()->with('error', 'Không thể hủy vì đơn hàng đã chuyển trạng thái.');
+                }
+
+                foreach ($donHang->orderItems as $item) {
+                    $variant = $item->variant; 
+                    $variant->update(['quantity' => $variant->quantity + $item->quantity]);
                 }
 
                 $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
@@ -94,7 +99,7 @@ class OrderHistoryController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error' , 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.');
+            return redirect()->back()->with('error', 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.');
         }
 
         return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công.');

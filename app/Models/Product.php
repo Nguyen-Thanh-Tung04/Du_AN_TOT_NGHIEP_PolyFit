@@ -29,6 +29,7 @@ class Product extends Model
     {
         return $this->hasMany(Variant::class, 'product_id', 'id');
     }
+
     // Phương thức tính trung bình đánh giá
     public function averageScore()
     {
@@ -40,7 +41,6 @@ class Product extends Model
 
         return $avgScore ? round($avgScore) : null; // Làm tròn đến số nguyên
     }
-
 
     // Quan hệ với Review
     public function reviews()

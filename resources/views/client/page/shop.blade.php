@@ -33,48 +33,57 @@
                 <div class="shop-pro-content">
                     <div class="shop-pro-inner">
                         <div class="row">
-                            @foreach ($products as $product)
-                            @php
-                            $gallery = json_decode($product->gallery);
-                            @endphp
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image">
-                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt="" style="height: 200px" />
-                                        </a>
-                                        <span class="ec-product-discount-label">-33%</span>
-                                    </div>
-                                    <div class="ec-product-body">
-                                        @if ($product->averageScore())
-                                                        @for($i = 1; $i <= 5; $i++)
-                                                            @if($i <= round($product->averageScore()))
-                                                                <li class="ecicon eci-star fill"></li>
-                                                            @else
-                                                                <li class="ecicon eci-star"></li>
-                                                            @endif
-                                                        @endfor
-                                                    @else
-                                                     <!-- Hiển thị 5 sao trống nếu không có đánh giá -->
-                                                @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= 5)
-                                                <li class="ecicon eci-star fill"></li>
-                                                @else
-                                                    <li class="ecicon eci-star"></li>
-                                                @endif                                                    @endfor
-                                            @endif
+                            @if(isset($message))
+                                <div class="alert alert-info">
+                                    {{ $message }}
+                                </div>
+                            @endif
 
-                                                </ul>
-                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
-                                        <div class="ec-price">
-                                            <span>{{ number_format($product->min_listed_price, 0) }} ₫</span>
-                                            {{ number_format($product->min_sale_price, 0) }} ₫
+                            @foreach ($products as $product)
+                                @php
+                                    $gallery = json_decode($product->gallery);
+                                @endphp
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="ec-product-ds">
+                                        <div class="ec-product-image">
+                                            <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                                <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt="" style="height: 200px" />
+                                            </a>
+                                            <span class="ec-product-discount-label">-33%</span>
                                         </div>
-                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                        <div class="ec-product-body">
+                                            @if ($product->averageScore())
+                                                <ul class="ec-rating">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        @if($i <= round($product->averageScore()))
+                                                            <li class="ecicon eci-star fill"></li>
+                                                        @else
+                                                            <li class="ecicon eci-star"></li>
+                                                        @endif
+                                                    @endfor
+                                                </ul>
+                                            @else
+                                            <ul class="ec-rating">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= 5)
+                                                        <li class="ecicon eci-star fill"></li>
+                                                    @else
+                                                        <li class="ecicon eci-star"></li>
+                                                    @endif
+                                                @endfor
+                                            </ul>
+                                            @endif
+                                            <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+                                            <div class="ec-price">
+                                                <span>{{ number_format($product->min_listed_price, 0) }} ₫</span>
+                                                {{ number_format($product->min_sale_price, 0) }} ₫
+                                            </div>
+                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             @endforeach
+
                             <div class="pagination justify-content-center align-items-center mt-5">
                                 {{ $products->appends(request()->input())->links() }}
                             </div>

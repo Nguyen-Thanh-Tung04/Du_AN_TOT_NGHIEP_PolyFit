@@ -13,16 +13,6 @@
     </div>
 </div>
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
 <form action="{{ route('vouchers.update', $voucher->id) }}" method="post" class="box">
     @csrf
     @method('PUT')
@@ -44,8 +34,7 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Mã Voucher
-                                        <span class="text-danger">(*)</span></label>
+                                    <label class="control-label text-left">Mã Voucher <span class="text-danger">(*)</span></label>
                                     <input
                                         type="text"
                                         name="code"
@@ -60,8 +49,7 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Tên Voucher
-                                        <span class="text-danger">(*)</span></label>
+                                    <label class="control-label text-left">Tên Voucher <span class="text-danger">(*)</span></label>
                                     <input
                                         type="text"
                                         name="name"
@@ -78,8 +66,7 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá Trị Giảm Giá
-                                        <span class="text-danger">(*)</span></label>
+                                    <label class="control-label text-left">Giá Trị Giảm Giá <span class="text-danger">(*)</span></label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -95,8 +82,7 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá trị tối đa
-                                    </label>
+                                    <label class="control-label text-left">Giá trị tối đa</label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -104,6 +90,7 @@
                                         value="{{ old('max_discount_value', $voucher->max_discount_value) }}"
                                         class="form-control"
                                         placeholder="Nhập giá trị tối đa"
+                                        id="max_discount_value"
                                     >
                                     @error('max_discount_value')
                                         <div class="text-danger">{{ $message }}</div>
@@ -114,8 +101,7 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá trị đơn hàng tối thiểu
-                                    </label>
+                                    <label class="control-label text-left">Giá trị đơn hàng tối thiểu</label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -131,14 +117,16 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Loại Giảm Giá
-                                        <span class="text-danger">(*)</span></label>
-                                    <select name="discount_type" class="form-control">
-                                        <option value="" disabled>Chọn loại giảm giá</option>
-                                        <option value="percentage" {{ old('discount_type', $voucher->discount_type) == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
-                                        <option value="fixed" {{ old('discount_type', $voucher->discount_type) == 'fixed' ? 'selected' : '' }}>Cố định</option>
-                                    </select>
-                                    @error('discount_type')
+                                    <label class="control-label text-left">Giá trị đơn hàng tối đa</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        name="max_order_value"
+                                        value="{{ old('max_order_value',$voucher->max_order_value) }}"
+                                        class="form-control"
+                                        placeholder="Nhập Giá trị đơn hàng tối đa"
+                                    >
+                                    @error('max_order_value')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -147,8 +135,7 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Số Lượng
-                                        <span class="text-danger">(*)</span></label>
+                                    <label class="control-label text-left">Số Lượng <span class="text-danger">(*)</span></label>
                                     <input
                                         type="number"
                                         name="quantity"
@@ -164,13 +151,13 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Trạng thái
-                                        <span class="text-danger">(*)</span></label>
-                                    <select name="status" class="form-control">
-                                        <option value="1" {{ old('status', $voucher->status) ? 'selected' : '' }}>Hoạt động</option>
-                                        <option value="0" {{ old('status', $voucher->status) == false ? 'selected' : '' }}>Không hoạt động</option>
+                                    <label class="control-label text-left">Loại Giảm Giá <span class="text-danger">(*)</span></label>
+                                    <select name="discount_type" class="form-control" id="discount_type">
+                                        <option value="" disabled>Chọn loại giảm giá</option>
+                                        <option value="percentage" {{ old('discount_type', $voucher->discount_type) == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
+                                        <option value="fixed" {{ old('discount_type', $voucher->discount_type) == 'fixed' ? 'selected' : '' }}>Cố định</option>
                                     </select>
-                                    @error('status')
+                                    @error('discount_type')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -179,8 +166,7 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Thời gian bắt đầu
-                                    </label>
+                                    <label class="control-label text-left">Thời gian bắt đầu</label>
                                     <input
                                         type="datetime-local"
                                         name="start_time"
@@ -194,8 +180,7 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Thời gian kết thúc
-                                    </label>
+                                    <label class="control-label text-left">Thời gian kết thúc</label>
                                     <input
                                         type="datetime-local"
                                         name="end_time"
@@ -203,6 +188,20 @@
                                         class="form-control"
                                     >
                                     @error('end_time')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Trạng thái <span class="text-danger">(*)</span></label>
+                                    <select name="status" class="form-control">
+                                        <option value="1" {{ old('status', $voucher->status) ? 'selected' : '' }}>Hoạt động</option>
+                                        <option value="0" {{ old('status', $voucher->status) == false ? 'selected' : '' }}>Không hoạt động</option>
+                                    </select>
+                                    @error('status')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -217,4 +216,27 @@
         </div>
     </div>
 </form>
+
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const discountTypeSelect = document.getElementById('discount_type');
+        const maxDiscountValueInput = document.getElementById('max_discount_value');
+
+        function toggleMaxDiscountValue() {
+            if (discountTypeSelect.value === 'fixed') {
+                maxDiscountValueInput.disabled = true;
+                maxDiscountValueInput.value = ''; 
+            } else {
+                maxDiscountValueInput.disabled = false;
+                maxDiscountValueInput.value = maxDiscountValueInput.value || "{{ old('max_discount_value', $voucher->max_discount_value) }}";
+            }
+        }
+
+        toggleMaxDiscountValue();
+
+        discountTypeSelect.addEventListener('change', toggleMaxDiscountValue);
+    });
+</script>
+@endsection
 @endsection

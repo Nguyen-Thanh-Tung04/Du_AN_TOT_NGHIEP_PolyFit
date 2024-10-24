@@ -24,10 +24,12 @@ use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
+use App\Http\Controllers\User\LienheController;
 use App\Models\Cart;
 use App\Models\Category;
 
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -47,7 +49,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//gửi mail
+Route::get('send', [LienheController::class, 'create'])->name('create');
+Route::post('send', [LienheController::class, 'sendMail'])->name('sendMail');
+
+
+Route::get('/forget-pass', [HomeController::class, 'forgetPass'])->name('forget');
+Route::post('/forget-pass', [HomeController::class, 'postForgetPass']);
+Route::get('/get-pass', [HomeController::class, 'getPass'])->name('getPass');
+Route::post('/get-pass', [HomeController::class, 'postGetPass'])->name('postGetPass');
+
+
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
@@ -293,12 +307,14 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
-    // Route::put('{id}/confirm-cancellation', [OrderController::class, 'confirmCancellation'])->name('order.history.confirm-cancellation');
 
 });
-Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
-Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
-Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+Route::middleware(['checkLoginClient'])->group(function () {
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
+    Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+    Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+});
+
 
 
 
@@ -375,5 +391,6 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+
 // Route để xem đánh giá cho một đơn hàng cụ thể
-Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
+Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
