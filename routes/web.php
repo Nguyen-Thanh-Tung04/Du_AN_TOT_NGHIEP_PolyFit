@@ -364,4 +364,4 @@ Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
 
 // Route để xem đánh giá cho một đơn hàng cụ thể
-Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
+Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

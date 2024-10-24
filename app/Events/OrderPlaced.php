@@ -22,7 +22,7 @@ class OrderPlaced implements ShouldBroadcast
         $this->order = $order;
         // Ghi log để kiểm tra
 
-        Log::info('Sự kiện OrderPlaced đã được phát cho đơn hàng: ' . $order->id);
+        // Log::info('Sự kiện OrderPlaced đã được phát cho đơn hàng: ' . $order->id);
 
 
         // Lấy sản phẩm đầu tiên trong đơn hàng
@@ -40,11 +40,11 @@ class OrderPlaced implements ShouldBroadcast
             $this->product_name = 'Sản phẩm không xác định';
             $this->image = 'default-image.jpg'; // Ảnh mặc định
         }
-        Log::info('Sự kiện OrderPlaced đã được phát cho sản phẩm', [
-            'order_item' => $firstItem,
-            'product_name' => $this->product_name,
-            'image' => $this->image
-        ]);
+        // Log::info('Sự kiện OrderPlaced đã được phát cho sản phẩm', [
+        //     'order_item' => $firstItem,
+        //     'product_name' => $this->product_name,
+        //     'image' => $this->image
+        // ]);
     }
 
     public function broadcastOn()

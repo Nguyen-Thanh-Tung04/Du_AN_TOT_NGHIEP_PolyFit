@@ -52,6 +52,7 @@
                                     <select name="trashed" class="form-control mr-10 setupSelect2">
                                         <option value="">Tất cả đánh giá</option>
                                         <option value="1" {{ request('trashed') == 1 ? 'selected' : '' }}>Đánh giá đã bị xóa</option>
+                                        <option value="0" {{ request('trashed') === '0' ? 'selected' : '' }}>Đánh giá chưa bị xóa</option>
                                     </select>
                                 
                                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
@@ -89,33 +90,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (isset($reviewHistories) && is_object($reviewHistories))
-                                @php
-                                $lastOrderId = null; // Biến để theo dõi ID đơn hàng được hiển thị lần cuối
-                                @endphp
-                                    @foreach($reviewHistories as $review)
-                                        @if ($review->order->id !== $lastOrderId)  <!-- Kiểm tra xem ID đơn hàng hiện tại có khác không -->
-                                            <tr class="{{ stripos($review->content, 'đểu') !== false ? 'bg-danger text-white' : '' }}">
-                                                <td class="text-center">{{ $review->order->code }}</td> 
-                                                <td class="text-center">{{ $review->email }}</td>
-                                                <td class="text-center">{{ $review->content }}</td>
-                                                <td class="text-center">{{ $review->score }}</td>
-                                                <td class="text-center">{{ $review->created_at->format('Y-m-d') }}</td>
-                                                <td class="text-center">
-                                                    <div class="d-inline-flex">
-                                                        <a href="{{ route('reviews.history_detail', $review->id) }}" class="btn btn-success me-2">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                
-                                                
-                                            </tr>
-                                            @php $lastOrderId = $review->order->id; // Update lastOrderId to current one @endphp
-                                        @endif
-                                    @endforeach
-                            @endif
-                        </tbody>
+                            @foreach($reviewHistories as $history)
+                                    <tr>
+                                        <td class="text-center">{{ $history->code }}</td> 
+                                        <td class="text-center">{{ $history->email }}</td>
+                                        <td class="text-center">{{ $history->content }}</td>
+                                        <td class="text-center">{{ $history->score }}</td>
+                                        <td class="text-center">{{ $history->created_at->format('Y-m-d') }}</td>
+                                        <td class="text-center">
+                                            <div class="d-inline-flex">
+                                                <a href="{{ route('reviews.history_detail', $history->review_id) }}" class="btn btn-success me-2">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                            @endforeach
+                       
+                    </tbody>
                     </table>
                 </div>                
             </div>
