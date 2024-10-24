@@ -92,13 +92,13 @@
                                         value="{{ old('max_discount_value') }}"
                                         class="form-control"
                                         placeholder="Nhập giá trị tối đa"
+                                        id="max_discount_value"
                                     >
                                     @error('max_discount_value')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                            
                         </div>
                         <div class="row">
                             <div class="col-lg-6 mb-15">
@@ -141,7 +141,7 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Loại Giảm Giá
                                         <span class="text-danger">(*)</span></label>
-                                    <select name="discount_type" class="form-control">
+                                    <select name="discount_type" class="form-control" id="discount_type">
                                         <option value="" disabled>Chọn loại giảm giá</option>
                                         <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
                                         <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Cố định</option>
@@ -225,5 +225,29 @@
         </div>
     </div>
 </form>
+
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const discountTypeSelect = document.getElementById('discount_type');
+        const maxDiscountValueInput = document.getElementById('max_discount_value');
+        const maxDiscountValueContainer = document.getElementById('max_discount_value_container');
+        function toggleMaxDiscountValue() {
+            if (discountTypeSelect.value === 'fixed') {
+                maxDiscountValueInput.disabled = true;
+                maxDiscountValueInput.value = ''; 
+            } else {
+                maxDiscountValueInput.disabled = false;
+            }
+        }
+
+        // Initial check
+        toggleMaxDiscountValue();
+
+        // Event listener for changes in the discount type select
+        discountTypeSelect.addEventListener('change', toggleMaxDiscountValue);
+    });
+</script>
+@endsection
 
 @endsection
