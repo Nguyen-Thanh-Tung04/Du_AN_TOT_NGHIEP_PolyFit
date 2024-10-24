@@ -21,10 +21,12 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
+use App\Http\Controllers\User\LienheController;
 use App\Models\Cart;
 use App\Models\Category;
 
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -44,7 +46,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//gửi mail
+Route::get('send', [LienheController::class, 'create'])->name('create');
+Route::post('send', [LienheController::class, 'sendMail'])->name('sendMail');
+
+
+Route::get('/forget-pass', [HomeController::class, 'forgetPass'])->name('forget');
+Route::post('/forget-pass', [HomeController::class, 'postForgetPass']);
+Route::get('/get-pass', [HomeController::class, 'getPass'])->name('getPass');
+Route::post('/get-pass', [HomeController::class, 'postGetPass'])->name('postGetPass');
+
+
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
@@ -88,6 +102,10 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->middleware('checkLoginClient')
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
+->middleware('checkLoginClient')
+->name('momo.payment');
+Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -230,6 +248,8 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ReviewController::class, 'index'])->name('index');
+    Route::get('history', [ReviewController::class, 'history'])->name("history");
+    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail');
 
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
         ->name('edit');
@@ -340,5 +360,6 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+
 // Route để xem đánh giá cho một đơn hàng cụ thể
 Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

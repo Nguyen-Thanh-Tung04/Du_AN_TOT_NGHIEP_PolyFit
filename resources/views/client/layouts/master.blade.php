@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://*.pusher.com; object-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"> --}}
+
 
 
     <title>PolyFit</title>
@@ -43,8 +45,8 @@
     <!-- Main Style -->
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/demo1.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/style.css')}}" />
-    <link rel="stylesheet" href="{{asset('theme/client/assets/css/custom.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/responsive.css')}}" />
+    <link rel="stylesheet" href="{{asset('theme/client/assets/css/custom.css')}}" />
 
     <!-- Background css -->
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/backgrounds/bg-4.css')}}">
@@ -67,6 +69,7 @@
 
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
 </head>
 
@@ -77,8 +80,10 @@
         <h1>@yield('title')</h1>
         <p>@yield('content')</p>
     </main>
+    @vite(['resources/js/order.js'])
 
     @include('client.layouts.footer')
+
 
 
     <!-- Vendor JS -->
@@ -126,9 +131,12 @@
                 }
             });
         }
-
-        updateCartCount();
+        var isLoggedIn = "{{ auth()->check() ? 'true' : 'false' }}";
+        if (isLoggedIn == 'true') {
+            updateCartCount();
+        }
     </script>
+
 
     <!-- Main Js -->
     <script src="{{asset('theme/client/assets/js/vendor/index.js')}}"></script>

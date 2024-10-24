@@ -43,7 +43,7 @@
                         <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
                             <i class="fa fa-edit"></i>
                         </a>
-                        <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0">
+                        <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0" style="display: inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-delete" >
