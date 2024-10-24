@@ -27,6 +27,18 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <span class="label label-warning pull-right">Xác nhận</span>
+                    <h5>ĐƠN HÀNG CHỜ</h5>
+                </div>
+                <div class="ibox-content">
+                    <a href="{{ route('orders.index') }}"><h1 class="no-margins">{{ isset($totalOrdersConfirm) ? $totalOrdersConfirm : 0 }}</h1></a>
+                    <small>Trên tổng số đơn hàng</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
                 <span class="label label-success pull-right">
                     Tháng {{ isset($results[0]['month']) ? $results[0]['month'] : 0 }}
                 </span>
@@ -61,24 +73,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-info pull-right">Tổng số đơn hàng</span>
-                    <h5>ĐƠN HÀNG</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">{{ isset($totalOrders) ? $totalOrders : 0 }}</h1>
-                    <div class="stat-percent font-bold text-info">
-                        {{ isset($cancellationRate) ? $cancellationRate : '0%' }}
-                        <i class="fa fa-level-up"></i>
-                    </div>
-                    <small>Số đơn hủy {{ isset($canceledOrders) ? $canceledOrders : 0 }} chiếm</small>
-                </div>
-            </div>
-        </div>
-
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -116,22 +110,27 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5 style="padding-top: 5px"> BIỂU ĐỒ DOANH SỐ</h5>
-                    <div class="right">
-                        <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST">
+                    <h5 style="padding-top: 5px"> BIỂU ĐỒ THỐNG KÊ DOANH THU</h5>
+                    <div class="right" style="margin-left: 62%">
+                        <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST" >
                             @csrf
                             <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN</h5>
 
-                            <input type="date" name="date_start" class="btn btn-xs btn-white" value="{{ old('date_start') }}">
-                            <input type="date" name="end_date" class="btn btn-xs btn-white" value="{{ old('end_date') }}">
+                            <!-- Input date_start -->
+                            <input type="date" name="date_start" class="btn btn-xs btn-white" value="{{ request('date_start', '0') }}" >
 
+                            <!-- Input end_date -->
+                            <input type="date" name="end_date" class="btn btn-xs btn-white" value="{{ request('end_date', '0') }}">
+
+                            <!-- Dropdown chọn khoảng thời gian -->
                             <select name="choose_time" id="" class="btn btn-xs btn-white">
-                                <option value="year" {{ old('choose_time') == 'year' ? 'selected' : '' }}>Năm</option>
-                                <option value="month" {{ old('choose_time') == 'month' ? 'selected' : '' }}>Tháng</option>
-                                <option value="week" {{ old('choose_time') == 'week' ? 'selected' : '' }}>Tuần</option>
-                                <option value="day" {{ old('choose_time') == 'day' ? 'selected' : '' }}>Ngày</option>
+                                <option value="year" {{ request('choose_time') == 'year' ? 'selected' : '' }}>Năm</option>
+                                <option value="month" {{ request('choose_time') == 'month' ? 'selected' : '' }}>Tháng</option>
+                                <option value="week" {{ request('choose_time') == 'week' ? 'selected' : '' }}>Tuần</option>
+                                <option value="day" {{ request('choose_time') == 'day' ? 'selected' : '' }}>Ngày</option>
                             </select>
 
+                            <!-- Nút lọc -->
                             <button class="btn btn-primary">Lọc</button>
                         </form>
 
@@ -309,6 +308,202 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-lg-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>BIỂU ĐỒ THỐNG KÊ LỢI NHUẬN</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="myChart_bar"></canvas>
+                    <script>
+                        // Tạo các mảng để lưu trữ nhãn và dữ liệu
+                        const labels = []; // Mảng nhãn cho các sản phẩm
+                        const barData = []; // Dữ liệu cho biểu đồ cột
+                        const lineData = []; // Dữ liệu cho biểu đồ đường
+
+                        // Kiểm tra xem $grossProfit có tồn tại không
+                        @if (isset($grossProfit) && count($grossProfit) > 0)
+                        // Duyệt qua $grossProfit để lấy tên sản phẩm, lợi nhuận gộp và số lượng
+                        @foreach ($grossProfit as $item)
+                        labels.push('{{ $item->product_name }} - Tháng {{ $item->month }}');
+                        barData.push({{ $item->gross_profit }}); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
+                        lineData.push({{ $item->total_quantity }}); // Thêm số lượng vào dữ liệu cho biểu đồ đường
+                        @endforeach
+                        @else
+                        // Nếu không có dữ liệu, thêm giá trị mặc định
+                        labels.push('Không có dữ liệu');
+                        barData.push(0); // Giá trị mặc định cho lợi nhuận gộp
+                        lineData.push(0); // Giá trị mặc định cho số lượng bán
+                        @endif
+
+                        const ctxBar = document.getElementById('myChart_bar').getContext('2d');
+
+                        // Hiển thị biểu đồ
+                        document.getElementById('myChart_bar').style.display = 'block'; // Hiển thị biểu đồ
+
+                        const dataBar = {
+                            labels: labels,
+                            datasets: [{
+                                type: 'bar',
+                                label: 'Lợi Nhuận Gộp',
+                                data: barData,
+                                borderColor: 'rgb(255, 99, 132)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                yAxisID: 'y', // Chỉ định trục y cho lợi nhuận
+                            }, {
+                                type: 'line',
+                                label: 'Số Lượng Bán',
+                                data: lineData,
+                                fill: false,
+                                borderColor: 'rgb(54, 162, 235)',
+                                yAxisID: 'y1', // Chỉ định trục y cho số lượng
+                            }]
+                        };
+
+                        const configBar = {
+                            type: 'bar',
+                            data: dataBar,
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        position: 'left', // Vị trí của trục y
+                                        title: {
+                                            display: true,
+                                            text: 'Lợi Nhuận Gộp'
+                                        }
+                                    },
+                                    y1: {
+                                        beginAtZero: true,
+                                        position: 'right', // Vị trí của trục y cho số lượng
+                                        title: {
+                                            display: true,
+                                            text: 'Số Lượng Bán'
+                                        },
+                                        grid: {
+                                            drawOnChartArea: false // Không vẽ lưới cho trục này
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            title: function(tooltipItems) {
+                                                // Hiển thị thông tin về tháng trong tooltip
+                                                return `Tháng: ${tooltipItems[0].label.split(' - ')[1] || 'N/A'}`; // Tách tháng hoặc N/A nếu không có
+                                            },
+                                            label: function(tooltipItem) {
+                                                // Hiển thị thêm thông tin trong tooltip
+                                                return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                        };
+
+                        const myChartBar = new Chart(ctxBar, configBar); // Vẽ biểu đồ
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>THỐNG KÊ TRẠNG THÁI ĐƠN HÀNG</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas id="myChartPie"></canvas>
+                    <script>
+                        const dataPie = {
+                            labels: [
+                                <?php
+                                if (count($orderStatus) > 0) {
+                                    // Nếu có dữ liệu thì tạo các nhãn từ trạng thái đơn hàng
+                                    foreach ($orderStatus as $status) {
+                                        echo "'" . App\Models\Order::STATUS_NAMES[$status->status] . "',";
+                                    }
+                                } else {
+                                    // Nếu không có dữ liệu, tạo nhãn mặc định
+                                    echo "'No Data',";
+                                }
+                                ?>
+                            ],
+                            datasets: [{
+                                label: 'Total Orders by Status',
+                                data: [
+                                    <?php
+                                    if (count($orderStatus) > 0) {
+                                        // Nếu có dữ liệu thì tạo các giá trị từ trạng thái đơn hàng
+                                        foreach ($orderStatus as $status) {
+                                            echo $status->total . ',';
+                                        }
+                                    } else {
+                                        // Nếu không có dữ liệu, cung cấp giá trị mặc định
+                                        echo '0,';
+                                    }
+                                    ?>
+                                ],
+                                backgroundColor: [
+                                    <?php
+                                    if (count($orderStatus) > 0) {
+                                        // Nếu có dữ liệu, sử dụng màu sắc phù hợp cho từng trạng thái
+                                        foreach ($orderStatus as $status) {
+                                            switch ($status->status) {
+                                                case 1: echo "'rgb(255, 205, 86)',"; break;
+                                                case 2: echo "'rgba(75, 192, 192, 0.2)',"; break;
+                                                case 3: echo "'rgb(201, 203, 207)',"; break;
+                                                case 4: echo "'rgb(54, 162, 235)',"; break;
+                                                case 5: echo "'rgb(75, 192, 192)',"; break;
+                                                case 6: echo "'rgb(255, 99, 99)',"; break;
+                                                default: echo "'rgb(0, 0, 0)',"; break;
+                                            }
+                                        }
+                                    } else {
+                                        // Màu mặc định nếu không có dữ liệu
+                                        echo "'rgb(128, 128, 128)',";
+                                    }
+                                    ?>
+                                ],
+                                hoverOffset: 4
+                            }]
+                        };
+
+                        const configPie = {
+                            type: 'polarArea',
+                            data: dataPie,
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(tooltipItem) {
+                                                const label = tooltipItem.label || '';
+                                                const value = tooltipItem.raw || 0;
+                                                return `${label}: ${value}`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        };
+
+                        const myChartPie = new Chart(
+                            document.getElementById('myChartPie'),
+                            configPie
+                        );
+                    </script>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
         <div class="col-lg-6">
             <div class="row">
                 <div class="col-lg-12">
@@ -342,8 +537,8 @@
                                                 <td class="text-center">{{ $latestUser->id }}</td>
                                                 <td class="text-center">{{ $latestUser->email }}</td>
                                                 <td>
-                                                    <span class="label {{ $latestUser->status == 1 ? 'label-primary' : 'label-warning' }}">
-                                                        {{ $latestUser->status == 1 ? 'Hoạt động' : 'Khóa' }}
+                                                    <span class="label {{ $latestUser->publish == 1 ? 'label-primary' : 'label-warning' }}">
+                                                        {{ $latestUser->publish == 1 ? 'Hoạt động' : 'Khóa' }}
                                                     </span>
                                                 </td>
 
