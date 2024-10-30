@@ -19,7 +19,6 @@
             </ol>
         </div>
     </div>
-
     <div class="row mt-20">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -54,7 +53,6 @@
                             <i class="fa fa-times"></i>
                         </a>
                     </div>
-
                 </div>
                 <div class="ibox-content">
                     <form action="">
@@ -120,42 +118,31 @@
                     <th>Tiêu đề</th>
                     <th>Hình Ảnh </th>
                     <th>Liên kết</th>
-                    <th>Ngày Bắt Đầu</th>
-                    <th>Ngày Kết Thúc</th>
-                    <th class="text-center">Tình Trạng</th>
+                    <th class="text-center">Trạng thái</th>
                     <th class="text-center">Thao Tác</th>
                 </tr>
             </thead>
             <tbody>
-
+                @foreach ($banners as $banner )
                     <tr>
                         <td>
                             <input type="checkbox" value="" class="input-checkbox checkBoxItem">
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{$banner->id}}</td>
+                        <td>{{$banner->title}}</td>
+                        <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
+                        <td>{{$banner->link}}</td>
+                        <td>{{ $banner->is_active ? 'Active' : 'Inactive' }}</td>
                         <td class="text-center">
-                            <input type="checkbox" value=""
-                                   class="js-switch status"
-                                   data-field="status"
-                                   data-model="Voucher"
-                                   data-modelId=""
-                                    />
-                        </td>
-                        <td class="text-center">
-                            <a href="" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                            <form action="" method="POST" style="display: inline-block;"   >
+                            <a href="{{ route('banner.edit', $banner->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                            <form action="{{ route('banner.delete', $banner->id) }}" method="POST" style="display: inline-block;"   >
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button>
                             </form>
                         </td>
                     </tr>
-
+                    @endforeach
             </tbody>
         </table>
         {{-- {{ $vouchers->links('pagination::bootstrap-5') }} --}}

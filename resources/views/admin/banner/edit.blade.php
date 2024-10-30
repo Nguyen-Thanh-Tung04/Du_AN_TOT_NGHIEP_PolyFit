@@ -8,11 +8,12 @@
             <li>
                 <a href="">Dashboard</a>
             </li>
-            <li class="active"><strong>Thêm Banner</strong></li>
+            <li class="active"><strong>Chỉnh sửa Banner</strong></li>
         </ol>
     </div>
 </div>
-<form action="{{route('banner.store')}}" method="post" class="box" enctype="multipart/form-data">
+<form action="{{ route('banner.update', $banner->id) }}" method="post" class="box" enctype="multipart/form-data">
+    @method('PUT')
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -33,13 +34,7 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Tiêu đề
                                         <span class="text-danger">(*)</span></label>
-                                    <input
-                                        type="text"
-                                        name="title"
-                                        value="{{ old('code') }}"
-                                        class="form-control"
-                                        placeholder="Nhập tiêu đề"
-                                    >
+                                        <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $banner->title) }}" required>
                                     @error('title')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -49,13 +44,11 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Hình ảnh
                                         <span class="text-danger">(*)</span></label>
-                                    <input
-                                        type="file"
-                                        name="image"
-                                        value="{{ old('image') }}"
-                                        class="form-control"
-                                        placeholder="Nhập tên voucher"
-                                    >
+                                    <<input type="file" class="form-control-file" id="image" name="image">
+                                    @if ($banner->image)
+                                    <p>Ảnh hiện tại:</p>
+                                    <img src="{{ asset('storage/' . $banner->image) }}" width="150" alt="Banner Image">
+                                @endif
                                     @error('image')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -67,13 +60,7 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Liên kết
                                         <span class="text-danger"></span></label>
-                                    <input
-                                        type="url"
-                                        name="link"
-                                        value="{{ old('link') }}"
-                                        class="form-control"
-                                        placeholder="Nhập link liên kết(Không bắt buộc)"
-                                    >
+                                        <input type="url" class="form-control" id="link" name="link" value="{{ old('link', $banner->link) }}">
                                     @error('value')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -83,16 +70,9 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Trạng thái
                                         <select class="form-control" id="is_active" name="is_active">
-                                            <option value="1" selected>Kích hoạt</option>
-                                            <option value="0">Ẩn</option>
+                                            <option value="1" {{ $banner->is_active ? 'selected' : '' }}>Kích hoạt</option>
+                                            <option value="0" {{ !$banner->is_active ? 'selected' : '' }}>Ẩn</option>
                                         </select>
-                                    <input
-                                        type="url"
-                                        name="is_active"
-                                        value="{{ old('link') }}"
-                                        class="form-control"
-                                        placeholder=""
-                                    >
                                     @error('value')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -104,7 +84,7 @@
             </div>
         </div>
         <div class="text-right mb-15">
-            <button type="submit" class="btn btn-primary">Thêm banner</button>
+            <button type="submit" class="btn btn-primary">Cập nhật banner</button>
         </div>
     </div>
 </form>

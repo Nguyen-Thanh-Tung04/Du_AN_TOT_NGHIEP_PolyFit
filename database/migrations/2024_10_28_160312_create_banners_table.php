@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('image'); // đường dẫn ảnh
-            $table->string('link')->nullable(); // link điều hướng khi click vào banner
-            $table->boolean('status')->default(1); // 1 là hiển thị, 0 là ẩn
+            $table->string('title')->nullable(); // tiêu đề của banner
+            $table->string('image')->nullable(); // đường dẫn ảnh
+            $table->text('link')->nullable(); // liên kết đến trang khác
+            $table->boolean('is_active')->default(true); // trạng thái kích hoạt
             $table->timestamps();
         });
     }
