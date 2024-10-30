@@ -38,6 +38,14 @@ class CheckoutController
         $this->checkoutService = $checkoutService;
     }
 
+    public function checkoutProcess(Request $request)
+    {
+        if ($request->isMethod('GET')) {
+            // Chuyển hướng về trang giỏ hàng nếu người dùng truy cập bằng GET
+            return redirect()->route('cart.index')->with('error', 'Không được phép truy cập khi chưa mua hàng.');
+        }
+    }
+
     public function showFormCheckout(Request $request)
     {
         $productVarians = $request->input('product_variant_ids');
@@ -266,7 +274,7 @@ class CheckoutController
             }
         }
         // Sau khi đơn hàng được tạo, phát sự kiện realtime
-        event(new OrderPlaced($order));
+        // event(new OrderPlaced($order));
 
         if ($voucher) {
             if ($voucher->quantity > 0) {
