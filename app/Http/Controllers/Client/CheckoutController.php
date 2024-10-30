@@ -51,6 +51,15 @@ class CheckoutController
         }
         $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
 
+         // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
+        foreach ($productVariants as $productVariant) {
+            $requestedQuantity = $quantities[$productVariant->id];
+            
+            if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) { // Giả sử `quantity` là cột chứa số lượng hàng trong kho
+                return redirect()->back()->with('error', 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.');
+            }
+        }
+
         $total = 0;
         $firstProduct = null;
 
