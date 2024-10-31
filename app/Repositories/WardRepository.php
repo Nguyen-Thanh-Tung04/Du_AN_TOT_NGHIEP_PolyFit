@@ -15,5 +15,9 @@ class WardRepository implements WardRepositoryInterface
     public function __construct(Ward $model) {
         $this->model = $model;
     }
+    public function all() {
+        return $this->model->all();
+    }
+
 
 }

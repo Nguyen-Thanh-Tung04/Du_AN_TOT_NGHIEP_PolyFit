@@ -21,7 +21,6 @@ class MemberService
     public function paginate($request) {
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
-        $condition['status'] = $request->integer('status');
         $perPage = $request->integer('perpage');
         $users = $this->memberRepository->pagination([
             'id',
@@ -31,7 +30,6 @@ class MemberService
             'phone',
             'address',
             'publish',
-            'status',
             'user_catalogue_id',
         ], $condition, $perPage, ['path' => 'user/index']);
         return $users;

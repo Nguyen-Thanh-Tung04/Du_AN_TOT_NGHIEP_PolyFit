@@ -38,6 +38,14 @@ class CheckoutController
         $this->checkoutService = $checkoutService;
     }
 
+    public function checkoutProcess(Request $request)
+    {
+        if ($request->isMethod('GET')) {
+            // Chuyển hướng về trang giỏ hàng nếu người dùng truy cập bằng GET
+            return redirect()->route('cart.index')->with('error', 'Không được phép truy cập khi chưa mua hàng.');
+        }
+    }
+
     public function showFormCheckout(Request $request)
     {
         $productVarians = $request->input('product_variant_ids');
@@ -50,6 +58,15 @@ class CheckoutController
             $quantities[$id] = $request->input("quantities.$id");
         }
         $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
+
+         // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
+        foreach ($productVariants as $productVariant) {
+            $requestedQuantity = $quantities[$productVariant->id];
+            
+            if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) { // Giả sử `quantity` là cột chứa số lượng hàng trong kho
+                return redirect()->back()->with('error', 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.');
+            }
+        }
 
         $total = 0;
         $firstProduct = null;
@@ -257,7 +274,7 @@ class CheckoutController
             }
         }
         // Sau khi đơn hàng được tạo, phát sự kiện realtime
-        event(new OrderPlaced($order));
+        // event(new OrderPlaced($order));
 
         if ($voucher) {
             if ($voucher->quantity > 0) {
@@ -266,9 +283,9 @@ class CheckoutController
         }
 
         // Xóa những sản phẩm đã được chọn mua trong giỏ hàng
-        // Cart::where('user_id', $user->id)
-        //     ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
-        //     ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
+        Cart::where('user_id', $user->id)
+            ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
+            ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
         //Send Mail
         Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
@@ -538,6 +555,8 @@ class CheckoutController
                     ], 400);
                 }
             }
+            // Sau khi đơn hàng được tạo, phát sự kiện realtime
+            // event(new OrderPlaced($order));
 
             // Trừ số lượng hoặc số lần sử dụng của voucher (nếu voucher tồn tại và có cột để quản lý số lượng)
             if ($voucher) {
@@ -554,11 +573,15 @@ class CheckoutController
                 ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
                 ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
 
+            //Send Mail
+            Mail::to($user->email)->queue(new OrderPlacedMail($order));
+
             // Xóa thông tin trong session
             session()->forget('checkout_data');
 
             // Sau khi đơn hàng được tạo, phát sự kiện realtime
             event(new OrderPlaced($order));
+
 
             // Chuyển hướng đến trang bill với thông tin đơn hàng
             return redirect()->route('order.show', $order->id);

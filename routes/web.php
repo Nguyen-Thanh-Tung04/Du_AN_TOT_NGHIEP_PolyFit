@@ -18,6 +18,8 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
@@ -76,14 +78,30 @@ Route::get('/product_detail', function () {
 Route::get('/contact', function () {
     return view('client.page.contact');
 });
-Route::get('/account', function () {
-    return view('client.page.profile');
-});
 
+Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
+Route::put('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+// Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
+// Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
+Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
+Route::patch('/updatePassword', [ProfileController::class, 'updatePassword'])->name('updatePassword');
+
+
+
+Route::get('/cart', function () {
+    return view('client.page.cart');
+})->name('cart');
+Route::get('/order', function () {
+    return view('client.page.order');
+})->name('order');
+
+// Route::get('/cart', function () {
+//     return view('client.page.cart');
+// })->name('cart');
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
     ->middleware('checkLoginClient')
     ->name('checkout.show');
-Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
+Route::get('/checkout', [CheckoutController::class, 'checkoutProcess'])
     ->middleware('checkLoginClient')
     ->name('checkout.process');
 Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
@@ -359,9 +377,8 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 });
 
 
-Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
 
 // Route để xem đánh giá cho một đơn hàng cụ thể
-Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
+Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

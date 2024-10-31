@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->unsignedBigInteger('user_catalogue_id')->nullable();
-            $table->tinyInteger('publish')->default(2);
+            $table->tinyInteger('publish')->default(1);
             $table->softDeletes()->nullable;
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
