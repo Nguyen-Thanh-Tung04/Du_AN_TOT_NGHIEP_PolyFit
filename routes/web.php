@@ -92,9 +92,6 @@ Route::patch('/updatePassword', [ProfileController::class, 'updatePassword'])->n
 Route::get('/cart', function () {
     return view('client.page.cart');
 })->name('cart');
-Route::get('/checkout', function () {
-    return view('client.page.checkout');
-})->name('checkout');
 Route::get('/order', function () {
     return view('client.page.order');
 })->name('order');
@@ -105,7 +102,7 @@ Route::get('/order', function () {
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
     ->middleware('checkLoginClient')
     ->name('checkout.show');
-Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
+Route::get('/checkout', [CheckoutController::class, 'checkoutProcess'])
     ->middleware('checkLoginClient')
     ->name('checkout.process');
 Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
@@ -392,7 +389,6 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 });
 
 
-Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
 

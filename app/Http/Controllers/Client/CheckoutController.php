@@ -38,6 +38,14 @@ class CheckoutController
         $this->checkoutService = $checkoutService;
     }
 
+    public function checkoutProcess(Request $request)
+    {
+        if ($request->isMethod('GET')) {
+            // Chuyển hướng về trang giỏ hàng nếu người dùng truy cập bằng GET
+            return redirect()->route('cart.index')->with('error', 'Không được phép truy cập khi chưa mua hàng.');
+        }
+    }
+
     public function showFormCheckout(Request $request)
     {
         $productVarians = $request->input('product_variant_ids');
@@ -50,6 +58,15 @@ class CheckoutController
             $quantities[$id] = $request->input("quantities.$id");
         }
         $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
+
+         // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
+        foreach ($productVariants as $productVariant) {
+            $requestedQuantity = $quantities[$productVariant->id];
+            
+            if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) { // Giả sử `quantity` là cột chứa số lượng hàng trong kho
+                return redirect()->back()->with('error', 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.');
+            }
+        }
 
         $total = 0;
         $firstProduct = null;
@@ -257,7 +274,7 @@ class CheckoutController
             }
         }
         // Sau khi đơn hàng được tạo, phát sự kiện realtime
-        event(new OrderPlaced($order));
+        // event(new OrderPlaced($order));
 
         if ($voucher) {
             if ($voucher->quantity > 0) {
