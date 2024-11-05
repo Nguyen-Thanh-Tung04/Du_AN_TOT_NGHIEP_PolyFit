@@ -21,6 +21,7 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
+use App\Http\Controllers\ChatController;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -88,6 +89,13 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->middleware('checkLoginClient')
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+
+// Chat Realtime
+Route::middleware('checkLoginClient')->group(function () {
+    Route::get('/list-user', [ChatController::class, 'index'])->name('home');
+    Route::get('/chat-private/{idUser}',[ChatController::class,'chatPrivate']);
+});
+
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
