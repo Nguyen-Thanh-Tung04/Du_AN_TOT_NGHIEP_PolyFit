@@ -1,0 +1,107 @@
+[33m53e8069[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m luan
+[33m46f3a3a[m update
+[33m1843492[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into trieunt04
+[33mad81dcb[m update
+[33m407ecf5[m validate
+[33m00f46ae[m up
+[33m1f51c89[m check_quantity_cart
+[33m95e323f[m up
+[33mc26325c[m Merge branch 'trieunt04' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into trieunt04
+[33m8870d76[m up
+[33mf69e258[m Merge branch 'tung' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into trieunt04
+[33mc402f13[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into trieunt04
+[33m5df4218[m update
+[33m8fd396c[m Merge branch 'quangtoan' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into quangtoan
+[33m67c0bdc[m up
+[33mad4dca6[m update code
+[33m2b391a3[m update static
+[33m62a8379[m restock&UpdateVcher
+[33m672068d[m Merge branch 'quangtoan' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into quangtoan
+[33m59d11b9[m update realtime
+[33m42cdc57[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into hung
+[33m2dc1677[m Realtime thông báo đơn mới
+[33ma0c8bc6[m tìm kiếm
+[33ma0f66a6[m Merge branch 'hung' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into hung
+[33mbe99cb3[m sửa tìm kiếm
+[33m016578c[m updateVoucher
+[33m84cdc5f[m update
+[33md0185dc[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into hung
+[33madba32d[m trieu
+[33mb1291ad[m Merge branch 'main' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into trieunt04
+[33m0065f78[m Merge branch 'quangtoan' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into tung
+[33mf8eb0d1[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into tung
+[33mb74826a[m update
+[33md6dbe22[m updateviewSendMail
+[33m92de8bf[m SendMail
+[33mb3bf713[m Merge branch 'main' into quangtoan
+[33m9fbf00c[m sửa thông báo liên hệ
+[33me462f0a[m luan
+[33me23a1d6[m Merge branch 'main' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into trieunt04
+[33mfa316e4[m Merge branch 'luan'
+[33ma2cdf9c[m[33m ([m[1;31morigin/luan[m[33m, [m[1;32mluan[m[33m)[m luan
+[33m583f79b[m updateHistory&showerror
+[33m74a5cae[m Lịch sửa QL Review admin
+[33m0df6461[m đặt lại mk
+[33m8486713[m Merge branch 'main' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33m4ba29e2[m fix template and cart
+[33m511fa74[m Merge branch 'main' into trieunt04
+[33m28e5782[m up
+[33mb87f387[m Update profile functionality and add change password view
+[33meeabf1f[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33mc36f394[m update
+[33mff27a13[m fix lỗi static
+[33mb8d3080[m hung
+[33m2bd0f59[m update
+[33m182b5c7[m Merge branch 'main' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33ma791633[m luan
+[33m359af29[m count product in cart
+[33m5ba9c7c[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33mb7a65d2[m update style static
+[33me56e6f8[m Merge branch 'luan'
+[33mbef57d6[m luan
+[33md0a59f2[m Merge branch 'main' into huongdev
+[33mf3a8cc8[m update
+[33m5152a3e[m update lọc theo tuần
+[33m62b9ba3[m Chặn Gửi form khi không nhập dữ liệu
+[33mdb89c60[m update cofilic static
+[33m6778e79[m update static
+[33mb8b1338[m update static_num
+[33m22fe10b[m Merge branch 'main' into quangtoan
+[33m9c5a142[m update status , ajax xóa, sửa bố cục
+[33mdfe0b9e[m hung
+[33m3879707[m reason_cancel
+[33m53b671f[m fix error
+[33mc311a87[m Merge branch 'main' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33m49380d1[m luan
+[33m8cde415[m Update review và quản lý
+[33ma97de94[m luan
+[33md1cc26a[m Merge branch 'main' into hung
+[33m59701b0[m Merge branch 'main' into tung
+[33m5527e36[m fix button
+[33m6d59842[m Quản lý review vs star trung bình
+[33m20505d5[m Merge branch 'main' into duonghv
+[33mdfdc4c7[m update product filter
+[33mf5d039a[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into huongdev
+[33m49a6fc5[m update thong ke
+[33m52ec27c[m hung
+[33mc22b0bf[m Xem sản phẩm đã đánh giá r
+[33meb3db59[m update
+[33m979846c[m Merge branch 'main' into quangtoan
+[33mfa8e4b5[m Đánh giá sau khi hoàn thành
+[33m0d62a54[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into huongdev
+[33mf6ba85d[m updateHistory
+[33mf96165c[m updateOrderg&History
+[33m2c1c497[m update
+[33mae68a84[m Merge branch 'main' into tung
+[33m459e26e[m update status admin
+[33mbeb26ff[m Merge branch 'main' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33m8a57086[m up_order_blade
+[33m670290f[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33m119f5b1[m update filter
+[33m7bb98e8[m fix_cart
+[33mca9b090[m up_checkout
+[33mb13fbab[m update fillter product
+[33md753f9d[m Sửa lịch sử chút
+[33ma6aa48d[m Merge branch 'main' of github.com:Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit
+[33m9b6ae90[m update
+[33m17866f9[m trieunt04
