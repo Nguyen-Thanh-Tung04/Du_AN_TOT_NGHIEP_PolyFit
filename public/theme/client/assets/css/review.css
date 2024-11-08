@@ -117,5 +117,68 @@
 #loginBtn:hover {
     background-color: hsl(354, 83%, 64%); /* Màu đỏ tối hơn khi di chuột vào */
 }
+.out-of-stock {
+    opacity: 0.5; /* Làm mờ sản phẩm */
+    position: relative;
+}
+
+.out-of-stock .out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.2em;
+    z-index: 10;
+}
+
+.ec-add-to-cart.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: gray;
+}
+.ec-product-image.out-of-stock {
+    position: relative;
+}
+
+.ec-product-image.out-of-stock img {
+    opacity: 0.7; /* Làm mờ nhẹ hình ảnh */
+}
+
+.ec-product-image .out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1em;
+    pointer-events: none; /* Đảm bảo nhãn không cản trở hành động nhấp */
+}
+
+/* Định dạng nhãn "Hết hàng" */
+.out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6); /* Nền trong suốt tối màu */
+    padding: 5px 10px;
+    border-radius: 5px;
+    pointer-events: none; /* Đảm bảo nhãn không ảnh hưởng đến sự kiện click */
+    z-index: 10;
+}
+
+
 
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */

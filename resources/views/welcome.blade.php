@@ -122,12 +122,14 @@
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <!-- START single card -->
                                 <div class="ec-product-ds">
-                                    <div class="ec-product-image">
+                                    <div class="ec-product-image {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" style="height: 300px"  />
+                                            <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
+                                            @if($product->variants->sum('quantity') === 0)
+                                                <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                                <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
                                         </a>
-                                        <span class="ec-product-discount-label">-33%</span>
                                     </div>
                                     <div class="ec-product-body">
                                         <ul class="ec-rating">
@@ -279,13 +281,15 @@
                                 <div class="col-lg-3 col-md-6 col-sm-6">
                                     <!-- START single card -->
                                     <div class="ec-product-ds">
-                                        <div class="ec-product-image">
-                                            <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                                <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                    alt="" style="height: 300px" />
-                                            </a>
-                                            <span class="ec-product-discount-label">-33%</span>
-                                        </div>
+                                        <div class="ec-product-image {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}">
+                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                            <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
+                                            @if($product->variants->sum('quantity') === 0)
+                                                <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                                <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
+                                        </a>
+                                    </div>
                                         <div class="ec-product-body">
                                             <ul class="ec-rating">
                                                 @php

@@ -274,7 +274,7 @@ class CheckoutController
             }
         }
         // Sau khi đơn hàng được tạo, phát sự kiện realtime
-        // event(new OrderPlaced($order));
+        event(new OrderPlaced($order));
 
         if ($voucher) {
             if ($voucher->quantity > 0) {
@@ -556,7 +556,7 @@ class CheckoutController
                 }
             }
             // Sau khi đơn hàng được tạo, phát sự kiện realtime
-            // event(new OrderPlaced($order));
+            event(new OrderPlaced($order));
 
             // Trừ số lượng hoặc số lần sử dụng của voucher (nếu voucher tồn tại và có cột để quản lý số lượng)
             if ($voucher) {

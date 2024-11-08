@@ -80,7 +80,7 @@
         <h1>@yield('title')</h1>
         <p>@yield('content')</p>
     </main>
-    {{-- @vite(['resources/js/order.js']) --}}
+    @vite(['resources/js/order.js'])
 
     @include('client.layouts.footer')
 

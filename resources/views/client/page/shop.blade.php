@@ -45,10 +45,14 @@
                                 @endphp
                                 <div class="col-lg-3 col-md-6 col-sm-6">
                                     <div class="ec-product-ds">
-                                        <div class="ec-product-image">
+                                        <div class="ec-product-image {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}">
                                             <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                                 <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt="" style="height: 200px" />
                                             </a>
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                        @endif
                                             <span class="ec-product-discount-label">-33%</span>
                                         </div>
                                         <div class="ec-product-body">
