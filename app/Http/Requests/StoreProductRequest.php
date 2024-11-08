@@ -34,28 +34,6 @@ class StoreProductRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            $purchasePrices = $this->input('purchase_price', []);
-            $listedPrices = $this->input('listed_price', []);
-            $salePrices = $this->input('sale_price', []);
-
-            foreach ($purchasePrices as $index => $purchasePrice) {
-                $listedPrice = $listedPrices[$index] ?? 0;
-                $salePrice = $salePrices[$index] ?? 0;
-
-                if ($purchasePrice >= $listedPrice) {
-                    $validator->errors()->add("purchase_price.{$index}", 'Giá niêm yết phải lớn hơn giá nhập kho.');
-                }
-
-                if ($listedPrice <= $salePrice) {
-                    $validator->errors()->add("sale_price.{$index}", 'Giá sale phải nhỏ hơn giá niêm yết.');
-                }
-            }
-        });
-    }
-
     public function messages(): array
     {
         return [
