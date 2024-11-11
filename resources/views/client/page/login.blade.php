@@ -57,7 +57,7 @@
                                 @enderror
                             </span>
                             <span class="ec-login-wrap ec-login-fp">
-                                <label><a href="#">Quên mật khẩu?</a></label>
+                                <label><a href="{{ route('forget')}}">Quên mật khẩu?</a></label>
                             </span>
                             <span class="ec-login-wrap ec-login-btn">
                                 <button class="btn btn-primary" type="submit">Đăng nhập</button>

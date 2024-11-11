@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -18,14 +19,18 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
+use App\Http\Controllers\User\LienheController;
 use App\Http\Controllers\ChatController;
 use App\Models\Cart;
 use App\Models\Category;
 
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -45,7 +50,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//gửi mail
+Route::get('send', [LienheController::class, 'create'])->name('create');
+Route::post('send', [LienheController::class, 'sendMail'])->name('sendMail');
+
+
+Route::get('/forget-pass', [HomeController::class, 'forgetPass'])->name('forget');
+Route::post('/forget-pass', [HomeController::class, 'postForgetPass']);
+Route::get('/get-pass', [HomeController::class, 'getPass'])->name('getPass');
+Route::post('/get-pass', [HomeController::class, 'postGetPass'])->name('postGetPass');
+
+
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
@@ -63,14 +80,30 @@ Route::get('/product_detail', function () {
 Route::get('/contact', function () {
     return view('client.page.contact');
 });
-Route::get('/account', function () {
-    return view('client.page.profile');
-});
 
+Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
+Route::put('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+// Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
+// Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
+Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
+Route::patch('/updatePassword', [ProfileController::class, 'updatePassword'])->name('updatePassword');
+
+
+
+Route::get('/cart', function () {
+    return view('client.page.cart');
+})->name('cart');
+Route::get('/order', function () {
+    return view('client.page.order');
+})->name('order');
+
+// Route::get('/cart', function () {
+//     return view('client.page.cart');
+// })->name('cart');
 Route::post('/checkout', [CheckoutController::class, 'showFormCheckout'])
     ->middleware('checkLoginClient')
     ->name('checkout.show');
-Route::post('checkoutStore', [CheckoutController::class, 'checkoutProcess'])
+Route::get('/checkout', [CheckoutController::class, 'checkoutProcess'])
     ->middleware('checkLoginClient')
     ->name('checkout.process');
 Route::post('/checkout/apply-voucher', [CheckoutController::class, 'applyVoucher'])
@@ -89,13 +122,25 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->middleware('checkLoginClient')
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
+->middleware('checkLoginClient')
+->name('momo.payment');
+Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
 
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
-    Route::get('/list-user', [ChatController::class, 'index'])->name('home');
-    Route::get('/chat-private/{idUser}',[ChatController::class,'chatPrivate']);
-});
+    Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
+    // Route::post('/chat-private/search',[ChatController::class,'search']);
+    Route::post('/chat-private-admin/search',[ChatController::class,'search']);
+    Route::get('/chat-private/{idUser}',[ChatController::class,'chatPrivate'])->name('chat-private');
+    Route::get('/chat-private-admin/{idUser}',[ChatController::class,'chatPrivateAdmin'])->name('chat-private-admin');
+    Route::post('/message-private',[ChatController::class,'messagePrivate']); 
+    Route::post('/user-inactive',[ChatController::class,'userInactive']);
 
+});
+Route::get('huongdev', function () {
+    return view('admin.chat.index');
+});
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -238,6 +283,8 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ReviewController::class, 'index'])->name('index');
+    Route::get('history', [ReviewController::class, 'history'])->name("history");
+    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail');
 
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
         ->name('edit');
@@ -261,17 +308,30 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
     Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
     Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy');
 });
+// banner
+Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [BannerController::class, 'index'])->name('index');
+    Route::get('create', [BannerController::class, 'create'])->name('create');
+    Route::post('store', [BannerController::class, 'store'])->name('store');
+    Route::get('edit/{id}',[BannerController::class,'edit'])->name('edit');
+    Route::put('update/{id}',[BannerController::class,'update'])->name('update');
+    Route::delete('delete/{id}',[BannerController::class,'delete'])->name('delete');
+
+
+});
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
     Route::get('index',                 [OrderController::class, 'index'])->name('index');
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
-    // Route::put('{id}/confirm-cancellation', [OrderController::class, 'confirmCancellation'])->name('order.history.confirm-cancellation');
 
 });
-Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
-Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
-Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+Route::middleware(['checkLoginClient'])->group(function () {
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
+    Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
+    Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
+});
+
 
 
 
@@ -345,8 +405,8 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 });
 
 
-Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+
 // Route để xem đánh giá cho một đơn hàng cụ thể
-Route::get('/reviews/{order_id}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
+Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

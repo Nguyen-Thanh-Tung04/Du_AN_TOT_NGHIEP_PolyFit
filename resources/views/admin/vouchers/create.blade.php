@@ -12,11 +12,13 @@
         </ol>
     </div>
 </div>
+
 <form action="{{ route('vouchers.store') }}" method="post" class="box">
     @csrf
+    
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-4">
                 <div class="panel-heading">
                     <div class="panel-title">Thông tin voucher</div>
                     <div class="panel-description">
@@ -25,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-8">
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
@@ -80,12 +82,9 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-15">
+                            <div class="col-lg-6 mb-15" id="max_discount_value_container">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá trị tối đa
-                                        <span class="text-danger">(*)</span></label>
-
-                                    </label>
+                                    <label class="control-label text-left">Giá trị tối đa</label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -93,6 +92,7 @@
                                         value="{{ old('max_discount_value') }}"
                                         class="form-control"
                                         placeholder="Nhập giá trị tối đa"
+                                        id="max_discount_value"
                                     >
                                     @error('max_discount_value')
                                         <div class="text-danger">{{ $message }}</div>
@@ -120,14 +120,17 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Loại Giảm Giá
-                                        <span class="text-danger">(*)</span></label>
-                                    <select name="discount_type" class="form-control">
-                                        <option value="" disabled selected>Chọn loại giảm giá</option>
-                                        <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
-                                        <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Cố định</option>
-                                    </select>
-                                    @error('discount_type')
+                                    <label class="control-label text-left">Giá trị đơn hàng tối đa
+                                    </label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        name="max_order_value"
+                                        value="{{ old('max_order_value') }}"
+                                        class="form-control"
+                                        placeholder="Nhập Giá trị đơn hàng tối đa"
+                                    >
+                                    @error('max_order_value')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -136,12 +139,26 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
+                                    <label class="control-label text-left">Loại Giảm Giá
+                                        <span class="text-danger">(*)</span></label>
+                                    <select name="discount_type" class="form-control" id="discount_type">
+                                        <option value="" disabled>Chọn loại giảm giá</option>
+                                        <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
+                                        <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Cố định</option>
+                                    </select>
+                                    @error('discount_type')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
                                     <label class="control-label text-left">Số Lượng
                                         <span class="text-danger">(*)</span></label>
                                     <input
                                         type="number"
                                         name="quantity"
-                                        value="{{ old('quantity', 1) }}"
+                                        value="{{ old('quantity') }}"
                                         class="form-control"
                                         placeholder="Nhập số lượng"
                                         min="1"
@@ -151,26 +168,11 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-15">
-                                <div class="form-row">
-                                    <label class="control-label text-left">Trạng thái
-                                        </label>
-                                    <select name="status" class="form-control">
-                                        <option value="1" {{ old('status', true) ? 'selected' : '' }}>Hoạt động</option>
-                                        <option value="0" {{ old('status') == false ? 'selected' : '' }}>Không hoạt động</option>
-                                    </select>
-                                    @error('status')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Thời gian bắt đầu                                         <span class="text-danger">(*)</span></label>
-                                    </label>
-
+                                    <label class="control-label text-left">Thời gian bắt đầu
                                     </label>
                                     <input
                                         type="datetime-local"
@@ -186,8 +188,6 @@
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Thời gian kết thúc
-                                        <span class="text-danger">(*)</span></label>
-
                                     </label>
                                     <input
                                         type="datetime-local"
@@ -201,13 +201,53 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Trạng thái
+                                        <span class="text-danger">(*)</span></label>
+                                    <select name="status" class="form-control">
+                                        <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Hoạt động</option>
+                                        <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Không hoạt động</option>
+                                    </select>
+                                    @error('status')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Lưu Voucher</button>
                 </div>
             </div>
         </div>
-        <div class="text-right mb-15">
-            <button type="submit" class="btn btn-primary">Lưu Voucher</button>
-        </div>
     </div>
 </form>
+
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const discountTypeSelect = document.getElementById('discount_type');
+        const maxDiscountValueInput = document.getElementById('max_discount_value');
+        const maxDiscountValueContainer = document.getElementById('max_discount_value_container');
+        function toggleMaxDiscountValue() {
+            if (discountTypeSelect.value === 'fixed') {
+                maxDiscountValueInput.disabled = true;
+                maxDiscountValueInput.value = ''; 
+            } else {
+                maxDiscountValueInput.disabled = false;
+            }
+        }
+
+        // Initial check
+        toggleMaxDiscountValue();
+
+        // Event listener for changes in the discount type select
+        discountTypeSelect.addEventListener('change', toggleMaxDiscountValue);
+    });
+</script>
+@endsection
+
 @endsection

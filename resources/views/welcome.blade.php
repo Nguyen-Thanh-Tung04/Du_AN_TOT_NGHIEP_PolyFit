@@ -62,23 +62,23 @@
             </div>
         </div>
         <div class="row margin-minus-tb-15">
-            <a href="#">
-                <div class="ec_cat_slider">
-                    @foreach ($category as $category)
-                    <div class="ec_cat_content">
-                        <div class="ec_cat_inner text-center p-5">
-                            <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
-                            <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
-                            width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                            height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                            object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
-                            />
-                            <p class="text-black fw-bold">{{$category->name}}</p>
-                        </div>
+
+            <div class="ec_cat_slider">
+                @foreach ($category as $category)
+                <div class="ec_cat_content">
+                    <div class="ec_cat_inner text-center p-5">
+                        <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
+                        <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
+                        width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
+                        height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
+                        object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
+                        />
+                        {{-- <p class="text-black fw-bold">{{$category->name}}</p> --}}
                     </div>
-                    @endforeach
                 </div>
-            </a>
+                @endforeach
+            </div>
+
         </div>
 
     </div>
@@ -96,6 +96,7 @@
                     <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
                 </div>
             </div>
+
 
             <!-- Tab Start -->
             <div class="col-md-12 text-center">
@@ -124,35 +125,40 @@
                                     <div class="ec-product-image">
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                             <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" style="height: 250px"  />
+                                                alt="" style="height: 300px"  />
                                         </a>
                                         <span class="ec-product-discount-label">-33%</span>
                                     </div>
                                     <div class="ec-product-body">
                                         <ul class="ec-rating">
-                                            @if ($product->averageScore)
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <= round($product->averageScore))
-                                                        <li class="ecicon eci-star fill"></li>
+                                            @php
+                                                $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                            @endphp
+
+                                            @if ($averageScore)
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $averageScore)
+                                                        <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
                                                     @else
-                                                        <li class="ecicon eci-star"></li>
+                                                        <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
                                                     @endif
                                                 @endfor
                                             @else
-                                                <!-- Hiển thị 5 sao trống nếu không có đánh giá -->
-                                                @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= 5)
-                                                <li class="ecicon eci-star fill"></li>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= 5)
+                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
                                                 @else
-                                                    <li class="ecicon eci-star"></li>
-                                                @endif                                                    @endfor
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                            @endfor
                                             @endif
                                         </ul>
+
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                         <div class="ec-price">
-                                            <span>{{ number_format($product->listed_price, 0) }}đ </span>
-                                            {{ number_format($product->min_price, 0) }} đ
-                                            {{-- - {{ number_format($product->max_price, 0) }} đ --}}
+                                            <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
+                                            {{ number_format($product->min_price, 0) }} VNĐ
+                                            {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                         </div>
                                         <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
                                     </div>
@@ -177,7 +183,7 @@
     </div>
     </div>
 
-    {{-- <section class="section ec-services-section section-space-p" id="services">
+    <section class="section ec-services-section section-space-p" id="services">
         <h2 class="d-none">Dịch vụ</h2>
         <div class="container">
             <div class="row">
@@ -227,7 +233,7 @@
                 </div>
             </div>
         </div>
-    </section> --}}
+    </section>
     <!--services Section End -->
 
     <!--  offer Section Start -->
@@ -282,30 +288,33 @@
                                         </div>
                                         <div class="ec-product-body">
                                             <ul class="ec-rating">
-                                                @if ($product->averageScore)
-                                                    @for($i = 1; $i <= 5; $i++)
-                                                        @if($i <= round($product->averageScore))
-                                                            <li class="ecicon eci-star fill"></li>
+                                                @php
+                                                    $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                                @endphp
+
+                                                @if ($averageScore)
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        @if ($i <= $averageScore)
+                                                            <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
                                                         @else
-                                                            <li class="ecicon eci-star"></li>
+                                                            <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
                                                         @endif
                                                     @endfor
                                                 @else
-                                                    <!-- Hiển thị 5 sao trống nếu không có đánh giá -->
-                                                    @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <= 5)
-                                                    <li class="ecicon eci-star fill"></li>
-                                                    @else
-                                                        <li class="ecicon eci-star"></li>
-                                                    @endif                                                    @endfor
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= 5)
+                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                            @endfor
                                                 @endif
                                             </ul>
-                                            
                                             <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
-                                                <span>{{ number_format($product->listed_price, 0) }}đ </span>
-                                                {{ number_format($product->min_price, 0) }} đ
-                                                {{-- - {{ number_format($product->max_price, 0) }} đ --}}
+                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
+                                                {{ number_format($product->min_price, 0) }} VNĐ
+                                                {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                             </div>
                                             <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
                                         </div>
@@ -388,5 +397,62 @@
         </div>
     </section>
     <!-- Ec Brand Section End -->
+    <div class="ec-style ec-right-bottom">
+     <!-- Start Floating Panel Container -->
+     <div class="ec-panel" style="display: block;">
+         <!-- Panel Header -->
+         <div class="ec-header">
+             <strong>Cần hỗ trợ?</strong>
+             <p>Liên hệ với nhân viên?</p>
+         </div>
+         <!-- Panel Content -->
+         <div class="ec-body">
+             <ul>
+                 <!-- Start Single Contact List -->
+                 @foreach($users as $item)
+                 <li id="user{{ $item->id }}">
+                     <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
+                         <div class="d-flex bd-highlight">
+                             <!-- Profile Picture -->
+                             <div class="ec-img-cont">
+                                 @if(isset($item->image))
+                                 <img src="{{ storage::url($item->image) }}" class="ec-user-img">
+                                 @else
+                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
+                                 @endif
+                             </div>
 
+                             <!-- Display Name & Last Seen -->
+                             <div class="ec-user-info">
+                                 <span>{{ $item->name }}</span>
+                                 <!-- Phần tử hiển thị thời gian hoạt động -->
+                                 <p style="margin-top: 2px;" class="activity-time"></p>
+                             </div>
+
+                             <!-- Chat Icon -->
+                             <div class="ec-chat-icon">
+                                 <i class="fa fa-whatsapp"></i>
+                             </div>
+                         </div>
+                     </a>
+                 </li>
+
+
+                 @endforeach
+                 <!--/ End Single Contact List -->
+             </ul>
+         </div>
+     </div>
+     <!--/ End Floating Panel Container -->
+     <!-- Start Right Floating Button-->
+     <div class="ec-right-bottom">
+         <div class="ec-box">
+             <div class="ec-button rotateForward">
+                 <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
+             </div>
+         </div>
+     </div>
+     <!--/ End Right Floating Button-->
+ </div>
+ <!-- Whatsapp end -->
     @endsection

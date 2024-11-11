@@ -15,6 +15,7 @@ class OrderHistoryController extends Controller
     {
         $orders = Order::with(['user', 'orderItems.variant.product'])
             ->where('user_id', auth()->id())
+            ->orderBy('id', 'desc')
             ->get();
 
         // Phân loại đơn hàng
@@ -25,6 +26,12 @@ class OrderHistoryController extends Controller
         $deliveredOrders = $orders->where('status', Order::STATUS_DA_GIAO_HANG);
         $cancelledOrders = $orders->where('status', Order::STATUS_HUY_DON_HANG);
 
+        $pendingCount = $pendingOrders->count();
+        $confirmedCount = $confirmedOrders->count();
+        $preparingCount = $preparingOrders->count();
+        $shippingCount = $shippingOrders->count();
+        $deliveredCount = $deliveredOrders->count();
+        $cancelledCount = $cancelledOrders->count();
         return view('client.page.history', compact(
             'orders',
             'pendingOrders',
@@ -32,7 +39,13 @@ class OrderHistoryController extends Controller
             'preparingOrders',
             'shippingOrders',
             'deliveredOrders',
-            'cancelledOrders'
+            'cancelledOrders',
+            'pendingCount',
+            'confirmedCount',
+            'preparingCount',
+            'shippingCount',
+            'deliveredCount',
+            'cancelledCount'
         ));
     }
 
@@ -44,7 +57,7 @@ class OrderHistoryController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $donHang = Order::findOrFail($id);
+        $donHang = Order::with('orderItems.variant')->findOrFail($id); // Load cả orderItems và variant để xử lý
         DB::beginTransaction();
 
         try {
@@ -52,7 +65,12 @@ class OrderHistoryController extends Controller
 
             if ($request->has('huy_don_hang')) {
                 if ($previousStatus !== Order::STATUS_CHO_XAC_NHAN) {
-                    return redirect()->back()->withErrors(['msg' => 'Không thể hủy đơn hàng khi nó không ở trạng thái "Chờ xác nhận".']);
+                    return redirect()->back()->with('error', 'Không thể hủy vì đơn hàng đã chuyển trạng thái.');
+                }
+
+                foreach ($donHang->orderItems as $item) {
+                    $variant = $item->variant; 
+                    $variant->update(['quantity' => $variant->quantity + $item->quantity]);
                 }
 
                 $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
@@ -65,13 +83,13 @@ class OrderHistoryController extends Controller
                 ]);
             } elseif ($request->has('da_giao_hang')) {
                 if ($previousStatus !== Order::STATUS_DANG_VAN_CHUYEN) {
-                    return redirect()->back()->withErrors(['msg' => 'Không thể xác nhận đã nhận hàng khi nó không ở trạng thái "Đang vận chuyển".']);
+                    return redirect()->back()->with('error', 'Không thể xác nhận đã nhận hàng khi nó không ở trạng thái "Đang vận chuyển".');
                 }
 
                 $donHang->update(['status' => Order::STATUS_DA_GIAO_HANG]);
                 OrderStatusHistory::create([
                     'order_id' => $donHang->id,
-                    'previous_status' => $previousStatus, 
+                    'previous_status' => $previousStatus,
                     'new_status' => Order::STATUS_DA_GIAO_HANG,
                     'cancel_reason' => null,
                     'changed_by' => auth()->id(),
@@ -81,7 +99,7 @@ class OrderHistoryController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['msg' => 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.']);
+            return redirect()->back()->with('error', 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.');
         }
 
         return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công.');

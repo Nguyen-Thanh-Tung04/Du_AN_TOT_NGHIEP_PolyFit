@@ -140,7 +140,11 @@
                                             <input class="qty-input" id="quantity" type="text" name="ec_qtybtn" value="1" />
                                         </div>
                                         <div class="ec-single-cart ">
-                                            <button id="addToCartButton" class="btn btn-primary">Thêm giỏ hàng</button>
+                                            <button id="addToCartButton" class="btn btn-primary btn-cart">Thêm giỏ hàng</button>
+
+                                        </div>
+                                        <div class="ec-single-cart ">
+                                            <button id="buyNow" class="btn btn-buy">Mua ngay</button>
                                         </div>
                                     </div>
                                     <div class="ec-single-social">
@@ -189,7 +193,7 @@
                         <div class="tab-content  ec-single-pro-tab-content">
                             <div id="ec-spt-nav-details" class="tab-pane fade show active">
                                 <div class="ec-single-pro-tab-desc">
-                                    {!! nl2br(e($product->description)) !!}
+                                    {!! $product->description !!}
                                 </div>
                             </div>
                             <div id="ec-spt-nav-info" class="tab-pane fade">
@@ -391,6 +395,49 @@
         let selectedSizeId = null;
         let selectedColorId = null;
 
+        $('#buyNow').click(function(e) {
+            e.preventDefault();
+
+            var productId = $('#productId').val();
+            var quantity = $('#quantity').val();
+            var selectedSize = $('.size-btn.active').data('id');
+            var selectedColor = $('.color-btn.active').data('id');
+
+            if (!selectedSize || !selectedColor) {
+                toastr.warning('Vui lòng chọn thuộc tính sản phẩm')
+                return;
+            }
+
+            $.ajax({
+                url: '{{route("cart.add")}}',
+                method: 'POST',
+                data: {
+                    product_id: productId,
+                    color_id: selectedColor,
+                    size_id: selectedSize,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.status) {
+                        updateCartCount();
+                        window.location.href = '{{ route("cart.index") }}';
+                    } else {
+                        toastr.warning(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        window.location.href = '/login';
+                    } else {
+                        toastr.error("Đã có lỗi xảy ra");
+                    }
+
+                }
+            });
+
+        })
+
         $('#addToCartButton').click(function(e) {
             e.preventDefault();
 
@@ -400,10 +447,7 @@
             var selectedColor = $('.color-btn.active').data('id');
 
             if (!selectedSize || !selectedColor) {
-                Toast.fire({
-                    icon: 'warning',
-                    title: 'Vui lòng chọn thuộc tính sản phẩm',
-                })
+                toastr.warning('Vui lòng chọn thuộc tính sản phẩm')
                 return;
             }
 
@@ -428,20 +472,14 @@
                         });
                         updateCartCount();
                     } else {
-                        Toast.fire({
-                            icon: 'error',
-                            title: response.message,
-                        })
+                        toastr.warning(response.message);
                     }
                 },
                 error: function(xhr) {
                     if (xhr.status === 401) {
                         window.location.href = '/login';
                     } else {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Đã xảy ra lỗi',
-                        })
+                        toastr.error("Đã có lỗi xảy ra");
                     }
 
                 }

@@ -4,12 +4,12 @@
 
 <head>
     @include('admin.dashboard.component.head')
+    
 </head>
 
 <body>
     <div id="wrapper">
-        @include('admin.dashboard.component.sidebar')
-
+        @include('admin.dashboard.component.sidebar', ['id' => 1])
         <div id="page-wrapper" class="gray-bg">
             @include('admin.dashboard.component.nav')
             @include(isset($template) ? $template : $template1)

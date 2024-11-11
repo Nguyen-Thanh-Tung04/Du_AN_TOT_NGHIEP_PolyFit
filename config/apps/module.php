@@ -52,17 +52,6 @@ return [
             ],
         ],
         [
-            'title' => 'Mẫu CRUD',
-            'icon' => 'fa fa-dashboard',
-            'name' => ['crud'],
-            'subModule' => [
-                [
-                    'title' => 'Mẫu CRUD',
-                    'route' => 'crud/index',
-                ],
-            ],
-        ],
-        [
             'title' => 'Quản lý Khuyến ',
             'icon' => 'fa fa-money',
             'name' => ['vouchers'],
@@ -83,6 +72,10 @@ return [
                     'title' => 'Quản lý đánh giá',
                     'route' => 'reviews/index',
                 ],
+                [
+                    'title' => 'Lịch sử đánh giá',
+                    'route' => 'reviews/history',
+                ]
             ],
         ],
         [
@@ -93,6 +86,17 @@ return [
                 [
                     'title' => 'Quản lý Đơn hàng',
                     'route' => 'orders/index',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Quản lý Banner',
+            'icon' => 'fa fa-money',
+            'name' => ['banners'],
+            'subModule' => [
+                [
+                    'title' => 'Quản lý Banner',
+                    'route' => 'banners/index',
                 ],
             ],
         ]

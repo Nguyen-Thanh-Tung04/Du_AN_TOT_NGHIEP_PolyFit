@@ -163,6 +163,7 @@
                 @else
                 <div class="ec-cart-leftside col-lg-12 col-md-12 ">
                     <div class="d-flex justify-content-center flex-column align-items-center">
+                        <img src="{{ asset('theme/client/assets/images/icons/nothing.png') }}" alt="" class="img-fluid" width="80px"/>
                         <h4 class="text-center">Giỏ hàng của bạn đang trống!</h4>
                         <div>
                             <a href="{{ route('home')}}" class="btn btn-primary text-center">Mua ngay</a>
@@ -198,30 +199,40 @@
 
         $('.quantity-input').on('input', function() {
             let input = $(this);
-            let min = parseInt(input.attr('data-min'));
-            let max = parseInt(input.attr('data-max'));
-            let value = input.val();
-
-            if (value.match(/[^0-9]/g)) {
-                value = value.replace(/[^0-9]/g, '');
-                input.val(value);
-            }
-
-            if (value < min) {
-                input.val(min);
-            }
-
-            if (value > max) {
-                input.val(max);
-            }
+            checkInput(input);
         });
 
-        $('.quantity-input').on('change', function() {
-            let itemId = $(this).data('id');
-            let quantity = parseInt($(this).val());
-            let maxQuantity = parseInt($(this).attr('max'));
+        function checkInput(input) {
+            let quantity = input.val();
 
-            updateCartQuantity(itemId, quantity, $(this));
+            let min = parseInt(input.attr('data-min'));
+            let max = parseInt(input.attr('data-max'));
+
+            if (quantity.match(/[^0-9]/g)) {
+                quantity = quantity.replace(/[^0-9]/g, '');
+                input.val(quantity);
+            }
+
+            if (quantity < min) {
+                input.val(min);
+                return false;
+            }
+
+            if (quantity > max) {
+                input.val(max);
+                return false;
+            }
+
+            return true;
+        }
+
+        $('.quantity-input').on('change', function() {
+            let input = $(this);
+            let itemId = input.data('id');
+            let quantity = input.val();
+            if (!checkInput(input)) return;
+
+            updateCartQuantity(itemId, quantity, input);
         });
 
 
@@ -242,6 +253,8 @@
                         var row = $('#cart-item-' + itemId);
 
                         row.find('.total-price').text(response.data.total_price + '₫');
+                    } else {
+                        toastr.warning(response.message);
                     }
                 },
                 error: function() {
@@ -288,10 +301,11 @@
                     $('#total').text(new Intl.NumberFormat().format(response.total) + '₫');
                 },
                 error: function(xhr) {
-                    Toast.fire({
-                        icon: 'error',
-                        title: "Có lỗi xảy ra!",
-                    })
+                    toastr.error("Đã có lỗi xảy ra");
+                    // Toast.fire({
+                    //     icon: 'error',
+                    //     title: "Có lỗi xảy ra!",
+                    // })
                 }
             });
         }
@@ -321,17 +335,19 @@
                         calculateTotal();
                         updateCartCount();
                     } else {
-                        Toast.fire({
-                            icon: 'error',
-                            title: response.message,
-                        })
+                        toastr.warning(response.message);
+                        // Toast.fire({
+                        //     icon: 'error',
+                        //     title: response.message,
+                        // })
                     }
                 },
                 error: function() {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Xảy ra lỗi',
-                    })
+                    toastr.error("Đã có lỗi xảy ra");
+                    // Toast.fire({
+                    //     icon: 'error',
+                    //     title: 'Xảy ra lỗi',
+                    // })
                 }
             });
         });

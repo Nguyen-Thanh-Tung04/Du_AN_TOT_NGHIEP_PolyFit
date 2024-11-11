@@ -3,12 +3,13 @@
 
 <head>
     @include('admin.dashboard.component.head')
+    @vite(['resources/js/app.js'])
     @yield('css')
 </head>
 
 <body>
     <div id="wrapper">
-        @include('admin.dashboard.component.sidebar')
+        @include('admin.dashboard.component.sidebar', ['id' => $id_user_new])
 
         <div id="page-wrapper" class="gray-bg">
             @include('admin.dashboard.component.nav')

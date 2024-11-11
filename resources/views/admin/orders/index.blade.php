@@ -101,7 +101,7 @@
                     <table class="table table-sm table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Mã đơn hàng</th>
                                 <th>Tên Khách Hàng</th>
                                 <th>Địa Chỉ</th>
                                 <th>Điện Thoại</th>
@@ -114,7 +114,7 @@
                         <tbody>
                             @foreach ($listOrder as $order)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
+                                    <td>{{ $order->code }}</td>
                                     <td>{{ $order->full_name }}</td>
                                     <td>{{ $order->address }}</td>
                                     <td>{{ $order->phone }}</td>

@@ -88,10 +88,9 @@
                     <!-- Ec Header Search Start -->
                     <div class="align-self-center">
                         <div class="header-search">
-                            <form class="ec-btn-group-form" action="#">
-                                <input class="form-control ec-search-bar" placeholder="Search products..."
-                                    type="text">
-                                <button class="submit" type="submit"><i class="fi-rr-search"></i></button>
+                            <form class="ec-btn-group-form" action="{{ route('search') }}" method="GET">
+                                <input class="form-control ec-search-bar" name="search" placeholder="Search products..." type="text">
+                                <button class="submit" type="submit" aria-label="Search"><i class="fi-rr-search"></i></button>
                             </form>
                         </div>
                     </div>
@@ -154,7 +153,7 @@
                 <div class="col">
                     <div class="header-search">
                         <form class="ec-btn-group-form" action="#">
-                            <input class="form-control ec-search-bar" placeholder="Search products..." type="text">
+                            <input class="form-control ec-search-bar" placeholder="Tìm kiếm sản phẩm..." type="text">
                             <button class="submit" type="submit"><i class="fi-rr-search"></i></button>
                         </form>
                     </div>
