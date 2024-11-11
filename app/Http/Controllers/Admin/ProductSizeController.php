@@ -12,7 +12,7 @@ use App\Services\ProductSizeService;
 use function Termwind\ask;
 use Illuminate\Http\Request;
 
-class ProductSizeController
+class ProductSizeController extends Controller
 {
     protected $productSizeService;
     protected $productSizeRepository;

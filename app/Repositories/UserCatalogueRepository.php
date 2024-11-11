@@ -68,8 +68,8 @@ class UserCatalogueRepository implements UserCatalogueRepositoryInterface
     //     return $this->findById($id)->forceDelete();
     // }
 
-    public function all() {
-        return UserCatalogue::all();
+    public function all($relation = []) {
+        return UserCatalogue::with($relation)->get();
     }
 
     public function findById(int $id) {

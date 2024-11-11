@@ -14,4 +14,7 @@ return [
     'delete' => [
         'title' => 'Xóa chức vụ',
     ],
+    'permission' => [
+        'title' => 'Cập nhật quyền',
+    ],
 ];
