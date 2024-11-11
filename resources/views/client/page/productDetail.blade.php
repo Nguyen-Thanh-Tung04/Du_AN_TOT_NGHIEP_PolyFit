@@ -42,11 +42,15 @@
                                 <div class="single-product-scroll">
                                     <div class="single-product-cover">
                                         @if (!empty($galleryImages))
-                                        @foreach($galleryImages as $image)
-                                        <div class="single-slide zoom-image-hover">
-                                            <img class="img-responsive" src="{{ $image }}" alt="{{ $product->name }}">
-                                        </div>
-                                        @endforeach
+                                            @foreach($galleryImages as $image)
+                                                <div class="single-slide zoom-image-hover">
+                                                    <img class="img-responsive {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}" src="{{ $image }}" alt="{{ $product->name }}">
+                                                    @if($product->variants->sum('quantity') === 0)
+                                                        <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                                        <div class="out-of-stock-label">Hết hàng</div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
                                         @endif
                                     </div>
                                     <div class="single-nav-thumb">
@@ -57,7 +61,6 @@
                                         </div>
                                         @endforeach
                                         @endif
-
                                     </div>
                                 </div>
                             </div>

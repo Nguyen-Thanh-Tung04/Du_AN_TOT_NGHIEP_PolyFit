@@ -1343,13 +1343,28 @@ function ecCheckCookie() {
     });
 
     /*----------------------------- Recent auto popup -----------------------------------*/
+    // Hiển thị liên tục sau 15s
     // setInterval(function () { $(".recent-purchase").stop().slideToggle('slow'); }, 10000);
     // $(".recent-close").click(function () {
     //     $(".recent-purchase").stop().slideToggle('slow');
     // });
-    $(document).on('click', '.recent-close', function () {
+    // $(document).on('click', '.recent-close', function () {
+    //     $(".recent-purchase").stop().slideToggle('slow');
+    // })
+
+    // Hiển thị popup lần đầu tiên trong 60 giây, sau đó tự động ẩn
+    $(".recent-purchase").stop().slideToggle('slow');
+
+    // Sau 60 giây, ẩn popup
+    setTimeout(function () {
         $(".recent-purchase").stop().slideToggle('slow');
-    })
+    }, 60000);
+
+    // Ẩn popup khi nhấn nút đóng
+    $(".recent-close").click(function () {
+        $(".recent-purchase").stop().slideToggle('slow');
+    });
+
     /*----------------------------- Whatsapp chat --------------------------------*/
     $(document).ready(function () {
 

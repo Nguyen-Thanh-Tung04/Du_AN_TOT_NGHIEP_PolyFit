@@ -34,39 +34,43 @@ class HomeController extends Controller
         $products = Product::select('products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price'),
+            DB::raw('SUM(variants.quantity) as total_quantity')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->groupBy('products.id')
+            ->having('total_quantity', '>', 0) // Chỉ lấy sản phẩm có tổng quantity > 0
             ->get();
-
+    
         // câu lệnh hiển thị sản phẩm giảm giá
         $discounted = Product::select('products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
-            DB::raw('MIN(variants.listed_price) as listed_price'))
+            DB::raw('MIN(variants.listed_price) as listed_price'),
+            DB::raw('SUM(variants.quantity) as total_quantity')
+        )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->whereColumn('variants.listed_price', '>', 'variants.sale_price')
             ->groupBy('products.id')
+            ->having('total_quantity', '>', 0) // Chỉ lấy sản phẩm có tổng quantity > 0
             ->get();
-
-        // Tạo một mảng kết hợp chứa dữ liệu cần truyền tới view
+    
         $data = [
             'products' => $products,
             'discounted' => $discounted,
             'users' => $users
   
         ];
-
+    
         $category = Category::all();
-
+    
         // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
         foreach ($products as $product) {
             $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
         }
-
-
+    
         return view('welcome', $data, compact('category') );
     }
-
+    
 
     public function search(Request $request)
 {
