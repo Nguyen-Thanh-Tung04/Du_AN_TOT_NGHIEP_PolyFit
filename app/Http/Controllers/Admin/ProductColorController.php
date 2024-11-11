@@ -12,7 +12,7 @@ use App\Services\ProductColorService;
 use function Termwind\ask;
 use Illuminate\Http\Request;
 
-class ProductColorController
+class ProductColorController extends Controller
 {
     protected $productColorService;
     protected $productColorRepository;

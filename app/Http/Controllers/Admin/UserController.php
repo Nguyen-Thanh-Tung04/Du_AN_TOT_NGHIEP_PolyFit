@@ -12,7 +12,7 @@ use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepositor
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 use App\Repositories\UserRepository;
 
-class UserController
+class UserController extends Controller
 {
     protected $userService;
     protected $provinceRepository;

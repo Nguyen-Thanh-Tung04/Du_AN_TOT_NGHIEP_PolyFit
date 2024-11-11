@@ -13,7 +13,7 @@ use App\Services\ProductService;
 use function Termwind\ask;
 use Illuminate\Http\Request;
 
-class ProductController
+class ProductController extends Controller
 {
     protected $productService;
     protected $productRepository;

@@ -19,6 +19,10 @@ return [
                     'title' => 'Quản lý Khách Hàng',
                     'route' => 'member/index',
                 ],
+                [
+                    'title' => 'Quản lý Quyền',
+                    'route' => 'permission/index',
+                ],
             ],
         ],
         [

@@ -8,22 +8,27 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserCatalogueService;
 use App\Repositories\UserCatalogueRepository;
+use App\Repositories\PermissionRepository;
 use Illuminate\Http\Request;
 
-class UserCatalogueController
+class UserCatalogueController extends Controller
 {
     protected $userCatalogueService;
     protected $userCatalogueRepository;
+    protected $permissionRepository;
 
     public function __construct(
         UserCatalogueService $userCatalogueService,
         UserCatalogueRepository $userCatalogueRepository,
+        PermissionRepository $permissionRepository,
     ) {
         $this->userCatalogueService = $userCatalogueService;
         $this->userCatalogueRepository = $userCatalogueRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     public function index(Request $request) {
+        $this->authorize('modules', 'user.catalogue.index');
         $userCatalogues = $this->userCatalogueService->paginate($request);
         $config = [
             'js' => [
@@ -45,7 +50,6 @@ class UserCatalogueController
     }
 
     public function create() {
-
         $template = 'admin.user.catalogue.store';
         $config['seo'] = config('apps.userCatalogue');
         $config['method'] = 'create';
@@ -107,5 +111,26 @@ class UserCatalogueController
             return redirect()->route('user.catalogue.index')->with('success', 'Xóa bản ghi thành công.');
         }
         return redirect()->route('user.catalogue.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
+    }
+
+    public function permission() {
+        $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
+        $permissions = $this->permissionRepository->all();
+        $config['seo'] = config('apps.userCatalogue');
+        $config['method'] = 'permission';
+        $template = 'admin.user.catalogue.permission';
+        return view('admin.dashboard.layout', compact(
+            'template',
+            'config',
+            'userCatalogues',
+            'permissions',
+        ));
+    }
+
+    public function updatePermission(Request $request) {
+        if ($this->userCatalogueService->setPermission($request)) {
+            return redirect()->route('user.catalogue.index')->with('success', 'Cập nhật quyền thành công.');
+        }
+        return redirect()->route('user.catalogue.updatePermission')->with('error', 'Có lỗi xảy ra. Hãy thử lại.');
     }
 }

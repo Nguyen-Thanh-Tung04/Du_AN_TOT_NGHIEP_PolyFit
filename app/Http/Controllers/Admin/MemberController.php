@@ -12,7 +12,7 @@ use App\Services\MemberService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\MemberRepositoryInterface as MemberRepository;
 
-class MemberController
+class MemberController extends Controller
 {
     protected $memberService;
     protected $provinceRepository;
