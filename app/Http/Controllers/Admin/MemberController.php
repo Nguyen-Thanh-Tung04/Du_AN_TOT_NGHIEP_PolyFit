@@ -30,7 +30,7 @@ class MemberController extends Controller
 
     public function index(Request $request) {
         $members = $this->memberService->paginate($request);
-//        dd($members);die();
+        $getUserCatalogue = $this->memberService->getUserCatalogue();
         $config = [
             'js' => [
                 'admin/js/plugins/switchery/switchery.js',
@@ -48,6 +48,7 @@ class MemberController extends Controller
             'template',
             'config',
             'members',
+            'getUserCatalogue',
         ));
     }
 

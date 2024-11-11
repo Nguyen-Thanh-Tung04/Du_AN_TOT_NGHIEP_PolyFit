@@ -18,6 +18,9 @@
         <tbody>
             @if (isset($users) && is_object($users))
                 @foreach($users as $user)
+                @if ($user->user_catalogues->id == 3) 
+                    @continue; 
+                @endif
                 <tr>
                     <td>
                         <input type="checkbox" value="{{ $user->id }}" class="input-checkbox checkBoxItem">

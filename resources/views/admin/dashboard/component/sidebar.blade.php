@@ -10,7 +10,7 @@
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ Auth::user()->name }}</strong>
-                              </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                              </span> <span class="text-muted text-xs block">{{ Auth::user()->user_catalogues->name }} <b class="caret"></b></span> </span> </a>
                 </div>
             </li>
             <li class="active">

@@ -33,6 +33,7 @@ class UserController extends Controller
 
     public function index(Request $request) {
         $users = $this->userService->paginate($request);
+        $getUserCatalogue = $this->userService->getUserCatalogue();
         $config = [
             'js' => [
                 'admin/js/plugins/switchery/switchery.js',
@@ -49,12 +50,13 @@ class UserController extends Controller
             'template',
             'config',
             'users',
+            'getUserCatalogue',
         ));
     }
 
     public function create() {
         $provinces = $this->provinceRepository->all();
-
+        $userCatalogue = $this->userCatalogueRepository->all();
         $template = 'admin.user.user.store';
         $config = $this->configData();
         $config['seo'] = config('apps.user');
@@ -63,6 +65,7 @@ class UserController extends Controller
             'template',
             'config',
             'provinces',
+            'userCatalogue',
         ));
     }
 
@@ -76,7 +79,7 @@ class UserController extends Controller
     public function edit($id) {
         $user = $this->userRepository->findById($id);
         $userCatalogue = $this->userCatalogueRepository->all();
-//        dd($userCatalogue);die();
+    //    dd($userCatalogue);die();
         $provinces = $this->provinceRepository->all();
 
         $template = 'admin.user.user.update';

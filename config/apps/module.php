@@ -5,14 +5,14 @@ return [
         [
             'title' => 'Quản lý Tài Khoản',
             'icon' => 'fa fa-dashboard',
-            'name' => ['user'],
+            'name' => ['user', 'member', 'permission'],
             'subModule' => [
                 [
-                    'title' => 'Quản lý Vai Trò',
+                    'title' => 'Quản lý Chức Vụ',
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'Quản lý Thành Viên',
+                    'title' => 'Quản lý Nhân Viên',
                     'route' => 'user/index',
                 ],
                 [

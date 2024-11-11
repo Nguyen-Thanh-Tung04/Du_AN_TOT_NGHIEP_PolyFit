@@ -11,6 +11,9 @@ use Faker\Provider\Base;
  */
 class UserRepository
 {
+    public function getCatalogue(string $table, array $column = ['*']){
+        return $table::select($column)->get();
+    }
 
     public function pagination(
         array $column = ['*'],

@@ -18,6 +18,14 @@ class UserService
     public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
     }
+
+    public function getUserCatalogue() {
+        $getUserCatalogue = $this->userRepository->getCatalogue(
+            'App\Models\userCatalogue',['id','name']
+        );
+        return $getUserCatalogue;
+    }
+
     public function paginate($request) {
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');

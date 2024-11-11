@@ -45,7 +45,7 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Họ Tên
+                                    <label class="control-label text-left">Mô tả
                                         <span class="text-danger">(*)</span></label>
                                     <input
                                         type="text"
