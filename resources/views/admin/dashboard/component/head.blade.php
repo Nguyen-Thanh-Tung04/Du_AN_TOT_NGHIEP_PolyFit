@@ -12,6 +12,7 @@
     <link href="admin/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     @if (isset($config['css']) && is_array($config['css']))
         @foreach ($config['css'] as $key => $val)
             {!! '<link href="'.$val.'" rel="stylesheet">' !!}

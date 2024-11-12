@@ -30,6 +30,11 @@ class Product extends Model
         return $this->hasMany(Variant::class, 'product_id', 'id');
     }
 
+    public function flashsales()
+    {
+        return $this->hasMany(FlashSaleProduct::class, 'product_id', 'id');
+    }
+
     // Phương thức tính trung bình đánh giá
     public function averageScore()
     {

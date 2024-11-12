@@ -63,13 +63,17 @@ return [
             ],
         ],
         [
-            'title' => 'Quản lý Khuyến ',
+            'title' => 'Quản lý Khuyến Mãi',
             'icon' => 'fa fa-money',
             'name' => ['vouchers'],
             'subModule' => [
                 [
                     'title' => 'Quản lý Voucher',
                     'route' => 'vouchers/index',
+                ],
+                [
+                    'title' => 'Quản lý FlashSale',
+                    'route' => 'flashsale/index',
                 ],
             ],
         ],
