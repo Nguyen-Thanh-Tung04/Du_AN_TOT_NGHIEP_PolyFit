@@ -47,6 +47,8 @@
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/style.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/responsive.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/custom.css')}}" />
+    <link rel="stylesheet" href="{{asset('theme/client/assets/css/chatbox.css')}}" />
+
 
     <!-- Background css -->
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/backgrounds/bg-4.css')}}">

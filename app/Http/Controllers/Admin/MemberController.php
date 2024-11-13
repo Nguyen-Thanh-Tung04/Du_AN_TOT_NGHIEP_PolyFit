@@ -12,7 +12,7 @@ use App\Services\MemberService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\MemberRepositoryInterface as MemberRepository;
 
-class MemberController
+class MemberController extends Controller
 {
     protected $memberService;
     protected $provinceRepository;
@@ -30,7 +30,7 @@ class MemberController
 
     public function index(Request $request) {
         $members = $this->memberService->paginate($request);
-//        dd($members);die();
+        $getUserCatalogue = $this->memberService->getUserCatalogue();
         $config = [
             'js' => [
                 'admin/js/plugins/switchery/switchery.js',
@@ -48,6 +48,7 @@ class MemberController
             'template',
             'config',
             'members',
+            'getUserCatalogue',
         ));
     }
 

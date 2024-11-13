@@ -4,20 +4,24 @@ return [
     'module' => [
         [
             'title' => 'Quản lý Tài Khoản',
-            'icon' => 'fa fa-dashboard',
-            'name' => ['user'],
+            'icon' => 'fa fa-group',
+            'name' => ['user', 'member', 'permission'],
             'subModule' => [
                 [
-                    'title' => 'Quản lý Vai Trò',
+                    'title' => 'Quản lý Chức Vụ',
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'Quản lý Thành Viên',
+                    'title' => 'Quản lý Nhân Viên',
                     'route' => 'user/index',
                 ],
                 [
                     'title' => 'Quản lý Khách Hàng',
                     'route' => 'member/index',
+                ],
+                [
+                    'title' => 'Quản lý Quyền',
+                    'route' => 'permission/index',
                 ],
             ],
         ],
@@ -34,7 +38,7 @@ return [
         ],
         [
             'title' => 'Quản lý Sản Phẩm',
-            'icon' => 'fa fa-dashboard',
+            'icon' => 'fa fa-shopping-cart',
             'name' => ['product'],
             'subModule' => [
                 [
@@ -65,7 +69,7 @@ return [
 
         [
             'title' => 'Quản lý đánh giá',
-            'icon' => 'fa fa-money',
+            'icon' => 'fa fa-star',
             'name' => ['reviews'],
             'subModule' => [
                 [
@@ -80,7 +84,7 @@ return [
         ],
         [
             'title' => 'Quản lý Đơn hàng',
-            'icon' => 'fa fa-money',
+            'icon' => 'fa fa-shopping-cart',
             'name' => ['orders'],
             'subModule' => [
                 [
@@ -91,7 +95,7 @@ return [
         ],
         [
             'title' => 'Quản lý Banner',
-            'icon' => 'fa fa-money',
+            'icon' => 'fa fa-picture-o',
             'name' => ['banners'],
             'subModule' => [
                 [

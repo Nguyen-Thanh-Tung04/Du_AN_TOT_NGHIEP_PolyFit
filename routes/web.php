@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -186,6 +187,27 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
     Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
         ->name('destroy');
 });
+
+// USER
+Route::prefix('permission/')->name('permission.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [PermissionController::class, 'index'])
+        ->name('index');
+    Route::get('create', [PermissionController::class, 'create'])
+        ->name('create');
+    Route::post('store', [PermissionController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [PermissionController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/edit', [PermissionController::class, 'edit'])
+        ->name('edit');
+    Route::post('{id}/update', [PermissionController::class, 'update'])
+        ->name('update');
+    Route::get('{id}/delete', [PermissionController::class, 'delete'])
+        ->name('delete');
+    Route::delete('{id}/destroy', [PermissionController::class, 'destroy'])
+        ->name('destroy');
+});
+
 Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])
         ->name('index');
@@ -245,38 +267,47 @@ Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, '
 // USER CATALOGUE
 Route::prefix('user/catalogue/')->name('user.catalogue.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserCatalogueController::class, 'index'])
-        ->name('index');
+        ->name('index')
+        ->middleware('checkModulePermission:user.catalogue.index');
     Route::get('create', [UserCatalogueController::class, 'create'])
-        ->name('create');
+        ->name('create')
+        ->middleware('checkModulePermission:user.catalogue.create');
     Route::post('store', [UserCatalogueController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [UserCatalogueController::class, 'edit'])
-        ->name('edit');
-    Route::get('{id}/edit', [UserCatalogueController::class, 'edit'])
-        ->name('edit');
+        ->name('edit')
+        ->middleware('checkModulePermission:user.catalogue.edit');
     Route::post('{id}/update', [UserCatalogueController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [UserCatalogueController::class, 'delete'])
-        ->name('delete');
+        ->name('delete')
+        ->middleware('checkModulePermission:user.catalogue.delete');
     Route::delete('{id}/destroy', [UserCatalogueController::class, 'destroy'])
         ->name('destroy');
+    Route::get('permission', [UserCatalogueController::class, 'permission'])
+        ->name('permission')
+        ->middleware('checkModulePermission:user.catalogue.permission');
+    Route::post('updatePermission', [UserCatalogueController::class, 'updatePermission'])
+        ->name('updatePermission');
 });
 
 // Category
 Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(function () {
-    Route::get('index', [CategoryController::class, 'index'])->name('index');
+    Route::get('index', [CategoryController::class, 'index'])->name('index')
+        ->middleware('checkModulePermission:categories.index');
     Route::get('create', [CategoryController::class, 'create'])
-        ->name('create');
+        ->name('create')
+        ->middleware('checkModulePermission:categories.create');
     Route::post('store', [CategoryController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [CategoryController::class, 'edit'])
-        ->name('edit');
-    Route::get('{id}/edit', [CategoryController::class, 'edit'])
-        ->name('edit');
+        ->name('edit')
+        ->middleware('checkModulePermission:categories.edit');
     Route::post('{id}/update', [CategoryController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [CategoryController::class, 'delete'])
-        ->name('delete');
+        ->name('delete')
+        ->middleware('checkModulePermission:categories.delete');
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
@@ -338,19 +369,24 @@ Route::middleware(['checkLoginClient'])->group(function () {
 // Products
 Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ProductController::class, 'index'])
-        ->name('index');
+        ->name('index')
+        ->middleware('checkModulePermission:product.index');
     Route::get('{id}/detail', [ProductController::class, 'detail'])
-        ->name('detail');
+        ->name('detail')
+        ->middleware('checkModulePermission:product.detail');
     Route::get('create', [ProductController::class, 'create'])
-        ->name('create');
+        ->name('create')
+        ->middleware('checkModulePermission:product.create');
     Route::post('store', [ProductController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [ProductController::class, 'edit'])
-        ->name('edit');
+        ->name('edit')
+        ->middleware('checkModulePermission:product.edit');
     Route::post('{id}/update', [ProductController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [ProductController::class, 'delete'])
-        ->name('delete');
+        ->name('delete')
+        ->middleware('checkModulePermission:product.delete');
     Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
         ->name('destroy');
     Route::delete('{id}/destroyVariant', [ProductController::class, 'destroyVariantDetail'])
@@ -358,34 +394,42 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
 
     Route::prefix('size')->name('size.')->group(function () {
         Route::get('index', [ProductSizeController::class, 'index'])
-            ->name('index');
+            ->name('index')
+            ->middleware('checkModulePermission:product.size.index');
         Route::get('create', [ProductSizeController::class, 'create'])
-            ->name('create');
+            ->name('create')
+            ->middleware('checkModulePermission:product.size.create');
         Route::post('store', [ProductSizeController::class, 'store'])
             ->name('store');
         Route::get('{id}/edit', [ProductSizeController::class, 'edit'])
-            ->name('edit');
+            ->name('edit')
+            ->middleware('checkModulePermission:product.size.edit');
         Route::post('{id}/update', [ProductSizeController::class, 'update'])
             ->name('update');
         Route::get('{id}/delete', [ProductSizeController::class, 'delete'])
-            ->name('delete');
+            ->name('delete')
+            ->middleware('checkModulePermission:product.size.delete');
         Route::delete('{id}/destroy', [ProductSizeController::class, 'destroy'])
             ->name('destroy');
     });
 
     Route::prefix('color')->name('color.')->group(function () {
         Route::get('index', [ProductColorController::class, 'index'])
-            ->name('index');
+            ->name('index')
+            ->middleware('checkModulePermission:product.color.index');
         Route::get('create', [ProductColorController::class, 'create'])
-            ->name('create');
+            ->name('create')
+            ->middleware('checkModulePermission:product.color.create');
         Route::post('store', [ProductColorController::class, 'store'])
             ->name('store');
         Route::get('{id}/edit', [ProductColorController::class, 'edit'])
-            ->name('edit');
+            ->name('edit')
+            ->middleware('checkModulePermission:product.color.edit');
         Route::post('{id}/update', [ProductColorController::class, 'update'])
             ->name('update');
         Route::get('{id}/delete', [ProductColorController::class, 'delete'])
-            ->name('delete');
+            ->name('delete')
+            ->middleware('checkModulePermission:product.color.delete');
         Route::delete('{id}/destroy', [ProductColorController::class, 'destroy'])
             ->name('destroy');
     });

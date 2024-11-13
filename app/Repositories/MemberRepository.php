@@ -13,6 +13,9 @@ use Faker\Provider\Base;
  */
 class MemberRepository implements MemberRepositoryInterface
 {
+    public function getCatalogue(string $table, array $column = ['*']){
+        return $table::select($column)->get();
+    }
 
     public function pagination(
         array $column = ['*'],
@@ -33,7 +36,7 @@ class MemberRepository implements MemberRepositoryInterface
                 } elseif (isset($condition['publish']) && $condition['publish'] == 2) {
                     $query->where('publish', '=', '2');
                 }
-                $query->where('user_catalogue_id', '=', null);
+                $query->where('user_catalogue_id', '=', 3);
                 return $query;
             })->with('user_catalogues');
 

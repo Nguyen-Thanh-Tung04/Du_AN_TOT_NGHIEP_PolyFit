@@ -24,13 +24,13 @@
                                         @if(isset($item->image))
                                         <img src="{{ Storage::url($item->image) }}" alt="User Avatar" class="img-circle">
                                         @else
-                                        <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="img-circle" alt="Profile image">
+                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
                                         @endif
                                         <!-- <span class="online_icon"></span> -->
                                     </div>
                                     <div class="chat-body clearfix">
                                         <div class="header_sec">
-                                            <strong class="primary-font">{{ $item->name }}</strong>
+                                            <strong class="primary-font">{{ isset($item->name) ? $item->name : '' }}</strong>
                                             <!-- <strong class="pull-right">
                                             09:45AM</strong> -->
                                         </div>
@@ -57,7 +57,7 @@
                                 @if(isset($item->image))
                                 <img src="{{ Storage::url($user->image) }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
                                 @else
-                                <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
+                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
                                 @endif
                                 <span class="online_icon2 online_icon" style="left: 50px; top: 51px; display: none;"></span>
                             </div>
@@ -92,32 +92,32 @@
                                 </span>
                                 @else
                                 <span class="chat-img1 pull-right">
-                                    <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="img-circle" alt="Profile image">
+                                    <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
                                 </span>
                                 @endif
 
                                 <div class="chat-body1 clearfix">
-                                    <p>{{ $item->message }}</p>
-                                    <div class="chat_time pull-right">{{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }}</div>
+                                    <p>{{ isset($item->message) ? $item->message : '' }}</p>
+                                    <div class="chat_time pull-right" data-timestamp="{{ $item->created_at->timestamp }}"></div>
                                 </div>
                             </li>
 
                             @else
                             <li class="left clearfix">
                                 <span class="chat-img1 pull-left">
-                                @if(isset($item->image_user_send))
+                                    @if(isset($item->image_user_send))
 
                                     <img src="{{ Storage::url($item->image_user_send) }}" alt="User Avatar" class="img-circle">
                                     @else
-                                <span class="chat-img1 pull-right">
-                                    <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="img-circle" alt="Profile image">
-                                </span>
-                                @endif
+                                    <span class="chat-img1 pull-right">
+                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                    </span>
+                                    @endif
 
                                 </span>
                                 <div class="chat-body1 clearfix">
-                                    <p>{{ $item->message }}</p>
-                                    <div class="chat_time pull-left">{{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }}</div>
+                                    <p>{{ isset($item->message) ? $item->message : '' }}</p>
+                                    <div class="chat_time pull-left" data-timestamp="{{ $item->created_at->timestamp }}"></div>
                                 </div>
                             </li>
                             @endif
@@ -291,29 +291,29 @@
         let interval = Math.floor(seconds / 31536000);
 
         if (interval >= 1) {
-            return interval + " year" + (interval > 1 ? "s" : "") + " ago";
+            return interval + " năm" + " trước";
         }
         interval = Math.floor(seconds / 2592000);
         if (interval >= 1) {
-            return interval + " month" + (interval > 1 ? "s" : "") + " ago";
+            return interval + " tháng" + " trước";
         }
         interval = Math.floor(seconds / 86400);
         if (interval >= 1) {
-            return interval + " day" + (interval > 1 ? "s" : "") + " ago";
+            return interval + " ngày" + " trước";
         }
         interval = Math.floor(seconds / 3600);
         if (interval >= 1) {
-            return interval + " hour" + (interval > 1 ? "s" : "") + " ago";
+            return interval + " giờ" + " trước";
         }
         interval = Math.floor(seconds / 60);
         if (interval >= 1) {
-            return interval + " minute" + (interval > 1 ? "s" : "") + " ago";
+            return interval + " phút" + " trước";
         }
-        return Math.floor(seconds) + " second" + (seconds > 1 ? "s" : "") + " ago";
+        return Math.floor(seconds) + " giây" + " trước";
     }
 
     function updateTimes() {
-        var msgTimes = document.querySelectorAll('.msg_time');
+        var msgTimes = document.querySelectorAll('.chat_time');
         msgTimes.forEach(function(span) {
             const timestamp = span.getAttribute('data-timestamp');
             if (timestamp) {
@@ -336,25 +336,11 @@
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var msg_card_body = document.querySelector('.msg_card_body ul');
             var card_header_msg_head = document.querySelector('.msg_head')
-
-            // var UI_bd_highlight = `
-            //     <div class="d-flex bd-highlight">
-            //                     <div class="img_cont">
-            //                         <img src="storage/${event.idUserReciever.image}"
-            //                             class="rounded-circle user_img">
-            //                         <span class="online_icon"></span>
-            //                     </div>
-            //                     <div class="user_info">
-            //                         <span>${event.idUserReciever.name}</span>
-            //                         <p>Hoạt động 45 phút trước</p>
-            //                     </div>
-            //                 </div>
-            //     `
             let image = null
             if (event.idUserSend.image) {
                 image = 'storage/' + event.idUserSend.image
             } else {
-                image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
+                image = 'theme/client/assets/images/whatsapp/admin.jpg'
             }
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
@@ -365,7 +351,8 @@
                         </span>
                         <div class="chat-body1 clearfix">
                             <p>${event.message}</p>
-                            <div class="chat_time pull-right">${currentTimestamp}</div>
+                            <div class="chat_time pull-left" data-timestamp="${currentTimestamp}"></div>
+
                         </div>
                     </li>
 
@@ -379,7 +366,8 @@
                         </span>
                         <div class="chat-body1 clearfix">
                             <p>${event.message}</p>
-                            <div class="chat_time pull-right">${currentTimestamp}</div>
+                            <div class="chat_time pull-left" data-timestamp="${currentTimestamp}"></div>
+
                         </div>
                     </li>
                      
@@ -404,7 +392,7 @@
             if (event.idUserSend.image) {
                 image = 'storage/' + event.idUserSend.image
             } else {
-                image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
+                image = 'theme/client/assets/images/whatsapp/admin.jpg'
             }
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -428,7 +416,7 @@
                         </span>
                         <div class="chat-body1 clearfix">
                             <p>${event.message}</p>
-                            <div class="chat_time pull-left">${currentTimestamp}</div>
+                            <div class="chat_time pull-left" data-timestamp="${currentTimestamp}"></div>
                         </div>
                     </li>              
                      `
@@ -439,7 +427,6 @@
             scrollToBottom()
         })
 </script>
-Route::post('/chat-private-admin/search',[ChatController::class,'search']);
 
 <script>
     console.log(334444);
@@ -465,7 +452,7 @@ Route::post('/chat-private-admin/search',[ChatController::class,'search']);
                         if (user.image) {
                             image = 'storage/' + user.image
                         } else {
-                            image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
+                            image = 'theme/client/assets/images/whatsapp/admin.jpg'
                         }
                         ui += `
                     <li class="left clearfix">

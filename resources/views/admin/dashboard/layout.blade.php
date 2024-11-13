@@ -4,7 +4,6 @@
 
 <head>
     @include('admin.dashboard.component.head')
-    
 </head>
 
 <body>

@@ -36,7 +36,11 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.catalogue.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới nhóm thành viên</a>
+                    <div class="uk-flex uk-flex-middle">
+                        <a href="{{ route('user.catalogue.permission') }}" class="btn btn-success mr-10"><i class="fa fa-key mr-5"></i>Phân quyền</a>
+                        <a href="{{ route('user.catalogue.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới chức vụ</a>
+
+                    </div>
                 </div>
             </div>
         </div>
