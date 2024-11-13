@@ -196,6 +196,8 @@ Route::prefix('flashsale/')->name('flashsale.')->middleware('checkLogin')->group
         ->name('store');
     Route::get('{id}/edit', [FlashSaleController::class, 'edit'])
         ->name('edit');
+    Route::get('{id}/show', [FlashSaleController::class, 'show'])
+        ->name('show');
     Route::put('{id}/update', [FlashSaleController::class, 'update'])
         ->name('update');
     Route::delete('{id}/destroy', [FlashSaleController::class, 'destroy'])

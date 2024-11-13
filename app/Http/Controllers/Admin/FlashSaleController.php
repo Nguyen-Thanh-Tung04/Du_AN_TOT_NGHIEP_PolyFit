@@ -55,6 +55,43 @@ class FlashSaleController extends Controller
         return view('admin.dashboard.layout', compact('template', 'config', 'flashSales'));
     }
 
+    public function show($id)
+    {
+        $template = 'admin.flashsale.show';
+        $config = $this->configData();
+        $config['seo'] = config('apps.flashsale');
+
+        $flashSale = FlashSale::with(['products' => function ($query) {
+            $query->with(['product', 'variant']);
+        }])->findOrFail($id);
+
+        // Nhóm các variant theo product_id
+        $groupedProducts = $flashSale->products->groupBy('product_id');
+
+        // Sử dụng hàm map để xử lý các product và variant theo cấu trúc đối tượng
+        $flashSale->products = $groupedProducts->map(function ($variants, $productId) {
+            $product = $variants->first()->product; // Lấy đối tượng sản phẩm từ variant đầu tiên
+
+            // Đảm bảo các variant là đối tượng model Eloquent
+            $product->variants = $variants->map(function ($flashSaleProduct) {
+                return [
+                    'variant_id' => $flashSaleProduct->variant_id,
+                    'color' => $flashSaleProduct->variant->color->name,
+                    'size' => $flashSaleProduct->variant->size->name,
+                    'flash_price' => $flashSaleProduct->flash_price,
+                    'listed_price' => $flashSaleProduct->listed_price,
+                    'discount_percentage' => $flashSaleProduct->discount_percentage,
+                    'quantity' => $flashSaleProduct->quantity,
+                    'quantity_max' => $flashSaleProduct->variant->quantity,
+                    'status' => $flashSaleProduct->status,
+                ];
+            });
+
+            return $product;
+        });
+        return view('admin.dashboard.layout', compact('template', 'config', 'flashSale'));
+    }
+
     public function create(Request $request)
     {
         $template = 'admin.flashsale.store';
@@ -119,10 +156,36 @@ class FlashSaleController extends Controller
 
     public function edit($id)
     {
-        $template = 'admin.flashsale.update';
         $flashSale = FlashSale::with(['products' => function ($query) {
-            $query->select('flash_sale_id', 'product_id')->distinct();
+            $query->with(['product', 'variant']);
         }])->findOrFail($id);
+
+        // Nhóm các variant theo product_id
+        $groupedProducts = $flashSale->products->groupBy('product_id');
+
+        // Sử dụng hàm map để xử lý các product và variant theo cấu trúc đối tượng
+        $flashSale->products = $groupedProducts->map(function ($variants, $productId) {
+            $product = $variants->first()->product; // Lấy đối tượng sản phẩm từ variant đầu tiên
+
+            // Đảm bảo các variant là đối tượng model Eloquent
+            $product->variants = $variants->map(function ($flashSaleProduct) {
+                return [
+                    'variant_id' => $flashSaleProduct->variant_id,
+                    'color' => $flashSaleProduct->variant->color->name,
+                    'size' => $flashSaleProduct->variant->size->name,
+                    'flash_price' => $flashSaleProduct->flash_price,
+                    'listed_price' => $flashSaleProduct->listed_price,
+                    'discount_percentage' => $flashSaleProduct->discount_percentage,
+                    'quantity' => $flashSaleProduct->quantity,
+                    'quantity_max' => $flashSaleProduct->variant->quantity,
+                    'status' => $flashSaleProduct->status,
+                ];
+            });
+
+            return $product;
+        });
+
+        $template = 'admin.flashsale.update';
         $products = Product::with('variants')->get();
         $timeSlots = ['0-9', '9-12', '12-15', '15-18', '18-21', '21-24'];
         $occupiedSlots = FlashSale::where('date', $flashSale->date)
@@ -165,6 +228,13 @@ class FlashSaleController extends Controller
         }
 
         $flashSale = FlashSale::findOrFail($id);
+        $startTime = explode('-', $flashSale->time_slot)[0];
+        $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
+
+        if ($flashSaleDateTime->isPast() && $flashSaleDateTime->addHours(explode('-', $flashSale->time_slot)[1] - $startTime)->isPast()) {
+            return response()->json(['status' => false, 'message' => 'Không thể cập nhật flash sale đã kết thúc.']);
+        }
+
         $flashSale->update([
             'date' => $request->date,
             'time_slot' => $request->time_slot,
@@ -215,9 +285,9 @@ class FlashSaleController extends Controller
         $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
 
         if ($flashSaleDateTime->isPast() && $flashSaleDateTime->addHours(explode('-', $flashSale->time_slot)[1] - $startTime)->isFuture()) {
-            return response()->json(['status' => false, 'message' => 'Cannot delete an ongoing flash sale.']);
+            return response()->json(['status' => false, 'message' => 'Không thể xóa flash sale đang diễn ra.']);
         } elseif ($flashSaleDateTime->isPast()) {
-            return response()->json(['status' => false, 'message' => 'Cannot delete a flash sale that has already ended.']);
+            return response()->json(['status' => false, 'message' => 'Không thể xóa flash sale đã kết thúc.']);
         }
 
         $flashSale->delete();

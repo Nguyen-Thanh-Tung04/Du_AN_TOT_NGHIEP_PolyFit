@@ -31,7 +31,10 @@
                         {{ ($flashSale['is_active'] == 1) ? 'checked' : '' }} />
                 </td>
                 <td class="text-center">
+                    <a href="{{ route('flashsale.show', $flashSale['id']) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
+                    @if ($flashSale['status'] != 'Đã diễn ra')
                     <a href="{{ route('flashsale.edit', $flashSale['id']) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                    @endif
                     <form action="{{ route('flashsale.destroy', $flashSale['id']) }}" method="POST" class="m-0 delete-form" style="display: inline-block;">
                         @csrf
                         @method('DELETE')

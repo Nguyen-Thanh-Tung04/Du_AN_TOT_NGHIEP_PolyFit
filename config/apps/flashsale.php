@@ -15,4 +15,7 @@ return [
     'delete' => [
         'title' => 'Xóa Flash Sale',
     ],
+    'detail' => [
+        'title' => 'Chi tiết Flash Sale',
+    ],
 ];

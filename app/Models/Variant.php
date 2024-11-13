@@ -37,9 +37,9 @@ class Variant extends Model
         return $this->belongsTo(Size::class, 'size_id', 'id');
     }
 
-    public function flashsale()
+    public function flashSaleProducts()
     {
-        return $this->hasMany(FlashSaleProduct::class, 'variant_id', 'id');
+        return $this->hasMany(FlashSaleProduct::class);
     }
 
     public function order_items()

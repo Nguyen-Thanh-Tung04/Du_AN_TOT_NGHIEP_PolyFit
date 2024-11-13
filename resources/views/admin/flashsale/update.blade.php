@@ -1,13 +1,5 @@
-@include('admin.dashboard.component.breadcrumb', ['title' => $config['seo']['create']['title']])
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
+@include('admin.dashboard.component.breadcrumb', ['title' => $config['seo']['edit']['title']])
+
 <form action="{{ route('flashsale.update', $flashSale->id) }}" method="POST" id="flashSaleForm">
     @csrf
     @method('PUT')
@@ -44,8 +36,8 @@
                                 <div class="form-row">
                                     <label for="status">Trạng thái</label>
                                     <select name="status" id="status" class="form-control" required>
-                                        <option value="1" {{ $flashSale->status == 1 ? 'selected' : '' }}>Active</option>
-                                        <option value="0" {{ $flashSale->status == 0 ? 'selected' : '' }}>Inactive</option>
+                                        <option value="1" {{ $flashSale->status == 1 ? 'selected' : '' }}>Hoạt động</option>
+                                        <option value="0" {{ $flashSale->status == 0 ? 'selected' : '' }}>Không hoạt động</option>
                                     </select>
                                 </div>
                             </div>
@@ -72,10 +64,7 @@
                             <div class="col-lg-12 mb-15">
                                 <div class="row" id="productList">
 
-                                    @foreach($flashSale->products as $flashSaleProduct)
-                                    @php
-                                    $product = $products->firstWhere('id', $flashSaleProduct->product_id);
-                                    @endphp
+                                    @foreach($flashSale->products as $product)
                                     @if($product)
                                     <div class="custom-col-12 custom-mb-3">
                                         <input type="hidden" name="products[{{ $product->id }}]" value="{{ $product->id }}">
@@ -107,29 +96,26 @@
                                                 </div>
 
                                                 @foreach($product->variants as $variant)
-                                                @php
-                                                $flashSaleVariant = $flashSaleProduct->where('variant_id', $variant->id)->first();
-                                                @endphp
-
-                                                @if($flashSaleVariant)
                                                 <div class="custom-row custom-mb-2">
-                                                    <div class="custom-col-1 custom-text-left">{{ $variant->color->name }}</div>
-                                                    <div class="custom-col-1 custom-text-center">{{ $variant->size->name }}</div>
-                                                    <div class="custom-col-2 custom-text-center original-price" data-price="{{ $variant->price }}">{{ $variant->listed_price }}</div>
-                                                    <input type="hidden" name="products[{{ $product->id }}][{{ $variant->id }}][listed_price]" value="{{ $variant->listed_price }}">
-                                                    <div class="custom-col-2 custom-text-center"><input type="number" name="products[{{ $product->id }}][{{ $variant->id }}][flash_price]" value="{{ $flashSaleVariant->flash_price }}" class="form-control discount-price" min="0" max="{{ $variant->price }}"></div>
+                                                    <div class="custom-col-1 custom-text-left">{{ $variant['color'] }}</div>
+                                                    <div class="custom-col-1 custom-text-center">{{ $variant['size']  }}</div>
+                                                    <div class="custom-col-2 custom-text-center original-price" data-price="{{ $variant['listed_price'] }}">{{ $variant['listed_price'] }}</div>
+                                                    <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][listed_price]" value="{{ $variant['listed_price'] }}">
+                                                    <div class="custom-col-2 custom-text-center"><input type="number" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][flash_price]" value="{{ $variant['flash_price'] }}" class="form-control discount-price" min="0" max="{{ $variant['listed_price'] }}"></div>
                                                     <div class="custom-col-2 custom-text-center input-group">
-                                                        <input type="number" class="form-control discount-percent" aria-describedby="percent-addon" value="{{ $flashSaleVariant->discount_percentage }}" disabled>
-                                                        <input type="hidden" name="products[{{ $product->id }}][{{ $variant->id }}][discount_percentage]" value="{{ $flashSaleVariant->discount_percentage }}" class="form-control discount-percent">
+                                                        <input type="number" class="form-control discount-percent" aria-describedby="percent-addon" value="{{ $variant['discount_percentage'] }}" disabled>
+                                                        <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][discount_percentage]" value="{{ $variant['discount_percentage'] }}" class="form-control discount-percent">
                                                         <span class="input-group-addon" id="percent-addon">% Giảm</span>
                                                     </div>
-                                                    <div class="custom-col-1 custom-text-center">{{ $variant->quantity }}</div>
-                                                    <div class="custom-col-2 custom-text-center"><input type="number" name="products[{{ $product->id }}][{{ $variant->id }}][quantity]" class="form-control discount-quantity" value="{{ $flashSaleVariant->quantity }}" min="0" max="{{ $variant->quantity }}" placeholder="Số lượng"></div>
-                                                    <div class="custom-col-1 custom-text-right"><input type="checkbox" name="products[{{ $product->id }}][{{ $variant->id }}][status]" class="js-switch status-variant" value="{{ $flashSaleVariant->status }}" {{ $flashSaleVariant->status == 1 ? 'checked' : '' }}></div>
-                                                    <input type="hidden" name="products[{{ $product->id }}][{{ $variant->id }}][product_id]" value="{{ $product->id }}">
-                                                    <input type="hidden" name="products[{{ $product->id }}][{{ $variant->id }}][variant_id]" value="{{ $variant->id }}">
+                                                    <div class="custom-col-1 custom-text-center">{{ $variant['quantity_max'] }}</div>
+                                                    <div class="custom-col-2 custom-text-center"><input type="number" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][quantity]" class="form-control discount-quantity" value="{{ $variant['quantity'] }}" min="0" max="{{ $variant['quantity'] }}" placeholder="Số lượng"></div>
+                                                    <div class="custom-col-1 custom-text-right">
+                                                        <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][status]" class="status-value" value="0">
+                                                        <input type="checkbox" class="js-switch status-variant" value="{{ $variant['status'] }}" {{ $variant['status'] == 1 ? 'checked' : '' }}>
+                                                    </div>
+                                                    <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][product_id]" value="{{ $product->id }}">
+                                                    <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][variant_id]" value="{{ $variant['variant_id'] }}">
                                                 </div>
-                                                @endif
                                                 @endforeach
                                             </div>
                                         </div>
@@ -227,13 +213,10 @@
             $(this).closest('.custom-col-12').remove();
         });
 
-        $(document).on('change', '.js-switch', function() {
-            console.log(this.checked);
-        });
 
         $(document).on('change', '.status-variant', function() {
             let status = this.checked ? 1 : 0;
-            $(this).closest('.custom-row').find('.status-variant').val(status);
+            $(this).closest('.custom-row').find('.status-value').val(status);
         });
 
         // Calculate discount percent
@@ -320,7 +303,10 @@
                                                 </div>
                                                 <div class="custom-col-1 custom-text-center">${variant.quantity}</div>
                                                 <div class="custom-col-2 custom-text-center"><input type="number" name="products[${product.id}][${variant.id}][quantity]" class="form-control discount-quantity" value="${variant.quantity}" min="0" max="${variant.quantity}" placeholder="Số lượng"></div>
-                                                <div class="custom-col-1 custom-text-right"><input type="checkbox" name="products[${product.id}][${variant.id}][status]" class="new-switch status-variant" value="0"></div>
+                                                <div class="custom-col-1 custom-text-right">
+                                                 <input type="hidden"  name="products[${product.id}][${variant.id}][status]" class="status-value" value="0">
+                                                    <input type="checkbox" class="new-switch status-variant" value="0">
+                                                </div>
                                                 <input type="hidden" name="products[${product.id}][${variant.id}][variant_id]" value="${variant.id}">
                                             </div>`).join('')}
                                         </div>
