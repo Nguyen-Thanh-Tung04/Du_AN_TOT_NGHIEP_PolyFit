@@ -10,20 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    private $id_user_new;
 
     public function __construct()
     {
-        $this->id_user_new = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
-            ->whereNull('users.user_catalogue_id') // Điều kiện user_catalogue_id = null
-            ->where('message_private.created_at', function ($query) {
-                $query->selectRaw('MAX(created_at)')
-                    ->from('message_private as mp_sub')
-                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
-            })
-            ->orderByDesc('message_private.created_at')
-            ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 'users.id as user_id', 'users.name as user_name')
-            ->first(); // Lấy bản ghi mới nhất
     }
     public function index()
     {
@@ -152,10 +141,6 @@ class DashboardController extends Controller
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
 
-            $id_user_new = $this->id_user_new->user_send;
-
-            // dd($this->id_user_new);
-
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
@@ -168,7 +153,6 @@ class DashboardController extends Controller
             'latestUsers',
             'orderStatus', // Trạng thái đơn hàng
             'grossProfit',
-            'id_user_new'
         ));
     }
 

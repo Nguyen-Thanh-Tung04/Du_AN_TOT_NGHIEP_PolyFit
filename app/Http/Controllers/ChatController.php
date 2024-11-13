@@ -117,16 +117,16 @@ class ChatController extends Controller
         // Lấy thông tin người dùng được chỉ định
         $user = User::where('id', '=', $idUser)->first();
 
-        $id_user_new = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
-            ->whereNull('users.user_catalogue_id') // Điều kiện user_catalogue_id = null
-            ->where('message_private.created_at', function ($query) {
-                $query->selectRaw('MAX(created_at)')
-                    ->from('message_private as mp_sub')
-                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
-            })
-            ->orderByDesc('message_private.created_at')
-            ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 'users.id as user_id', 'users.name as user_name')
-            ->first(); // Lấy bản ghi mới nhất
+        // $id_user_new = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
+        //     ->whereNull('users.user_catalogue_id') // Điều kiện user_catalogue_id = null
+        //     ->where('message_private.created_at', function ($query) {
+        //         $query->selectRaw('MAX(created_at)')
+        //             ->from('message_private as mp_sub')
+        //             ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
+        //     })
+        //     ->orderByDesc('message_private.created_at')
+        //     ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 'users.id as user_id', 'users.name as user_name')
+        //     ->first(); // Lấy bản ghi mới nhất
         // dd($id_user_new);
 
         // Lấy tin nhắn giữa người dùng hiện tại và người dùng được chỉ định
@@ -151,7 +151,7 @@ class ChatController extends Controller
             ->orderBy('message_private.created_at', 'asc') // Đảm bảo tin nhắn được sắp xếp theo thời gian
             ->get();
         // dd($messagePrivate);
-        return view('chat.chat-private-admin', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate, "id_user_new" => $id_user_new->user_send]);
+        return view('chat.chat-private-admin', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate]);
     }
     public function search(Request $request)
     {
