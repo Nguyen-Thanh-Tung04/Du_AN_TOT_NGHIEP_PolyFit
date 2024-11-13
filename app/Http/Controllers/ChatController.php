@@ -12,21 +12,27 @@ class ChatController extends Controller
 {
     public function index()
     {
-
-
+        // $users = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id') // Join bảng users với bảng message_private
+        // ->where('message_private.created_at', function ($query) {
+        //     $query->selectRaw('MAX(created_at)')
+        //         ->from('message_private as mp_sub')
+        //         ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
+        // })
+        // ->where('users.id', '<>', Auth::user()->id) // Loại trừ người dùng hiện tại
+        // ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian tạo tin nhắn giảm dần
+        // ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 
+        //         'users.id as user_id', 'users.name as user_name', 'users.image as user_image')
+        // ->get(); // Lấy danh sách người dùng và tin nhắn mới nhất
+    
+        // dd($users);
         $users = User::where('id', '<>', Auth::user()->id)->get();
 
-        // dd($users);
-        // $group_my_chat = GroupchatModel::where('id_leader', '=', Auth::user()->id)
-        //     ->select('groupchat.id as groupchatId', 'groupchat.name')
-        //     ->get();
+        $user = Auth::user();
+        // dd($user);
 
-        // $group_not_leader = GroupchatModel::leftJoin('groupchat_detail', 'groupchat.id', '=', 'groupchat_detail.groupchat_id')
-        //     ->select('groupchat.id as groupchatId', 'groupchat.name')
-        //     ->where('groupchat_detail.member_id', Auth::user()->id)->get();
-
-        return view('chat/chat', [
+        return view('chat.chat', [
             'users' => $users,
+            'user' => $user
             // 'group_my_chat' => $group_my_chat,
             // 'group_not_leader' => $group_not_leader,
         ]);
@@ -54,7 +60,7 @@ class ChatController extends Controller
             ->leftJoin('users as user_reciever', 'user_reciever.id', '=', 'message_private.user_reciever')
             ->Where(function ($query) use ($idUser) {
                 $query->where('message_private.user_send', $idUser)
-                ->where('message_private.user_reciever', Auth::user()->id);
+                    ->where('message_private.user_reciever', Auth::user()->id);
             })
             ->orWhere(function ($query) use ($idUser) {
                 $query->where('message_private.user_send', Auth::user()->id)
@@ -86,9 +92,9 @@ class ChatController extends Controller
             'activeUserIds' => 'required|array',
             'activeUserIds.*' => 'integer', // Each item in the array should be an integer
         ]);
-    
+
         $activeUserIds = $request->activeUserIds;
-    
+
         // Fetch users whose IDs are not in the array of active user IDs
         $inactiveUsers = User::whereNotIn('id', $activeUserIds)
             ->get()
@@ -97,7 +103,7 @@ class ChatController extends Controller
                 $user->image = $user->image ? url($user->image) : 'default-image-path.jpg';
                 return $user;
             });
-    
+
         return response()->json([
             'inactiveUsers' => $inactiveUsers,
             'success' => 'Thành công',
@@ -110,7 +116,18 @@ class ChatController extends Controller
 
         // Lấy thông tin người dùng được chỉ định
         $user = User::where('id', '=', $idUser)->first();
-        // dd($user);
+
+        $id_user_new = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
+            ->whereNull('users.user_catalogue_id') // Điều kiện user_catalogue_id = null
+            ->where('message_private.created_at', function ($query) {
+                $query->selectRaw('MAX(created_at)')
+                    ->from('message_private as mp_sub')
+                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
+            })
+            ->orderByDesc('message_private.created_at')
+            ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 'users.id as user_id', 'users.name as user_name')
+            ->first(); // Lấy bản ghi mới nhất
+        // dd($id_user_new);
 
         // Lấy tin nhắn giữa người dùng hiện tại và người dùng được chỉ định
         $messagePrivate = ChatPrivateModel::select(
@@ -125,7 +142,7 @@ class ChatController extends Controller
             ->leftJoin('users as user_reciever', 'user_reciever.id', '=', 'message_private.user_reciever')
             ->Where(function ($query) use ($idUser) {
                 $query->where('message_private.user_send', $idUser)
-                ->where('message_private.user_reciever', Auth::user()->id);
+                    ->where('message_private.user_reciever', Auth::user()->id);
             })
             ->orWhere(function ($query) use ($idUser) {
                 $query->where('message_private.user_send', Auth::user()->id)
@@ -134,14 +151,13 @@ class ChatController extends Controller
             ->orderBy('message_private.created_at', 'asc') // Đảm bảo tin nhắn được sắp xếp theo thời gian
             ->get();
         // dd($messagePrivate);
-        return view('chat.Chat-private-admin', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate, "id_user_new"=>4]);
+        return view('chat.chat-private-admin', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate, "id_user_new" => $id_user_new->user_send]);
     }
     public function search(Request $request)
     {
 
         if (!empty($request->groupChatId)) {
-            $member_id = User::where('groupchat_id', '=', $request->groupChatId)
-                ->pluck('member_id')->toArray();
+            $member_id = User::all();
             if (!empty($request->search_text)) {
                 $result_filter = User::whereIn('id', $member_id)->where('id', '<>', Auth::user()->id)
                     ->where('name', 'like', '%' . $request->search_text . '%')

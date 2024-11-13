@@ -9,4 +9,5 @@ class ChatPrivateModel extends Model
 {
     use HasFactory;
     protected $table = 'message_private';
+    
 }
