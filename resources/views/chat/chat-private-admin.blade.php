@@ -17,12 +17,15 @@
                     <div class="member_list">
                         <ul class="list-unstyled">
                             @foreach($users as $item)
+                            @php
+                            $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
+                            @endphp
 
                             <li class="left clearfix">
                                 <a style="color: #000" href="{{ url('chat-private-admin/' . $item->id) }}" id="user{{ $item->id }}">
                                     <div class="chat-img pull-left img_cont" style="position: relative;">
                                         @if(isset($item->image))
-                                        <img src="{{ Storage::url($item->image) }}" alt="User Avatar" class="img-circle">
+                                        <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                         @else
                                         <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
                                         @endif
@@ -30,7 +33,7 @@
                                     </div>
                                     <div class="chat-body clearfix">
                                         <div class="header_sec">
-                                            <strong class="primary-font">{{ isset($item->name) ? $item->name : '' }}</strong>
+                                            <strong class="primary-font">{{ $item->name }}</strong>
                                             <!-- <strong class="pull-right">
                                             09:45AM</strong> -->
                                         </div>
@@ -54,8 +57,11 @@
                     <div class="new_message_head">
                         <div class="pull-left" id="user{{ $item->id }}" style="display: flex;">
                             <div class="img_cont">
-                                @if(isset($item->image))
-                                <img src="{{ Storage::url($user->image) }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
+                                @php
+                                $checkUrlImg = \Illuminate\Support\Str::contains($user->image, '/userfiles/') ? $user->image : Storage::url($user->image);
+                                @endphp
+                                @if(isset($user->image))
+                                <img src="{{ $checkUrlImg }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
                                 @else
                                 <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
                                 @endif
@@ -88,7 +94,7 @@
                             <li class="left clearfix admin_chat">
                                 @if(isset($item->image_user_send))
                                 <span class="chat-img1 pull-right">
-                                    <img src="{{ Storage::url($item->image_user_send) }}" alt="User Avatar" class="img-circle">
+                                    <img src="{{ $item->image_user_send }}" alt="User Avatar" class="img-circle">
                                 </span>
                                 @else
                                 <span class="chat-img1 pull-right">
@@ -97,7 +103,7 @@
                                 @endif
 
                                 <div class="chat-body1 clearfix">
-                                    <p>{{ isset($item->message) ? $item->message : '' }}</p>
+                                    <p>{{ $item->message }}</p>
                                     <div class="chat_time pull-right" data-timestamp="{{ $item->created_at->timestamp }}"></div>
                                 </div>
                             </li>
@@ -116,7 +122,7 @@
 
                                 </span>
                                 <div class="chat-body1 clearfix">
-                                    <p>{{ isset($item->message) ? $item->message : '' }}</p>
+                                    <p>{{ $item->message }}</p>
                                     <div class="chat_time pull-left" data-timestamp="{{ $item->created_at->timestamp }}"></div>
                                 </div>
                             </li>
@@ -340,7 +346,7 @@
             if (event.idUserSend.image) {
                 image = 'storage/' + event.idUserSend.image
             } else {
-                image = 'theme/client/assets/images/whatsapp/admin.jpg'
+                image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
             }
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
@@ -392,7 +398,7 @@
             if (event.idUserSend.image) {
                 image = 'storage/' + event.idUserSend.image
             } else {
-                image = 'theme/client/assets/images/whatsapp/admin.jpg'
+                image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
             }
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -452,7 +458,7 @@
                         if (user.image) {
                             image = 'storage/' + user.image
                         } else {
-                            image = 'theme/client/assets/images/whatsapp/admin.jpg'
+                            image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
                         }
                         ui += `
                     <li class="left clearfix">

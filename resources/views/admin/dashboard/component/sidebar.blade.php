@@ -12,8 +12,8 @@ $segment = request()->segment(1);
                         @if (Auth::user()->image)
                             <!-- Nếu user có ảnh đại diện -->
                             <img alt="image" class="rounded-circle mx-auto d-block" 
-                                src="{{ Storage::url(Auth::user()->image) }}" 
-                                style="width: 60px; height: 60px; object-fit: cover; overflow: hidden; border-radius: 50%;" />
+                                src="{{ Auth::user()->image }}" 
+                                style="width: 46px; height: 46px; object-fit: cover; overflow: hidden; border-radius: 50%;" />
                         @else
                             <!-- Nếu không có ảnh đại diện -->
                             <img alt="image" class="rounded-circle mx-auto d-block" 
