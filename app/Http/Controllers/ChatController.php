@@ -134,7 +134,7 @@ class ChatController extends Controller
             ->orderBy('message_private.created_at', 'asc') // Đảm bảo tin nhắn được sắp xếp theo thời gian
             ->get();
         // dd($messagePrivate);
-        return view('chat.Chat-private-admin', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate, "id_user_new"=>5]);
+        return view('chat.Chat-private-admin', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate, "id_user_new"=>4]);
     }
     public function search(Request $request)
     {

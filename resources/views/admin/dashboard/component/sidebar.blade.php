@@ -6,13 +6,34 @@ $segment = request()->segment(1);
     <div class="sidebar-collapse">
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
-                <div class="dropdown profile-element"> <span>
-                        <img alt="image" class="img-circle" src="admin/img/profile_small.jpg" />
-                    </span>
+                <div class="dropdown profile-element text-center">
+                    <!-- Container for the image -->
+                    @if(Auth::check())
+                        @if (Auth::user()->image)
+                            <!-- Nếu user có ảnh đại diện -->
+                            <img alt="image" class="rounded-circle mx-auto d-block" 
+                                src="{{ Storage::url(Auth::user()->image) }}" 
+                                style="width: 60px; height: 60px; object-fit: cover; overflow: hidden; border-radius: 50%;" />
+                        @else
+                            <!-- Nếu không có ảnh đại diện -->
+                            <img alt="image" class="rounded-circle mx-auto d-block" 
+                                src="{{ asset('userfiles/image/avata_null.jpg')}}" 
+                                style="width: 80px; height: 80px; object-fit: cover; overflow: hidden; border-radius: 50%;" />
+                        @endif
+                    @else
+                        <!-- Nếu chưa đăng nhập -->
+                        <i class="fi-rr-user" style="font-size: 80px;"></i>
+                    @endif
+                
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ Auth::user()->name }}</strong>
-                            </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                        <span class="clear d-block mt-2"> 
+                            <span class="block m-t-xs text-center"> 
+                                <strong class="font-bold">{{ Auth::user()->name ?? 'Guest' }}</strong>
+                            </span> 
+                        </span> 
+                    </a>
                 </div>
+                
             </li>
             <li class="active">
                 <a href="{{ route('dashboard.index') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Thống Kê</span> <span class="fa arrow"></span></a>
