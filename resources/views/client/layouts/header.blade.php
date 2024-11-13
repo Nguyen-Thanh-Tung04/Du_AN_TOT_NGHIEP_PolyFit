@@ -102,8 +102,24 @@
 
                             <!-- Header User Start -->
                             <div class="ec-header-user dropdown">
-                                <button class="dropdown-toggle" data-bs-toggle="dropdown"><i
-                                        class="fi-rr-user"></i></button>
+                                <button class="dropdown-toggle" data-bs-toggle="dropdown">
+                                    @if(Auth::check())
+                                    @if (Auth::user()->image)
+                                        <!-- Nếu user có ảnh đại diện -->
+                                        <img 
+                                        src="{{ Storage::url(Auth::user()->image) }}" 
+                                        alt="User Avatar" 
+                                        class="img-profile rounded-circle border  shadow" 
+                                        style="height: 40px; width: 40px; object-fit: cover;">
+                                                                        @else
+                                        <!-- Nếu không có ảnh đại diện -->
+                                        <img style="height: 40px; width: 40px;" class="img-profile rounded-circle" src="{{ asset('userfiles/image/avata_null.jpg') }}" alt="Default Avatar">
+                                    @endif
+                                    @else
+                                        <!-- Nếu chưa đăng nhập -->
+                                        <i class="fi-rr-user"></i>
+                                    @endif
+                                </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <!-- Kiểm tra nếu người dùng đã đăng nhập -->
                                     @auth
