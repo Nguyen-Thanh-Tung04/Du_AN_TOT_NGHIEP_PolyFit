@@ -46,7 +46,7 @@
         <div class="col-md-12 col-xl-8 chat">
             <div class="card">
                 <input type="hidden" id="idUserReciever" value="{{ $user->id }}">
-                <div class="card-header msg_head bg-black">
+                    <div class="card-header">
 							<div class="d-flex bd-highlight" id="user{{ $user->id }}">
 								<div class="img_cont">
 									<img src="{{ Storage::url($user->image) }}" class="rounded-circle user_img">
@@ -68,6 +68,25 @@
 							</div>
 						</div>
                 <div class="card-body msg_card_body">
+                    <div class="chat_area_index">
+                        <div class="empty-chat-box">
+                            <div class="empty-chat-content">
+                                <div class="box-content-img">
+                                    <img src="{{asset('theme/client/assets/images/logo/Luutru.png')}}" alt="">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <h3 class="empty-chat-title">
+                                        <i class="fas fa-comments empty-chat-icon"></i>
+                                        Hãy chọn một cuộc trò chuyện
+                                    </h3>
+                                </div>
+                                <p class="empty-chat-message">
+                                    <i class="fas fa-hand-point-down"></i>
+                                    Nhấp vào để bắt đầu trò chuyện!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     @foreach ($messagePrivate as $item)
                     @if ($item->id_user_send === Auth::user()->id)
                     <div class="d-flex justify-content-end mb-4">
@@ -75,14 +94,14 @@
                             {{ $item->message }}
                             <span class="msg_time" data-timestamp="{{ $item->created_at->timestamp }}"></span>
                         </div>
-                        <div class="img_cont_msg">
+                        <div class="img_cont_msg d-flex align-items-top">
                             <img src="{{ Storage::url($item->image_user_send) }}" class="rounded-circle user_img_msg">
                         </div>
 
                     </div>
                     @else
                     <div class="d-flex justify-content-start mb-4">
-                        <div class="img_cont_msg">
+                        <div class="img_cont_msg d-flex align-items-top">
                             <a href="{{ url('chat-private/' . $item->id_user_reciever) }}">
                                 <img src="{{ Storage::url($item->image_user_send) }}"
                                     class="rounded-circle user_img_msg">
@@ -91,7 +110,7 @@
                         </div>
                         <div class="msg_cotainer">
                             {{ $item->message }}
-                            <span class="msg_time" data-timestamp="{{ $item->created_at->timestamp }}"></span>
+                            <span class="msg_time msg_time_receiver" data-timestamp="{{ $item->created_at->timestamp }}"></span>
                         </div>
                     </div>
                     @endif
@@ -101,13 +120,13 @@
                 </div>
                 <div class="card-footer">
                     <div class="input-group">
-                        <div class="input-group-append">
+                        <!-- <div class="input-group-append">
                             <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
-                        </div>
-                        <input name="" id="content_message" class="form-control type_msg"
-                            placeholder="Type your message..."></input>
+                        </div> -->
+                        <textarea  name="" id="content_message" class="form-control type_msg"
+                            placeholder="Aa..."></textarea>
                         <div class="input-group-append">
-                            <span style=" cursor: default;" id="send_message" class="input-group-text send_btn"></span>
+                            <span style=" cursor: default; color: #000;" id="send_message" class="input-group-text send_btn"></span>
                         </div>
                     </div>
                 </div>
@@ -242,6 +261,8 @@ content_message.addEventListener('input', function() {
         if (!send_btn.contains(fa_location_arrow)) {
             send_btn.appendChild(fa_location_arrow);
             fa_location_arrow.style.cursor = 'pointer'
+            fa_location_arrow.style.color = '#000'
+
         }
     }
 });
@@ -289,25 +310,25 @@ function timeSince(date) {
     let interval = Math.floor(seconds / 31536000);
 
     if (interval >= 1) {
-        return interval + " year" + (interval > 1 ? "s" : "") + " ago";
+        return interval + " năm" + (interval > 1 ? "s" : "") + " trước";
     }
     interval = Math.floor(seconds / 2592000);
     if (interval >= 1) {
-        return interval + " month" + (interval > 1 ? "s" : "") + " ago";
+        return interval + " tháng" + (interval > 1 ? "s" : "") + " trước";
     }
     interval = Math.floor(seconds / 86400);
     if (interval >= 1) {
-        return interval + " day" + (interval > 1 ? "s" : "") + " ago";
+        return interval + " ngày" + (interval > 1 ? "s" : "") + " trước";
     }
     interval = Math.floor(seconds / 3600);
     if (interval >= 1) {
-        return interval + " hour" + (interval > 1 ? "s" : "") + " ago";
+        return interval + " giờ" + (interval > 1 ? "s" : "") + " trước";
     }
     interval = Math.floor(seconds / 60);
     if (interval >= 1) {
-        return interval + " minute" + (interval > 1 ? "s" : "") + " ago";
+        return interval + " phút" + (interval > 1 ? "s" : "") + " trước";
     }
-    return Math.floor(seconds) + " second" + (seconds > 1 ? "s" : "") + " ago";
+    return Math.floor(seconds) + " giây" + (seconds > 1 ? "s" : "") + " trước";
 }
 
 function updateTimes() {

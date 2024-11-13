@@ -98,7 +98,7 @@
 
                                 <div class="chat-body1 clearfix">
                                     <p>{{ $item->message }}</p>
-                                    <div class="chat_time pull-left">{{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }}</div>
+                                    <div class="chat_time pull-right">{{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }}</div>
                                 </div>
                             </li>
 
@@ -117,7 +117,7 @@
                                 </span>
                                 <div class="chat-body1 clearfix">
                                     <p>{{ $item->message }}</p>
-                                    <div class="chat_time pull-right">{{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }}</div>
+                                    <div class="chat_time pull-left">{{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }}</div>
                                 </div>
                             </li>
                             @endif

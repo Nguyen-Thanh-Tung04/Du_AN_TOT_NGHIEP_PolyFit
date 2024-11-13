@@ -50,40 +50,7 @@
 </section>
 <!-- ec Product tab Area End -->
 
-<!--category Section End -->
-<!--  category Section Start -->
-<section class="section ec-category-section ec-category-wrapper-1 section-space-p py-1">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="section-title">
-                    <h2 class="ec-title fs-1">Danh mục</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row margin-minus-tb-15">
 
-            <div class="ec_cat_slider">
-                @foreach ($category as $category)
-                <div class="ec_cat_content">
-                    <div class="ec_cat_inner text-center p-5">
-                        <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
-                        <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
-                        width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                        height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                        object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
-                        />
-                        {{-- <p class="text-black fw-bold">{{$category->name}}</p> --}}
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-        </div>
-
-    </div>
-</section>
-<!--category Section End -->
 <!-- Product tab Area Start -->
 <section class="section ec-product-tab section-space-p" id="collection">
 
@@ -420,7 +387,7 @@
                              <!-- Profile Picture -->
                              <div class="ec-img-cont">
                                  @if(isset($item->image))
-                                 <img src="{{ storage::url($item->image) }}" class="ec-user-img">
+                                 <img src="{{ Storage::url($item->image) }}" class="ec-user-img" alt="Profile image">
                                  @else
                                  <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
                                  @endif

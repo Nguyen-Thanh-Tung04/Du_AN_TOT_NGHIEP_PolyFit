@@ -184,17 +184,27 @@
 }
 
 .chat_area .chat-body1 {
-    margin-left: 50px;
+    margin-left: 10px;
+    max-width: 40% !important; /* Đặt chiều rộng của div là 40% */
+    word-wrap: break-word; /* Cho phép chữ quá dài sẽ xuống dòng */
+    word-break: break-word; /* Đảm bảo rằng từ dài không bị cắt giữa chừng */
+    white-space: normal; /* Đảm bảo chữ không bị giữ nguyên trên một dòng */
+    overflow-wrap: break-word; /* Cùng với word-wrap, giúp dòng văn bản dài bị ngắt */
+    display: inline-block;
 }
-
 .chat-body1 p {
     background: #fbf9fa none repeat scroll 0 0;
     padding: 10px;
+    
 }
 
+.chat_area .admin_chat {
+    display: flex;
+    flex-direction: row-reverse;
+}
 .chat_area .admin_chat .chat-body1 {
-    margin-left: 0;
-    margin-right: 50px;
+    margin-right: 10px;
+    max-width: 40%;
 }
 
 .chat_area li:last-child {
