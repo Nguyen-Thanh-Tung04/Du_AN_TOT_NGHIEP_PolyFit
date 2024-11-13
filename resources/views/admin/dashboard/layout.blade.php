@@ -9,7 +9,7 @@
 
 <body>
     <div id="wrapper">
-        @include('admin.dashboard.component.sidebar', ['id' => 1])
+        @include('admin.dashboard.component.sidebar')
         <div id="page-wrapper" class="gray-bg">
             @include('admin.dashboard.component.nav')
             @include(isset($template) ? $template : $template1)

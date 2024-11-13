@@ -382,6 +382,7 @@ Echo.private("chat.private.{{ Auth::user()->id }}.{{ $user->id }}")
 
         msg_card_body.insertAdjacentHTML('beforeend', ui)
         updateTimes();
+        scrollToBottom()
     })
 
 
@@ -422,6 +423,7 @@ Echo.private("chat.private.{{ $user->id }}.{{ Auth::user()->id }}")
 
         msg_card_body.insertAdjacentHTML('beforeend', ui)
         updateTimes();
+        scrollToBottom()
     })
 </script>
 <script>

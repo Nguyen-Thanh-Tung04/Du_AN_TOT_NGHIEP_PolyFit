@@ -3,14 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChatPrivateModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function __construct() {
+    private $id_user_new;
 
+    public function __construct()
+    {
+        $this->id_user_new = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
+            ->whereNull('users.user_catalogue_id') // Điều kiện user_catalogue_id = null
+            ->where('message_private.created_at', function ($query) {
+                $query->selectRaw('MAX(created_at)')
+                    ->from('message_private as mp_sub')
+                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
+            })
+            ->orderByDesc('message_private.created_at')
+            ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 'users.id as user_id', 'users.name as user_name')
+            ->first(); // Lấy bản ghi mới nhất
     }
     public function index()
     {
@@ -73,7 +86,7 @@ class DashboardController extends Controller
             ->select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->get();
-//        dd($orderStatus);
+        //        dd($orderStatus);
         // Nếu không có dữ liệu đơn hàng
         if ($monthlyOrders->isEmpty()) {
             return view('admin.dashboard.layout', compact('template', 'config', 'totalOrders', 'totalOrdersConfirm', 'totalCustomers', 'latestOrders', 'orderStatus', 'latestUsers'));
@@ -139,6 +152,10 @@ class DashboardController extends Controller
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
 
+            $id_user_new = $this->id_user_new->user_send;
+
+            // dd($this->id_user_new);
+
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
@@ -150,7 +167,8 @@ class DashboardController extends Controller
             'latestOrders', // 10 đơn hàng mới nhất
             'latestUsers',
             'orderStatus', // Trạng thái đơn hàng
-            'grossProfit'
+            'grossProfit',
+            'id_user_new'
         ));
     }
 
@@ -311,17 +329,15 @@ class DashboardController extends Controller
             ->leftJoin('order_items', 'order_items.order_id', '=', 'orders.id')
             ->select(
                 DB::raw($choose_time === 'week' ? "CONCAT(YEAR(orders.created_at), '-', LPAD(WEEK(orders.created_at, 3), 2, '0')) AS date" : // Chọn định dạng cho tuần
-                    ($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m') AS date" :
-                        ($choose_time === 'year' ? "YEAR(orders.created_at) AS date" : "DATE(orders.created_at) AS date"))),
+                    ($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m') AS date" : ($choose_time === 'year' ? "YEAR(orders.created_at) AS date" : "DATE(orders.created_at) AS date"))),
                 DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 5 THEN orders.id END) AS so_luong_don_hang'), // Đếm đơn hàng đã đặt thành công
                 DB::raw('SUM(CASE WHEN orders.status = 5 THEN order_items.quantity ELSE 0 END) AS so_luong_ban_ra'), // Số lượng bán ra cho đơn hàng đã đặt thành công
                 DB::raw('SUM(CASE WHEN orders.status = 5 THEN orders.total_price ELSE 0 END) AS doanh_thu'), // Doanh thu từ đơn hàng đã đặt thành công
                 DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 6 THEN orders.id END) AS tong_so_don_hang_huy') // Đếm đơn hàng đã hủy
             )
             ->whereBetween(DB::raw('DATE(orders.created_at)'), [$date_start, $end_date])
-            ->groupBy(DB::raw($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m')" :
-                ($choose_time === 'week' ? "CONCAT(YEAR(orders.created_at), '-', LPAD(WEEK(orders.created_at, 3), 2, '0'))" : // Nhóm theo tuần
-                    ($choose_time === 'year' ? "YEAR(orders.created_at)" : "DATE(orders.created_at)"))));
+            ->groupBy(DB::raw($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m')" : ($choose_time === 'week' ? "CONCAT(YEAR(orders.created_at), '-', LPAD(WEEK(orders.created_at, 3), 2, '0'))" : // Nhóm theo tuần
+                ($choose_time === 'year' ? "YEAR(orders.created_at)" : "DATE(orders.created_at)"))));
 
         // Lấy kết quả và chuyển sang dạng hiển thị đầy đủ mốc thời gian
         $results_one = $dates->map(function ($date) use ($query, $choose_time) {
@@ -382,7 +398,8 @@ class DashboardController extends Controller
 
 
 
-    private function config() {
+    private function config()
+    {
         return [
             'js' => [
                 'admin/js/plugins/flot/jquery.flot.js',

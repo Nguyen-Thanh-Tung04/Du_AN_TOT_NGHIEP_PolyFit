@@ -18,7 +18,7 @@ $segment = request()->segment(1);
                 <a href="{{ route('dashboard.index') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Thống Kê</span> <span class="fa arrow"></span></a>
             </li>
             <li >
-                <a href="{{ route('chat-private-admin', $id) }}"><i class="fa fa-comment"></i> <span class="nav-label">Chat</span> <span class="fa arrow"></span></a>
+                <a href="{{ route('list-chat') }}"><i class="fa fa-comment"></i> <span class="nav-label">Chat</span> <span class="fa arrow"></span></a>
             </li>
             @foreach (config('apps.module.module') as $val)
             <li class="{{ (in_array($segment, $val['name'])) ? 'active' : '' }}">
