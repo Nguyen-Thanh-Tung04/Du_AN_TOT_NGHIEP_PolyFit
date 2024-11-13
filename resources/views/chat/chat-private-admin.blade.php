@@ -63,7 +63,7 @@
                             </div>
                             <div class="user_info" style="position: relative;">
                                 <span>{{ $user->name }}</span>
-                                <p class="is_active2">Đang hoạt động</p>
+                                <p class="is_active2" style="display: none;">Đang hoạt động</p>
                             </div>
                         </div>
                         <div class="pull-right">

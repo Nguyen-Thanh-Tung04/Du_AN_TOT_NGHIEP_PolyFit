@@ -12,7 +12,21 @@ class ChatController extends Controller
 {
     public function index()
     {
+        // $users = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id') // Join bảng users với bảng message_private
+        // ->where('message_private.created_at', function ($query) {
+        //     $query->selectRaw('MAX(created_at)')
+        //         ->from('message_private as mp_sub')
+        //         ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
+        // })
+        // ->where('users.id', '<>', Auth::user()->id) // Loại trừ người dùng hiện tại
+        // ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian tạo tin nhắn giảm dần
+        // ->select('message_private.user_send', 'message_private.message', 'message_private.created_at', 
+        //         'users.id as user_id', 'users.name as user_name', 'users.image as user_image')
+        // ->get(); // Lấy danh sách người dùng và tin nhắn mới nhất
+    
+        // dd($users);
         $users = User::where('id', '<>', Auth::user()->id)->get();
+
         $user = Auth::user();
         // dd($user);
 
@@ -143,8 +157,7 @@ class ChatController extends Controller
     {
 
         if (!empty($request->groupChatId)) {
-            $member_id = User::where('groupchat_id', '=', $request->groupChatId)
-                ->pluck('member_id')->toArray();
+            $member_id = User::all();
             if (!empty($request->search_text)) {
                 $result_filter = User::whereIn('id', $member_id)->where('id', '<>', Auth::user()->id)
                     ->where('name', 'like', '%' . $request->search_text . '%')

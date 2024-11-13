@@ -74,10 +74,11 @@
                                 <div class="icon-wrapper">
                                     <h3 class="empty-chat-title">
                                         <i class="fas fa-comments empty-chat-icon"></i>
-                                        Hãy chọn một cuộc trò chuyện</h3>
+                                        Hãy chọn một cuộc trò chuyện
+                                    </h3>
                                 </div>
                                 <p class="empty-chat-message">
-                                    <i class="fas fa-hand-point-left"></i> 
+                                    <i class="fas fa-hand-point-left"></i>
                                     Nhấp vào tên người dùng ở bên trái để bắt đầu trò chuyện!
                                 </p>
                             </div>
@@ -98,20 +99,20 @@
         </div>
     </div>
 </div>
-
 @endsection
 @section('js')
 
 <script type="module">
-    $(document).ready(function() {
-        scrollToBottom()
-    })
     Echo.join('chat')
         .here(users => {
+            console.log(users);
+
             users.forEach(user => {
-                console.log(user);
+                console.log(user.id);
 
                 var userItem = document.querySelector(`#user${user.id}`);
+                console.log(userItem);
+
                 if (userItem) {
                     var imgCont = userItem.querySelector('.img_cont');
                     var user_info = userItem.querySelector('.user_info');
@@ -126,8 +127,6 @@
                     // Thêm dấu chấm vào imgCont và trạng thái vào user_info
                     imgCont.appendChild(status);
                     user_info.appendChild(is_active);
-
-                    // active()
                 }
             });
 
@@ -150,12 +149,13 @@
                     el_active.textContent = 'Đang hoạt động';
                     user_info.appendChild(el_active);
                 }
-                // active()
             }
 
         })
         .leaving(user => {
             var el = document.querySelector(`#user${user.id}`);
+            console.log(el);
+
             if (el) {
                 var img_cont = el.querySelector('.img_cont');
                 var user_info = el.querySelector('.user_info');
@@ -171,80 +171,70 @@
                 if (el_active) {
                     user_info.removeChild(el_active);
                 }
-
-                // unActive()
             }
         });
+    const online_icon = document.querySelector('.online_icon')
+    const is_active = document.querySelector('.is_active')
+    const active = () => {
+        online_icon.style.display = "block"
+        is_active.style.display = "block"
+    }
 
-    // const online_icon2 = document.querySelector('.online_icon2')
-    // const is_active2 = document.querySelector('.is_active2')
-    // const active = () => {
-    //     online_icon2.style.display = "block"
-    //     is_active2.style.display = "block"
-    // }
-
-    // const unActive = () => {
-    //     online_icon2.style.display = "none"
-    //     is_active2.style.display = "none"
-    // }
-
-    var content_message = document.querySelector('#content_message')
-
-    var idUserReciever = document.querySelector('#idUserReciever')
-    console.log(idUserReciever);
-
-    var fa_location_arrow = document.createElement('i')
-    fa_location_arrow.classList.add('fas', 'fa-location-arrow');
-
-    var send_btn = document.querySelector('.send_btn')
-
-    content_message.addEventListener('input', function() {
-        if (content_message.value.trim() == '') {
-            if (send_btn.contains(fa_location_arrow)) {
-                send_btn.removeChild(fa_location_arrow);
-            }
-        } else {
-            if (!send_btn.contains(fa_location_arrow)) {
-                send_btn.appendChild(fa_location_arrow);
-                fa_location_arrow.style.cursor = 'pointer'
-            }
-        }
-    });
-
-    let messageContent = ''
-
-    content_message.addEventListener('keypress', e => {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter (nếu có)
-            messageContent = content_message.value.trim();
-            sendMess();
-        }
-    })
-
-    fa_location_arrow.addEventListener('click', function() {
-
-        if (send_btn.contains(fa_location_arrow)) {
-            send_btn.removeChild(fa_location_arrow);
-        }
-        messageContent = content_message.value.trim();
-        sendMess()
-        // axios.post('/message-private', {
-        //         message: messageContent,
-        //         idUserReciever: idUserReciever.value,
-        //     })
-        //     .then(function(response) {
-
-        //     })
-    })
-
-    const sendMess = () => {
-        axios.post('/message-private', {
-                message: messageContent,
-                idUserReciever: idUserReciever.value,
-            })
-            .then(function(response) {
-                content_message.value = ''
-                scrollToBottom()
-            })
+    const unActive = () => {
+        online_icon.style.display = "none"
+        is_active.style.display = "none"
     }
 </script>
+
+<script>
+    var search_text = document.querySelector('.search-text')
+    var contacts = document.querySelector('.list-unstyled');
+    // console.log(contacts);
+
+
+    search_text.addEventListener('input', function() {
+        var query = search_text.value.trim();
+
+
+        axios.post('/chat-private-admin/search', {
+                search_text: query
+            })
+            .then(function(response) {
+
+                var ui = '';
+                if (response.data && response.data.data) {
+                    response.data.data.forEach(function(user) {
+                        let image = null
+                        if (user.image) {
+                            image = 'storage/' + user.image
+                        } else {
+                            image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
+                        }
+                        ui += `
+                    <li class="left clearfix">
+                            <a style="color: #000" href="{{ url('chat-private-admin/${user.id}') }}" id="user${user.id}">
+                                <div class="chat-img pull-left img_cont" style="position: relative;">
+                                        <img src="${image}" alt="User Avatar" class="img-circle">
+                                    <!-- <span class="online_icon"></span> -->
+                                </div>
+                                <div class="chat-body clearfix">
+                                    <div class="header_sec">
+                                        <strong class="primary-font">${user.name}</strong> 
+                                        <!-- <strong class="pull-right">
+                                            09:45AM</strong> -->
+                                    </div>
+                                    <div class="user_info" style="position: relative;" >
+                                        <!-- <span class="is_active" >Đang hoạt động</span> -->
+                                        <p class="activity-time"></p> <!-- Thêm phần tử này để hiển thị giờ online/offline -->
+                                    </div>
+                                </div>
+                            </a>
+                    </li>
+            `;
+                    });
+                }
+                contacts.innerHTML = ui;
+            })
+    })
+</script>
+@endsection
