@@ -20,15 +20,10 @@
             </li>
             <li class="active"><strong>Danh sách đơn hàng</strong></li>
         </ol>
+        
     </div>
+     
 </div>
-
-@if(session('error'))
-<div class="alert alert-danger">
-    {{ session('error') }}
-</div>
-@endif
-
 <div class="row mt-20">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
@@ -55,7 +50,7 @@
                 </div>
             </div>
             <div class="ibox-content">
-                <form action="">
+                <form action="" method="GET">
                     <div class="filter-wraper">
                         <div class="uk-flex uk-flex-middle uk-flex-space-between">
                             @php
@@ -72,14 +67,16 @@
                             </div>
                             <div class="action">
                                 <div class="uk-flex uk-flex-middle">
-                                    @php
-                                    $publish = request('publish') ?: old('publish');
-                                    @endphp
-                                    <select name="publish" class="form-control mr-10 setupSelect2">
-                                        @foreach (config('apps.general.publish') as $key => $val)
-                                            <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
+                                  
+                
+                                    <!-- Dropdown for order status filtering -->
+                                    <select name="status" class="form-control mr-10 setupSelect2">
+                                        <option value="">-- Tất cả trạng thái --</option> <!-- Default option for all statuses -->
+                                        @foreach ($orderStatuses as $key => $value)
+                                            <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $value }}</option>
                                         @endforeach
                                     </select>
+                
                                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
                                         <div class="input-group">
                                             <input type="text"
@@ -88,15 +85,19 @@
                                                 placeholder="Nhập Từ Khóa bạn muốn tìm kiếm..."
                                                 class="form-control">
                                             <span class="input-group-btn">
-                                                <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
+                                                <button type="submit" name="search" value="search"
+                                                    class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
                                             </span>
                                         </div>
+                                        <a href="{{ route('orders.export') }}" class="btn btn-success mb-3 float-right">
+                                            <i class="fa fa-file-excel"></i> Xuất Excel
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                </form>  
                 <div class="table-responsive">
                     <table class="table table-sm table-striped table-bordered">
                         <thead>
@@ -126,13 +127,15 @@
                                             <select name="status" class="form-select w-75 setupSelect2"
                                                 data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
                                                 @foreach ($orderStatuses as $key => $value)
-                                                    <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }} {{ $key == $cancelledOrder ? 'disabled' : '' }}>
+                                                    <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }} 
+                                                        {{ ($key == $cancelledOrder || $key == $delivered) ? 'disabled' : '' }}>
                                                         {{ $value }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </form>
                                     </td>
+                                    
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                                     <td class="text-center d-flex justify-content-center">
                                         <a href="{{ route('orders.show', $order->id) }}" class="me-2">
@@ -147,17 +150,6 @@
                                                 </button>
                                             </form>
                                         @endif
-
-                                        <!-- Nút xác nhận hủy đơn hàng -->
-                                        @if ($order->status == 'Chờ xác nhận hủy') <!-- Thay thế 'CHỜ_XÁC_NHẬN' bằng hằng số thực tế -->
-                                            <form action="{{ route('orders.confirm-cancellation', $order->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="btn btn-warning" onclick="return confirm('Bạn có chắc chắn muốn xác nhận hủy đơn hàng này không?')">
-                                                    Xác nhận hủy
-                                                </button>
-                                            </form>
-                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -168,6 +160,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('js')
@@ -182,7 +175,7 @@
         if (confirm('Bạn có chắc chắn thay đổi trạng thái đơn hàng thành "' + selectedOption + '" không?')) {
             form.submit();
         } else {
-            selectElement.value = defaultValue; // Đặt lại giá trị về mặc định nếu người dùng không xác nhận
+            selectElement.value = defaultValue; 
         }
     }
     

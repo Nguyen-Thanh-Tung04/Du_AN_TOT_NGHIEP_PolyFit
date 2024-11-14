@@ -81,8 +81,8 @@ Route::get('/contact', function () {
     return view('client.page.contact');
 });
 
-Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
-Route::put('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
+Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 // Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
 // Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
 Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
@@ -123,8 +123,8 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
-->middleware('checkLoginClient')
-->name('momo.payment');
+    ->middleware('checkLoginClient')
+    ->name('momo.payment');
 Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
 
 // Chat Realtime
@@ -355,7 +355,7 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
-
+    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export');
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');

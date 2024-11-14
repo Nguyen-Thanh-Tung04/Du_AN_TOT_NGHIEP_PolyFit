@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -15,11 +17,29 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $listOrder = Order::query()->orderByDesc('id')->get();
+        $query = Order::query();
+        
+        if ($status = request('status')) {
+            $query->where('status', $status);
+        }
+    
+        if ($keyword = request('keyword')) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('full_name', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('code', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('phone', 'LIKE', '%' . $keyword . '%');
+            });
+        }
+    
+        $listOrder = $query->orderByDesc('id')->paginate(request('perpage', 20)); // Pagination with perpage
         $orderStatuses = Order::STATUS_NAMES;
         $cancelledOrder = Order::STATUS_HUY_DON_HANG;
-        return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder'));
+        $delivered = Order::STATUS_DA_GIAO_HANG;
+    
+        return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder', 'delivered'));
     }
+    
+
 
 
     /**
@@ -110,5 +130,9 @@ class OrderController extends Controller
         }
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
     }
-
+    public function exportOrders()
+    {
+        
+        return Excel::download(new OrdersExport, 'ListOrder.xlsx');
+    }
 }
