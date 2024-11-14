@@ -53,6 +53,7 @@ class ClientProductController extends Controller
 
         $minFlashSalePrice = null;
         $discountPercentage = null;
+        $minFlashSaleListedPrice = null;
 
         if ($product->is_in_flash_sale) {
             $minFlashSaleProduct = $flashSaleProducts->sortBy('flash_price')->first();

@@ -128,21 +128,18 @@ Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('v
 Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
     ->middleware('checkLoginClient')
     ->name('momo.payment');
-    ->middleware('checkLoginClient')
-    ->name('momo.payment');
 Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
 
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
     // Route::post('/chat-private/search',[ChatController::class,'search']);
-    Route::post('/chat-private-admin/search',[ChatController::class,'search']);
-    Route::get('/chat-private/{idUser}',[ChatController::class,'chatPrivate'])->name('chat-private');
-    Route::get('/chat-private-admin/{idUser}',[ChatController::class,'chatPrivateAdmin'])->name('chat-private-admin');
-    Route::post('/message-private',[ChatController::class,'messagePrivate']); 
-    Route::post('/user-inactive',[ChatController::class,'userInactive']);
+    Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
+    Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
+    Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
+    Route::post('/message-private', [ChatController::class, 'messagePrivate']);
+    Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
-
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');
@@ -371,11 +368,9 @@ Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(funct
     Route::get('index', [BannerController::class, 'index'])->name('index');
     Route::get('create', [BannerController::class, 'create'])->name('create');
     Route::post('store', [BannerController::class, 'store'])->name('store');
-    Route::get('edit/{id}',[BannerController::class,'edit'])->name('edit');
-    Route::put('update/{id}',[BannerController::class,'update'])->name('update');
-    Route::delete('delete/{id}',[BannerController::class,'delete'])->name('delete');
-
-
+    Route::get('edit/{id}', [BannerController::class, 'edit'])->name('edit');
+    Route::put('update/{id}', [BannerController::class, 'update'])->name('update');
+    Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete');
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
     Route::get('index',                 [OrderController::class, 'index'])->name('index');
@@ -484,4 +479,3 @@ Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::cla
 
 // Route để xem đánh giá cho một đơn hàng cụ thể
 Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
-
