@@ -284,8 +284,8 @@
                     let occupiedSlots = response.occupiedSlots;
                     let availableSlots = timeSlots.filter(slot => {
                         if (selectedDate === today) {
-                            let [startHour] = slot.value.split('-').map(Number);
-                            if (startHour <= currentTime) {
+                            let [, endHour] = slot.value.split('-').map(Number);
+                            if (endHour <= currentTime) {
                                 return false;
                             }
                         }
