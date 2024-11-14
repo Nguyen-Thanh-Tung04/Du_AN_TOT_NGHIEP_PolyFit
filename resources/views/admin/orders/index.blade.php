@@ -20,7 +20,9 @@
             </li>
             <li class="active"><strong>Danh sách đơn hàng</strong></li>
         </ol>
+        
     </div>
+     
 </div>
 <div class="row mt-20">
     <div class="col-lg-12">
@@ -87,6 +89,9 @@
                                                     class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
                                             </span>
                                         </div>
+                                        <a href="{{ route('orders.export') }}" class="btn btn-success mb-3 float-right">
+                                            <i class="fa fa-file-excel"></i> Xuất Excel
+                                        </a>
                                     </div>
                                 </div>
                             </div>

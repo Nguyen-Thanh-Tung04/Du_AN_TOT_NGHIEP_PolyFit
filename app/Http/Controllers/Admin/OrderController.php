@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -127,5 +129,10 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('success', 'Đơn hàng đã được xóa thành công.');
         }
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
+    }
+    public function exportOrders()
+    {
+        
+        return Excel::download(new OrdersExport, 'ListOrder.xlsx');
     }
 }
