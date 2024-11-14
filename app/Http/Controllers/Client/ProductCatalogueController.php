@@ -122,5 +122,32 @@ class ProductCatalogueController
     
         return view('client.page.shop', compact('products', 'categories', 'colors', 'sizes'));
     }
-    
+
+    public function getSelectedProducts(Request $request)
+    {
+        $productIds = explode(',', $request->input('ids'));
+        $products = Product::whereIn('id', $productIds)->with('variants')->get();
+
+        $productData = $products->map(function ($product) {
+            $gallery = json_decode($product->gallery, true);
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'image' => !empty($gallery) ? $gallery[0] : '',
+                'code' => $product->code,
+                'category' => $product->category->name,
+                'variants' => $product->variants->map(function ($variant) {
+                    return [
+                        'id' => $variant->id,
+                        'color' => $variant->color->name,
+                        'size' => $variant->size->name,
+                        'price' => $variant->listed_price,
+                        'quantity' => $variant->quantity
+                    ];
+                })
+            ];
+        });
+
+        return response()->json(['products' => $productData]);
+    }
 }

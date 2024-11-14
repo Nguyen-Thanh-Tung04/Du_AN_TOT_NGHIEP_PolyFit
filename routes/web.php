@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FlashSaleController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductColorController;
@@ -83,6 +84,8 @@ Route::get('/contact', function () {
 
 Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
 Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
+Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
+Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 // Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
 // Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
 Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
@@ -123,6 +126,8 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
+    ->middleware('checkLoginClient')
+    ->name('momo.payment');
     ->middleware('checkLoginClient')
     ->name('momo.payment');
 Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
@@ -224,6 +229,28 @@ Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(f
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+
+Route::prefix('flashsale/')->name('flashsale.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [FlashSaleController::class, 'index'])
+        ->name('index');
+    Route::get('create', [FlashSaleController::class, 'create'])
+        ->name('create');
+    Route::post('store', [FlashSaleController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [FlashSaleController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/show', [FlashSaleController::class, 'show'])
+        ->name('show');
+    Route::put('{id}/update', [FlashSaleController::class, 'update'])
+        ->name('update');
+    Route::delete('{id}/destroy', [FlashSaleController::class, 'destroy'])
+        ->name('destroy');
+    Route::patch('/{id}/status', [FlashSaleController::class, 'updateStatus'])->name('updateStatus');
+    Route::get('/get-selected-products', [ProductCatalogueController::class, 'getSelectedProducts'])->name('getSelectedProducts');
+    Route::get('/get-occupied-time-slots', [FlashSaleController::class, 'getOccupiedTimeSlots'])->name('getOccupiedTimeSlots');
+});
+
+Route::prefix('flashsale')->name('flashsale.')->middleware('checkLogin')->group(function () {});
 
 // AUTH
 // Login client
@@ -452,5 +479,9 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
 
+
+
+
 // Route để xem đánh giá cho một đơn hàng cụ thể
 Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);
+
