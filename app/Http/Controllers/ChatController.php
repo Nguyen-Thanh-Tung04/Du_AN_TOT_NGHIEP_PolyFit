@@ -169,26 +169,31 @@ class ChatController extends Controller
     }
     public function search(Request $request)
     {
-
-        if (!empty($request->groupChatId)) {
-            $member_id = User::all();
-            if (!empty($request->search_text)) {
-                $result_filter = User::whereIn('id', $member_id)->where('id', '<>', Auth::user()->id)
-                    ->where('name', 'like', '%' . $request->search_text . '%')
-                    ->get();
-            } else {
-                $result_filter = User::whereIn('id', $member_id)->where('id', '<>', Auth::user()->id)->get();;
-            }
-        } else {
-            if (!empty($request->search_text)) {
-                $result_filter = User::where('name', 'like', '%' . $request->search_text . '%')
-                    ->where('id', '<>', Auth::user()->id)
-                    ->get();
-            } else {
-                $result_filter = User::where('id', '<>', Auth::user()->id)->get();
-            }
-        }
-
-        return response()->json(['data' => $result_filter]);
+        $searchText = $request->search_text;
+    
+        $users = ChatPrivateModel::join('users', function ($join) {
+                $join->on('message_private.user_send', '=', 'users.id')
+                    ->orOn('message_private.user_reciever', '=', 'users.id');
+            })
+            ->where(function ($query) {
+                $query->where('message_private.user_send', Auth::id())
+                    ->orWhere('message_private.user_reciever', Auth::id());
+            })
+            ->where('users.id', '<>', Auth::id()) // Loại trừ người dùng hiện tại
+            ->whereNull('users.user_catalogue_id')
+            ->when($searchText, function ($query, $searchText) {
+                $query->where('users.name', 'like', '%' . $searchText . '%');
+            })
+            ->groupBy('users.id')
+            ->select(
+                'users.id as user_id',
+                'users.name as user_name',
+                'users.image as user_image',
+                ChatPrivateModel::raw('MAX(message_private.created_at) as latest_message_time')
+            )
+            ->orderByDesc('latest_message_time') // Sắp xếp theo tin nhắn mới nhất
+            ->get();
+    
+        return response()->json(['data' => $users]);
     }
 }

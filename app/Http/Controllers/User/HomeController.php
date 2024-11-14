@@ -25,9 +25,9 @@ class HomeController extends Controller
     public function welcome()
     {
 
-        $users = User::whereNotNull('user_catalogue_id') // Chọn người dùng có `user_catalogue_id` không null
-            ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo từ mới đến cũ
-            ->limit(4) // Giới hạn số lượng kết quả là 5
+        $users = User::where('id', 2)
+            ->orderBy('created_at', 'desc') 
+            ->limit(3) 
             ->get();
         $user = Auth::user();
 
