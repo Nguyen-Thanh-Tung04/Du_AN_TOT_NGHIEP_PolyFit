@@ -85,6 +85,7 @@ class AuthController extends Controller
     {
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
+        $data['user_catalogue_id'] = 3;
         $user = User::create($data);
         Auth::login($user);
 
