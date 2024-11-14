@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="member_list">
-                    <ul class="list-unstyled">
+                        <ul class="list-unstyled">
                             @foreach($users as $item)
                             @php
                             $checkUrlImg = \Illuminate\Support\Str::contains($item->user_image, '/userfiles/') ? $item->user_image : Storage::url($item->user_image);
@@ -33,7 +33,7 @@
                                     <div class="chat-body clearfix">
                                         <div class="header_sec">
                                             <strong class="primary-font">{{ $item->user_name }}</strong>
-                                            <p class="pull-right">{{ $item->created_at->format('H:i') }}</p>
+                                            <p class="pull-right">{{ $item->created_at->format('h:i A') }}</p>
                                         </div>
                                         <div class="user_info" style="position: relative;">
                                             <span class="is_active">{{ $item->message }}</span>
@@ -452,33 +452,30 @@
 
                 var ui = '';
                 if (response.data && response.data.data) {
+                    console.log(response.data);
+
                     response.data.data.forEach(function(user) {
                         let image = null
-                        if (user.image) {
-                            image = user.image
+                        if (user.user_image) {
+                            image = 'storage/' + user.user_image
                         } else {
-                            image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
+                            image = 'theme/client/assets/images/whatsapp/admin.jpg'
                         }
                         ui += `
-                    <li class="left clearfix">
-                            <a style="color: #000" href="{{ url('chat-private-admin/${user.id}') }}" id="user${user.id}">
-                                <div class="chat-img pull-left img_cont" style="position: relative;">
+                        <li class="left clearfix">
+                                <a style="color: #000" href="/chat-private-admin/${user.user_id}" id="user${user.user_id}">
+                                    <div class="chat-img pull-left img_cont" style="position: relative;">
                                         <img src="${image}" alt="User Avatar" class="img-circle">
-                                    <!-- <span class="online_icon"></span> -->
-                                </div>
-                                <div class="chat-body clearfix">
-                                    <div class="header_sec">
-                                        <strong class="primary-font">${user.name}</strong> 
-                                        <!-- <strong class="pull-right">
-                                            09:45AM</strong> -->
                                     </div>
-                                    <div class="user_info" style="position: relative;" >
-                                        <!-- <span class="is_active" >Đang hoạt động</span> -->
-                                        <p class="activity-time"></p> <!-- Thêm phần tử này để hiển thị giờ online/offline -->
+                                    <div class="chat-body clearfix">
+                                        <div class="header_sec">
+                                            <strong class="primary-font">${user.user_name}</strong>
+                                            <p class="pull-right">${new Date(user.latest_message_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                    </li>
+                                </a>
+                            </li>
+                    
             `;
                     });
                 }
