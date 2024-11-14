@@ -319,6 +319,7 @@
         </div>
     </section>
     <!-- New Product end -->
+     
     <!-- Ec Brand Section Start -->
     <section class="section ec-brand-area section-space-p">
         <h2 class="d-none">Thương hiệu</h2>
@@ -380,14 +381,18 @@
          <div class="ec-body">
              <ul>
                  <!-- Start Single Contact List -->
+
                  @foreach($users as $item)
+                 @php
+                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
+                 @endphp
                  <li id="user{{ $item->id }}">
                      <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
                          <div class="d-flex bd-highlight">
                              <!-- Profile Picture -->
                              <div class="ec-img-cont">
                                  @if(isset($item->image))
-                                 <img src="{{ Storage::url($item->image) }}" class="ec-user-img" alt="Profile image">
+                                 <img src="{{ $checkUrlImg }}" class="ec-user-img" alt="Profile image">
                                  @else
                                  <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
                                  @endif
@@ -424,6 +429,7 @@
          </div>
      </div>
      <!--/ End Right Floating Button-->
+     
  </div>
  <!-- Whatsapp end -->
     @endsection

@@ -74,41 +74,43 @@ class AuthController extends Controller
     {
         return view('client.page.register');
     }
+    // public function register(RegisterRequest $request)
+    // {
+    //     $data = $request->validated();
+    //     $data['password'] = bcrypt($data['password']);
+    //     $user = User::create($data);
+    //     return redirect()->route('auth.client-login')->with('success', 'Đăng ký thành công. Vui lòng đăng nhập.');
+    // }
     public function register(RegisterRequest $request)
     {
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
-        return redirect()->route('auth.client-login')->with('success', 'Đăng ký thành công. Vui lòng đăng nhập.');
-    }
+        Auth::login($user);
 
+        return redirect()->route('home')->with('success', 'Đăng ký thành công và bạn đã được đăng nhập!');
+    }
     public function logout(Request $request)
     {
         $user = Auth::user();
-
+        
         // Kiểm tra trạng thái người dùng trước khi đăng xuất
-        if ($user && $user->user_catalogue_id  > 0) {
+        if ($user && $user->user_catalogue_id  != null) {
             // Nếu người dùng là admin hoặc có điều kiện bạn mong muốn, thực hiện đăng xuất
             Auth::logout();
-
-            // Xóa phiên tùy chỉnh nếu có
-            session()->forget('selected_items');
-
-            // Làm sạch phiên người dùng để bảo mật
+ 
             $request->session()->invalidate();
+         
             $request->session()->regenerateToken();
 
             // Chuyển hướng tới trang đăng nhập của admin
             return redirect()->route('auth.login');
-        } else if ($user && $user->publish == null) {
+        } else if ($user && $user->user_catalogue_id === null) {
             // Nếu người dùng không phải là admin, hoặc điều kiện khác
             Auth::logout();
-
-            // Xóa phiên tùy chỉnh nếu có
-            session()->forget('selected_items');
-
-            // Làm sạch phiên người dùng để bảo mật
+ 
             $request->session()->invalidate();
+         
             $request->session()->regenerateToken();
 
             // Chuyển hướng tới trang đăng nhập của client

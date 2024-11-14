@@ -263,6 +263,11 @@
     top: -12px;
     left: -10px;
     padding: 3px 0px;
+    display: inline-block;
+    max-width: 100px; /* Kích thước tối đa bạn muốn */
+    white-space: nowrap; /* Không cho phép xuống dòng */
+    overflow: hidden; /* Ẩn phần văn bản vượt quá */
+    text-overflow: ellipsis; /* Thêm dấu ba chấm (...) khi văn bản quá dài */
 }
 .is_active2{
     /* display: none; */

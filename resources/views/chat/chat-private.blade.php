@@ -8,7 +8,10 @@
                 <div class="card-header">
                     <div class="d-flex bd-highlight" id="user{{ $user->id }}">
                         <div class="img_cont">
-                            <img src="{{ Storage::url($user->image) }}" class="rounded-circle user_img">
+                            @php
+                                $checkUrlImg = \Illuminate\Support\Str::contains($user->image, '/userfiles/') ? $user->image : Storage::url($user->image);
+                            @endphp
+                            <img src="{{ $checkUrlImg }}" class="rounded-circle user_img">
                             <!-- <span class="online_icon"></span> -->
                         </div>
                         <div class="user_info">
@@ -54,6 +57,7 @@
                             <span class="msg_time" data-timestamp="{{ $item->created_at->timestamp }}"></span>
                         </div>
                         <div class="img_cont_msg d-flex align-items-top">
+
                             @if(isset($item->image_user_send))
                             <img src="{{ Storage::url($item->image_user_send) }}" class="rounded-circle user_img_msg">
                             @else
@@ -66,9 +70,12 @@
                     <div class="d-flex justify-content-start mb-4">
                         <div class="img_cont_msg d-flex align-items-top">
                             <a href="{{ url('chat-private/' . $item->id_user_reciever) }}">
+                                @php
+                                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                                @endphp
                                 @if(isset($item->image_user_send))
 
-                                <img src="{{ Storage::url($item->image_user_send) }}" class="rounded-circle user_img_msg">
+                                <img src="{{ $checkUrlImg }}" class="rounded-circle user_img_msg">
                                 @else
                                 <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
                                 @endif
@@ -319,8 +326,7 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             var card_header_msg_head = document.querySelector('.msg_head');
 
-            let image = event.idUserSend.image ?
-                'storage/' + event.idUserSend.image :
+            let image = event.idUserSend.image ? event.idUserSend.image :
                 "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
@@ -365,6 +371,8 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var ui = ''
+            let image = event.idUserSend.image ? event.idUserSend.image :
+            "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
                    <div class="d-flex justify-content-end mb-4">
@@ -383,7 +391,7 @@
                     `
                      <div class="d-flex justify-content-start mb-4">
                                 <div class="img_cont_msg">
-                                    <img src="/storage/${event.idUserSend.image}" class="rounded-circle user_img_msg">
+                                    <img src="${image}" class="rounded-circle user_img_msg">
                                 </div>
                                 <div class="msg_cotainer">
                                    ${event.message}

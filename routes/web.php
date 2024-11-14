@@ -71,7 +71,6 @@ Route::get('/about', function () {
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
 
 
-
 Route::get('/history', function () {
     return view('client.page.history');
 });
@@ -137,6 +136,7 @@ Route::middleware('checkLoginClient')->group(function () {
     Route::get('/chat-private-admin/{idUser}',[ChatController::class,'chatPrivateAdmin'])->name('chat-private-admin');
     Route::post('/message-private',[ChatController::class,'messagePrivate']); 
     Route::post('/user-inactive',[ChatController::class,'userInactive']);
+    Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
 
 });
 Route::get('huongdev', function () {

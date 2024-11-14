@@ -15,16 +15,15 @@
                         </div>
                     </div>
                     <div class="member_list">
-                        <ul class="list-unstyled">
+                    <ul class="list-unstyled">
                             @foreach($users as $item)
                             @php
-                            $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
+                            $checkUrlImg = \Illuminate\Support\Str::contains($item->user_image, '/userfiles/') ? $item->user_image : Storage::url($item->user_image);
                             @endphp
-
                             <li class="left clearfix">
-                                <a style="color: #000" href="{{ url('chat-private-admin/' . $item->id) }}" id="user{{ $item->id }}">
+                                <a style="color: #000" href="{{ url('chat-private-admin/' . $item->user_id) }}" id="user{{ $item->user_id }}">
                                     <div class="chat-img pull-left img_cont" style="position: relative;">
-                                        @if(isset($item->image))
+                                        @if(isset($item->user_image))
                                         <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                         @else
                                         <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
@@ -33,12 +32,11 @@
                                     </div>
                                     <div class="chat-body clearfix">
                                         <div class="header_sec">
-                                            <strong class="primary-font">{{ $item->name }}</strong>
-                                            <!-- <strong class="pull-right">
-                                            09:45AM</strong> -->
+                                            <strong class="primary-font">{{ $item->user_name }}</strong>
+                                            <p class="pull-right">{{ $item->created_at->format('H:i') }}</p>
                                         </div>
                                         <div class="user_info" style="position: relative;">
-                                            <!-- <span class="is_active" >Đang hoạt động</span> -->
+                                            <span class="is_active">{{ $item->message }}</span>
                                             <p class="activity-time"></p> <!-- Thêm phần tử này để hiển thị giờ online/offline -->
                                         </div>
                                     </div>
@@ -55,7 +53,7 @@
                 <div class="row">
                     <input type="hidden" id="idUserReciever" value="{{ $user->id }}">
                     <div class="new_message_head">
-                        <div class="pull-left" id="user{{ $item->id }}" style="display: flex;">
+                        <div class="pull-left" id="user{{ $item->user_id }}" style="display: flex;">
                             <div class="img_cont">
                                 @php
                                 $checkUrlImg = \Illuminate\Support\Str::contains($user->image, '/userfiles/') ? $user->image : Storage::url($user->image);
@@ -149,76 +147,6 @@
     $(document).ready(function() {
         scrollToBottom()
     })
-    Echo.join('chat')
-        .here(users => {
-            users.forEach(user => {
-                console.log(user);
-
-                var userItem = document.querySelector(`#user${user.id}`);
-                if (userItem) {
-                    var imgCont = userItem.querySelector('.img_cont');
-                    var user_info = userItem.querySelector('.user_info');
-
-                    // Tạo và thêm thẻ span và thẻ p
-                    var status = document.createElement('span');
-                    var is_active = document.createElement('p');
-                    status.classList.add('online_icon');
-                    is_active.classList.add('is_active');
-                    is_active.textContent = 'Đang hoạt động';
-
-                    // Thêm dấu chấm vào imgCont và trạng thái vào user_info
-                    imgCont.appendChild(status);
-                    user_info.appendChild(is_active);
-
-                    active()
-                }
-            });
-
-        })
-        .joining(user => {
-            var el = document.querySelector(`#user${user.id}`);
-            if (el) {
-                var img_cont = el.querySelector('.img_cont');
-                var user_info = el.querySelector('.user_info');
-
-                if (img_cont) {
-                    var el_status = document.createElement('span');
-                    el_status.classList.add('online_icon');
-                    img_cont.appendChild(el_status);
-                }
-
-                if (user_info) {
-                    var el_active = document.createElement('p');
-                    el_active.classList.add('is_active');
-                    el_active.textContent = 'Đang hoạt động';
-                    user_info.appendChild(el_active);
-                }
-                active()
-            }
-
-        })
-        .leaving(user => {
-            var el = document.querySelector(`#user${user.id}`);
-            if (el) {
-                var img_cont = el.querySelector('.img_cont');
-                var user_info = el.querySelector('.user_info');
-
-                // Xóa dấu chấm xanh
-                var el_status = img_cont.querySelector('.online_icon');
-                if (el_status) {
-                    img_cont.removeChild(el_status);
-                }
-
-                // Xóa trạng thái "Đang hoạt động"
-                var el_active = user_info.querySelector('.is_active');
-                if (el_active) {
-                    user_info.removeChild(el_active);
-                }
-
-                unActive()
-            }
-        });
-
     const online_icon2 = document.querySelector('.online_icon2')
     const is_active2 = document.querySelector('.is_active2')
     const active = () => {
@@ -230,11 +158,82 @@
         online_icon2.style.display = "none"
         is_active2.style.display = "none"
     }
+    Echo.join('chat')
+        .here(users => {
+            users.forEach(user => {
+                console.log(user);
+
+                var userItem = document.querySelector(`#user${user.id}`);
+                if (userItem) {
+                    var imgCont = userItem.querySelector('.img_cont');
+                    // var user_info = userItem.querySelector('.user_info');
+
+                    // Tạo và thêm thẻ span và thẻ p
+                    var status = document.createElement('span');
+                    // var is_active = document.createElement('p');
+                    status.classList.add('online_icon');
+                    // is_active.classList.add('is_active');
+                    // is_active.textContent = 'Đang hoạt động';
+
+                    // Thêm dấu chấm vào imgCont và trạng thái vào user_info
+                    imgCont.appendChild(status);
+                    // user_info.appendChild(is_active);
+
+                    active()
+                }
+            });
+
+        })
+        .joining(user => {
+            var el = document.querySelector(`#user${user.id}`);
+            if (el) {
+                var img_cont = el.querySelector('.img_cont');
+                // var user_info = el.querySelector('.user_info');
+
+                if (img_cont) {
+                    var el_status = document.createElement('span');
+                    el_status.classList.add('online_icon');
+                    img_cont.appendChild(el_status);
+                }
+
+                // if (user_info) {
+                //     var el_active = document.createElement('p');
+                //     el_active.classList.add('is_active');
+                //     el_active.textContent = 'Đang hoạt động';
+                //     user_info.appendChild(el_active);
+                // }
+                active()
+            }
+
+        })
+        .leaving(user => {
+            var el = document.querySelector(`#user${user.id}`);
+            if (el) {
+                var img_cont = el.querySelector('.img_cont');
+                // var user_info = el.querySelector('.user_info');
+
+                // Xóa dấu chấm xanh
+                var el_status = img_cont.querySelector('.online_icon');
+                if (el_status) {
+                    img_cont.removeChild(el_status);
+                }
+
+                // Xóa trạng thái "Đang hoạt động"
+                // var el_active = user_info.querySelector('.is_active');
+                // if (el_active) {
+                //     user_info.removeChild(el_active);
+                // }
+
+                unActive()
+            }
+        });
+
+
 
     var content_message = document.querySelector('#content_message')
 
     var idUserReciever = document.querySelector('#idUserReciever')
-    console.log(idUserReciever);
+    // console.log(idUserReciever);
 
     var fa_location_arrow = document.createElement('i')
     fa_location_arrow.classList.add('fas', 'fa-location-arrow');
@@ -336,7 +335,7 @@
     setInterval(updateTimes, 1000);
     Echo.private("chat.private.{{ Auth::user()->id }}.{{ $user->id }}")
         .listen('ChatPrivateEvent', event => {
-            console.log(122);
+            // console.log(122);
 
 
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
@@ -344,7 +343,7 @@
             var card_header_msg_head = document.querySelector('.msg_head')
             let image = null
             if (event.idUserSend.image) {
-                image = 'storage/' + event.idUserSend.image
+                image = event.idUserSend.image
             } else {
                 image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
             }
@@ -389,14 +388,14 @@
 
     Echo.private("chat.private.{{ $user->id }}.{{ Auth::user()->id }}")
         .listen('ChatPrivateEvent', event => {
-            console.log(123);
+            // console.log(123);
 
             var msg_card_body = document.querySelector('.msg_card_body ul');
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var ui = ''
             let image = null
             if (event.idUserSend.image) {
-                image = 'storage/' + event.idUserSend.image
+                image = event.idUserSend.image
             } else {
                 image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
             }
@@ -435,7 +434,7 @@
 </script>
 
 <script>
-    console.log(334444);
+    // console.log(334444);
 
     var search_text = document.querySelector('.search-text')
     var contacts = document.querySelector('.list-unstyled');
@@ -456,7 +455,7 @@
                     response.data.data.forEach(function(user) {
                         let image = null
                         if (user.image) {
-                            image = 'storage/' + user.image
+                            image = user.image
                         } else {
                             image = 'theme/client/assets/images/whatsapp/profile_01.jpg'
                         }
@@ -489,7 +488,7 @@
 
     function scrollToBottom() {
         const chatBox = document.querySelector('.msg_card_body');
-        console.log(chatBox);
+        // console.log(chatBox);
 
         chatBox.scrollTop = chatBox.scrollHeight;
     }

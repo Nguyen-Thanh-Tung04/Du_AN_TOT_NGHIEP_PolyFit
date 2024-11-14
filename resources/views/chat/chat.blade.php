@@ -18,12 +18,12 @@
                         <ul class="list-unstyled">
                             @foreach($users as $item)
                             @php
-                            $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
+                            $checkUrlImg = \Illuminate\Support\Str::contains($item->user_image, '/userfiles/') ? $item->user_image : Storage::url($item->user_image);
                             @endphp
                             <li class="left clearfix">
-                                <a style="color: #000" href="{{ url('chat-private-admin/' . $item->id) }}" id="user{{ $item->id }}">
+                                <a style="color: #000" href="{{ url('chat-private-admin/' . $item->user_id) }}" id="user{{ $item->user_id }}">
                                     <div class="chat-img pull-left img_cont" style="position: relative;">
-                                        @if(isset($item->image))
+                                        @if(isset($item->user_image))
                                         <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                         @else
                                         <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
@@ -32,12 +32,11 @@
                                     </div>
                                     <div class="chat-body clearfix">
                                         <div class="header_sec">
-                                            <strong class="primary-font">{{ $item->name }}</strong>
-                                            <!-- <strong class="pull-right">
-                                            09:45AM</strong> -->
+                                            <strong class="primary-font">{{ $item->user_name }}</strong>
+                                            <p class="pull-right">{{ $item->created_at->format('H:i') }}</p>
                                         </div>
                                         <div class="user_info" style="position: relative;">
-                                            <!-- <span class="is_active" >Đang hoạt động</span> -->
+                                            <span class="is_active">{{ $item->message }}</span>
                                             <p class="activity-time"></p> <!-- Thêm phần tử này để hiển thị giờ online/offline -->
                                         </div>
                                     </div>
@@ -117,14 +116,14 @@
 
                 if (userItem) {
                     var imgCont = userItem.querySelector('.img_cont');
-                    var user_info = userItem.querySelector('.user_info');
+                    // var user_info = userItem.querySelector('.user_info');
 
                     // Tạo và thêm thẻ span và thẻ p
                     var status = document.createElement('span');
-                    var is_active = document.createElement('p');
+                    // var is_active = document.createElement('p');
                     status.classList.add('online_icon');
-                    is_active.classList.add('is_active');
-                    is_active.textContent = 'Đang hoạt động';
+                    // is_active.classList.add('is_active');
+                    // is_active.textContent = 'Đang hoạt động';
 
                     // Thêm dấu chấm vào imgCont và trạng thái vào user_info
                     imgCont.appendChild(status);
@@ -145,12 +144,12 @@
                     img_cont.appendChild(el_status);
                 }
 
-                if (user_info) {
-                    var el_active = document.createElement('p');
-                    el_active.classList.add('is_active');
-                    el_active.textContent = 'Đang hoạt động';
-                    user_info.appendChild(el_active);
-                }
+                // if (user_info) {
+                //     var el_active = document.createElement('p');
+                //     el_active.classList.add('is_active');
+                //     el_active.textContent = 'Đang hoạt động';
+                //     user_info.appendChild(el_active);
+                // }
             }
 
         })
@@ -169,10 +168,10 @@
                 }
 
                 // Xóa trạng thái "Đang hoạt động"
-                var el_active = user_info.querySelector('.is_active');
-                if (el_active) {
-                    user_info.removeChild(el_active);
-                }
+                // var el_active = user_info.querySelector('.is_active');
+                // if (el_active) {
+                //     user_info.removeChild(el_active);
+                // }
             }
         });
     const online_icon = document.querySelector('.online_icon')
@@ -239,4 +238,6 @@
             })
     })
 </script>
+
+
 @endsection
