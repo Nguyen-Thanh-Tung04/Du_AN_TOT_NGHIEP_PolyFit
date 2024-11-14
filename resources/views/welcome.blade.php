@@ -383,16 +383,13 @@
                  <!-- Start Single Contact List -->
 
                  @foreach($users as $item)
-                 @php
-                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
-                 @endphp
                  <li id="user{{ $item->id }}">
                      <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
                          <div class="d-flex bd-highlight">
                              <!-- Profile Picture -->
                              <div class="ec-img-cont">
                                  @if(isset($item->image))
-                                 <img src="{{ $checkUrlImg }}" class="ec-user-img" alt="Profile image">
+                                 <img src="{{ $item->image }}" class="ec-user-img" alt="Profile image">
                                  @else
                                  <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
                                  @endif

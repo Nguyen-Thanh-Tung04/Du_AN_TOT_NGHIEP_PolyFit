@@ -25,7 +25,7 @@ class HomeController extends Controller
     public function welcome()
     {
 
-        $users = User::where('id', 2)
+        $users = User::where('user_catalogue_id', 2)
             ->orderBy('created_at', 'desc') 
             ->limit(3) 
             ->get();
@@ -193,10 +193,6 @@ class HomeController extends Controller
         // Trả kết quả tìm kiếm ra view
         return view('client.page.shop', compact('products', 'search', 'categories', 'colors', 'sizes', 'message'));
     }
-
-
-
-
 
     // gửi email quên mật khẩu
 

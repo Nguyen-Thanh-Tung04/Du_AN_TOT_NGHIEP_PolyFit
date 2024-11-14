@@ -103,11 +103,14 @@
                             <!-- Header User Start -->
                             <div class="ec-header-user dropdown">
                                 <button class="dropdown-toggle" data-bs-toggle="dropdown">
+                                    @php
+                                        $checkUrlImg = \Illuminate\Support\Str::contains(Auth::user()->image, '/userfiles/') ? Auth::user()->image : Storage::url(Auth::user()->image);
+                                    @endphp
                                     @if(Auth::check())
                                     @if (Auth::user()->image)
                                         <!-- Nếu user có ảnh đại diện -->
                                         <img 
-                                        src="{{ Storage::url(Auth::user()->image) }}" 
+                                        src="{{ $checkUrlImg }}" 
                                         alt="User Avatar" 
                                         class="img-profile rounded-circle border  shadow" 
                                         style="height: 40px; width: 40px; object-fit: cover;">

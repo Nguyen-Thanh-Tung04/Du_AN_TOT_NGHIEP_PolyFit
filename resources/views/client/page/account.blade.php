@@ -135,5 +135,4 @@
             </div>
         </div>
     </section>
-    <!-- End User profile section -->
 @endsection
