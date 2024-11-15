@@ -28,7 +28,9 @@ class CartController extends Controller
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                            $currentMinute = now()->minute;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
                         });
                 })
                 ->where('status', 1)
@@ -190,7 +192,9 @@ class CartController extends Controller
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                            $currentMinute = now()->minute;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
                         });
                 })
                 ->where('status', 1)
@@ -259,7 +263,9 @@ class CartController extends Controller
                             ->where('date', now()->toDateString())
                             ->where(function ($query) {
                                 $currentHour = now()->hour;
-                                $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                                $currentMinute = now()->minute;
+                                $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
+                                    ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
                             });
                     })
                     ->where('status', 1)

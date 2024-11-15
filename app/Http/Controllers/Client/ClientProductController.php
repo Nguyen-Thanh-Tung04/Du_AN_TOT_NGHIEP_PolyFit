@@ -27,12 +27,15 @@ class ClientProductController extends Controller
                 ->where('date', now()->toDateString())
                 ->where(function ($query) {
                     $currentHour = now()->hour;
-                    $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                    $currentMinute = now()->minute;
+                    $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
+                        ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
                 });
         })
             ->where('status', 1)
             ->where('quantity', '>', 0)
             ->get();
+
 
         $product->is_in_flash_sale = $flashSaleProducts->isNotEmpty();
         $flashSaleEndTime = null;
@@ -103,7 +106,9 @@ class ClientProductController extends Controller
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                            $currentMinute = now()->minute;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
                         });
                 })
                 ->where('status', 1)
