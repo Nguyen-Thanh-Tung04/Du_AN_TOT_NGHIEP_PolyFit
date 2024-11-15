@@ -175,7 +175,7 @@
                                             </div>
                                             <div class="custom-col-1 custom-text-center">${variant.quantity}</div>
                                             <div class="custom-col-2 custom-text-center"><input type="number" name="products[${product.id}][${variant.id}][quantity]" class="form-control discount-quantity" value="${variant.quantity}" min="0" max="${variant.quantity}" placeholder="Số lượng"></div>
-                                            <div class="custom-col-1 custom-text-right"><input type="checkbox" name="products[${product.id}][${variant.id}][status]" class="js-switch" value="0"></div>
+                                            <div class="custom-col-1 custom-text-right"><input type="checkbox" name="products[${product.id}][${variant.id}][status]" class="js-switch" value="1" checked></div>
                                             <input type="hidden" name="products[${product.id}][${variant.id}][product_id]" value="${product.id}">
                                             <input type="hidden" name="products[${product.id}][${variant.id}][variant_id]" value="${variant.id}">
                                         </div>`).join('')}

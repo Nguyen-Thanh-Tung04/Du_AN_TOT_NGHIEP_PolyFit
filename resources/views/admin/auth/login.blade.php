@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html>
 
 <head>
 
-    <meta charset="utf-8">g
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Trang Đăng Nhập</title>
@@ -43,25 +42,25 @@
                         @csrf
                         <div class="form-group">
                             <input type="text"
-                            class="form-control"
-                            name="email"
-                            value="{{ old('email') }}"
-                            placeholder="Email">
+                                class="form-control"
+                                name="email"
+                                value="{{ old('email') }}"
+                                placeholder="Email">
                             @error('email')
-                                <span class="error-message">* {{ $message }}</span>
+                            <span class="error-message">* {{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group">
                             <input type="password"
-                            class="form-control"
-                            name="password"
-                            placeholder="Password">
+                                class="form-control"
+                                name="password"
+                                placeholder="Password">
                             @error('password')
-                                <span class="error-message">* {{ $message }}</span>
+                            <span class="error-message">* {{ $message }}</span>
                             @enderror
                         </div>
                         <button type="submit"
-                        class="btn btn-primary block full-width m-b">Đăng Nhập</button>
+                            class="btn btn-primary block full-width m-b">Đăng Nhập</button>
 
                     </form>
                     <p class="m-t">
@@ -70,13 +69,13 @@
                 </div>
             </div>
         </div>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col-md-6">
                 Copyright Example PolyFit
             </div>
             <div class="col-md-6 text-right">
-               <small>© 2024-2025</small>
+                <small>© 2024-2025</small>
             </div>
         </div>
     </div>
