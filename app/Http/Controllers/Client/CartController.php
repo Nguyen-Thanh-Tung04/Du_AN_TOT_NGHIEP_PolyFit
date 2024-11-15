@@ -29,8 +29,8 @@ class CartController extends Controller
                         ->where(function ($query) {
                             $currentHour = now()->hour;
                             $currentMinute = now()->minute;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
-                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
                         });
                 })
                 ->where('status', 1)
@@ -193,8 +193,8 @@ class CartController extends Controller
                         ->where(function ($query) {
                             $currentHour = now()->hour;
                             $currentMinute = now()->minute;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
-                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
                         });
                 })
                 ->where('status', 1)
@@ -271,6 +271,7 @@ class CartController extends Controller
                     ->where('status', 1)
                     ->where('quantity', '>', 0)
                     ->first();
+
 
                 if ($flashSaleProduct) {
                     $salePrice = $flashSaleProduct->flash_price;
