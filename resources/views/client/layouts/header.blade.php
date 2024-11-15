@@ -103,25 +103,33 @@
                             <!-- Header User Start -->
                             <div class="ec-header-user dropdown">
                                 <button class="dropdown-toggle" data-bs-toggle="dropdown">
-                                    @php
-                                        $checkUrlImg = \Illuminate\Support\Str::contains(Auth::user()->image, '/userfiles/') ? Auth::user()->image : Storage::url(Auth::user()->image);
-                                    @endphp
                                     @if(Auth::check())
-                                    @if (Auth::user()->image)
-                                        <!-- Nếu user có ảnh đại diện -->
-                                        <img 
-                                        src="{{ $checkUrlImg }}" 
-                                        alt="User Avatar" 
-                                        class="img-profile rounded-circle border  shadow" 
-                                        style="height: 40px; width: 40px; object-fit: cover;">
+                                        @php
+                                            $checkUrlImg = Auth::user()->image && \Illuminate\Support\Str::contains(Auth::user()->image, '/userfiles/') 
+                                                            ? Auth::user()->image 
+                                                            : (Auth::user()->image ? Storage::url(Auth::user()->image) : null);
+                                        @endphp
+                                    
+                                        @if ($checkUrlImg)
+                                            <!-- Nếu user có ảnh đại diện -->
+                                            <img 
+                                                src="{{ $checkUrlImg }}" 
+                                                alt="User Avatar" 
+                                                class="img-profile rounded-circle border shadow" 
+                                                style="height: 40px; width: 40px; object-fit: cover;">
+                                        @else
+                                            <!-- Nếu không có ảnh đại diện -->
+                                            <img 
+                                                style="height: 40px; width: 40px;" 
+                                                class="img-profile rounded-circle" 
+                                                src="{{ asset('userfiles/image/avata_null.jpg') }}" 
+                                                alt="Default Avatar">
+                                        @endif
                                     @else
-                                    <!-- Nếu không có ảnh đại diện -->
-                                    <img style="height: 40px; width: 40px;" class="img-profile rounded-circle" src="{{ asset('userfiles/image/avata_null.jpg') }}" alt="Default Avatar">
+                                        <!-- Nếu chưa đăng nhập -->
+                                        <i class="fi-rr-user"></i>
                                     @endif
-                                    @else
-                                    <!-- Nếu chưa đăng nhập -->
-                                    <i class="fi-rr-user"></i>
-                                    @endif
+                                
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <!-- Kiểm tra nếu người dùng đã đăng nhập -->

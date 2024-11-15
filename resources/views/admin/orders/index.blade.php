@@ -83,6 +83,7 @@
                                                 name="keyword"
                                                 value="{{ request('keyword') ?: old('keyword') }}"
                                                 placeholder="Nhập Từ Khóa bạn muốn tìm kiếm..."
+                                                style="width: 300px"
                                                 class="form-control">
                                             <span class="input-group-btn">
                                                 <button type="submit" name="search" value="search"

@@ -145,7 +145,7 @@
                                             @php
                                                 $checkUrlImg = \Illuminate\Support\Str::contains($profile->image, '/userfiles/') ? $profile->image : $profile->image;
                                             @endphp
-                                            <img class="v-img" src="{{ $checkUrlImg }}" alt="vendor image">
+                                            <img class="v-img" src="{{ Storage::url($checkUrlImg) }}" alt="vendor image">
                                             <h5 class="name">{{$profile->name}}</h5>
                                         </div>
                                         <p>Xin chào<span> {{$profile->name}}</span></p>
