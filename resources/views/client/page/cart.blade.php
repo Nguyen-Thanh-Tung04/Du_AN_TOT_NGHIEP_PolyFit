@@ -87,11 +87,11 @@
                                                 </td>
                                                 <td data-label="Đơn giá" class="ec-cart-pro-price">
                                                     <span class="amount">
-                                                        @if($item->variant->sale_price)
-                                                        <span class="text-decoration-line-through listed_price">{{ number_format($item->variant->listed_price) }}₫</span>
-                                                        <span class="sale_price"> {{ number_format($item->variant->sale_price) }}₫</span>
+                                                        @if($item->sale_price)
+                                                        <span class="text-decoration-line-through listed_price">{{ number_format($item->listed_price) }}₫</span>
+                                                        <span class="sale_price"> {{ number_format($item->sale_price) }}₫</span>
                                                         @else
-                                                        <span class="listed_price">{{ number_format($item->variant->listed_price) }}₫</span>
+                                                        <span class="listed_price">{{ number_format($item->listed_price) }}₫</span>
                                                         @endif
 
                                                     </span>
@@ -109,7 +109,7 @@
                                                     </div>
                                                 </td>
                                                 <td data-label="Số tiền" class="ec-cart-pro-subtotal total-price">
-                                                    {{ number_format(($item->variant->sale_price ?? $item->variant->listed_price) * $item->quantity) }}₫
+                                                    {{ number_format(($item->sale_price ?? $item->listed_price) * $item->quantity) }}₫
                                                 </td>
                                                 <td data-label="Xóa" class="ec-cart-pro-remove">
                                                     <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
@@ -163,7 +163,7 @@
                 @else
                 <div class="ec-cart-leftside col-lg-12 col-md-12 ">
                     <div class="d-flex justify-content-center flex-column align-items-center">
-                        <img src="{{ asset('theme/client/assets/images/icons/nothing.png') }}" alt="" class="img-fluid" width="80px"/>
+                        <img src="{{ asset('theme/client/assets/images/icons/nothing.png') }}" alt="" class="img-fluid" width="80px" />
                         <h4 class="text-center">Giỏ hàng của bạn đang trống!</h4>
                         <div>
                             <a href="{{ route('home')}}" class="btn btn-primary text-center">Mua ngay</a>

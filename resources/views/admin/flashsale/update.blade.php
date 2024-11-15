@@ -110,7 +110,7 @@
                                                     <div class="custom-col-1 custom-text-center">{{ $variant['quantity_max'] }}</div>
                                                     <div class="custom-col-2 custom-text-center"><input type="number" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][quantity]" class="form-control discount-quantity" value="{{ $variant['quantity'] }}" min="0" max="{{ $variant['quantity'] }}" placeholder="Số lượng"></div>
                                                     <div class="custom-col-1 custom-text-right">
-                                                        <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][status]" class="status-value" value="0">
+                                                        <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][status]" class="status-value" value="{{ $variant['status'] }}">
                                                         <input type="checkbox" class="js-switch status-variant" value="{{ $variant['status'] }}" {{ $variant['status'] == 1 ? 'checked' : '' }}>
                                                     </div>
                                                     <input type="hidden" name="products[{{ $product->id }}][{{ $variant['variant_id'] }}][product_id]" value="{{ $product->id }}">
@@ -304,8 +304,8 @@
                                                 <div class="custom-col-1 custom-text-center">${variant.quantity}</div>
                                                 <div class="custom-col-2 custom-text-center"><input type="number" name="products[${product.id}][${variant.id}][quantity]" class="form-control discount-quantity" value="${variant.quantity}" min="0" max="${variant.quantity}" placeholder="Số lượng"></div>
                                                 <div class="custom-col-1 custom-text-right">
-                                                 <input type="hidden"  name="products[${product.id}][${variant.id}][status]" class="status-value" value="0">
-                                                    <input type="checkbox" class="new-switch status-variant" value="0">
+                                                 <input type="hidden"  name="products[${product.id}][${variant.id}][status]" class="status-value" value="1">
+                                                    <input type="checkbox" class="new-switch status-variant" checked value="1">
                                                 </div>
                                                 <input type="hidden" name="products[${product.id}][${variant.id}][variant_id]" value="${variant.id}">
                                             </div>`).join('')}

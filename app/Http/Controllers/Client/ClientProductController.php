@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\FlashSaleProduct;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\ReviewReply;
@@ -28,11 +29,33 @@ class ClientProductController extends Controller
                     $currentHour = now()->hour;
                     $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
                 });
-        })->get();
-
+        })
+            ->where('status', 1)
+            ->where('quantity', '>', 0)
+            ->get();
 
         $product->is_in_flash_sale = $flashSaleProducts->isNotEmpty();
-        $product->flash_sale_end_time = $flashSaleProducts->isNotEmpty() ? now()->toDateString() . ' ' . explode('-', $flashSaleProducts->first()->flashSale->time_slot)[1] . ':00:00' : null;
+        $flashSaleEndTime = null;
+        // Lấy giá variant nhỏ nhất và % giảm giá
+        $minSalePrice = null;
+        $discountPercentage = null;
+        $minListedPrice = null;
+
+        if ($product->is_in_flash_sale) {
+            $flashSaleEndTime = now()->toDateString() . ' ' . explode('-', $flashSaleProducts->first()->flashSale->time_slot)[1] . ':00:00';
+            $minFlashSaleProduct = $flashSaleProducts->sortBy('flash_price')->first();
+            $minSalePrice = $minFlashSaleProduct->flash_price;
+            $minListedPrice = $minFlashSaleProduct->listed_price;
+            $discountPercentage = $minFlashSaleProduct->discount_percentage;
+        } else {
+            $minVariant = $product->variants->sortBy(function ($variant) {
+                return $variant->sale_price ?? $variant->listed_price;
+            })->first();
+
+            $minListedPrice = $minVariant->listed_price;
+            $minSalePrice = $minVariant->sale_price;
+            $discountPercentage = $minSalePrice ? round((($minListedPrice - $minSalePrice) / $minListedPrice) * 100) : null;
+        }
 
         // Lấy các sản phẩm tương tự (cùng danh mục) nhưng không bao gồm sản phẩm hiện tại
         $similar_products = Product::select(
@@ -46,24 +69,6 @@ class ClientProductController extends Controller
             ->where('products.id', '!=', $product->id) // Loại trừ sản phẩm hiện tại
             ->groupBy('products.id')
             ->get();
-
-        $minVariant = $product->variants->sortBy(function ($variant) {
-            return $variant->sale_price ?? $variant->listed_price;
-        })->first();
-
-        $minFlashSalePrice = null;
-        $discountPercentage = null;
-        $minFlashSaleListedPrice = null;
-
-        if ($product->is_in_flash_sale) {
-            $minFlashSaleProduct = $flashSaleProducts->sortBy('flash_price')->first();
-            $minFlashSalePrice = $minFlashSaleProduct->flash_price;
-            $minFlashSaleListedPrice = $minFlashSaleProduct->listed_price;
-            $discountPercentage = $minFlashSaleProduct->discount_percentage;
-        }
-
-        $minListedPrice = $minVariant->listed_price;
-        $minSalePrice = $minVariant->sale_price;
 
         $galleryString = str_replace("'", '"', $product->gallery);
 
@@ -79,7 +84,7 @@ class ClientProductController extends Controller
 
         return view(
             'client.page.productDetail',
-            compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'averageScore', 'reviews', 'similar_products', 'minFlashSalePrice', 'minFlashSaleListedPrice', 'discountPercentage')
+            compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'averageScore', 'reviews', 'similar_products', 'discountPercentage', 'flashSaleEndTime')
         );
     }
 
@@ -91,10 +96,45 @@ class ClientProductController extends Controller
             ->first();
 
         if ($variant) {
-            return response()->json([
-                'status' => true,
-                'data' => $variant
-            ]);
+            // Kiểm tra xem variant có trong chương trình flash sale đang diễn ra hay không
+            $flashSaleProduct = FlashSaleProduct::where('variant_id', $variant->id)
+                ->whereHas('flashSale', function ($query) {
+                    $query->where('status', 1)
+                        ->where('date', now()->toDateString())
+                        ->where(function ($query) {
+                            $currentHour = now()->hour;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                        });
+                })
+                ->where('status', 1)
+                ->where('quantity', '>', 0)
+                ->first();
+
+            if ($flashSaleProduct) {
+                return response()->json([
+                    'status' => true,
+                    'data' => [
+                        'listed_price' => $variant->listed_price,
+                        'sale_price' => $flashSaleProduct->flash_price,
+                        'discount_percentage' => $flashSaleProduct->discount_percentage,
+                        'is_in_flash_sale' => true
+                    ]
+                ]);
+            } else {
+                $discountPercentage = null;
+                if ($variant->sale_price) {
+                    $discountPercentage = (($variant->listed_price - $variant->sale_price) / $variant->listed_price) * 100;
+                }
+                return response()->json([
+                    'status' => true,
+                    'data' => [
+                        'listed_price' => $variant->listed_price,
+                        'sale_price' => $variant->sale_price,
+                        'discount_percentage' => $discountPercentage,
+                        'is_in_flash_sale' => false
+                    ]
+                ]);
+            }
         } else {
             return response()->json([
                 'status' => false,

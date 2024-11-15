@@ -42,15 +42,15 @@
                                 <div class="single-product-scroll">
                                     <div class="single-product-cover">
                                         @if (!empty($galleryImages))
-                                            @foreach($galleryImages as $image)
-                                                <div class="single-slide zoom-image-hover">
-                                                    <img class="img-responsive {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}" src="{{ $image }}" alt="{{ $product->name }}">
-                                                    @if($product->variants->sum('quantity') === 0)
-                                                        <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
-                                                        <div class="out-of-stock-label">Hết hàng</div>
-                                                    @endif
-                                                </div>
-                                            @endforeach
+                                        @foreach($galleryImages as $image)
+                                        <div class="single-slide zoom-image-hover">
+                                            <img class="img-responsive {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}" src="{{ $image }}" alt="{{ $product->name }}">
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
+                                        </div>
+                                        @endforeach
                                         @endif
                                     </div>
                                     <div class="single-nav-thumb">
@@ -113,8 +113,7 @@
 
 
                                     <div class="">
-                                        @if($product->is_in_flash_sale)
-                                        <div class="">
+                                        <div id="flash-sale-container" class="{{ $product->is_in_flash_sale ? '' : 'd-none' }}">
                                             <div class="flash-sale">
                                                 <div class="time-sale">
                                                     <svg viewBox="0 0 108 21" height="21" width="108" class="flash-sale-logo flash-sale-logo--white">
@@ -137,10 +136,10 @@
                                                     <div class="flex flex-column p-15">
                                                         <div class="flex items-center">
                                                             <div class="flex items-center">
-                                                                <div class="old-price">{{ number_format($minFlashSaleListedPrice) }} ₫</div>
+                                                                <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
                                                                 <div class="flex items-center">
-                                                                    <div class="sale-price">{{ number_format($minFlashSalePrice) }} ₫</div>
-                                                                    <div class="box-sale">{{ number_format($discountPercentage) }} % giảm</div>
+                                                                    <div class="sale-price">{{ number_format($minSalePrice) }} ₫</div>
+                                                                    <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }} % giảm</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -148,17 +147,33 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @else
-                                        <div class="ec-single-price">
-
+                                        <div id="non-flash-sale-container" class="ec-single-price {{ $product->is_in_flash_sale ? 'd-none' : '' }}">
                                             @if($minSalePrice)
-                                            <span id="listed-price" class="fw-semibold" style="text-decoration: line-through;">{{ number_format($minListedPrice) }} ₫</span>
-                                            <span id="sale-price" class="new-price">{{ number_format($minSalePrice) }} ₫</span>
+                                            <div class="flex flex-column">
+                                                <div class="flex flex-column p-15">
+                                                    <div class="flex items-center">
+                                                        <div class="flex items-center">
+                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                            <div class="flex items-center">
+                                                                <div class="sale-price">{{ number_format($minSalePrice) }} ₫</div>
+                                                                <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }} % giảm</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             @else
-                                            <span id="listed-price" class="new-price">{{ number_format($minListedPrice) }} ₫</span>
+                                            <div class="flex flex-column">
+                                                <div class="flex flex-column p-15">
+                                                    <div class="flex items-center">
+                                                        <div class="flex items-center">
+                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             @endif
                                         </div>
-                                        @endif
                                     </div>
                                     <div class="ec-pro-variation">
                                         <div class="ec-pro-variation-inner ec-pro-variation-size">
@@ -438,6 +453,55 @@
         let variants = JSON.parse(document.getElementById('product-variants').dataset.variants);
         let selectedSizeId = null;
         let selectedColorId = null;
+        var isInFlashSale = "{{ $product->is_in_flash_sale ? 'true' : 'false' }}";
+        var flashSaleEndTime = "{{ $flashSaleEndTime }}";
+
+
+        const coutDown = (hours, minutes, seconds) => {
+            let countDownDate = new Date().getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+
+            let countdownFunction = setInterval(() => {
+                let now = new Date().getTime();
+                let distance = countDownDate - now;
+
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+                if (seconds < 10) seconds = "0" + seconds;
+
+                $("#the-24h-countdown p").html(
+                    "<span>" +
+                    hours +
+                    '</span><span class="min">' +
+                    minutes +
+                    '<br></span><span class="seg">' +
+                    seconds +
+                    "</span>"
+                );
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    $("#the-24h-countdown p").html("Hết giờ");
+                }
+            }, 1000);
+        };
+
+        if (isInFlashSale === 'true') {
+            var countDownDate = new Date(flashSaleEndTime).getTime();
+            var now = new Date().getTime();
+
+            var distance = countDownDate - now;
+
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            coutDown(hours, minutes, seconds);
+
+        }
+
 
         $('#buyNow').click(function(e) {
             e.preventDefault();
@@ -612,13 +676,30 @@
                         if (response.status) {
                             let listedPrice = response.data.listed_price;
                             let salePrice = response.data.sale_price;
+                            let discountPercentage = response.data.discount_percentage;
 
-                            if (salePrice) {
-                                $('#listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
-                                $('#sale-price').text(new Intl.NumberFormat().format(salePrice) + ' ₫');
+                            if (response.data.is_in_flash_sale) {
+                                // Hiển thị giá flash sale
+                                $('#flash-sale-container').removeClass('d-none');
+                                $('#non-flash-sale-container').addClass('d-none');
+                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
+                                $('.sale-price').text(new Intl.NumberFormat().format(salePrice) + ' ₫');
+                                if (discountPercentage) {
+                                    $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
+                                } else {
+                                    $('.discount-percentage').hide();
+                                }
                             } else {
-                                $('#listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
-                                $('#sale-price').text('');
+                                // Hiển thị giá không flash sale
+                                $('#flash-sale-container').addClass('d-none');
+                                $('#non-flash-sale-container').removeClass('d-none');
+                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
+                                $('.sale-price').text(salePrice ? new Intl.NumberFormat().format(salePrice) + ' ₫' : '');
+                                if (discountPercentage) {
+                                    $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
+                                } else {
+                                    $('.discount-percentage').hide();
+                                }
                             }
                         }
                     }
@@ -626,61 +707,6 @@
             }
         }
 
-        const coutDown = (hour, minute, second) => {
-            setInterval(
-                (time = () => {
-                    var d = new Date();
-                    let hours = hour - 1 - d.getHours();
-                    let min = minute - d.getMinutes();
-                    if ((min + "").length == 1) {
-                        min = "0" + min;
-                    }
-                    let sec = second - d.getSeconds();
-                    if ((sec + "").length == 1) {
-                        sec = "0" + sec;
-                    }
-                    $("#the-24h-countdown p").html(
-                        "<span>" +
-                        hours +
-                        '</span><span class="min">' +
-                        min +
-                        '<br></span><span class="seg">' +
-                        sec +
-                        "</span>"
-                    );
-                }),
-                1000
-            );
-        };
-        coutDown(24, 60, 60);
-        $(".navbar-with-more-menu__more").mouseenter(function() {
-            $(".navbar-with-more-menu__more").addClass("show");
-            $(".more-menu").addClass("open");
-        });
-
-        $(".navbar-with-more-menu__more").mouseleave(function() {
-            $(".navbar-with-more-menu__more").removeClass("show");
-            $(".more-menu").removeClass("open");
-        });
-        $(window).scroll(function() {
-            let scroll = $(document).scrollTop();
-            if (scroll >= 10) {
-                $(".flash-sale-header-with-countdown-timer").addClass("ticky");
-            } else {
-                $(".flash-sale-header-with-countdown-timer").removeClass("ticky");
-            }
-
-            if (
-                $(window).scrollTop() >
-                $(".flash-sale-header-with-countdown-timer").outerHeight() +
-                $(".flash-sale-banner").outerHeight() - 70
-            ) {
-                $(".inside-page__menu").addClass("sticky");
-                $(".image-carousel__item-list").addClass("sticky");
-            } else {
-                $(".image-carousel__item-list").removeClass("sticky");
-            }
-        });
     });
 </script>
 @endsection
