@@ -456,6 +456,7 @@
         var isInFlashSale = "{{ $product->is_in_flash_sale ? 'true' : 'false' }}";
         var flashSaleEndTime = "{{ $flashSaleEndTime }}";
 
+        // console.log(isInFlashSale + 'tung');
 
         const coutDown = (hours, minutes, seconds) => {
             let countDownDate = new Date().getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
@@ -499,6 +500,7 @@
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
             coutDown(hours, minutes, seconds);
+            // console.log(hours+  'hours');
 
         }
 
