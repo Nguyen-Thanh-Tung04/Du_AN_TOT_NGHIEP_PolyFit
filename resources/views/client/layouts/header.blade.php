@@ -198,7 +198,7 @@
                     <div class="ec-main-menu">
                         <ul>
                             <li><a href="{{ url('/') }}">Trang chủ</a></li>
-                            <li class="dropdown position-static"><a href="javascript:void(0)">Danh mục</a>
+                            {{-- <li class="dropdown position-static"><a href="javascript:void(0)">Danh mục</a>
                                 <ul class="mega-menu d-block">
                                     <li class="d-flex">
                                         <ul class="d-block">
@@ -259,7 +259,7 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li><a href="{{ url('/about') }}">Giới thiệu</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
                             <li><a href="{{ url('/flash-sale') }}">Flash Sale</a></li>
