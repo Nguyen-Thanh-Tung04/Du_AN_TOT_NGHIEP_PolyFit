@@ -48,6 +48,8 @@
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/responsive.css')}}" />
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/custom.css')}}" />
 
+
+
     <!-- Background css -->
     <link rel="stylesheet" id="bg-switcher-css" href="{{asset('theme/client/assets/css/backgrounds/bg-4.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -71,6 +73,10 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
+    
+
+
+
 </head>
 
 <body>
@@ -80,6 +86,7 @@
         <h1>@yield('title')</h1>
         <p>@yield('content')</p>
     </main>
+    @vite(['resources/js/app.js'])
     @vite(['resources/js/order.js'])
 
     @include('client.layouts.footer')

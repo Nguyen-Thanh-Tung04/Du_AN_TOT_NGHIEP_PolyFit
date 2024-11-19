@@ -35,7 +35,7 @@
                     <div class="ec-vendor-card-body">
                         <ul class="nav nav-tabs" id="orderTabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">
+                                <a class="nav-link @if(empty($activeTab)) active @endif" id="pending-orders-tab" data-toggle="tab" href="#pending-orders" role="tab">
                                     Chờ xác nhận @if($pendingCount > 0) <span class="text-danger">({{ $pendingCount }})</span> @endif
                                 </a>
                             </li>
@@ -65,13 +65,8 @@
                                 </a>
                             </li>
                         </ul>
-                        
-                        
-                        
-                        
-
                         <div class="tab-content" id="orderTabContent">
-                            <div class="tab-pane fade" id="pending-orders" role="tabpanel">
+                            <div class="tab-pane fade @if(empty($activeTab)) show active @endif" id="pending-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $pendingOrders])
                             </div>
                             <div class="tab-pane fade" id="confirmed-orders" role="tabpanel">
@@ -89,6 +84,10 @@
                             <div class="tab-pane fade" id="cancelled-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $cancelledOrders])
                             </div>
+                        
+                        
+                        
+                           
                         <div class="ec-vendor-card-table">
                             <table class="table ec-table">
                                 <tbody>

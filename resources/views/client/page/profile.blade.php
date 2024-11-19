@@ -119,14 +119,10 @@
                             </div> -->
                             <div class="ec-vendor-block-items">
                                 <ul>
-                                    <li><a href="user-profile.html">Hồ sơ người dùng</a></li>
+                                    <li><a href="{{route('listProfile')}}">Hồ sơ người dùng </a></li>
                                     <li><a href="{{route('changePassword')}}">Thay đổi mật khẩu</a></li>
-                                    <li><a href="user-history.html">Lịch sử</a></li>
-                                    <li><a href="wishlist.html">Danh sách mong muốn</a></li>
-                                    <li><a href="cart.html">Giỏ hàng</a></li>
-                                    <li><a href="checkout.html">Thanh toán</a></li>
-                                    <li><a href="track-order.html">Theo dõi đơn hàng</a></li>
-                                    <li><a href="user-invoice.html">Hóa đơn</a></li>
+                                    <li><a href="{{ url('/history') }}">Lịch sử đặt hàng</a></li>
+                                    <li><a href="{{route('cart.index')}}">Giỏ hàng</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -146,7 +142,10 @@
                                                 data-bs-toggle="modal" data-bs-target="#edit_modal">Chỉnh sửa thông tin</a>
                                         </div>
                                         <div class="ec-vendor-block-detail">
-                                            <img class="v-img" src="{{Storage::url($profile->image)}}" alt="vendor image">
+                                            @php
+                                                $checkUrlImg = \Illuminate\Support\Str::contains($profile->image, '/userfiles/') ? $profile->image : $profile->image;
+                                            @endphp
+                                            <img class="v-img" src="{{ Storage::url($checkUrlImg) }}" alt="vendor image">
                                             <h5 class="name">{{$profile->name}}</h5>
                                         </div>
                                         <p>Xin chào<span> {{$profile->name}}</span></p>
@@ -217,8 +216,6 @@
         </div>
     </div>
 </section>
-<!-- End User profile section -->
-  <!-- Modal -->
   <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -247,8 +244,11 @@
                                 </div>
                                 <div class="thumb-preview ec-preview">
                                     <div class="image-thumb-preview">
+                                        @php
+                                            $checkUrlImg = \Illuminate\Support\Str::contains($profile->image, '/userfiles/') ? $profile->image : $profile->image;
+                                        @endphp
                                         <img class="image-thumb-preview ec-image-preview v-img"
-                                            src="{{Storage::url($profile->image)}}" alt="edit" />
+                                            src="{{ Storage::url($checkUrlImg) }}" alt="edit" />
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +277,7 @@
                                 </div>
                                 <div class="col-md-12 space-t-15">
                                     <label class="form-label">Ngày sinh</label>
-                                    <input type="date" name="birthday" class="form-control" value="{{$profile->birthday}}">
+                                    <input type="datetime" name="birthday" class="form-control" value="{{$profile->birthday}}">
                                     @error('birthday')
                                     <p class="text-danger">{{$message}}</p>
                                     @enderror
@@ -291,7 +291,7 @@
                                             @if (isset($provinces))
                                             @foreach($provinces as $province)
                                             <option value="{{ $province->code }}"
-                                                {{ old('province_id') == $province->code ? 'selected' : '' }}>
+                                                {{ $profile->province_id == $province->code ? 'selected' : '' }}>
                                                 {{ $province->name }}
                                             </option>
                                             @endforeach
@@ -309,6 +309,14 @@
                                     <span class="ec-bl-select-inner">
                                         <select name="district_id" id="districtId" class="ec-bill-select districts location col-md-12" data-target="wards" value="{{$profile->district_id}}">
                                             <option value="">[Chọn Quận/Huyện]</option>
+                                            @if (isset($districts))
+                                            @foreach($districts as $district)
+                                            <option value="{{ $district->code }}"
+                                                {{ $profile->district_id == $district->code ? 'selected' : '' }}>
+                                                {{ $district->name }}
+                                            </option>
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </span>
                                 </span>
@@ -323,6 +331,14 @@
                                         <select id="wardId" name="ward_id"
                                             class="ec-bill-select wards col-md-12">
                                             <option value="">[Chọn Phường/Xã]</option>
+                                            @if (isset($wards))
+                                            @foreach($wards as $ward)
+                                            <option value="{{ $ward->code }}"
+                                                {{ $profile->ward_id == $ward->code ? 'selected' : '' }}>
+                                                {{ $ward->name }}
+                                            </option>
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </span>
                                 </span>
@@ -355,6 +371,8 @@
     var province_id = '{{ (isset($user->province_id)) ? $user->province_id : old('province_id') }}'
     var district_id = '{{ (isset($user->district_id)) ? $user->district_id : old('district_id') }}'
     var ward_id = '{{ (isset($user->ward_id)) ? $user->ward_id : old('ward_id') }}'
+    console.log(ward_id);
+
 </script>
 <script src="{{ asset('admin/library/location.js') }}"></script>
 @endsection

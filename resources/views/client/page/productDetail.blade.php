@@ -42,15 +42,15 @@
                                 <div class="single-product-scroll">
                                     <div class="single-product-cover">
                                         @if (!empty($galleryImages))
-                                            @foreach($galleryImages as $image)
-                                                <div class="single-slide zoom-image-hover">
-                                                    <img class="img-responsive {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}" src="{{ $image }}" alt="{{ $product->name }}">
-                                                    @if($product->variants->sum('quantity') === 0)
-                                                        <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
-                                                        <div class="out-of-stock-label">Hết hàng</div>
-                                                    @endif
-                                                </div>
-                                            @endforeach
+                                        @foreach($galleryImages as $image)
+                                        <div class="single-slide zoom-image-hover">
+                                            <img class="img-responsive {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}" src="{{ $image }}" alt="{{ $product->name }}">
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
+                                        </div>
+                                        @endforeach
                                         @endif
                                     </div>
                                     <div class="single-nav-thumb">
@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="single-pro-desc single-pro-desc-no-sidebar">
+                            <div class="single-pro-desc single-pro-desc-no-sidebar p-4">
                                 <div class="single-pro-content">
                                     <h5 class="ec-single-title">{{ $product->name }}</h5>
                                     <div class="ec-single-rating-wrap">
@@ -88,6 +88,9 @@
                                                     @endif
                                         </div>
                                     </div>
+                                    <div class="ec-single-stoke">
+                                        <span class="ec-single-sku">SKU#: {{ $product->code }}</span>
+                                    </div>
 
                                     <!-- <div class="ec-single-sales">
                                         <div class="ec-single-sales-inner">
@@ -106,17 +109,70 @@
                                             </div>
                                         </div>
                                     </div> -->
-                                    <div class="ec-single-price-stoke">
-                                        <div class="ec-single-price">
-                                            @if($minSalePrice)
-                                            <span id="listed-price" class="fw-semibold" style="text-decoration: line-through;">{{ number_format($minListedPrice) }} ₫</span>
-                                            <span id="sale-price" class="new-price">{{ number_format($minSalePrice) }} ₫</span>
-                                            @else
-                                            <span id="listed-price" class="new-price">{{ number_format($minListedPrice) }} ₫</span>
-                                            @endif
+
+
+
+                                    <div class="">
+                                        <div id="flash-sale-container" class="{{ $product->is_in_flash_sale ? '' : 'd-none' }}">
+                                            <div class="flash-sale">
+                                                <div class="time-sale">
+                                                    <svg viewBox="0 0 108 21" height="21" width="108" class="flash-sale-logo flash-sale-logo--white">
+                                                        <g fill="currentColor" fill-rule="evenodd">
+                                                            <path d="M0 16.195h3.402v-5.233h4.237V8H3.402V5.037h5.112V2.075H0zm29.784 0l-.855-2.962h-4.335l-.836 2.962H20.26l4.723-14.12h3.576l4.724 14.12zM26.791 5.294h-.04s-.31 1.54-.563 2.43l-.797 2.744h2.74l-.777-2.745c-.252-.889-.563-2.43-.563-2.43zm7.017 9.124s1.807 2.014 5.073 2.014c3.13 0 4.898-2.034 4.898-4.384 0-4.463-6.259-4.147-6.259-5.925 0-.79.778-1.106 1.477-1.106 1.672 0 3.071 1.245 3.071 1.245l1.439-2.824s-1.477-1.6-4.47-1.6c-2.76 0-4.918 1.718-4.918 4.325 0 4.345 6.258 4.285 6.258 5.964 0 .85-.758 1.126-1.457 1.126-1.75 0-3.324-1.462-3.324-1.462zm12.303 1.777h3.402v-5.53h5.054v5.53h3.401V2.075h-3.401v5.648h-5.054V2.075h-3.402zm18.64-1.678s1.692 1.915 4.763 1.915c2.877 0 4.548-1.876 4.548-4.107 0-4.483-6.492-3.871-6.492-6.36 0-.987.914-1.678 2.08-1.678 1.73 0 3.052 1.224 3.052 1.224l1.088-2.073s-1.4-1.501-4.12-1.501c-2.644 0-4.627 1.738-4.627 4.068 0 4.305 6.512 3.87 6.512 6.379 0 1.145-.952 1.698-2.002 1.698-1.944 0-3.44-1.48-3.44-1.48zm19.846 1.678l-1.166-3.594h-4.84l-1.166 3.594H74.84L79.7 2.174h2.623l4.86 14.021zM81.04 4.603h-.039s-.31 1.382-.583 2.172l-1.224 3.752h3.615l-1.224-3.752c-.253-.79-.545-2.172-.545-2.172zm7.911 11.592h8.475v-2.192H91.46V2.173H88.95zm10.477 0H108v-2.192h-6.064v-3.772h4.645V8.04h-4.645V4.366h5.753V2.174h-8.26zM14.255.808l6.142.163-3.391 5.698 3.87 1.086-8.028 12.437.642-8.42-3.613-1.025z"></path>
+                                                        </g>
+                                                    </svg>
+                                                    <svg height="20" viewBox="0 0 20 20" width="20" class="shop-svg-icon _17VGnS ">
+                                                        <g fill="none" fill-rule="evenodd" stroke="#fff" stroke-width="1.8" transform="translate(1 1)">
+                                                            <circle cx="9" cy="9" r="9"></circle>
+                                                            <path d="m11.5639648 5.05283203v4.71571528l-2.72832027 1.57129639" stroke-linecap="round" stroke-linejoin="round" transform="matrix(-1 0 0 1 20.39961 0)"></path>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="end-text">Kết thúc trong</div>
+                                                    <div class="flash-sale-countdown" id="the-24h-countdown">
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-column">
+                                                    <div class="flex flex-column p-15">
+                                                        <div class="flex items-center">
+                                                            <div class="flex items-center">
+                                                                <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                                <div class="flex items-center">
+                                                                    <div class="sale-price">{{ number_format($minSalePrice) }} ₫</div>
+                                                                    <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }} % giảm</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="ec-single-stoke">
-                                            <span class="ec-single-sku">SKU#: {{ $product->code }}</span>
+                                        <div id="non-flash-sale-container" class="ec-single-price {{ $product->is_in_flash_sale ? 'd-none' : '' }}">
+                                            @if($minSalePrice)
+                                            <div class="flex flex-column">
+                                                <div class="flex flex-column p-15">
+                                                    <div class="flex items-center">
+                                                        <div class="flex items-center">
+                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                            <div class="flex items-center">
+                                                                <div class="sale-price">{{ number_format($minSalePrice) }} ₫</div>
+                                                                <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }} % giảm</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @else
+                                            <div class="flex flex-column">
+                                                <div class="flex flex-column p-15">
+                                                    <div class="flex items-center">
+                                                        <div class="flex items-center">
+                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="ec-pro-variation">
@@ -397,6 +453,57 @@
         let variants = JSON.parse(document.getElementById('product-variants').dataset.variants);
         let selectedSizeId = null;
         let selectedColorId = null;
+        var isInFlashSale = "{{ $product->is_in_flash_sale ? 'true' : 'false' }}";
+        var flashSaleEndTime = "{{ $flashSaleEndTime }}";
+
+        // console.log(isInFlashSale + 'tung');
+
+        const coutDown = (hours, minutes, seconds) => {
+            let countDownDate = new Date().getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+
+            let countdownFunction = setInterval(() => {
+                let now = new Date().getTime();
+                let distance = countDownDate - now;
+
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+                if (seconds < 10) seconds = "0" + seconds;
+
+                $("#the-24h-countdown p").html(
+                    "<span>" +
+                    hours +
+                    '</span><span class="min">' +
+                    minutes +
+                    '<br></span><span class="seg">' +
+                    seconds +
+                    "</span>"
+                );
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    $("#the-24h-countdown p").html("Hết giờ");
+                }
+            }, 1000);
+        };
+
+        if (isInFlashSale === 'true') {
+            var countDownDate = new Date(flashSaleEndTime).getTime();
+            var now = new Date().getTime();
+
+            var distance = countDownDate - now;
+
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            coutDown(hours, minutes, seconds);
+            // console.log(hours+  'hours');
+
+        }
+
 
         $('#buyNow').click(function(e) {
             e.preventDefault();
@@ -571,19 +678,37 @@
                         if (response.status) {
                             let listedPrice = response.data.listed_price;
                             let salePrice = response.data.sale_price;
+                            let discountPercentage = response.data.discount_percentage;
 
-                            if (salePrice) {
-                                $('#listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
-                                $('#sale-price').text(new Intl.NumberFormat().format(salePrice) + ' ₫');
+                            if (response.data.is_in_flash_sale) {
+                                // Hiển thị giá flash sale
+                                $('#flash-sale-container').removeClass('d-none');
+                                $('#non-flash-sale-container').addClass('d-none');
+                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
+                                $('.sale-price').text(new Intl.NumberFormat().format(salePrice) + ' ₫');
+                                if (discountPercentage) {
+                                    $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
+                                } else {
+                                    $('.discount-percentage').hide();
+                                }
                             } else {
-                                $('#listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
-                                $('#sale-price').text('');
+                                // Hiển thị giá không flash sale
+                                $('#flash-sale-container').addClass('d-none');
+                                $('#non-flash-sale-container').removeClass('d-none');
+                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
+                                $('.sale-price').text(salePrice ? new Intl.NumberFormat().format(salePrice) + ' ₫' : '');
+                                if (discountPercentage) {
+                                    $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
+                                } else {
+                                    $('.discount-percentage').hide();
+                                }
                             }
                         }
                     }
                 });
             }
         }
+
     });
 </script>
 @endsection

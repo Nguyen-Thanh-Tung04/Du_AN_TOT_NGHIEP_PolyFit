@@ -50,40 +50,7 @@
 </section>
 <!-- ec Product tab Area End -->
 
-<!--category Section End -->
-<!--  category Section Start -->
-<section class="section ec-category-section ec-category-wrapper-1 section-space-p py-1">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="section-title">
-                    <h2 class="ec-title fs-1">Danh mục</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row margin-minus-tb-15">
 
-            <div class="ec_cat_slider">
-                @foreach ($category as $category)
-                <div class="ec_cat_content">
-                    <div class="ec_cat_inner text-center p-5">
-                        <!-- Thêm lớp "img-circle" hoặc một lớp tùy chỉnh để bo tròn -->
-                        <img src="{{ asset(Storage::url($category->image)) }}" alt="slider category img" class="img-circle img-fluid border border-dark" style="border-radius: 50%; /* Làm hình tròn */
-                        width: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                        height: 150px; /* Tuỳ chỉnh kích thước của hình ảnh */
-                        object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ */"
-                        />
-                        {{-- <p class="text-black fw-bold">{{$category->name}}</p> --}}
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-        </div>
-
-    </div>
-</section>
-<!--category Section End -->
 <!-- Product tab Area Start -->
 <section class="section ec-product-tab section-space-p" id="collection">
 
@@ -352,6 +319,7 @@
         </div>
     </section>
     <!-- New Product end -->
+     
     <!-- Ec Brand Section Start -->
     <section class="section ec-brand-area section-space-p">
         <h2 class="d-none">Thương hiệu</h2>
@@ -401,5 +369,64 @@
         </div>
     </section>
     <!-- Ec Brand Section End -->
+    <div class="ec-style ec-right-bottom">
+     <!-- Start Floating Panel Container -->
+     <div class="ec-panel" style="display: block;">
+         <!-- Panel Header -->
+         <div class="ec-header">
+             <strong>Cần hỗ trợ?</strong>
+             <p>Liên hệ với nhân viên?</p>
+         </div>
+         <!-- Panel Content -->
+         <div class="ec-body">
+             <ul>
+                 <!-- Start Single Contact List -->
 
+                 @foreach($users as $item)
+                 <li id="user{{ $item->id }}">
+                     <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
+                         <div class="d-flex bd-highlight">
+                             <!-- Profile Picture -->
+                             <div class="ec-img-cont">
+                                 @if(isset($item->image))
+                                 <img src="{{ $item->image }}" class="ec-user-img" alt="Profile image">
+                                 @else
+                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
+                                 @endif
+                             </div>
+
+                             <!-- Display Name & Last Seen -->
+                             <div class="ec-user-info">
+                                 <span>{{ $item->name }}</span>
+                                 <!-- Phần tử hiển thị thời gian hoạt động -->
+                                 <p style="margin-top: 2px;" class="activity-time"></p>
+                             </div>
+
+                             <!-- Chat Icon -->
+                             <div class="ec-chat-icon">
+                                 <i class="fa fa-whatsapp"></i>
+                             </div>
+                         </div>
+                     </a>
+                 </li>
+
+
+                 @endforeach
+                 <!--/ End Single Contact List -->
+             </ul>
+         </div>
+     </div>
+     <!--/ End Floating Panel Container -->
+     <!-- Start Right Floating Button-->
+     <div class="ec-right-bottom">
+         <div class="ec-box">
+             <div class="ec-button rotateForward">
+                 <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
+             </div>
+         </div>
+     </div>
+     <!--/ End Right Floating Button-->
+     
+ </div>
+ <!-- Whatsapp end -->
     @endsection

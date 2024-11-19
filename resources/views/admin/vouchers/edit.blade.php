@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <h2>Quản lý Voucher</h2>
         <ol class="breadcrumb" style="margin-bottom: 10px;">
             <li>
@@ -19,7 +19,7 @@
     
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-            <div class="col-lg-5">
+            <div class="col-lg-3">
                 <div class="panel-heading">
                     <div class="panel-title">Thông tin voucher</div>
                     <div class="panel-description">

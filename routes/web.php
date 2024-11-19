@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FlashSaleController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductColorController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Client\ProductCatalogueController;
 use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
 use App\Http\Controllers\User\LienheController;
+use App\Http\Controllers\ChatController;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -70,7 +72,6 @@ Route::get('/about', function () {
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
 
 
-
 Route::get('/history', function () {
     return view('client.page.history');
 });
@@ -81,8 +82,10 @@ Route::get('/contact', function () {
     return view('client.page.contact');
 });
 
-Route::get('/account', [ProfileController::class,'listProfile'])->name('listProfile');
-Route::put('/updateAccount/{idUser}',[ProfileController::class,'updateProfile'])->name('updateProfile');
+Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
+Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
+Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
+Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 // Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
 // Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
 Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
@@ -123,9 +126,24 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpayPayment'])
     ->name('vnpay.payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 Route::post('/momo-payment', [CheckoutController::class, 'momoPayment'])
-->middleware('checkLoginClient')
-->name('momo.payment');
+    ->middleware('checkLoginClient')
+    ->name('momo.payment');
 Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
+
+// Chat Realtime
+Route::middleware('checkLoginClient')->group(function () {
+    Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
+    // Route::post('/chat-private/search',[ChatController::class,'search']);
+    Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
+    Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
+    Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
+    Route::post('/message-private', [ChatController::class, 'messagePrivate']);
+    Route::post('/user-inactive', [ChatController::class, 'userInactive']);
+    Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
+});
+Route::get('huongdev', function () {
+    return view('admin.chat.index');
+});
 
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
@@ -208,6 +226,28 @@ Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(f
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
+
+Route::prefix('flashsale/')->name('flashsale.')->middleware('checkLogin')->group(function () {
+    Route::get('index', [FlashSaleController::class, 'index'])
+        ->name('index');
+    Route::get('create', [FlashSaleController::class, 'create'])
+        ->name('create');
+    Route::post('store', [FlashSaleController::class, 'store'])
+        ->name('store');
+    Route::get('{id}/edit', [FlashSaleController::class, 'edit'])
+        ->name('edit');
+    Route::get('{id}/show', [FlashSaleController::class, 'show'])
+        ->name('show');
+    Route::put('{id}/update', [FlashSaleController::class, 'update'])
+        ->name('update');
+    Route::delete('{id}/destroy', [FlashSaleController::class, 'destroy'])
+        ->name('destroy');
+    Route::patch('/{id}/status', [FlashSaleController::class, 'updateStatus'])->name('updateStatus');
+    Route::get('/get-selected-products', [ProductCatalogueController::class, 'getSelectedProducts'])->name('getSelectedProducts');
+    Route::get('/get-occupied-time-slots', [FlashSaleController::class, 'getOccupiedTimeSlots'])->name('getOccupiedTimeSlots');
+});
+
+Route::prefix('flashsale')->name('flashsale.')->middleware('checkLogin')->group(function () {});
 
 // AUTH
 // Login client
@@ -328,18 +368,16 @@ Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(funct
     Route::get('index', [BannerController::class, 'index'])->name('index');
     Route::get('create', [BannerController::class, 'create'])->name('create');
     Route::post('store', [BannerController::class, 'store'])->name('store');
-    Route::get('edit/{id}',[BannerController::class,'edit'])->name('edit');
-    Route::put('update/{id}',[BannerController::class,'update'])->name('update');
-    Route::delete('delete/{id}',[BannerController::class,'delete'])->name('delete');
-
-
+    Route::get('edit/{id}', [BannerController::class, 'edit'])->name('edit');
+    Route::put('update/{id}', [BannerController::class, 'update'])->name('update');
+    Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete');
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
     Route::get('index',                 [OrderController::class, 'index'])->name('index');
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show');
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
-
+    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export');
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
@@ -435,6 +473,9 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
+
+
+
 
 // Route để xem đánh giá cho một đơn hàng cụ thể
 Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

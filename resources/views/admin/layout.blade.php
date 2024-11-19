@@ -3,6 +3,7 @@
 
 <head>
     @include('admin.dashboard.component.head')
+    @vite(['resources/js/app.js'])
     @yield('css')
 </head>
 

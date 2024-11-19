@@ -89,7 +89,7 @@
                     <div class="align-self-center">
                         <div class="header-search">
                             <form class="ec-btn-group-form" action="{{ route('search') }}" method="GET">
-                                <input class="form-control ec-search-bar" name="search" placeholder="Search products..." type="text">
+                                <input class="form-control ec-search-bar" name="search" placeholder="Tìm kiếm sản phẩm..." type="text">
                                 <button class="submit" type="submit" aria-label="Search"><i class="fi-rr-search"></i></button>
                             </form>
                         </div>
@@ -102,8 +102,35 @@
 
                             <!-- Header User Start -->
                             <div class="ec-header-user dropdown">
-                                <button class="dropdown-toggle" data-bs-toggle="dropdown"><i
-                                        class="fi-rr-user"></i></button>
+                                <button class="dropdown-toggle" data-bs-toggle="dropdown">
+                                    @if(Auth::check())
+                                        @php
+                                            $checkUrlImg = Auth::user()->image && \Illuminate\Support\Str::contains(Auth::user()->image, '/userfiles/') 
+                                                            ? Auth::user()->image 
+                                                            : (Auth::user()->image ? Storage::url(Auth::user()->image) : null);
+                                        @endphp
+                                    
+                                        @if ($checkUrlImg)
+                                            <!-- Nếu user có ảnh đại diện -->
+                                            <img 
+                                                src="{{ $checkUrlImg }}" 
+                                                alt="User Avatar" 
+                                                class="img-profile rounded-circle border shadow" 
+                                                style="height: 40px; width: 40px; object-fit: cover;">
+                                        @else
+                                            <!-- Nếu không có ảnh đại diện -->
+                                            <img 
+                                                style="height: 40px; width: 40px;" 
+                                                class="img-profile rounded-circle" 
+                                                src="{{ asset('userfiles/image/avata_null.jpg') }}" 
+                                                alt="Default Avatar">
+                                        @endif
+                                    @else
+                                        <!-- Nếu chưa đăng nhập -->
+                                        <i class="fi-rr-user"></i>
+                                    @endif
+                                
+                                </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <!-- Kiểm tra nếu người dùng đã đăng nhập -->
                                     @auth
@@ -171,6 +198,68 @@
                     <div class="ec-main-menu">
                         <ul>
                             <li><a href="{{ url('/') }}">Trang chủ</a></li>
+                            {{-- <li class="dropdown position-static"><a href="javascript:void(0)">Danh mục</a>
+                                <ul class="mega-menu d-block">
+                                    <li class="d-flex">
+                                        <ul class="d-block">
+                                            <li class="menu_title"><a href="javascript:void(0)">Classic
+                                                    Variation</a></li>
+                                            <li><a href="shop-left-sidebar-col-3.html">Left sidebar 3 column</a>
+                                            </li>
+                                            <li><a href="shop-left-sidebar-col-4.html">Left sidebar 4 column</a>
+                                            </li>
+                                            <li><a href="shop-right-sidebar-col-3.html">Right sidebar 3 column</a>
+                                            </li>
+                                            <li><a href="shop-right-sidebar-col-4.html">Right sidebar 4 column</a>
+                                            </li>
+                                            <li><a href="shop-full-width.html">Full width 4 column</a></li>
+                                        </ul>
+                                        <ul class="d-block">
+                                            <li class="menu_title"><a href="javascript:void(0)">Classic
+                                                    Variation</a></li>
+                                            <li><a href="shop-banner-left-sidebar-col-3.html">Banner left sidebar 3
+                                                    column</a></li>
+                                            <li><a href="shop-banner-left-sidebar-col-4.html">Banner left sidebar 4
+                                                    column</a></li>
+                                            <li><a href="shop-banner-right-sidebar-col-3.html">Banner right sidebar
+                                                    3 column</a></li>
+                                            <li><a href="shop-banner-right-sidebar-col-4.html">Banner right sidebar
+                                                    4 column</a></li>
+                                            <li><a href="shop-banner-full-width.html">Banner Full width 4 column</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="d-block">
+                                            <li class="menu_title"><a href="javascript:void(0)">Columns
+                                                    Variation</a></li>
+                                            <li><a href="shop-full-width-col-3.html">3 Columns full width</a></li>
+                                            <li><a href="shop-full-width-col-4.html">4 Columns full width</a></li>
+                                            <li><a href="shop-full-width-col-5.html">5 Columns full width</a></li>
+                                            <li><a href="shop-full-width-col-6.html">6 Columns full width</a></li>
+                                            <li><a href="shop-banner-full-width-col-3.html">Banner 3 Columns</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="d-block">
+                                            <li class="menu_title"><a href="javascript:void(0)">List Variation</a>
+                                            </li>
+                                            <li><a href="shop-list-left-sidebar.html">Shop left sidebar</a></li>
+                                            <li><a href="shop-list-right-sidebar.html">Shop right sidebar</a></li>
+                                            <li><a href="shop-list-banner-left-sidebar.html">Banner left sidebar</a>
+                                            </li>
+                                            <li><a href="shop-list-banner-right-sidebar.html">Banner right
+                                                    sidebar</a></li>
+                                            <li><a href="shop-list-full-col-2.html">Full width 2 columns</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="ec-main-banner w-100">
+                                            <li><a class="p-0" href="shop-left-sidebar-col-3.html"><img class="img-responsive" src="assets/images/menu-banner/1.jpg" alt=""></a></li>
+                                            <li><a class="p-0" href="shop-left-sidebar-col-4.html"><img class="img-responsive" src="assets/images/menu-banner/2.jpg" alt=""></a></li>
+                                            <li><a class="p-0" href="shop-right-sidebar-col-3.html"><img class="img-responsive" src="assets/images/menu-banner/3.jpg" alt=""></a></li>
+                                            <li><a class="p-0" href="shop-right-sidebar-col-4.html"><img class="img-responsive" src="assets/images/menu-banner/4.jpg" alt=""></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li> --}}
                             <li><a href="{{ url('/about') }}">Giới thiệu</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
                             <li><a href="{{ url('/contact') }}">Liên hệ</a></li>

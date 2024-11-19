@@ -1,25 +1,25 @@
 @if (isset($successMessage) || isset($errorMessage))
-    <script type="text/javascript">
-        $(document).ready(function() {
-            @if (isset($successMessage))
-            toastr.success('{{ $successMessage }}', 'Thành công', {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 5000
-            });
-            @endif
-
-            @if (isset($errorMessage))
-            toastr.error('{{ $errorMessage }}', 'Lỗi', {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 5000
-            });
-            @endif
+<script type="text/javascript">
+    $(document).ready(function() {
+        @if(isset($successMessage))
+        toastr.success('{{ $successMessage }}', 'Thành công', {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 5000
         });
-    </script>
+        @endif
+
+        @if(isset($errorMessage))
+        toastr.error('{{ $errorMessage }}', 'Lỗi', {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 5000
+        });
+        @endif
+    });
+</script>
 @endif
 
 <div class="wrapper wrapper-content">
@@ -31,7 +31,9 @@
                     <h5>ĐƠN HÀNG CHỜ</h5>
                 </div>
                 <div class="ibox-content">
-                    <a href="{{ route('orders.index') }}"><h1 class="no-margins">{{ isset($totalOrdersConfirm) ? $totalOrdersConfirm : 0 }}</h1></a>
+                    <a href="{{ route('orders.index') }}">
+                        <h1 class="no-margins">{{ isset($totalOrdersConfirm) ? $totalOrdersConfirm : 0 }}</h1>
+                    </a>
                     <small>Trên tổng số đơn hàng</small>
                 </div>
             </div>
@@ -39,9 +41,9 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                <span class="label label-success pull-right">
-                    Tháng {{ isset($results[0]['month']) ? $results[0]['month'] : 0 }}
-                </span>
+                    <span class="label label-success pull-right">
+                        Tháng {{ isset($results[0]['month']) ? $results[0]['month'] : 0 }}
+                    </span>
                     <h5>ĐƠN HÀNG TRONG</h5>
                 </div>
                 <div class="ibox-content">
@@ -57,19 +59,19 @@
                     </div>
 
                     <small>
-                        {{--                        @dd($results)--}}
+                        {{-- @dd($results)--}}
                         @if(isset($results[0]['growth']))
-                            @if($results[0]['growth'] > 0)
-                                Tăng so với tháng trước
-                            @elseif($results[0]['growth'] < 0)
-                                Giảm so với tháng trước
+                        @if($results[0]['growth'] > 0)
+                        Tăng so với tháng trước
+                        @elseif($results[0]['growth'] < 0)
+                            Giảm so với tháng trước
                             @else
-                                Không thay đổi so với tháng trước
+                            Không thay đổi so với tháng trước
                             @endif
-                        @else
+                            @else
                             Không có dữ liệu
-                        @endif
-                    </small>
+                            @endif
+                            </small>
                 </div>
             </div>
         </div>
@@ -112,12 +114,12 @@
                 <div class="ibox-title">
                     <h5 style="padding-top: 5px"> BIỂU ĐỒ THỐNG KÊ DOANH THU</h5>
                     <div class="right" style="margin-left: 62%">
-                        <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST" >
+                        <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST">
                             @csrf
                             <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN</h5>
 
                             <!-- Input date_start -->
-                            <input type="date" name="date_start" class="btn btn-xs btn-white" value="{{ request('date_start', '0') }}" >
+                            <input type="date" name="date_start" class="btn btn-xs btn-white" value="{{ request('date_start', '0') }}">
 
                             <!-- Input end_date -->
                             <input type="date" name="end_date" class="btn btn-xs btn-white" value="{{ request('end_date', '0') }}">
@@ -142,6 +144,17 @@
                                 if (!dateStart || !endDate) {
                                     event.preventDefault(); // Ngăn không cho submit form
                                     toastr.error('Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc!', 'Thông báo');
+                                    return;
+                                }
+
+                                // Chuyển đổi chuỗi ngày thành đối tượng Date để so sánh
+                                let start = new Date(dateStart);
+                                let end = new Date(endDate);
+
+                                if (end < start) {
+                                    event.preventDefault(); // Ngăn không cho submit form
+                                    toastr.error('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!', 'Thông báo');
+                                    return;
                                 }
                             });
                         </script>
@@ -160,10 +173,10 @@
                             $chartData = [];
                             $labels = []; // Khai báo mảng để chứa nhãn
 
-// Kiểm tra lựa chọn thời gian
+                            // Kiểm tra lựa chọn thời gian
                             $timeFilter = request('choose_time'); // Nhận giá trị từ dropdown
 
-// Lấy dữ liệu doanh thu theo thời gian
+                            // Lấy dữ liệu doanh thu theo thời gian
                             foreach ($results_one as $value) {
                                 $date = $value['date']; // Lấy ngày ở định dạng 'Y-W' cho tuần
                                 $doanh_thu = $value['doanh_thu'];
@@ -203,7 +216,7 @@
                                 }
                             }
 
-// Xử lý để đảm bảo dữ liệu cho tất cả các khoảng thời gian
+                            // Xử lý để đảm bảo dữ liệu cho tất cả các khoảng thời gian
                             foreach ($labels as $label) {
                                 $num = (int) filter_var($label, FILTER_SANITIZE_NUMBER_INT); // Lấy số từ nhãn
                                 if (!isset($chartData[$num])) {
@@ -250,14 +263,14 @@
                             <ul class="stat-list">
                                 <li>
                                     @php
-                                        // Tính tổng số đơn hàng từ dữ liệu mới gửi lên nếu có
-                                        $totalOrders1 = isset($results_one) ? collect($results_one)->sum('so_luong_don_hang') : 0;
-//
-//                                        // Kiểm tra nếu đã có tổng số đơn hàng mặc định
-//                                        $totalOrders = isset($totalOrders) ? $totalOrders : 0;
-//
-//                                        // Quyết định hiển thị giá trị nào
-//                                        $displayTotalOrders = $totalOrders1 > 0 ? $totalOrders1 : $totalOrders;
+                                    // Tính tổng số đơn hàng từ dữ liệu mới gửi lên nếu có
+                                    $totalOrders1 = isset($results_one) ? collect($results_one)->sum('so_luong_don_hang') : 0;
+                                    //
+                                    // // Kiểm tra nếu đã có tổng số đơn hàng mặc định
+                                    // $totalOrders = isset($totalOrders) ? $totalOrders : 0;
+                                    //
+                                    // // Quyết định hiển thị giá trị nào
+                                    // $displayTotalOrders = $totalOrders1 > 0 ? $totalOrders1 : $totalOrders;
                                     @endphp
                                     <h2 class="no-margins">{{ $totalOrders1 }}</h2>
                                     <small>Tổng số đơn đặt hàng</small>
@@ -269,9 +282,9 @@
 
                                 <li>
                                     @php
-                                        $totalCancelOrders = isset($results_one) ? collect($results_one)->sum('tong_so_don_hang_huy') : 0; // Tính tổng số đơn hàng đã hủy
-//                                        $canceledOrders = isset($canceledOrders) ? $canceledOrders : 0;
-//                                        $TotalCancelOrders = $totalCancelOrders > 0 ? $totalCancelOrders : $canceledOrders;
+                                    $totalCancelOrders = isset($results_one) ? collect($results_one)->sum('tong_so_don_hang_huy') : 0; // Tính tổng số đơn hàng đã hủy
+                                    // $canceledOrders = isset($canceledOrders) ? $canceledOrders : 0;
+                                    // $TotalCancelOrders = $totalCancelOrders > 0 ? $totalCancelOrders : $canceledOrders;
                                     @endphp
                                     <h2 class="no-margins">{{ $totalCancelOrders }}</h2>
                                     <small>Tổng số đơn hàng đã hủy</small>
@@ -282,13 +295,13 @@
                                 </li>
                                 <li>
                                     @php
-                                        $totalRevenue = isset($results_one) ? collect($results_one)->sum('doanh_thu') : 0; // Tính tổng doanh thu
+                                    $totalRevenue = isset($results_one) ? collect($results_one)->sum('doanh_thu') : 0; // Tính tổng doanh thu
 
-//                                        // Kiểm tra nếu đã có tổng số doanh thu mặc định
-//                                        $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00'; // Đã thêm dấu chấm phẩy
-//
-//                                        // Quyết định hiển thị giá trị nào
-//                                        $displayTotalRevenue = $totalRevenue > 0 ? $totalRevenue : $totalRevenue_month;
+                                    // // Kiểm tra nếu đã có tổng số doanh thu mặc định
+                                    // $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00'; // Đã thêm dấu chấm phẩy
+                                    //
+                                    // // Quyết định hiển thị giá trị nào
+                                    // $displayTotalRevenue = $totalRevenue > 0 ? $totalRevenue : $totalRevenue_month;
                                     @endphp
                                     <h2 class="no-margins">{{ $totalRevenue }}</h2>
                                     <small>Doanh thu</small>
@@ -322,12 +335,20 @@
                         const lineData = []; // Dữ liệu cho biểu đồ đường
 
                         // Kiểm tra xem $grossProfit có tồn tại không
-                        @if (isset($grossProfit) && count($grossProfit) > 0)
+                        @if(isset($grossProfit) && count($grossProfit) > 0)
                         // Duyệt qua $grossProfit để lấy tên sản phẩm, lợi nhuận gộp và số lượng
-                        @foreach ($grossProfit as $item)
+                        @foreach($grossProfit as $item)
                         labels.push('{{ $item->product_name }} - Tháng {{ $item->month }}');
-                        barData.push({{ $item->gross_profit }}); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
-                        lineData.push({{ $item->total_quantity }}); // Thêm số lượng vào dữ liệu cho biểu đồ đường
+                        barData.push({
+                            {
+                                $item - > gross_profit
+                            }
+                        }); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
+                        lineData.push({
+                            {
+                                $item - > total_quantity
+                            }
+                        }); // Thêm số lượng vào dữ liệu cho biểu đồ đường
                         @endforeach
                         @else
                         // Nếu không có dữ liệu, thêm giá trị mặc định
@@ -452,13 +473,27 @@
                                         // Nếu có dữ liệu, sử dụng màu sắc phù hợp cho từng trạng thái
                                         foreach ($orderStatus as $status) {
                                             switch ($status->status) {
-                                                case 1: echo "'rgb(255, 205, 86)',"; break;
-                                                case 2: echo "'rgba(75, 192, 192, 0.2)',"; break;
-                                                case 3: echo "'rgb(201, 203, 207)',"; break;
-                                                case 4: echo "'rgb(54, 162, 235)',"; break;
-                                                case 5: echo "'rgb(75, 192, 192)',"; break;
-                                                case 6: echo "'rgb(255, 99, 99)',"; break;
-                                                default: echo "'rgb(0, 0, 0)',"; break;
+                                                case 1:
+                                                    echo "'rgb(255, 205, 86)',";
+                                                    break;
+                                                case 2:
+                                                    echo "'rgba(75, 192, 192, 0.2)',";
+                                                    break;
+                                                case 3:
+                                                    echo "'rgb(201, 203, 207)',";
+                                                    break;
+                                                case 4:
+                                                    echo "'rgb(54, 162, 235)',";
+                                                    break;
+                                                case 5:
+                                                    echo "'rgb(75, 192, 192)',";
+                                                    break;
+                                                case 6:
+                                                    echo "'rgb(255, 99, 99)',";
+                                                    break;
+                                                default:
+                                                    echo "'rgb(0, 0, 0)',";
+                                                    break;
                                             }
                                         }
                                     } else {
@@ -524,15 +559,15 @@
                                 <div class="col-lg-12">
                                     <table class="table table-hover margin bottom">
                                         <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">STT</th>
-                                            <th class="text-center">Email</th>
-                                            <th class="text-center">Trạng Thái</th>
-                                            <th class="text-center">Thời Gian</th>
-                                        </tr>
+                                            <tr>
+                                                <th style="width: 1%" class="text-center">STT</th>
+                                                <th class="text-center">Email</th>
+                                                <th class="text-center">Trạng Thái</th>
+                                                <th class="text-center">Thời Gian</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($latestUsers as $latestUser)
+                                            @foreach($latestUsers as $latestUser)
                                             <tr>
                                                 <td class="text-center">{{ $latestUser->id }}</td>
                                                 <td class="text-center">{{ $latestUser->email }}</td>
@@ -544,7 +579,7 @@
 
                                                 <td class="text-center">{{ $latestUser->created_at }}</td>
                                             </tr>
-                                        @endforeach
+                                            @endforeach
 
                                         </tbody>
                                     </table>
@@ -576,16 +611,16 @@
                                 <div class="col-lg-12">
                                     <table class="table table-hover margin bottom">
                                         <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">STT</th>
-                                            <th style="width: 150px">Thông Tin</th>
-                                            <th class="text-center">Tổng Tiền</th>
-                                            <th class="text-center">Trạng Thái</th>
-                                            <th class="text-center">Thời Gian</th>
-                                        </tr>
+                                            <tr>
+                                                <th style="width: 1%" class="text-center">STT</th>
+                                                <th style="width: 150px">Thông Tin</th>
+                                                <th class="text-center">Tổng Tiền</th>
+                                                <th class="text-center">Trạng Thái</th>
+                                                <th class="text-center">Thời Gian</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($latestOrders as $latestOrder)
+                                            @foreach($latestOrders as $latestOrder)
                                             <tr>
                                                 <td class="text-center">{{ $latestOrder->id }}</td>
                                                 <td>
@@ -598,26 +633,26 @@
                                                 <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
                                                 <td class="text-center">
                                                     @php
-                                                        // Định nghĩa các trạng thái và màu sắc tương ứng
-                                                        $statuses = [
-                                                            1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
-                                                            2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
-                                                            3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
-                                                            4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
-                                                            5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
-                                                            6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
-                                                        ];
+                                                    // Định nghĩa các trạng thái và màu sắc tương ứng
+                                                    $statuses = [
+                                                    1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
+                                                    2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
+                                                    3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
+                                                    4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
+                                                    5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
+                                                    6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
+                                                    ];
                                                     @endphp
                                                     @php
-                                                        // Lấy trạng thái tương ứng
-                                                        $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
+                                                    // Lấy trạng thái tương ứng
+                                                    $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
                                                     @endphp
                                                     <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
                                                 </td>
 
                                                 <td class="text-center">{{ $latestOrder->created_at }}</td>
                                             </tr>
-                                        @endforeach
+                                            @endforeach
 
                                         </tbody>
                                     </table>

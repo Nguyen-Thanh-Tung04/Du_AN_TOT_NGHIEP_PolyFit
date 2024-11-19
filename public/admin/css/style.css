@@ -1069,7 +1069,7 @@ button.dim:active:before {
 .label {
   background-color: #d1dade;
   color: #5e5e5e;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'fOpen Sans', 'Helvetica Neue', Helvetica, Arial, sans-seri;
   font-weight: 600;
   padding: 3px 8px;
   text-shadow: none;
@@ -1921,7 +1921,7 @@ div.dt-button-info {
   color: #ed5565;
 }
 .input-group-addon {
-  background-color: #fff;
+  background-color: #eee;
   border: 1px solid #E5E6E7;
   border-radius: 1px;
   color: inherit;

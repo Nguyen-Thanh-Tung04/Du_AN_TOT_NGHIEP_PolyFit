@@ -52,17 +52,16 @@ class CheckoutController
         if (empty($productVarians)) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm nào để thanh toán.');
         }
-
         $quantities = [];
         foreach ($productVarians as $id) {
             $quantities[$id] = $request->input("quantities.$id");
         }
         $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
 
-         // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
+        // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
         foreach ($productVariants as $productVariant) {
             $requestedQuantity = $quantities[$productVariant->id];
-            
+
             if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) { // Giả sử `quantity` là cột chứa số lượng hàng trong kho
                 return redirect()->back()->with('error', 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.');
             }
@@ -73,10 +72,37 @@ class CheckoutController
 
         foreach ($productVariants as $productVariant) {
             $qty = $quantities[$productVariant->id];
-            $total += ($productVariant->sale_price != 0) ? $productVariant->sale_price * $qty : $productVariant->listed_price * $qty;
             // lấy thông tin sản phẩm đầu tiên
             if (!$firstProduct) {
                 $firstProduct = $productVariant->product;
+            }
+
+            $flashSaleProduct = $productVariant->product->flashSaleProducts()->where('variant_id', $productVariant->id)
+                ->whereHas('flashSale', function ($query) {
+                    $query->where('status', 1)
+                        ->where('date', now()->toDateString())
+                        ->where(function ($query) {
+                            $currentHour = now()->hour;
+                            $currentMinute = now()->minute;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
+                        });
+                })
+                ->where('status', 1)
+                ->where('quantity', '>', 0)
+                ->first();
+
+            if ($flashSaleProduct) {
+                $flashSaleQty = min($qty, $flashSaleProduct->quantity);
+                $normalQty = $qty - $flashSaleQty;
+                $productVariant->setAttribute('new_price', $flashSaleProduct->flash_price);
+                $productVariant->setAttribute('normal_price', $flashSaleProduct->listed_price);
+                $total += $flashSaleProduct->flash_price * $flashSaleQty;
+                $total += ($productVariant->sale_price != 0 ? $productVariant->sale_price : $productVariant->listed_price) * $normalQty;
+            } else {
+                $total += ($productVariant->sale_price != 0) ? $productVariant->sale_price * $qty : $productVariant->listed_price * $qty;
+                $productVariant->setAttribute('new_price', $productVariant->sale_price  ?? null);
+                $productVariant->setAttribute('normal_price', $productVariant->listed_price);
             }
         }
         $userId = Auth::id();
@@ -287,7 +313,7 @@ class CheckoutController
             ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
             ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
         //Send Mail
-        Mail::to($user->email)->queue(new OrderPlacedMail($order));
+        // Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
         return response()->json([
             'success' => true,

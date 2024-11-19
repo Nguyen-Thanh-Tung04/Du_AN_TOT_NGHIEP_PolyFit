@@ -22,19 +22,28 @@ class Variant extends Model
 
     protected $table = 'variants';
 
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function color() {
+    public function color()
+    {
         return $this->belongsTo(Color::class, 'color_id', 'id');
     }
 
-    public function size() {
+    public function size()
+    {
         return $this->belongsTo(Size::class, 'size_id', 'id');
     }
 
-    public function order_items() {
+    public function flashSaleProducts()
+    {
+        return $this->hasMany(FlashSaleProduct::class);
+    }
+
+    public function order_items()
+    {
         return $this->hasMany(OrderItem::class, 'variant_id', 'id');
     }
 }

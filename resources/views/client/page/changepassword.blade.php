@@ -119,14 +119,10 @@
                             </div> -->
                             <div class="ec-vendor-block-items">
                                 <ul>
-                                    <li><a href="user-profile.html">Hồ sơ người dùng</a></li>
-                                    <li><a href="user-profile.html">Thay đổi mật khẩu</a></li>
-                                    <li><a href="user-history.html">Lịch sử</a></li>
-                                    <li><a href="wishlist.html">Danh sách mong muốn</a></li>
-                                    <li><a href="cart.html">Giỏ hàng</a></li>
-                                    <li><a href="checkout.html">Thanh toán</a></li>
-                                    <li><a href="track-order.html">Theo dõi đơn hàng</a></li>
-                                    <li><a href="user-invoice.html">Hóa đơn</a></li>
+                                    <li><a href="{{route('listProfile')}}">Hồ sơ người dùng </a></li>
+                                    <li><a href="{{route('changePassword')}}">Thay đổi mật khẩu</a></li>
+                                    <li><a href="{{ url('/history') }}">Lịch sử đặt hàng</a></li>
+                                    <li><a href="{{route('cart.index')}}">Giỏ hàng</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -144,21 +140,21 @@
                                         @csrf
                                         <div class=" col-md-12 space-t-15">
                                             <label class="form-label">Mật khẩu hiện tại</label>
-                                            <input type="password" name="current_password" class="form-control">
+                                            <input type="password" name="current_password" class="form-control" value="{{ session('current_password', '') }}">
                                             @error('current_password')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                         </div>
                                         <div class=" col-md-12 space-t-15">
                                             <label class="form-label">Mật khẩu mới</label>
-                                            <input type="password" name="new_password" class="form-control" >
+                                            <input type="password" name="new_password" class="form-control" value="{{old('new_password')}}" >
                                             @error('new_password')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                         </div>
                                         <div class=" col-md-12 space-t-15">
                                             <label class="form-label">Nhập lại mật khẩu mới</label>
-                                            <input type="password" name="new_password_confirmation" class="form-control" >
+                                            <input type="password" name="new_password_confirmation" class="form-control" value="{{old('new_password_confirmation')}}" >
                                             @error('new_password_confirmation')
                                             <p class="text-danger">{{ $message }}</p>
                                             @enderror
