@@ -193,3 +193,7 @@
     padding: 10px;
     border-bottom: 1px solid #ccc;
 }
+
+.datatable-image {
+    width: 60% !important;
+}

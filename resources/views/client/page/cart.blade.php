@@ -143,7 +143,7 @@
                                         </div>
                                         <div class="fw-bolder pt-3 border-top">
                                             <span class="text-left">Tổng số tiền</span>
-                                            <span id="total" class="text-right">0₫</span>
+                                            <span id="total" class="text-right fw-bold fs-4 text-danger">0₫</span>
                                         </div>
 
 

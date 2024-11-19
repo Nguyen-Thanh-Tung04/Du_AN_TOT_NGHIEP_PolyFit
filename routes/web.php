@@ -28,6 +28,7 @@ use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
 use App\Http\Controllers\User\LienheController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Client\SaleController;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -70,6 +71,7 @@ Route::get('/about', function () {
 });
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
+Route::get('/flash-sale', [SaleController::class, 'index'])->name('flash-sale');
 
 
 Route::get('/history', function () {

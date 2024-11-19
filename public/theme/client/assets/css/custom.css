@@ -160,124 +160,6 @@ body {
     background: #fff;
     padding: 1.25rem 2.1875rem 0 1.25rem;
 
-    &-name {
-        display: -webkit-box;
-        text-overflow: ellipsis;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        font-weight: 500;
-        margin: 0;
-        vertical-align: sub;
-        max-height: 3rem;
-        line-height: 1.5rem;
-        overflow: hidden;
-        max-width: 41.5625rem;
-        font-size: 1.25rem;
-        word-wrap: break-word;
-    }
-
-    .comp {
-        -webkit-box-align: end;
-        -webkit-align-items: flex-end;
-        -moz-box-align: end;
-        -ms-flex-align: end;
-        align-items: flex-end;
-        padding: 0 15px;
-        border-right: 1px solid rgba(0, 0, 0, .14);
-
-        &:first-child {
-            padding-left: 0
-        }
-
-        &:last-child {
-            border-right: none
-        }
-    }
-
-    &-score {
-        margin-top: 15px;
-
-        .score {
-            font-size: 1rem;
-            color: #222;
-            margin-right: 5px;
-            padding-bottom: 1px;
-            color: #d0011b;
-            border-bottom: 1px solid #d0011b;
-        }
-
-        .mark {
-            padding: 0;
-            font-size: 1rem;
-            color: #767676;
-            text-transform: capitalize;
-            background: #fff;
-
-            .shop-rating-stars {
-                position: relative;
-                display: inline-block;
-                background: #fff;
-                margin-bottom: 4px;
-
-                &__stars {
-                    display: -webkit-box;
-                    display: -webkit-flex;
-                    display: -moz-box;
-                    display: -ms-flexbox;
-                    display: flex;
-                    background: #fff;
-                }
-
-                &__star-wrapper {
-                    position: relative;
-                    background: #fff;
-                    margin-right: 1px;
-                }
-
-                &__lit {
-                    // overflow: hidden;
-                    position: absolute;
-                    height: 100%;
-                    left: 0;
-                    top: 0;
-                    z-index: 1;
-                }
-
-                &__primary {
-                    &-star {
-                        color: #d0011b !important;
-                        display: block;
-                        position: absolute;
-                        left: 0;
-                        overflow-x: hidden;
-                    }
-                }
-            }
-
-            .shop-svg-icon {
-                display: inline-block;
-                width: 1em;
-                height: 1em;
-                fill: currentColor;
-                position: relative;
-            }
-        }
-
-        .number {
-            font-size: 1rem;
-            color: #222;
-            margin-right: 5px;
-            padding-bottom: 1px;
-            border-bottom: 1px solid #555;
-        }
-
-        .text {
-            padding: 4px 0;
-            font-size: .875rem;
-            color: #767676;
-            text-transform: capitalize;
-        }
-    }
 }
 
 .flash-sale {
@@ -304,9 +186,6 @@ body {
 
 }
 
-@media screen and (max-width: 640px) {
-    padding: 0 0.5em;
-}
 
 .flash-sale-logo--white {
     color: #fff;
@@ -324,26 +203,12 @@ body {
     height: 1em;
     fill: currentColor;
     position: relative;
-
-    @media screen and (max-width: 640px) {
-        width: 0.8em;
-        height: 0.8em;
-    }
 }
 
 .end-text {
     text-transform: uppercase;
     margin-right: .225rem;
     font-weight: 400;
-
-    @media screen and (max-width: 991px) {
-        font-size: 12px;
-    }
-
-    @media screen and (max-width:767px) {
-        font-size: 9px;
-        marginn-right: 0px;
-    }
 }
 
 .flash-sale-countdown {
@@ -357,40 +222,41 @@ body {
     cursor: default;
     display: flex;
     color: #000;
-
-
-    p {
-        margin-top: 0;
-        font-weight: bold;
-        text-align: center;
-    }
-
-    span {
-        background: #222;
-        color: #f4f4f4;
-        width: 27px;
-        display: inline-block;
-        height: 24px;
-        float: left;
-        line-height: 23px;
-        margin-left: 6px;
-        border-radius: 2px;
-    }
-
-    .tempo {
-        width: 350px;
-        padding: 0;
-    }
-
-    .tempo li {
-        text-align: left;
-        display: inline-block;
-        font-size: 24px;
-        width: 31%;
-        margin-top: -50px;
-        margin-left: -1px;
-    }
 }
+
+.flash-sale-countdown p {
+    margin-top: 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.flash-sale-countdown span {
+    background: #222;
+    color: #f4f4f4;
+    width: 27px;
+    display: inline-block;
+    height: 24px;
+    float: left;
+    line-height: 23px;
+    margin-left: 6px;
+    border-radius: 2px;
+}
+
+.tempo {
+    width: 350px;
+    padding: 0;
+}
+
+.tempo li {
+    text-align: left;
+    display: inline-block;
+    font-size: 24px;
+    width: 31%;
+    margin-top: -50px;
+    margin-left: -1px;
+}
+
+
 
 .flex,
 .h-center {
@@ -414,10 +280,6 @@ body {
 .p-15 {
     padding: 15px 20px;
     background: #fafafa;
-
-    @media screen and (max-width: 991px) {
-        padding: 0.7rem 1rem;
-    }
 }
 
 .items-center {
@@ -458,4 +320,34 @@ body {
     .produc-name {
         width: 1200px;
     }
+}
+
+.flash-sale-banner {
+    background-color: #ff6f61;
+    /* Màu cam nhạt */
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    /* Căn giữa nội dung */
+}
+
+.countdown-timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.flash-sale-banner h4,
+.flash-sale-banner h5 {
+    margin: 0;
+}
+
+.flash-sale-banner p {
+    margin: 5px 0;
+}
+
+.countdown-timer span {
+    background-color: #333;
+    color: white;
+    padding: 4px;
 }

@@ -1,4 +1,4 @@
-<form action="{{ route('category.index') }}">
+<form action="{{ route('flashsale.index') }}">
     <div class="filter-wraper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             @php
@@ -20,25 +20,14 @@
                     $is_active = request('is_active') ?: old('is_active', '');
                     @endphp
 
-                    <select name="is_active" class="form-control mr-10 setupSelect2">
-                        @foreach (config('apps.general.is_active') ?? [] as $key => $val)
-                        <option {{ ($is_active === (string)$key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
+                    <select name="status" class="form-control mr-10 setupSelect2" onchange="this.form.submit()">
+                        <option value="">Tất cả</option>
+                        <option value="Sắp diễn ra" {{ request('status') == 'Sắp diễn ra' ? 'selected' : '' }}>Sắp diễn ra</option>
+                        <option value="Đang diễn ra" {{ request('status') == 'Đang diễn ra' ? 'selected' : '' }}>Đang diễn ra</option>
+                        <option value="Đã diễn ra" {{ request('status') == 'Đã diễn ra' ? 'selected' : '' }}>Đã diễn ra</option>
                     </select>
 
-                    <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
-                        <div class="input-group">
-                            <input type="text"
-                                name="keyword"
-                                value="{{ request('keyword') ?: old('keyword') }}"
-                                placeholder="Nhập Từ Khóa bạn muốn tìm kiếm..."
-                                class="form-control">
-                            <span class="input-group-btn">
-                                <button type="submit" name="search" value="search"
-                                    class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
-                            </span>
-                        </div>
-                    </div>
+
                     <a href="{{ route('flashsale.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới flash sale</a>
                 </div>
             </div>
