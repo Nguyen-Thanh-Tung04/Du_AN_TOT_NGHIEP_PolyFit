@@ -29,11 +29,7 @@
                     <td>{{ $member->email }}</td>
                     <td>{{ $member->phone }}</td>
                     <td>{{ $member->address }}</td>
-                    <td>
-                        @if($member->user_catalogue_id === null)
-                            Khách hàng
-                        @endif
-                    </td>
+                    <td>{{ $member->user_catalogues->name }}</td>
                     <td class="text-center js-switch-{{ $member->id }}">
                         <input type="checkbox" value="{{ $member->publish }}"
                                class="js-switch status "
@@ -43,8 +39,6 @@
                             {{ ($member->publish == 1) ? 'checked' : '' }}/>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('member.edit', $member->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-
                         <a href="{{ route('member.delete', $member->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Repositories\Interfaces\MemberRepositoryInterface as MemberRepository;
+use App\Repositories\MemberRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +18,14 @@ class MemberService
     public function __construct(MemberRepository $memberRepository) {
         $this->memberRepository = $memberRepository;
     }
+
+    public function getUserCatalogue() {
+        $getUserCatalogue = $this->memberRepository->getCatalogue(
+            'App\Models\userCatalogue',['id','name']
+        );
+        return $getUserCatalogue;
+    }
+
     public function paginate($request) {
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');

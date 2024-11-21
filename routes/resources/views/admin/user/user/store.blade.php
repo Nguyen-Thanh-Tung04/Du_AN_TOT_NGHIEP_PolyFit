@@ -57,22 +57,20 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $userCatalogue = [
-                                '[Chọn nhóm thành viên]',
-                                '[Quản trị viên]',
-                                '[Nhân viên]',
-                            ];
-                        @endphp
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Nhóm Thành Viên
+                                    <label class="control-label text-left">Chức vụ
                                         <span class="text-danger">(*)</span></label>
                                     <select name="user_catalogue_id" class="form-control setupSelect2">
-                                        @foreach($userCatalogue as $key => $item)
-                                        <option {{ $key == old('user_catalogue_id') ? 'selected' : '' }}
-                                        value="{{ $key }}">{{ $item }}</option>
+                                        <option value="0">Chọn chức vụ</option>
+                                        @foreach($userCatalogue as $item)
+                                        @if ($item->id == 3) 
+                                            @continue; 
+                                        @endif
+                                        <option {{ old('user_catalogue_id') == $item->id ? 'selected' : '' }}
+                                            value="{{ $item->id }}">{{ $item->name }}
+                                        </option>
                                         @endforeach
                                     </select>
                                 </div>

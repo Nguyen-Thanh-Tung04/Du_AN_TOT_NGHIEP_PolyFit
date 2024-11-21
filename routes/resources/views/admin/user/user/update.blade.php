@@ -57,24 +57,20 @@
                                 </div>
                             </div>
                         </div>
-{{--                        @php--}}
-{{--                            $userCatalogue = [--}}
-{{--                                '[Chọn nhóm thành viên]',--}}
-{{--                                '[Quản trị viên]',--}}
-{{--                                '[Nhân viên]',--}}
-{{--                            ];--}}
-{{--                        @endphp--}}
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Nhóm Thành Viên
+                                    <label class="control-label text-left">Nhân viên
                                         <span class="text-danger">(*)</span></label>
                                     <select name="user_catalogue_id" class="form-control setupSelect2">
-                                        @foreach($userCatalogue as $catalogue) <!-- Sử dụng $catalogue thay vì $key -->
-                                        <option value="{{ $catalogue->id }}"
-                                            {{ $catalogue->id == old('user_catalogue_id', $user->user_catalogue_id) ? 'selected' : '' }}>
-                                            {{ $catalogue->name }} <!-- Hiển thị tên của nhóm thành viên -->
-                                        </option>
+                                        <option value="0">Chọn chức vụ</option>
+                                        @foreach($userCatalogue as $item) <!-- Sử dụng $catalogue thay vì $key -->
+                                        @if ($item->id == 3) 
+                                            @continue; 
+                                        @endif
+                                        <option {{ old('user_catalogue_id', $user->user_catalogue_id) == $item->id ? 'selected' : '' }} 
+                                            value="{{ $item->id }}">{{ $item->name }}
+                                            </option>
                                         @endforeach
                                     </select>
 

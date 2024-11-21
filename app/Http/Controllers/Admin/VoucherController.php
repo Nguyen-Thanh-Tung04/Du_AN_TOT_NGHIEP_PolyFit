@@ -13,11 +13,26 @@ class VoucherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $vouchers = Voucher::all();
+        $query = Voucher::query();
+        if ($request->has('publish') && $request->publish !== '') {
+            $query->where('status', $request->publish);
+        }
+
+        if ($request->has('keyword') && $request->keyword !== '') {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('code', 'LIKE', "%{$keyword}%")
+                    ->orWhere('name', 'LIKE', "%{$keyword}%");
+            });
+        }
+        $vouchers = $query->paginate($request->get('perpage', 20));
+
         return view('admin.vouchers.index', compact('vouchers'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.

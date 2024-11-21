@@ -56,7 +56,6 @@
                     </div>
 
                     <small>
-{{--                        @dd($results)--}}
                         @if(isset($results[0]['growth']))
                             @if($results[0]['growth'] > 0)
                                 Tăng so với tháng trước
@@ -72,23 +71,6 @@
                 </div>
             </div>
         </div>
-
-{{--        <div class="col-lg-3">--}}
-{{--            <div class="ibox float-e-margins">--}}
-{{--                <div class="ibox-title">--}}
-{{--                    <span class="label label-info pull-right">Tổng số đơn hàng</span>--}}
-{{--                    <h5>ĐƠN HÀNG</h5>--}}
-{{--                </div>--}}
-{{--                <div class="ibox-content">--}}
-{{--                    <h1 class="no-margins">{{ isset($totalOrders) ? $totalOrders : 0 }}</h1>--}}
-{{--                    <div class="stat-percent font-bold text-info">--}}
-{{--                        {{ isset($cancellationRate) ? $cancellationRate : '0%' }}--}}
-{{--                        <i class="fa fa-level-up"></i>--}}
-{{--                    </div>--}}
-{{--                    <small>Số đơn hủy {{ isset($canceledOrders) ? $canceledOrders : 0 }} chiếm</small>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
 
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
@@ -128,7 +110,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 style="padding-top: 5px"> BIỂU ĐỒ THỐNG KÊ DOANH THU</h5>
-                    <div class="right" style="margin-left: 70%">
+                    <div class="right" style="margin-left: 60%">
                         <form id="filterForm" action="{{ route('dashboard.post') }}" method="POST">
                             @csrf
                             <h5 style="padding-top: 7px; padding-right: 10px">THỜI GIAN</h5>
@@ -146,6 +128,7 @@
                             <button class="btn btn-primary">Lọc</button>
                         </form>
 
+
                         <script>
                             document.getElementById('filterForm').addEventListener('submit', function(event) {
                                 let dateStart = document.querySelector('input[name="date_start"]').value;
@@ -154,6 +137,17 @@
                                 if (!dateStart || !endDate) {
                                     event.preventDefault(); // Ngăn không cho submit form
                                     toastr.error('Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc!', 'Thông báo');
+                                    return;
+                                }
+
+                                // Chuyển đổi chuỗi ngày thành đối tượng Date để so sánh
+                                let start = new Date(dateStart);
+                                let end = new Date(endDate);
+
+                                if (end < start) {
+                                    event.preventDefault(); // Ngăn không cho submit form
+                                    toastr.error('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!', 'Thông báo');
+                                    return;
                                 }
                             });
                         </script>

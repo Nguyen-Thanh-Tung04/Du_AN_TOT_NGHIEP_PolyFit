@@ -132,7 +132,7 @@
                          <div class="footer-bottom-payment d-flex justify-content-end">
                              <div class="payment-link">
                                  <img src="{{ asset('theme/client/assets/images/icons/payment.png')}}" alt="">
-                                
+
                              </div>
 
                          </div>
@@ -170,28 +170,28 @@
 
 
  <!-- Recent Purchase Popup  -->
-    <div class="recent-purchase-container">
-        <!-- Recent Purchase Popup sẽ được chèn vào đây -->
-    </div>
-{{-- <div class="recent-purchase">
+ <div class="recent-purchase-container">
+     <!-- Recent Purchase Popup sẽ được chèn vào đây -->
+ </div>
+ {{-- <div class="recent-purchase">
     <img src="{{asset('theme/client/assets/images/product-image/1.jpg')}}" alt="payment image">
-    <div class="detail">
-        <p>Có người mới mua</p>
-        <h6>{{ $product_name }}</h6>
-        <p>{{ $time_ago }}</p>
-    </div>
-    <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
-</div> --}}
+ <div class="detail">
+     <p>Có người mới mua</p>
+     <h6>{{ $product_name }}</h6>
+     <p>{{ $time_ago }}</p>
+ </div>
+ <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
+ </div> --}}
 
 
  {{-- <div class="recent-purchase">
      <img src="{{asset('theme/client/assets/images/product-image/1.jpg')}}" alt="payment image">
-     <div class="detail">
-         <p>Có người mới mua</p>
-         <h6>giày trẻ em thời trang</h6>
-         <p>10 phút trước</p>
-     </div>
-     <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
+ <div class="detail">
+     <p>Có người mới mua</p>
+     <h6>giày trẻ em thời trang</h6>
+     <p>10 phút trước</p>
+ </div>
+ <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
  </div> --}}
  <!-- Recent Purchase Popup end -->
 
@@ -203,176 +203,117 @@
          <span class="ec-cart-count cart-count-lable">3</span>
      </a>
  </div>
- <!-- Cart Floating Button end -->
 
- <!-- Whatsapp -->
- <div class="ec-style ec-right-bottom">
-     <!-- Start Floating Panel Container -->
-     <div class="ec-panel">
-         <!-- Panel Header -->
-         <div class="ec-header">
-             <strong>Need Help?</strong>
-             <p>Chat with us on WhatsApp</p>
-         </div>
-         <!-- Panel Content -->
-         <div class="ec-body">
-             <ul>
-                 <!-- Start Single Contact List -->
-                 <li>
-                     <a class="ec-list" data-number="918866774266"
-                         data-message="Please help me! I have got wrong product - ORDER ID is : #654321485">
-                         <div class="d-flex bd-highlight">
-                             <!-- Profile Picture -->
-                             <div class="ec-img-cont">
-                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img"
-                                     alt="Profile image">
-                                 <span class="ec-status-icon"></span>
-                             </div>
-                             <!-- Display Name & Last Seen -->
-                             <div class="ec-user-info">
-                                 <span>Sahar Darya</span>
-                                 <p>Sahar left 7 mins ago</p>
-                             </div>
-                             <!-- Chat iCon -->
-                             <div class="ec-chat-icon">
-                                 <i class="fa fa-whatsapp"></i>
-                             </div>
-                         </div>
-                     </a>
-                 </li>
-                 <!--/ End Single Contact List -->
-                 <!-- Start Single Contact List -->
-                 <li>
-                     <a class="ec-list" data-number="918866774266"
-                         data-message="Please help me! I have got wrong product - ORDER ID is : #654321485">
-                         <div class="d-flex bd-highlight">
-                             <!-- Profile Picture -->
-                             <div class="ec-img-cont">
-                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_02.jpg') }}" class="ec-user-img"
-                                     alt="Profile image">
-                                 <span class="ec-status-icon ec-online"></span>
-                             </div>
-                             <!-- Display Name & Last Seen -->
-                             <div class="ec-user-info">
-                                 <span>Yolduz Rafi</span>
-                                 <p>Yolduz is online</p>
-                             </div>
-                             <!-- Chat iCon -->
-                             <div class="ec-chat-icon">
-                                 <i class="fa fa-whatsapp"></i>
-                             </div>
-                         </div>
-                     </a>
-                 </li>
-                 <!--/ End Single Contact List -->
-                 <!-- Start Single Contact List -->
-                 <li>
-                     <a class="ec-list" data-number="918866774266"
-                         data-message="Please help me! I have got wrong product - ORDER ID is : #654321485">
-                         <div class="d-flex bd-highlight">
-                             <!-- Profile Picture -->
-                             <div class="ec-img-cont">
-                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_03.jpg') }}" class="ec-user-img"
-                                     alt="Profile image">
-                                 <span class="ec-status-icon ec-offline"></span>
-                             </div>
-                             <!-- Display Name & Last Seen -->
-                             <div class="ec-user-info">
-                                 <span>Nargis Hawa</span>
-                                 <p>Nargis left 30 mins ago</p>
-                             </div>
-                             <!-- Chat iCon -->
-                             <div class="ec-chat-icon">
-                                 <i class="fa fa-whatsapp"></i>
-                             </div>
-                         </div>
-                     </a>
-                 </li>
-                 <!--/ End Single Contact List -->
-                 <!-- Start Single Contact List -->
-                 <li>
-                     <a class="ec-list" data-number="918866774266"
-                         data-message="Please help me! I have got wrong product - ORDER ID is : #654321485">
-                         <div class="d-flex bd-highlight">
-                             <!-- Profile Picture -->
-                             <div class="ec-img-cont">
-                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_04.jpg') }}" class="ec-user-img"
-                                     alt="Profile image">
-                                 <span class="ec-status-icon ec-offline"></span>
-                             </div>
-                             <!-- Display Name & Last Seen -->
-                             <div class="ec-user-info">
-                                 <span>Khadija Mehr</span>
-                                 <p>Khadija left 50 mins ago</p>
-                             </div>
-                             <!-- Chat iCon -->
-                             <div class="ec-chat-icon">
-                                 <i class="fa fa-whatsapp"></i>
-                             </div>
-                         </div>
-                     </a>
-                 </li>
-                 <!--/ End Single Contact List -->
-             </ul>
-         </div>
-     </div>
-     <!--/ End Floating Panel Container -->
-     <!-- Start Right Floating Button-->
-     <div class="ec-right-bottom">
-         <div class="ec-box">
-             <div class="ec-button rotateBackward">
-                 <img class="whatsapp" src="{{asset('theme/client/assets/images/common/whatsapp.png')}}" alt="whatsapp icon">
-             </div>
-         </div>
-     </div>
-     <!--/ End Right Floating Button-->
- </div>
- <!-- Whatsapp end -->
+ <script type="module">
+     function formatTime(date) {
+         return date.toLocaleTimeString([], {
+             hour: '2-digit',
+             minute: '2-digit'
+         });
+     }
+
+     Echo.join('chat')
+         .here(users => {
+             users.forEach(user => {
+                 var userItem = document.querySelector(`#user${user.id}`);
+                 if (userItem) {
+                     var imgCont = userItem.querySelector('.ec-img-cont');
+                     var userInfo = userItem.querySelector('.ec-user-info');
+                     var activityTime = userInfo.querySelector('.activity-time');
+
+                     // Ghi lại thời gian người dùng online
+                     var currentTime = new Date();
+                     activityTime.textContent = `Online lúc ${formatTime(currentTime)}`;
+
+                     // Thêm dấu chấm xanh và trạng thái "Đang hoạt động"
+                     if (!imgCont.querySelector('.ec-online')) {
+                         var statusDot = document.createElement('span');
+                         statusDot.classList.add('ec-status-icon', 'ec-online');
+                         imgCont.appendChild(statusDot);
+                     }
+                 }
+             });
+         })
+         .joining(user => {
+             var userItem = document.querySelector(`#user${user.id}`);
+             if (userItem) {
+                 var imgCont = userItem.querySelector('.ec-img-cont');
+                 var userInfo = userItem.querySelector('.ec-user-info');
+                 var activityTime = userInfo.querySelector('.activity-time');
+
+                 // Ghi lại thời gian người dùng online
+                 var currentTime = new Date();
+                 activityTime.textContent = `Online lúc ${formatTime(currentTime)}`;
+
+                 // Thêm dấu chấm xanh và trạng thái "Đang hoạt động"
+                 var statusDot = document.createElement('span');
+                 statusDot.classList.add('ec-status-icon', 'ec-online');
+                 imgCont.appendChild(statusDot);
+             }
+         })
+         .leaving(user => {
+             var userItem = document.querySelector(`#user${user.id}`);
+             if (userItem) {
+                 var imgCont = userItem.querySelector('.ec-img-cont');
+                 var userInfo = userItem.querySelector('.ec-user-info');
+                 var activityTime = userInfo.querySelector('.activity-time');
+
+                 // Ghi lại thời gian người dùng offline
+                 var currentTime = new Date();
+                 activityTime.textContent = `Offline lúc ${formatTime(currentTime)}`;
+
+                 // Xóa dấu chấm xanh và trạng thái "Đang hoạt động"
+                 var statusDot = imgCont.querySelector('.ec-online');
+                 if (statusDot) {
+                     imgCont.removeChild(statusDot);
+                 }
+             }
+         });
+ </script>
+
  <script>
-    // console.log(window.Echo); // Kiểm tra xem Echo có khởi tạo đúng không
-    // console.log(window.Echo.channel('orders-channel'));
-    // window.Echo.channel('orders-channel')
-    // .listen('OrderPlaced', (e) => {
-    //     console.log('New order placed:', e);
-    // });
+     // console.log(window.Echo); // Kiểm tra xem Echo có khởi tạo đúng không
+     // console.log(window.Echo.channel('orders-channel'));
+     // window.Echo.channel('orders-channel')
+     // .listen('OrderPlaced', (e) => {
+     //     console.log('New order placed:', e);
+     // });
 
 
 
-//    function timeSince(date) {
-//     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-//     let interval = Math.floor(seconds / 60);
+     //    function timeSince(date) {
+     //     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+     //     let interval = Math.floor(seconds / 60);
 
-//     if (interval < 1) return 'Vừa mới';
-//     if (interval == 1) return '1 phút trước';
-//     return `${interval} phút trước`;
-//     }
+     //     if (interval < 1) return 'Vừa mới';
+     //     if (interval == 1) return '1 phút trước';
+     //     return `${interval} phút trước`;
+     //     }
 
-// // Lắng nghe sự kiện 'order.placed'
-// window.Echo.channel('orders-channel')
-//     .listen('order.placed', (e) => {
-//         const timeAgo = timeSince(e.order.created_at);
-        
-//         let recentPurchaseHtml = `
-//             <div class="recent-purchase">
-//                 <img src="/storage/${e.image}" alt="payment image">
-//                 <div class="detail">
-//                     <p>Có người mới mua</p>
-//                     <h6>${e.product_name}</h6>
-//                     <p>${timeAgo}</p>
-//                 </div>
-//                 <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
-//             </div>`;
-//         // Console log thông tin trước khi hiển thị
-//         console.log('Sự kiện đơn hàng mới:', {
-//             product_name: e.product_name,
-//             image: e.image,
-//             created_at: e.order.created_at,
-//             timeAgo: timeAgo
-//         });
+     // // Lắng nghe sự kiện 'order.placed'
+     // window.Echo.channel('orders-channel')
+     //     .listen('order.placed', (e) => {
+     //         const timeAgo = timeSince(e.order.created_at);
 
-
-//         document.querySelector('.recent-purchase-container').innerHTML = recentPurchaseHtml;
-//     });
+     //         let recentPurchaseHtml = `
+     //             <div class="recent-purchase">
+     //                 <img src="/storage/${e.image}" alt="payment image">
+     //                 <div class="detail">
+     //                     <p>Có người mới mua</p>
+     //                     <h6>${e.product_name}</h6>
+     //                     <p>${timeAgo}</p>
+     //                 </div>
+     //                 <a href="javascript:void(0)" class="icon-btn recent-close">×</a>
+     //             </div>`;
+     //         // Console log thông tin trước khi hiển thị
+     //         console.log('Sự kiện đơn hàng mới:', {
+     //             product_name: e.product_name,
+     //             image: e.image,
+     //             created_at: e.order.created_at,
+     //             timeAgo: timeAgo
+     //         });
 
 
+     //         document.querySelector('.recent-purchase-container').innerHTML = recentPurchaseHtml;
+     //     });
  </script>

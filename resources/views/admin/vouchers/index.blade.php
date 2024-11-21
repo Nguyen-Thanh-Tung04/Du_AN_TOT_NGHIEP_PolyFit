@@ -1,9 +1,13 @@
 @extends('admin.layout')
 
 @section('css')
-    <link href="admin/css/plugins/switchery/switchery.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-    <link href="admin/css/customize.css" rel="stylesheet">
+<link href="admin/css/plugins/switchery/switchery.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+<link href="admin/css/customize.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 @endsection
 
 @section('content')
@@ -82,10 +86,7 @@
                                                 <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>   
                                             @endforeach
                                         </select>
-                                        <select name="user_catalogue_id" class="form-control mr-10 setupSelect2">
-                                            <option value="0" selected="selected">Chọn Nhóm Thành Viên</option>
-                                            <option value="1">Quản Trị Viên</option>
-                                        </select>
+                                       
                                         <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
                                             <div class="input-group">
                                                 <input type="text"
@@ -105,69 +106,70 @@
                             </div>
                         </div>
                     </form>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                                    </th>
+                                    <th>Mã Voucher</th>
+                                    <th>Tên Voucher</th>
+                                    <th>Giá Trị</th>
+                                    <th>Giá Trị Giảm Tối Đa</th>
+                                    <th>Giá Trị Đơn Hàng Tối Thiểu</th>
+                                    <th>Giá Trị Đơn Hàng Tối Đa</th>
+                                    <th>Loại Giảm Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Ngày Bắt Đầu</th>
+                                    <th>Ngày Kết Thúc</th>
+                                    <th class="text-center">Tình Trạng</th>
+                                    <th class="text-center">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($vouchers as $voucher)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" value="{{ $voucher->id }}" class="input-checkbox checkBoxItem">
+                                        </td>
+                                        <td>{{ $voucher->code }}</td>
+                                        <td>{{ $voucher->name }}</td>
+                                        <td>{{ $voucher->value }}</td>
+                                        <td>{{ $voucher->max_discount_value }}</td>
+                                        <td>{{ $voucher->min_order_value}}</td>
+                                        <td>{{ $voucher->max_order_value}}</td>
+                                        <td>{{ $voucher->discount_type == 'fixed' ? 'Giảm giá cố định' : 'Giảm giá theo tỷ lệ' }}</td>
+                                        <td>{{ $voucher->quantity }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($voucher->end_time)->format('d/m/Y') }}</td>
+                                        <td class="text-center">
+                                            <input type="checkbox" value="{{ $voucher->status }}" 
+                                                   class="js-switch status" 
+                                                   data-field="status" 
+                                                   data-model="Voucher"
+                                                   data-modelId="{{ $voucher->id }}"
+                                                   {{ $voucher->status ? 'checked' : '' }} />
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                                            <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;"   >
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{-- {{ $vouchers->links('pagination::bootstrap-5') }} --}}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-sm table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
-                    </th>
-                    <th>Mã Voucher</th>
-                    <th>Tên Voucher</th>
-                    <th>Giá Trị</th>
-                    <th>Giá Trị Giảm Tối Đa</th>
-                    <th>Giá Trị Đơn Hàng Tối Thiểu</th>
-                    <th>Giá Trị Đơn Hàng Tối Đa</th>
-                    <th>Loại Giảm Giá</th>
-                    <th>Số Lượng</th>
-                    <th>Ngày Bắt Đầu</th>
-                    <th>Ngày Kết Thúc</th>
-                    <th class="text-center">Tình Trạng</th>
-                    <th class="text-center">Thao Tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($vouchers as $voucher)
-                    <tr>
-                        <td>
-                            <input type="checkbox" value="{{ $voucher->id }}" class="input-checkbox checkBoxItem">
-                        </td>
-                        <td>{{ $voucher->code }}</td>
-                        <td>{{ $voucher->name }}</td>
-                        <td>{{ $voucher->value }}</td>
-                        <td>{{ $voucher->max_discount_value }}</td>
-                        <td>{{ $voucher->min_order_value}}</td>
-                        <td>{{ $voucher->max_order_value}}</td>
-                        <td>{{ $voucher->discount_type == 'fixed' ? 'Giảm giá cố định' : 'Giảm giá theo tỷ lệ' }}</td>
-                        <td>{{ $voucher->quantity }}</td>
-                        <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($voucher->end_time)->format('d/m/Y') }}</td>
-                        <td class="text-center">
-                            <input type="checkbox" value="{{ $voucher->status }}" 
-                                   class="js-switch status" 
-                                   data-field="status" 
-                                   data-model="Voucher"
-                                   data-modelId="{{ $voucher->id }}"
-                                   {{ $voucher->status ? 'checked' : '' }} />
-                        </td>
-                        <td class="text-center">
-                            <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                            <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;"   >
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{-- {{ $vouchers->links('pagination::bootstrap-5') }} --}}
-    </div>
+   
     
 @endsection
 @section('js')
