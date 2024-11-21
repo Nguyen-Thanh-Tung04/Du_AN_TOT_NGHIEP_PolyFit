@@ -56,17 +56,6 @@ return [
             ],
         ],
         [
-            'title' => 'Mẫu CRUD',
-            'icon' => 'fa fa-dashboard',
-            'name' => ['crud'],
-            'subModule' => [
-                [
-                    'title' => 'Mẫu CRUD',
-                    'route' => 'crud/index',
-                ],
-            ],
-        ],
-        [
             'title' => 'Quản lý Khuyến Mãi',
             'icon' => 'fa fa-money',
             'name' => ['vouchers'],

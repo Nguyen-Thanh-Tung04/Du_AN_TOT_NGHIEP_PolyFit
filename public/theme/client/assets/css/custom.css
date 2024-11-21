@@ -282,115 +282,113 @@ body {
 
 .flash-sale {
     margin-top: 10px;
+}
 
-    .time-sale {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-        -webkit-align-items: center;
-        -moz-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        margin-top: .625rem;
-        height: 36px;
-        color: #fff;
-        padding: 0 20px;
-        background-image: url(https://deo.shopmobile.com/shop/shop-pcmall-live-sg/assets/a4320a9a13d12e6adf5b81c81fdce433.jpg), -webkit-gradient(linear, right top, left top, color-stop(9%, #f0451e), color-stop(96%, #f32424));
-        background-image: url(https://deo.shopmobile.com/shop/shop-pcmall-live-sg/assets/a4320a9a13d12e6adf5b81c81fdce433.jpg), linear-gradient(-90deg, #f0451e 9%, #f32424 96%);
+.time-sale {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: .625rem;
+    height: 36px;
+    color: #fff;
+    padding: 0 20px;
+    background-image: url(""), -webkit-gradient(linear, right top, left top, color-stop(9%, #f0451e), color-stop(96%, #f32424));
+    background-image: url(""), linear-gradient(-90deg, #f0451e 9%, #f32424 96%);
 
-        @media screen and (max-width: 640px) {
-            padding: 0 0.5em;
-        }
+}
 
-        .flash-sale-logo--white {
-            color: #fff;
-        }
+@media screen and (max-width: 640px) {
+    padding: 0 0.5em;
+}
 
-        .flash-sale-logo {
-            display: inline-block;
-        }
+.flash-sale-logo--white {
+    color: #fff;
+}
 
-        .shop-svg-icon {
-            margin-left: auto;
-            margin-right: 6px;
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            fill: currentColor;
-            position: relative;
+.flash-sale-logo {
+    display: inline-block;
+}
 
-            @media screen and (max-width: 640px) {
-                width: 0.8em;
-                height: 0.8em;
-            }
-        }
+.shop-svg-icon {
+    margin-left: auto;
+    margin-right: 6px;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    position: relative;
 
-        .end-text {
-            text-transform: uppercase;
-            margin-right: .225rem;
-            font-weight: lighter;
+    @media screen and (max-width: 640px) {
+        width: 0.8em;
+        height: 0.8em;
+    }
+}
 
-            @media screen and (max-width: 991px) {
-                font-size: 12px;
-            }
+.end-text {
+    text-transform: uppercase;
+    margin-right: .225rem;
+    font-weight: 400;
 
-            @media screen and (max-width:767px) {
-                font-size: 9px;
-                marginn-right: 0px;
-            }
-        }
+    @media screen and (max-width: 991px) {
+        font-size: 12px;
+    }
 
-        .flash-sale-countdown {
-            margin-left: 0;
-            height: 24px;
-            font-weight: 400;
-            align-items: flex-start;
-            transform: scale(0.84);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            cursor: default;
-            display: flex;
-            color: #000;
+    @media screen and (max-width:767px) {
+        font-size: 9px;
+        marginn-right: 0px;
+    }
+}
 
-            @media screen and (max-width: 991px) {
-                margin-left: 0
-            }
+.flash-sale-countdown {
+    margin-left: 0;
+    height: 24px;
+    font-weight: 400;
+    align-items: flex-start;
+    transform: scale(0.84);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    cursor: default;
+    display: flex;
+    color: #000;
 
-            p {
-                margin-top: 0;
-                font-weight: bold;
-                text-align: center;
-            }
 
-            span {
-                background: #222;
-                color: #f4f4f4;
-                width: 27px;
-                display: inline-block;
-                height: 24px;
-                float: left;
-                line-height: 23px;
-                margin-left: 6px;
-                border-radius: 2px;
-            }
+    p {
+        margin-top: 0;
+        font-weight: bold;
+        text-align: center;
+    }
 
-            .tempo {
-                width: 350px;
-                padding: 0;
-            }
+    span {
+        background: #222;
+        color: #f4f4f4;
+        width: 27px;
+        display: inline-block;
+        height: 24px;
+        float: left;
+        line-height: 23px;
+        margin-left: 6px;
+        border-radius: 2px;
+    }
 
-            .tempo li {
-                text-align: left;
-                display: inline-block;
-                font-size: 24px;
-                width: 31%;
-                margin-top: -50px;
-                margin-left: -1px;
-            }
-        }
+    .tempo {
+        width: 350px;
+        padding: 0;
+    }
+
+    .tempo li {
+        text-align: left;
+        display: inline-block;
+        font-size: 24px;
+        width: 31%;
+        margin-top: -50px;
+        margin-left: -1px;
     }
 }
 

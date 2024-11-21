@@ -16,6 +16,36 @@ class CartController extends Controller
         $cartItems = Cart::with('variant.product', 'variant.color', 'variant.size')
             ->where('user_id', Auth::id())
             ->get();
+
+        foreach ($cartItems as $item) {
+            $product = $item->variant->product;
+            $variant = $item->variant;
+
+            // Kiểm tra xem variant có trong chương trình flash sale đang diễn ra hay không
+            $flashSaleProduct = $product->flashSaleProducts()->where('variant_id', $variant->id)
+                ->whereHas('flashSale', function ($query) {
+                    $query->where('status', 1)
+                        ->where('date', now()->toDateString())
+                        ->where(function ($query) {
+                            $currentHour = now()->hour;
+                            $currentMinute = now()->minute;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
+                        });
+                })
+                ->where('status', 1)
+                ->where('quantity', '>', 0)
+                ->first();
+
+            if ($flashSaleProduct) {
+                $item->setAttribute('sale_price', $flashSaleProduct->flash_price);
+                $item->setAttribute('listed_price', $flashSaleProduct->listed_price);
+            } else {
+                $item->setAttribute('sale_price', $variant->sale_price ?? null);
+                $item->setAttribute('listed_price', $variant->listed_price);
+            }
+        }
+
         return view('client.page.cart', compact('cartItems'));
     }
 
@@ -155,9 +185,31 @@ class CartController extends Controller
                 ]);
             }
 
+            // Kiểm tra xem variant có trong chương trình flash sale đang diễn ra hay không
+            $flashSaleProduct = $variant->product->flashSaleProducts()->where('variant_id', $variant->id)
+                ->whereHas('flashSale', function ($query) {
+                    $query->where('status', 1)
+                        ->where('date', now()->toDateString())
+                        ->where(function ($query) {
+                            $currentHour = now()->hour;
+                            $currentMinute = now()->minute;
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
+                        });
+                })
+                ->where('status', 1)
+                ->where('quantity', '>', 0)
+                ->first();
+
+            if ($flashSaleProduct) {
+                $price = $flashSaleProduct->flash_price;
+            } else {
+                $price = $variant->sale_price ?? $variant->listed_price;
+            }
+
             $cartItem->quantity = $newQuantity;
             $cartItem->save();
-            $totalPrice = ($variant->sale_price ?? $variant->listed_price) * $cartItem->quantity;
+            $totalPrice = $price * $cartItem->quantity;
 
             return response()->json([
                 'status' => true,
@@ -198,14 +250,37 @@ class CartController extends Controller
         $items = $request->input('items');
         $subtotal = 0;
         $discount = 0;
-
-
-
         foreach ($items as $item) {
             $cart = Cart::with('variant')->find($item['id']);
             if ($cart) {
-                $salePrice = $cart->variant->sale_price;
-                $listedPrice = $cart->variant->listed_price;
+                $variant = $cart->variant;
+                $product = $variant->product;
+
+                // Kiểm tra xem variant có trong chương trình flash sale đang diễn ra hay không
+                $flashSaleProduct = $product->flashSaleProducts()->where('variant_id', $variant->id)
+                    ->whereHas('flashSale', function ($query) {
+                        $query->where('status', 1)
+                            ->where('date', now()->toDateString())
+                            ->where(function ($query) {
+                                $currentHour = now()->hour;
+                                $currentMinute = now()->minute;
+                                $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
+                                    ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
+                            });
+                    })
+                    ->where('status', 1)
+                    ->where('quantity', '>', 0)
+                    ->first();
+
+
+                if ($flashSaleProduct) {
+                    $salePrice = $flashSaleProduct->flash_price;
+                    $listedPrice = $flashSaleProduct->listed_price;
+                } else {
+                    $salePrice = $variant->sale_price;
+                    $listedPrice = $variant->listed_price;
+                }
+
                 $quantity = $cart->quantity;
 
                 $subtotal += $listedPrice * $quantity;

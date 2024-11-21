@@ -23,7 +23,7 @@
                         <input type="checkbox" value="{{ $member->id }}" class="input-checkbox checkBoxItem">
                     </td>
                     <td class="text-center">
-                        <span><img class="image img-cover" src="{{ $member->image }}" alt=""></span>
+                        <span><img class="image img-cover" src="{{Storage::url($member->image)  }}" alt=""></span>
                     </td>
                     <td>{{ $member->name }}</td>
                     <td>{{ $member->email }}</td>
