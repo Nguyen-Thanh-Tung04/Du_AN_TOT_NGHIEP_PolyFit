@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Variant;
 use App\Repositories\PermissionRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -34,8 +35,7 @@ class PermissionService
         DB::beginTransaction();
         try {
             $payloadPermission = $request->only([
-                'name', 
-                'canonical',
+                'name',
             ]);
             $permission = $this->permissionRepository->create($payloadPermission);
             DB::commit();
@@ -55,7 +55,6 @@ class PermissionService
        
             $payloadPermission = $request->only([
                 'name',
-                'canonical', 
             ]);
             $flagUpdatePermission = $this->permissionRepository->update($id, $payloadPermission);
             DB::commit();
