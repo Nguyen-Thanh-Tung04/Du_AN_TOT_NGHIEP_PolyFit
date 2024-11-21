@@ -36,7 +36,11 @@
                                             <p class="pull-right">{{ $item->created_at->format('h:i A') }}</p>
                                         </div>
                                         <div class="user_info" style="position: relative;">
+                                            @if($item->is_read === 0)
+                                            <strong class="is_active">{{ $item->message }}</strong>
+                                            @else
                                             <span class="is_active">{{ $item->message }}</span>
+                                            @endif
                                             <p class="activity-time"></p> <!-- Thêm phần tử này để hiển thị giờ online/offline -->
                                         </div>
                                     </div>
@@ -50,7 +54,7 @@
             <div class="col-sm-9 message_section">
                 <div class="row">
                     <div class="new_message_head">
-                        <div class="pull-left" id="user{{ $item->id }}" style="display: flex;">
+                        <div class="pull-left" id="user{{ $item->id ?? '' }}" style="display: flex;">
                             <div class="img_cont">
                                 @if(isset($user->image))
                                 <img src="{{ $user->image }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
@@ -106,13 +110,8 @@
 <script type="module">
     Echo.join('chat')
         .here(users => {
-            console.log(users);
-
             users.forEach(user => {
-                console.log(user.id);
-
                 var userItem = document.querySelector(`#user${user.id}`);
-                console.log(userItem);
 
                 if (userItem) {
                     var imgCont = userItem.querySelector('.img_cont');
@@ -122,12 +121,6 @@
                     var status = document.createElement('span');
                     // var is_active = document.createElement('p');
                     status.classList.add('online_icon');
-                    // is_active.classList.add('is_active');
-                    // is_active.textContent = 'Đang hoạt động';
-
-                    // Thêm dấu chấm vào imgCont và trạng thái vào user_info
-                    imgCont.appendChild(status);
-                    user_info.appendChild(is_active);
                 }
             });
 
@@ -155,7 +148,6 @@
         })
         .leaving(user => {
             var el = document.querySelector(`#user${user.id}`);
-            console.log(el);
 
             if (el) {
                 var img_cont = el.querySelector('.img_cont');
@@ -166,12 +158,6 @@
                 if (el_status) {
                     img_cont.removeChild(el_status);
                 }
-
-                // Xóa trạng thái "Đang hoạt động"
-                // var el_active = user_info.querySelector('.is_active');
-                // if (el_active) {
-                //     user_info.removeChild(el_active);
-                // }
             }
         });
     const online_icon = document.querySelector('.online_icon')
@@ -189,8 +175,7 @@
 
 <script>
     var search_text = document.querySelector('.search-text')
-    var contacts = document.querySelector('.list-unstyled');
-    // console.log(contacts);
+    var contacts = document.querySelector('.list-unstyled')
 
 
     search_text.addEventListener('input', function() {
@@ -201,11 +186,11 @@
                 search_text: query
             })
             .then(function(response) {
-
+                
                 var ui = '';
                 if (response.data && response.data.data) {
-                    console.log(response.data);
-
+                    console.log(response.data.data);
+                    
                     response.data.data.forEach(function(user) {
                         let image = null
                         if (user.user_image) {
