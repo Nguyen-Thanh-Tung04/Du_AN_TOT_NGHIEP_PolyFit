@@ -111,8 +111,11 @@ class ChatController extends Controller
     }
     public function chatPrivate($idUser)
     {
-        // Lấy danh sách người dùng khác (trừ người dùng hiện tại)
-        $users = User::where('id', '<>', Auth::user()->id)->get();
+        $authUserId = Auth::user()->id; // ID người dùng hiện tại
+        ChatPrivateModel::where('user_send', $idUser)
+            ->where('user_reciever', $authUserId)
+            ->where('is_read', 0)
+            ->update(['is_read' => 1]);
 
         // Lấy thông tin người dùng được chỉ định
         $user = User::where('id', '=', $idUser)->first();
@@ -140,7 +143,7 @@ class ChatController extends Controller
             ->orderBy('message_private.created_at', 'asc') // Đảm bảo tin nhắn được sắp xếp theo thời gian
             ->get();
         // dd($messagePrivate);
-        return view('chat.Chat-private', ['users' => $users, 'user' => $user, 'messagePrivate' => $messagePrivate]);
+        return view('chat.Chat-private', ['user' => $user, 'messagePrivate' => $messagePrivate]);
     }
 
 

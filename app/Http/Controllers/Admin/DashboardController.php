@@ -25,40 +25,12 @@ class DashboardController extends Controller
 
         $authUserId = Auth::user()->id; // ID người dùng hiện tại
         $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
-        // Truy vấn chung
-        $query = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id') // Join bảng users với bảng message_private
-            ->where('message_private.created_at', function ($query) {
-                $query->selectRaw('MAX(created_at)')
-                    ->from('message_private as mp_sub')
-                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
-            })
-            ->where('users.id', '<>', Auth::user()->id) // Loại trừ người dùng hiện tại
-            ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian tạo tin nhắn giảm dần
-            ->select(
-                'message_private.user_send',
-                'message_private.message',
-                'message_private.created_at',
-                'users.id as user_id',
-                'users.name as user_name',
-                'users.image as user_image'
-            );
+
 
         if ($authUserRole === 1) {
-            // Nếu là Admin: Hiển thị tất cả user đã nhắn tin và đếm tất cả tin nhắn chưa đọc
-            $users = $query->get();
-
             // Đếm tin nhắn chưa đọc (Admin xem tất cả)
             $unreadMessagesCount = ChatPrivateModel::where('is_read', false)->count();
         } else {
-            // Nếu là nhân viên: Chỉ hiển thị các user đã nhắn tin với tài khoản nhân viên hiện tại
-
-            $users = $query
-                ->where(function ($subQuery) use ($authUserId) {
-                    $subQuery->where('message_private.user_send', $authUserId)
-                        ->orWhere('message_private.user_reciever', $authUserId);
-                })
-                ->where('users.id', '<>', $authUserId) // Loại trừ chính tài khoản nhân viên
-                ->get();
             // Còn Nếu là tk nhân viên: đếm tất nhắn tin chưa đọc với tài khoản nhân viên đó
             $unreadMessagesCount = ChatPrivateModel::where('is_read', false)
                 ->where(function ($query) use ($authUserId) {
