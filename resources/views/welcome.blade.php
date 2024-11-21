@@ -386,18 +386,18 @@
                 <ul>
                     <!-- Start Single Contact List -->
 
-                    @foreach($users as $item)
-                    <li id="user{{ $item->id }}">
-                        <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
-                            <div class="d-flex bd-highlight">
-                                <!-- Profile Picture -->
-                                <div class="ec-img-cont">
-                                    @if(isset($item->image))
-                                    <img src="{{ $item->image }}" class="ec-user-img" alt="Profile image">
-                                    @else
-                                    <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
-                                    @endif
-                                </div>
+                 @foreach($users as $item)
+                 <li id="user{{ $item->id }}">
+                     <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
+                         <div class="d-flex bd-highlight">
+                             <!-- Profile Picture -->
+                             <div class="ec-img-cont">
+                                 @if(isset($item->image))
+                                 <img src="{{ $item->image }}" class="ec-user-img" alt="Profile image">
+                                 @else
+                                 <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
+                                 @endif
+                             </div>
 
                                 <!-- Display Name & Last Seen -->
                                 <div class="ec-user-info">
@@ -415,22 +415,22 @@
                     </li>
 
 
-                    @endforeach
-                    <!--/ End Single Contact List -->
-                </ul>
-            </div>
-        </div>
-        <!--/ End Floating Panel Container -->
-        <!-- Start Right Floating Button-->
-        <div class="ec-right-bottom">
-            <div class="ec-box">
-                <div class="ec-button rotateForward">
-                    <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
-                </div>
-            </div>
-        </div>
-        <!--/ End Right Floating Button-->
-
-    </div>
-    <!-- Whatsapp end -->
-    @endsection
+                 @endforeach
+                 <!--/ End Single Contact List -->
+             </ul>
+         </div>
+     </div>
+     <!--/ End Floating Panel Container -->
+     <!-- Start Right Floating Button-->
+     <div class="ec-right-bottom">
+         <div class="ec-box">
+             <div class="ec-button rotateForward">
+                 <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
+             </div>
+         </div>
+     </div>
+     <!--/ End Right Floating Button-->
+     
+ </div>
+ <!-- Whatsapp end -->
+@endsection

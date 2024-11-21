@@ -142,6 +142,7 @@ Route::middleware('checkLoginClient')->group(function () {
     Route::post('/message-private', [ChatController::class, 'messagePrivate']);
     Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
+    Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');

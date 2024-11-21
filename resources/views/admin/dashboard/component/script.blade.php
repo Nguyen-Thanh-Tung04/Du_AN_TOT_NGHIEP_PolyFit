@@ -130,3 +130,31 @@
             });
         })
     </script>
+<script>
+// Hàm cập nhật số lượng tin nhắn chưa đọc
+const updateUnreadMessagesCount = () => {
+    $.ajax({
+        url: '/get-unread-messages-count',  // API lấy số lượng tin nhắn chưa đọc
+        type: 'GET',
+        success: function(response) {
+            // Cập nhật số lượng tin nhắn chưa đọc vào giao diện
+            $('#unreadMessagesCount').text(response.unreadCount);
+        },
+        error: function(xhr, status, error) {
+            console.error('Lỗi khi lấy số lượng tin nhắn chưa đọc:', error);
+        }
+    });
+};
+
+// Gọi hàm khi trang tải lần đầu tiên để hiển thị số lượng tin nhắn chưa đọc
+$(document).ready(function() {
+    updateUnreadMessagesCount();  // Cập nhật ngay khi trang tải
+
+    // Kiểm tra mỗi 5 giây (5000ms)
+    setInterval(function() {
+        updateUnreadMessagesCount();
+    }, 5000);  // 5 giây
+});
+
+
+</script>

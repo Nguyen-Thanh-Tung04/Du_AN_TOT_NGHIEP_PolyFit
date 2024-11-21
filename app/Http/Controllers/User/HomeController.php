@@ -25,11 +25,22 @@ class HomeController extends Controller
     public function welcome()
     {
 
-        $users = User::where('user_catalogue_id', 2)
-            ->orderBy('created_at', 'desc') 
-            ->limit(3) 
+        $users = User::select('users.id', 'users.name', 'users.image')
+            ->leftJoin('message_private as m', function ($join) {
+                $join->on('users.id', '=', 'm.user_reciever')
+                    ->where('m.created_at', '>=', now()->subMinutes(5));
+            })
+            ->where('users.user_catalogue_id', 2)
+            ->where('users.id', '<>', Auth::user()->id)
+            ->groupBy('users.id', 'users.name')
+            ->havingRaw('COUNT(DISTINCT m.user_send) <= 5')
+            ->limit(3)  // Lấy 3 nhân viên
             ->get();
+
+        // Hiển thị kết quả
+        // dd($availableStaff);
         $user = Auth::user();
+
 
         // dd($users);
         // Sử dụng join để kết nối bảng product và variants
