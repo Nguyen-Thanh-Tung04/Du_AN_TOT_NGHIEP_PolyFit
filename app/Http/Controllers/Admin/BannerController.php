@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BannerRequest;
+use App\Http\Requests\UpdateRequestBanner;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,25 +19,19 @@ class BannerController extends Controller
     public function create(){
         return view('admin.banner.create');
     }
-    public function store(Request $request)
+    public function store(BannerRequest $request)
     {
-
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|max:2048',
-        ]);
-
         $banner = new Banner();
-        $banner->title = $request->title;
-
+        $banner->title_main = $request->title_main;
+        $banner->title_sub = $request->title_sub;
+        $banner->content = $request->content;
         // Upload và lưu hình ảnh
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('banners', 'public');
             $banner->image = $imagePath;
         }
-
         $banner->link = $request->link;
-        $banner->is_active = $request->is_active ? 1 : 0;
+        $banner->is_active = $request->is_active;
         $banner->save();
         return redirect()->route('banner.index')->with('success', 'Banner đã được tạo thành công');
     }
@@ -44,18 +40,10 @@ class BannerController extends Controller
         $banner = Banner::findOrFail($id);
         return view('admin.banner.edit', compact('banner'));
     }
-    public function update(Request $request, $id)
+    public function update(UpdateRequestBanner $request, $id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'link' => 'nullable|url',
-            'is_active' => 'required|boolean',
-        ]);
-
         $banner = Banner::findOrFail($id);
         $data = $request->all();
-
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ nếu có
             if ($banner->image) {
@@ -63,9 +51,7 @@ class BannerController extends Controller
             }
             $data['image'] = $request->file('image')->store('banners', 'public');
         }
-
         $banner->update($data);
-
         return redirect()->route('banner.index')->with('success', 'Đã cập nhật  thành công.');
     }
     public function delete($id)
@@ -75,9 +61,7 @@ class BannerController extends Controller
         if ($banner->image) {
             Storage::disk('public')->delete($banner->image);
         }
-
         $banner->delete();
-
         return redirect()->route('banner.index')->with('success', 'Đã xóa thành công.');
     }
 

@@ -115,7 +115,9 @@
                         <input type="checkbox" value="" id="checkAll" class="input-checkbox">
                     </th>
                     <th>Mã Banner</th>
-                    <th>Tiêu đề</th>
+                    <th>Tiêu đề chính</th>
+                    <th>Tiêu đề phụ</th>
+                    <th>Nội dung</th>
                     <th>Hình Ảnh </th>
                     <th>Liên kết</th>
                     <th class="text-center">Trạng thái</th>
@@ -129,7 +131,9 @@
                             <input type="checkbox" value="" class="input-checkbox checkBoxItem">
                         </td>
                         <td>{{$banner->id}}</td>
-                        <td>{{$banner->title}}</td>
+                        <td>{{$banner->title_main}}</td>
+                        <td>{{$banner->title_sub}}</td>
+                        <td>{{$banner->content}}</td>
                         <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
                         <td>{{$banner->link}}</td>
                         <td>{{ $banner->is_active ? 'Active' : 'Inactive' }}</td>

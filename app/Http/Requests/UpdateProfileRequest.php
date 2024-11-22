@@ -26,8 +26,6 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'email' => 'required|email|',
-            'phone' => 'digits:10',
-            'birthday' =>'date',
             'province_id' => 'max:255',
             'district_id' => 'max:255',
             'ward_id' => 'max:255',

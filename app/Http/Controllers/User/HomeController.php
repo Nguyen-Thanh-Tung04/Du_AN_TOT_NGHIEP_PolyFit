@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\ResetPasswordMail;
+use App\Models\Banner;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\Variant;
@@ -69,11 +70,14 @@ class HomeController extends Controller
             ->having('total_quantity', '>', 0) // Chỉ lấy sản phẩm có tổng quantity > 0
             ->get();
 
+        $banners = Banner::where('is_active',1)->get();
+
         $data = [
             'products' => $products,
             'discounted' => $discounted,
             'users' => $users,
-            'user' => $user
+            'user' => $user,
+            'banners' => $banners
 
         ];
 

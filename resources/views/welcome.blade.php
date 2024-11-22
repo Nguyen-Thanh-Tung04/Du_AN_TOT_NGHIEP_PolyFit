@@ -8,36 +8,23 @@
     <div class="ec-slider swiper-container main-slider-nav main-slider-dot">
         <!-- Main slider -->
         <div class="swiper-wrapper">
-            <div class="ec-slide-item swiper-slide d-flex ec-slide-1">
+            @foreach ($banners as $banner )
+            <div class="ec-slide-item swiper-slide d-flex ec-slide-1" style="background-image: url('{{ asset('storage/' . $banner->image) }}')">
                 <div class="container align-self-center">
                     <div class="row">
                         <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                             <div class="ec-slide-content slider-animation">
-                                <h1 class="ec-slide-title">Bộ sưu tập thời trang mới</h1>
-                                <h2 class="ec-slide-stitle">Khuyến mại</h2>
-                                <p>PolyFit chúng tôi hân hạnh chào đón bạn !</p>
-                                <a href="{{ url('/product_detail') }}" class="btn btn-lg btn-secondary">Đặt hàng
+                                <h1 class="ec-slide-title">{{$banner->title_main}}</h1>
+                                <h2 class="ec-slide-stitle">{{$banner->title_sub}}</h2>
+                                <p>{{$banner->content}}</p>
+                                <a href="{{$banner->link}}" class="btn btn-lg btn-secondary">Đặt hàng
                                     ngay</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="ec-slide-item swiper-slide d-flex ec-slide-2">
-                <div class="container align-self-center">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
-                            <div class="ec-slide-content slider-animation">
-                                <h1 class="ec-slide-title">Bộ thời trang sang trọng quý phái</h1>
-                                <h2 class="ec-slide-stitle">Khuyến mại</h2>
-                                <p>Chúng tôi hi vọng sẽ giúp thỏa mãn mong muốn mua sắm của quý khách !</p>
-                                <a href="{{ url('/product_detail') }}" class="btn btn-lg btn-secondary">Đặt hàng
-                                    ngay</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
         <div class="swiper-pagination swiper-pagination-white"></div>
         <div class="swiper-buttons">
