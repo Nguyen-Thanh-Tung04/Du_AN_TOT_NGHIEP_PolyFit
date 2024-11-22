@@ -1,11 +1,19 @@
-import "./bootstrap";
 function timeSince(date) {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    let interval = Math.floor(seconds / 60);
 
-    if (interval < 1) return 'Vừa mới';
-    if (interval == 1) return '1 phút trước';
-    return `${interval} phút trước`;
+    let interval = Math.floor(seconds / 3600); // Tính theo giờ
+    if (interval >= 1) {
+        const minutes = Math.floor((seconds % 3600) / 60); // Tính số phút còn lại
+        if (minutes > 0) {
+            return `${interval} giờ ${minutes} phút trước`;
+        }
+        return `${interval} giờ trước`;
+    }
+
+    interval = Math.floor(seconds / 60); // Tính theo phút
+    if (interval >= 1) return `${interval} phút trước`;
+
+    return 'Vừa mới';
 }
 
 // Lắng nghe sự kiện 'order.placed'
@@ -30,7 +38,6 @@ window.Echo.channel('orders-channel')
             created_at: e.order.created_at,
             timeAgo: timeAgo
         });
-
 
         document.querySelector('.recent-purchase-container').innerHTML = recentPurchaseHtml;
         setTimeout(function () {

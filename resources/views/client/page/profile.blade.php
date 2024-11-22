@@ -277,7 +277,7 @@
                                 </div>
                                 <div class="col-md-12 space-t-15">
                                     <label class="form-label">Ngày sinh</label>
-                                    <input type="datetime" name="birthday" class="form-control" value="{{$profile->birthday}}">
+                                    <input type="date" name="birthday" class="form-control" value="{{$profile->birthday}}">
                                     @error('birthday')
                                     <p class="text-danger">{{$message}}</p>
                                     @enderror
