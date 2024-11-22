@@ -151,10 +151,10 @@ Route::get('huongdev', function () {
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
     ->name('dashboard.index')
-    ->middleware('checkLogin');
+    ->middleware('logined');
 Route::post('dashboard/index', [DashboardController::class, 'statistical_sale'])
     ->name('dashboard.post')
-    ->middleware('checkLogin');
+    ->middleware('logined');
 // USER
 Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserController::class, 'index'])
@@ -261,7 +261,7 @@ Route::post('login-client', [AuthController::class, 'loginclient'])
 
 // Login admin
 Route::get('admin-login', [AuthController::class, 'index'])
-    ->name('auth.login')->middleware('guest');
+    ->name('auth.login');
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');
