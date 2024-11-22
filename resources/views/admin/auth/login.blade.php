@@ -13,6 +13,11 @@
 </head>
 
 <body class="gray-bg">
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
     <div class="loginColumns animated fadeInDown">
         <div class="row">
