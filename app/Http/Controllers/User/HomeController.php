@@ -31,7 +31,7 @@ class HomeController extends Controller
                     ->where('m.created_at', '>=', now()->subMinutes(5));
             })
             ->where('users.user_catalogue_id', 2)
-            ->where('users.id', '<>', Auth::user()->id)
+            // ->where('users.id', '<>', Auth::user()->id)
             ->groupBy('users.id', 'users.name')
             ->havingRaw('COUNT(DISTINCT m.user_send) <= 5')
             ->limit(3)  // Lấy 3 nhân viên
@@ -84,7 +84,7 @@ class HomeController extends Controller
             $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
         }
 
-        return view('welcome', $data, compact('category'));
+        return view('client.welcome', $data, compact('category'));
     }
 
 

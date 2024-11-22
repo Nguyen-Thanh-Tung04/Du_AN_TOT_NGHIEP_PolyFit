@@ -69,6 +69,9 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
+Route::get('/helo', function () {
+    return view('client.helo');
+});
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
 Route::get('/flash-sale', [SaleController::class, 'index'])->name('flash-sale');
@@ -261,7 +264,7 @@ Route::post('login-client', [AuthController::class, 'loginclient'])
 
 // Login admin
 Route::get('admin-login', [AuthController::class, 'index'])
-    ->name('auth.login');
+    ->name('auth.login')->middleware(['guest']);
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');
