@@ -69,9 +69,6 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/about', function () {
     return view('client.page.about');
 });
-Route::get('/helo', function () {
-    return view('client.helo');
-});
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
 Route::get('/flash-sale', [SaleController::class, 'index'])->name('flash-sale');
