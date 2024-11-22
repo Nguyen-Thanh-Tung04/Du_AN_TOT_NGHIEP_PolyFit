@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                             <div class="ec-slide-content slider-animation">
-                            <h1 class="ec-slide-title">Bộ thời trang sang trọng quý phái</h1>
+                                <h1 class="ec-slide-title">Bộ thời trang sang trọng quý phái</h1>
                                 <h2 class="ec-slide-stitle">Khuyến mại</h2>
                                 <p>Chúng tôi hi vọng sẽ giúp thỏa mãn mong muốn mua sắm của quý khách !</p>
                                 <a href="{{ url('/product_detail') }}" class="btn btn-lg btn-secondary">Đặt hàng
@@ -93,34 +93,36 @@
                                         <a href="{{ route('client.product.show', $product->id) }}" class="image">
                                             <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
                                             @if($product->variants->sum('quantity') === 0)
-                                                <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
-                                                <div class="out-of-stock-label">Hết hàng</div>
+                                            <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
+                                            <div class="out-of-stock-label">Hết hàng</div>
                                             @endif
                                         </a>
                                     </div>
                                     <div class="ec-product-body">
                                         <ul class="ec-rating">
                                             @php
-                                                $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                            $averageScore = $product->averageScore(); // Gọi phương thức averageScore
                                             @endphp
 
                                             @if ($averageScore)
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    @if ($i <= $averageScore)
-                                                        <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
-                                                    @else
-                                                        <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                    @endif
-                                                @endfor
-                                            @else
                                             @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= 5)
-                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                @if ($i <=$averageScore)
+                                                <li class="ecicon eci-star fill">
+                                                </li> <!-- Sao đầy -->
                                                 @else
-                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
                                                 @endif
-                                            @endfor
-                                            @endif
+                                                @endfor
+                                                @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <=5)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                    @endfor
+                                                    @endif
                                         </ul>
 
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
@@ -129,7 +131,7 @@
                                             {{ number_format($product->min_price, 0) }} VNĐ
                                             {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                         </div>
-                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
                                     </div>
                                 </div>
                                 <!--/END single card -->
@@ -214,12 +216,12 @@
                     <h2 class="ec-offer-title">Mũ</h2>
                     <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
                     <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
-                            alt="offer image" /></span>
-                    <span class="ec-offer-desc">Mũ</span>
-                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} đ</span>
-                    <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
-                </div> --}}
-            </div>
+                alt="offer image" /></span>
+                <span class="ec-offer-desc">Mũ</span>
+                <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} đ</span>
+                <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
+            </div> --}}
+        </div>
         </div>
     </section>
     <!-- offer Section End -->
@@ -249,37 +251,39 @@
                                     <!-- START single card -->
                                     <div class="ec-product-ds">
                                         <div class="ec-product-image {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}">
-                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
-                                            @if($product->variants->sum('quantity') === 0)
+                                            <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                                <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
+                                                @if($product->variants->sum('quantity') === 0)
                                                 <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
                                                 <div class="out-of-stock-label">Hết hàng</div>
-                                            @endif
-                                        </a>
-                                    </div>
+                                                @endif
+                                            </a>
+                                        </div>
                                         <div class="ec-product-body">
                                             <ul class="ec-rating">
                                                 @php
-                                                    $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                                $averageScore = $product->averageScore(); // Gọi phương thức averageScore
                                                 @endphp
 
                                                 @if ($averageScore)
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        @if ($i <= $averageScore)
-                                                            <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
-                                                        @else
-                                                            <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                        @endif
-                                                    @endfor
-                                                @else
                                                 @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= 5)
-                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
-                                                @else
+                                                    @if ($i <=$averageScore)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
                                                     <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                @endif
-                                            @endfor
-                                                @endif
+                                                    @endif
+                                                    @endfor
+                                                    @else
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        @if ($i <=5)
+                                                        <li class="ecicon eci-star fill">
+                                                        </li> <!-- Sao đầy -->
+                                                        @else
+                                                        <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                        @endif
+                                                        @endfor
+                                                        @endif
                                             </ul>
                                             <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="ec-price">
@@ -287,7 +291,7 @@
                                                 {{ number_format($product->min_price, 0) }} VNĐ
                                                 {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
                                             </div>
-                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
                                         </div>
                                     </div>
                                     <!--/END single card -->
@@ -319,7 +323,7 @@
         </div>
     </section>
     <!-- New Product end -->
-     
+
     <!-- Ec Brand Section Start -->
     <section class="section ec-brand-area section-space-p">
         <h2 class="d-none">Thương hiệu</h2>
@@ -370,63 +374,66 @@
     </section>
     <!-- Ec Brand Section End -->
     <div class="ec-style ec-right-bottom">
-     <!-- Start Floating Panel Container -->
-     <div class="ec-panel" style="display: block;">
-         <!-- Panel Header -->
-         <div class="ec-header">
-             <strong>Cần hỗ trợ?</strong>
-             <p>Liên hệ với nhân viên?</p>
-         </div>
-         <!-- Panel Content -->
-         <div class="ec-body">
-             <ul>
-                 <!-- Start Single Contact List -->
+        <!-- Start Floating Panel Container -->
+        <div class="ec-panel" style="display: block;">
+            <!-- Panel Header -->
+            <div class="ec-header">
+                <strong>Cần hỗ trợ?</strong>
+                <p>Liên hệ với nhân viên?</p>
+            </div>
+            <!-- Panel Content -->
+            <div class="ec-body">
+                <ul>
+                    <!-- Start Single Contact List -->
 
-                 @foreach($users as $item)
-                 <li id="user{{ $item->id }}">
-                     <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
-                         <div class="d-flex bd-highlight">
-                             <!-- Profile Picture -->
-                             <div class="ec-img-cont">
-                                 @if(isset($item->image))
-                                 <img src="{{ $item->image }}" class="ec-user-img" alt="Profile image">
-                                 @else
-                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
-                                 @endif
-                             </div>
+                    @foreach($users as $item)
+                    @php
+                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
+                    @endphp
+                    <li id="user{{ $item->id }}">
+                        <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
+                            <div class="d-flex bd-highlight">
+                                <!-- Profile Picture -->
+                                <div class="ec-img-cont">
+                                    @if(isset($item->image))
+                                    <img src="{{$checkUrlImg }}" class="ec-user-img" alt="Profile image">
+                                    @else
+                                    <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
+                                    @endif
+                                </div>
 
-                             <!-- Display Name & Last Seen -->
-                             <div class="ec-user-info">
-                                 <span>{{ $item->name }}</span>
-                                 <!-- Phần tử hiển thị thời gian hoạt động -->
-                                 <p style="margin-top: 2px;" class="activity-time"></p>
-                             </div>
+                                <!-- Display Name & Last Seen -->
+                                <div class="ec-user-info">
+                                    <span>{{ $item->name }}</span>
+                                    <!-- Phần tử hiển thị thời gian hoạt động -->
+                                    <p style="margin-top: 2px;" class="activity-time"></p>
+                                </div>
 
-                             <!-- Chat Icon -->
-                             <div class="ec-chat-icon">
-                                 <i class="fa fa-whatsapp"></i>
-                             </div>
-                         </div>
-                     </a>
-                 </li>
+                                <!-- Chat Icon -->
+                                <div class="ec-chat-icon">
+                                    <i class="fa fa-whatsapp"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
 
 
-                 @endforeach
-                 <!--/ End Single Contact List -->
-             </ul>
-         </div>
-     </div>
-     <!--/ End Floating Panel Container -->
-     <!-- Start Right Floating Button-->
-     <div class="ec-right-bottom">
-         <div class="ec-box">
-             <div class="ec-button rotateForward">
-                 <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
-             </div>
-         </div>
-     </div>
-     <!--/ End Right Floating Button-->
-     
- </div>
- <!-- Whatsapp end -->
+                    @endforeach
+                    <!--/ End Single Contact List -->
+                </ul>
+            </div>
+        </div>
+        <!--/ End Floating Panel Container -->
+        <!-- Start Right Floating Button-->
+        <div class="ec-right-bottom">
+            <div class="ec-box">
+                <div class="ec-button rotateForward">
+                    <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
+                </div>
+            </div>
+        </div>
+        <!--/ End Right Floating Button-->
+
+    </div>
+    <!-- Whatsapp end -->
     @endsection

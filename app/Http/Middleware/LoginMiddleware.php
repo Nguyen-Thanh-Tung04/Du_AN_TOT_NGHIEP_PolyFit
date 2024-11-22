@@ -12,13 +12,36 @@ class LoginMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::id() > 0) {
-            return redirect()->route('dashboard.index');
+        // Kiểm tra nếu người dùng đã đăng nhập
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            // Nếu là admin (user_catalogue_id != 3), cho phép tiếp tục
+            if ($user->user_catalogue_id != 3) {
+                return $next($request);
+            }
+
+            // Nếu không phải admin, chuyển hướng đến trang đăng nhập
+            return redirect()->route('auth.login')
+                             ->with('error', 'Tài khoản không được phép truy cập vào chức năng này.');
         }
-        return $next($request);
+
+        // Nếu chưa đăng nhập
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bạn phải đăng nhập để sử dụng chức năng này.'
+            ], 401);
+        }
+
+        // Chuyển hướng đến trang đăng nhập
+        return redirect()->route('auth.login')
+                         ->with('error', 'Bạn phải đăng nhập để sử dụng chức năng này.');
     }
 }

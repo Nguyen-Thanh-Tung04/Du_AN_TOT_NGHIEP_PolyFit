@@ -18,6 +18,7 @@
     <script src="admin/js/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="admin/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
     @if (isset($config['js']) && is_array($config['js']))
         @foreach ($config['js'] as $key => $val)
@@ -129,3 +130,31 @@
             });
         })
     </script>
+<script>
+// Hàm cập nhật số lượng tin nhắn chưa đọc
+const updateUnreadMessagesCount = () => {
+    $.ajax({
+        url: '/get-unread-messages-count',  // API lấy số lượng tin nhắn chưa đọc
+        type: 'GET',
+        success: function(response) {
+            // Cập nhật số lượng tin nhắn chưa đọc vào giao diện
+            $('#unreadMessagesCount').text(response.unreadCount);
+        },
+        error: function(xhr, status, error) {
+            console.error('Lỗi khi lấy số lượng tin nhắn chưa đọc:', error);
+        }
+    });
+};
+
+// Gọi hàm khi trang tải lần đầu tiên để hiển thị số lượng tin nhắn chưa đọc
+$(document).ready(function() {
+    updateUnreadMessagesCount();  // Cập nhật ngay khi trang tải
+
+    // Kiểm tra mỗi 5 giây (5000ms)
+    setInterval(function() {
+        updateUnreadMessagesCount();
+    }, 5000);  // 5 giây
+});
+
+
+</script>
