@@ -25,30 +25,44 @@ class FlashSaleController extends Controller
     }
     public function index(Request $request)
     {
-        $flashSales = FlashSale::withCount('products')->get()->map(function ($flashSale) {
-            $startTime = explode('-', $flashSale->time_slot)[0];
-            $endTime = explode('-', $flashSale->time_slot)[1];
-            $formattedTimeSlot = sprintf('%02d:00-%02d:00', $startTime, $endTime);
-            $formattedDate = \Carbon\Carbon::parse($flashSale->date)->format('d/m/Y');
-            $currentDateTime = \Carbon\Carbon::now();
-            $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
+        $statusFilter = $request->input('status');
 
-            if ($flashSaleDateTime->isFuture()) {
-                $status = 'Sắp diễn ra';
-            } elseif ($flashSaleDateTime->isPast() && $flashSaleDateTime->addHours($endTime - $startTime)->isFuture()) {
-                $status = 'Đang diễn ra';
-            } else {
-                $status = 'Đã diễn ra';
-            }
+        $flashSales = FlashSale::withCount('products')
+            ->orderBy('date', 'desc')
+            ->orderByRaw('CAST(SUBSTRING_INDEX(time_slot, "-", 1) AS UNSIGNED) DESC')
+            ->get()
+            ->map(function ($flashSale) {
+                $startTime = explode('-', $flashSale->time_slot)[0];
+                $endTime = explode('-', $flashSale->time_slot)[1];
+                $formattedTimeSlot = sprintf('%02d:00-%02d:00', $startTime, $endTime);
+                $formattedDate = \Carbon\Carbon::parse($flashSale->date)->format('d/m/Y');
+                $currentDateTime = \Carbon\Carbon::now();
+                $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
 
-            return [
-                'id' => $flashSale->id,
-                'time_slot' => $formattedTimeSlot . ' ' . $formattedDate,
-                'product_count' => $flashSale->products->unique('product_id')->count(),
-                'status' => $status,
-                'is_active' => $flashSale->status,
-            ];
-        });
+                if ($flashSaleDateTime->isFuture()) {
+                    $status = 'Sắp diễn ra';
+                } elseif ($flashSaleDateTime->isPast() && $flashSaleDateTime->addHours($endTime - $startTime)->isFuture()) {
+                    $status = 'Đang diễn ra';
+                } else {
+                    $status = 'Đã diễn ra';
+                }
+
+                return [
+                    'id' => $flashSale->id,
+                    'time_slot' => $formattedTimeSlot . ' ' . $formattedDate,
+                    'product_count' => $flashSale->products->unique('product_id')->count(),
+                    'status' => $status,
+                    'is_active' => $flashSale->status,
+                ];
+            });
+
+        // Lọc theo trạng thái
+        if ($statusFilter) {
+            $flashSales = $flashSales->filter(function ($flashSale) use ($statusFilter) {
+                return $flashSale['status'] === $statusFilter;
+            });
+        }
+
         $config = $this->configData();
         $config['seo'] = config('apps.flashsale');
         $template = 'admin.flashsale.index';
@@ -195,7 +209,10 @@ class FlashSaleController extends Controller
 
         // Loại bỏ các time_slot đã có trong cơ sở dữ liệu
         $availableSlots = array_diff($timeSlots, $occupiedSlots);
-        $selectedProductIds = $flashSale->products->pluck('product_id')->toArray();
+        $selectedProductIds = $flashSale->products->map(function ($product) {
+            return $product->id;
+        })->toArray();
+
         $config = [
             'seo' => config('apps.flashsale'),
             'method' => 'update',
@@ -258,7 +275,7 @@ class FlashSaleController extends Controller
             }
         }
 
-        return response()->json(['status' => true, 'message' => 'Flash sale updated successfully.']);
+        return response()->json(['status' => true, 'message' => 'Cập nhật flash sale thành công.']);
     }
 
     public function getOccupiedTimeSlots(Request $request)

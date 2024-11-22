@@ -61,9 +61,11 @@
                             <span class="msg_time" data-timestamp="{{ $item->created_at->timestamp }}"></span>
                         </div>
                         <div class="img_cont_msg d-flex align-items-top">
-
+                            @php
+                            $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                            @endphp
                             @if(isset($item->image_user_send))
-                            <img src="{{ Storage::url($item->image_user_send) }}" class="rounded-circle user_img_msg">
+                            <img src="{{ $checkUrlImg }}" class="rounded-circle user_img_msg">
                             @else
                             <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
                             @endif
@@ -346,8 +348,9 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             var card_header_msg_head = document.querySelector('.msg_head');
 
-            let image = event.idUserSend.image ? event.idUserSend.image :
+            let image_url = event.idUserSend.image ? event.idUserSend.image :
                 "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+            let image = image_url.includes('http') ? event.idUserSend.image : '/storage/' + event.idUserSend.image;
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -391,8 +394,9 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var ui = ''
-            let image = event.idUserSend.image ? event.idUserSend.image :
+            let image_url = event.idUserSend.image ? event.idUserSend.image :
                 "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+            let image = image_url.includes('http') ? event.idUserSend.image : '/storage/' + event.idUserSend.image;
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
                    <div class="d-flex justify-content-end mb-4">

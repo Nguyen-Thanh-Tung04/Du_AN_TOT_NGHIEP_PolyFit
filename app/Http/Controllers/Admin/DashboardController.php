@@ -157,7 +157,6 @@ class DashboardController extends Controller
             ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
-
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
@@ -170,7 +169,6 @@ class DashboardController extends Controller
             'latestUsers',
             'orderStatus', // Trạng thái đơn hàng
             'grossProfit',
-            'users',
             'unreadMessagesCount'
         ));
     }

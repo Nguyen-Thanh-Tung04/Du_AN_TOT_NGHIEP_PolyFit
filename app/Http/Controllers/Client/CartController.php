@@ -29,8 +29,8 @@ class CartController extends Controller
                         ->where(function ($query) {
                             $currentHour = now()->hour;
                             $currentMinute = now()->minute;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
-                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
+                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
                         });
                 })
                 ->where('status', 1)
@@ -38,10 +38,19 @@ class CartController extends Controller
                 ->first();
 
             if ($flashSaleProduct) {
-                $item->setAttribute('sale_price', $flashSaleProduct->flash_price);
+                $flashSaleQty = min($item->quantity, $flashSaleProduct->quantity);
+                $normalQty = $item->quantity - $flashSaleQty;
+
+                $item->setAttribute('flash_sale_price', $flashSaleProduct->flash_price);
+                $item->setAttribute('flash_sale_qty', $flashSaleQty);
+                $item->setAttribute('normal_price', $variant->sale_price ?? $variant->listed_price);
+                $item->setAttribute('normal_qty', $normalQty);
                 $item->setAttribute('listed_price', $flashSaleProduct->listed_price);
             } else {
-                $item->setAttribute('sale_price', $variant->sale_price ?? null);
+                $item->setAttribute('flash_sale_price', null);
+                $item->setAttribute('flash_sale_qty', 0);
+                $item->setAttribute('normal_price', $variant->sale_price ?? $variant->listed_price);
+                $item->setAttribute('normal_qty', $item->quantity);
                 $item->setAttribute('listed_price', $variant->listed_price);
             }
         }
@@ -192,9 +201,7 @@ class CartController extends Controller
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $currentMinute = now()->minute;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
-                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
+                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
                         });
                 })
                 ->where('status', 1)
@@ -202,22 +209,45 @@ class CartController extends Controller
                 ->first();
 
             if ($flashSaleProduct) {
-                $price = $flashSaleProduct->flash_price;
+                $flashSaleQty = min($newQuantity, $flashSaleProduct->quantity);
+                $normalQty = $newQuantity - $flashSaleQty;
+
+                $flashSalePrice = $flashSaleProduct->flash_price;
+                $normalPrice = $variant->sale_price ?? $variant->listed_price;
+
+                $totalPrice = ($flashSalePrice * $flashSaleQty) + ($normalPrice * $normalQty);
+
+                $cartItem->quantity = $newQuantity;
+                $cartItem->save();
+
+                $message = $flashSaleQty < $newQuantity
+                    ? "Số lượng sản phẩm đã vượt quá số lượng trong flash sale ($flashSaleProduct->quantity sản phẩm). Số lượng vượt sẽ được tính giá bình thường."
+                    : 'Cập nhật số lượng thành công';
+
+                return response()->json([
+                    'status' => true,
+                    'message' => $message,
+                    'data' => [
+                        'total_price' => number_format($totalPrice),
+                        'flash_sale_exceeded' => $flashSaleQty < $newQuantity
+                    ],
+                ]);
             } else {
                 $price = $variant->sale_price ?? $variant->listed_price;
+                $totalPrice = $price * $newQuantity;
+
+                $cartItem->quantity = $newQuantity;
+                $cartItem->save();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Cập nhật số lượng thành công',
+                    'data' => [
+                        'total_price' => number_format($totalPrice),
+                        'flash_sale_exceeded' => false
+                    ],
+                ]);
             }
-
-            $cartItem->quantity = $newQuantity;
-            $cartItem->save();
-            $totalPrice = $price * $cartItem->quantity;
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Cập nhật số lượng thành công',
-                'data' => [
-                    'total_price' => number_format($totalPrice)
-                ],
-            ]);
         }
 
         return response()->json([
@@ -225,7 +255,6 @@ class CartController extends Controller
             'message' => 'Không tìm thấy sản phẩm',
         ]);
     }
-
     public function deleteCartItem(Request $request)
     {
         $cartItem = Cart::find($request->cart_id);
@@ -250,6 +279,7 @@ class CartController extends Controller
         $items = $request->input('items');
         $subtotal = 0;
         $discount = 0;
+
         foreach ($items as $item) {
             $cart = Cart::with('variant')->find($item['id']);
             if ($cart) {
@@ -263,27 +293,32 @@ class CartController extends Controller
                             ->where('date', now()->toDateString())
                             ->where(function ($query) {
                                 $currentHour = now()->hour;
-                                $currentMinute = now()->minute;
-                                $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", 1) - 1', [$currentHour])
-                                    ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", 1) AND ? < 60', [$currentHour, $currentMinute]);
+                                $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
                             });
                     })
                     ->where('status', 1)
                     ->where('quantity', '>', 0)
                     ->first();
 
-                if ($flashSaleProduct) {
-                    $salePrice = $flashSaleProduct->flash_price;
-                    $listedPrice = $flashSaleProduct->listed_price;
-                } else {
-                    $salePrice = $variant->sale_price;
-                    $listedPrice = $variant->listed_price;
-                }
-
                 $quantity = $cart->quantity;
+                $listedPrice = $variant->listed_price;
+                $salePrice = $variant->sale_price ?? $listedPrice;
 
-                $subtotal += $listedPrice * $quantity;
-                $discount += ($listedPrice - $salePrice) * $quantity;
+                if ($flashSaleProduct) {
+                    $flashSaleQty = min($quantity, $flashSaleProduct->quantity);
+                    $normalQty = $quantity - $flashSaleQty;
+
+                    $flashSalePrice = $flashSaleProduct->flash_price;
+
+                    $subtotal += $listedPrice * $quantity;
+
+                    $discount += ($listedPrice - $flashSalePrice) * $flashSaleQty;
+                    $discount += ($listedPrice - $salePrice) * $normalQty;
+                } else {
+
+                    $subtotal += $listedPrice * $quantity;
+                    $discount += ($listedPrice - $salePrice) * $quantity;
+                }
             }
         }
 

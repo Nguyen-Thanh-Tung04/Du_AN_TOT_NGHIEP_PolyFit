@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered">
+    <table class="table table-sm table-striped table-bordered" id="product-flash">
         <thead>
             <tr>
                 <th>
@@ -22,7 +22,7 @@
                     <input type="checkbox" value="{{ $product->id }}" class="input-checkbox checkBoxItem">
                 </td>
                 <td class="text-center">
-                    <span><img class="image img-cover" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt=""></span>
+                    <span><img class="image img-cover datatable-image" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt=""></span>
                 </td>
                 <td>{{ $product->code }}</td>
                 <td>{{ $product->name }}</td>

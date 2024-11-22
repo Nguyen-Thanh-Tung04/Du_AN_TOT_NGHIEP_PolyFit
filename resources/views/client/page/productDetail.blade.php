@@ -136,10 +136,10 @@
                                                     <div class="flex flex-column p-15">
                                                         <div class="flex items-center">
                                                             <div class="flex items-center">
-                                                                <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                                <div class="listed-price old-price">{{ number_format($minListedPrice) }}₫</div>
                                                                 <div class="flex items-center">
-                                                                    <div class="sale-price">{{ number_format($minSalePrice) }} ₫</div>
-                                                                    <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }} % giảm</div>
+                                                                    <div class="sale-price">{{ number_format($minSalePrice) }}₫</div>
+                                                                    <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }}%</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -153,10 +153,10 @@
                                                 <div class="flex flex-column p-15">
                                                     <div class="flex items-center">
                                                         <div class="flex items-center">
-                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }}₫</div>
                                                             <div class="flex items-center">
-                                                                <div class="sale-price">{{ number_format($minSalePrice) }} ₫</div>
-                                                                <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }} % giảm</div>
+                                                                <div class="sale-price">{{ number_format($minSalePrice) }}₫</div>
+                                                                <div class="discount-percentage box-sale">{{ number_format($discountPercentage) }}%</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -167,7 +167,7 @@
                                                 <div class="flex flex-column p-15">
                                                     <div class="flex items-center">
                                                         <div class="flex items-center">
-                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }} ₫</div>
+                                                            <div class="listed-price old-price">{{ number_format($minListedPrice) }}₫</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -410,7 +410,7 @@
                                             {{ number_format($product->min_price, 0) }} ₫
                                             {{-- - {{ number_format($product->max_price, 0) }} ₫ --}}
                                         </div>
-                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
                                     </div>
                                 </div>
                                 <!--/END single card -->
@@ -456,6 +456,7 @@
         var isInFlashSale = "{{ $product->is_in_flash_sale ? 'true' : 'false' }}";
         var flashSaleEndTime = "{{ $flashSaleEndTime }}";
 
+        // console.log(isInFlashSale + 'tung');
 
         const coutDown = (hours, minutes, seconds) => {
             let countDownDate = new Date().getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
@@ -499,6 +500,7 @@
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
             coutDown(hours, minutes, seconds);
+            // console.log(hours+  'hours');
 
         }
 
@@ -682,8 +684,8 @@
                                 // Hiển thị giá flash sale
                                 $('#flash-sale-container').removeClass('d-none');
                                 $('#non-flash-sale-container').addClass('d-none');
-                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
-                                $('.sale-price').text(new Intl.NumberFormat().format(salePrice) + ' ₫');
+                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + '₫');
+                                $('.sale-price').text(new Intl.NumberFormat().format(salePrice) + '₫');
                                 if (discountPercentage) {
                                     $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
                                 } else {
@@ -693,8 +695,8 @@
                                 // Hiển thị giá không flash sale
                                 $('#flash-sale-container').addClass('d-none');
                                 $('#non-flash-sale-container').removeClass('d-none');
-                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + ' ₫');
-                                $('.sale-price').text(salePrice ? new Intl.NumberFormat().format(salePrice) + ' ₫' : '');
+                                $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + '₫');
+                                $('.sale-price').text(salePrice ? new Intl.NumberFormat().format(salePrice) + '₫' : '');
                                 if (discountPercentage) {
                                     $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
                                 } else {
