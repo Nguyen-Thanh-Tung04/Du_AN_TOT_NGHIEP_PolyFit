@@ -142,6 +142,7 @@ Route::middleware('checkLoginClient')->group(function () {
     Route::post('/message-private', [ChatController::class, 'messagePrivate']);
     Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
+    Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');
@@ -260,7 +261,7 @@ Route::post('login-client', [AuthController::class, 'loginclient'])
 
 // Login admin
 Route::get('admin-login', [AuthController::class, 'index'])
-    ->name('auth.login');
+    ->name('auth.login')->middleware('guest');
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');

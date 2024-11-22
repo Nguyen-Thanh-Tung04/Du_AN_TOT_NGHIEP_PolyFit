@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ChatPrivateModel;
 use Carbon\Carbon;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     public function index()
     {
         $config = $this->config();
@@ -23,6 +23,23 @@ class DashboardController extends Controller
         $currentMonth = date('m');
         $currentYear = date('Y');
 
+        $authUserId = Auth::user()->id; // ID người dùng hiện tại
+        $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
+
+
+        if ($authUserRole === 1) {
+            // Đếm tin nhắn chưa đọc (Admin xem tất cả)
+            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)->count();
+        } else {
+            // Còn Nếu là tk nhân viên: đếm tất nhắn tin chưa đọc với tài khoản nhân viên đó
+            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)
+                ->where(function ($query) use ($authUserId) {
+                    $query->where('user_reciever', $authUserId)
+                        ->orWhere('user_send', $authUserId);
+                })
+                ->count();
+        }
+        // dd($unreadMessagesCount);
         // Truy vấn tổng số đơn chờ xác nhận
         $totalOrdersConfirm = DB::table('orders')
             ->where('status', 1) // Đơn hàng chờ xác nhận
@@ -140,7 +157,6 @@ class DashboardController extends Controller
             ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
-
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
@@ -153,6 +169,7 @@ class DashboardController extends Controller
             'latestUsers',
             'orderStatus', // Trạng thái đơn hàng
             'grossProfit',
+            'unreadMessagesCount'
         ));
     }
 
@@ -362,7 +379,25 @@ class DashboardController extends Controller
             ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
+
+
+        $authUserId = Auth::user()->id; // ID người dùng hiện tại
+        $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
+        if ($authUserRole === 1) {
+            // Đếm tin nhắn chưa đọc (Admin xem tất cả)
+            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)->count();
+        } else {
+            // Còn Nếu là tk nhân viên: đếm tất nhắn tin chưa đọc với tài khoản nhân viên đó
+            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)
+                ->where(function ($query) use ($authUserId) {
+                    $query->where('user_reciever', $authUserId)
+                        ->orWhere('user_send', $authUserId);
+                })
+                ->count();
+        }
         $successMessage = 'Lọc dữ liệu thành công!';
+
+
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
@@ -375,8 +410,8 @@ class DashboardController extends Controller
             'results_one',
             'orderStatus',
             'grossProfit',
-            'successMessage'
-
+            'successMessage',
+            'unreadMessagesCount'
         ));
     }
 

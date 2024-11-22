@@ -36,7 +36,11 @@
                                             <p class="pull-right">{{ $item->created_at->format('h:i A') }}</p>
                                         </div>
                                         <div class="user_info" style="position: relative;">
+                                            @if($item->is_read === 0)
+                                            <strong class="is_active">{{ $item->message }}</strong>
+                                            @else
                                             <span class="is_active">{{ $item->message }}</span>
+                                            @endif
                                             <p class="activity-time"></p> <!-- Thêm phần tử này để hiển thị giờ online/offline -->
                                         </div>
                                     </div>
@@ -53,7 +57,7 @@
                 <div class="row">
                     <input type="hidden" id="idUserReciever" value="{{ $user->id }}">
                     <div class="new_message_head">
-                        <div class="pull-left" id="user{{ $item->user_id }}" style="display: flex;">
+                        <div class="pull-left" id="user{{ $item->id ?? '' }}" style="display: flex;">
                             <div class="img_cont">
                                 @php
                                 $checkUrlImg = \Illuminate\Support\Str::contains($user->image, '/userfiles/') ? $user->image : Storage::url($user->image);
@@ -335,9 +339,7 @@
     setInterval(updateTimes, 1000);
     Echo.private("chat.private.{{ Auth::user()->id }}.{{ $user->id }}")
         .listen('ChatPrivateEvent', event => {
-            // console.log(122);
-
-
+            // console.log(122)
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var msg_card_body = document.querySelector('.msg_card_body ul');
             var card_header_msg_head = document.querySelector('.msg_head')
@@ -452,7 +454,6 @@
 
                 var ui = '';
                 if (response.data && response.data.data) {
-                    console.log(response.data);
 
                     response.data.data.forEach(function(user) {
                         let image = null
