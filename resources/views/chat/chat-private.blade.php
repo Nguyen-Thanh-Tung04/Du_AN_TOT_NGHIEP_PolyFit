@@ -351,9 +351,15 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             var card_header_msg_head = document.querySelector('.msg_head');
 
-            let image_url = event.idUserSend.image ? event.idUserSend.image :
+            let image_url = event.idUserSend?.image ?
+                event.idUserSend.image :
                 "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
-            let image = image_url.includes('http') ? event.idUserSend.image : '/storage/' + event.idUserSend.image;
+
+            // Kiểm tra và xử lý đường dẫn ảnh
+            let image = image_url.includes('http') ?
+                image_url :
+                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -397,9 +403,14 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var ui = ''
-            let image_url = event.idUserSend.image ? event.idUserSend.image :
+            let image_url = event.idUserSend?.image ?
+                event.idUserSend.image :
                 "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
-            let image = image_url.includes('http') ? event.idUserSend.image : '/storage/' + event.idUserSend.image;
+
+            // Kiểm tra và xử lý đường dẫn ảnh
+            let image = image_url.includes('http') ?
+                image_url :
+                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
                    <div class="d-flex justify-content-end mb-4">
