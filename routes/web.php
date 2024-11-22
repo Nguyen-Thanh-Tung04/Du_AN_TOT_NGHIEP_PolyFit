@@ -261,7 +261,7 @@ Route::post('login-client', [AuthController::class, 'loginclient'])
 
 // Login admin
 Route::get('admin-login', [AuthController::class, 'index'])
-    ->name('auth.login')->middleware(['guest']);
+    ->name('auth.login')->middleware('guest');
 
 Route::post('logined', [AuthController::class, 'logined'])
     ->name('auth.logined');

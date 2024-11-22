@@ -431,4 +431,5 @@
         <!--/ End Right Floating Button-->
 
     </div>
-@endsection
+    <!-- Whatsapp end -->
+    @endsection
