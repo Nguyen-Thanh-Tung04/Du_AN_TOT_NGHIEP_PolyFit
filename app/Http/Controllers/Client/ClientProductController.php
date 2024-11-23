@@ -28,16 +28,17 @@ class ClientProductController extends Controller
                 ->where(function ($query) {
                     $currentHour = now()->hour;
                     $currentMinute = now()->minute;
-                    $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
-                        ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
+                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]) // Giờ kết thúc > giờ hiện tại
+                        ->orWhereRaw('SUBSTRING_INDEX(time_slot, "-", -1) = ? AND ? < 60', [$currentHour, $currentMinute]); // Trường hợp giờ kết thúc trùng và phút < 60
                 });
         })
             ->where('status', 1)
             ->where('quantity', '>', 0)
             ->get();
 
-
         $product->is_in_flash_sale = $flashSaleProducts->isNotEmpty();
+
         $flashSaleEndTime = null;
         // Lấy giá variant nhỏ nhất và % giảm giá
         $minSalePrice = null;
@@ -107,8 +108,9 @@ class ClientProductController extends Controller
                         ->where(function ($query) {
                             $currentHour = now()->hour;
                             $currentMinute = now()->minute;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
-                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
+                            $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]) // Giờ kết thúc > giờ hiện tại
+                                ->orWhereRaw('SUBSTRING_INDEX(time_slot, "-", -1) = ? AND ? < 60', [$currentHour, $currentMinute]); // Trường hợp giờ kết thúc trùng và phút < 60
                         });
                 })
                 ->where('status', 1)

@@ -351,3 +351,7 @@ body {
     color: white;
     padding: 4px;
 }
+
+.more:hover {
+    opacity: 0.5;
+}
