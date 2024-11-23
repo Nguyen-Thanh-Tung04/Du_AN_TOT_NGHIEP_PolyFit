@@ -111,7 +111,7 @@
                                         class="form-control"
                                         placeholder="Nhập link liên kết(Không bắt buộc)"
                                     >
-                                    @error('value')
+                                    @error('link')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
