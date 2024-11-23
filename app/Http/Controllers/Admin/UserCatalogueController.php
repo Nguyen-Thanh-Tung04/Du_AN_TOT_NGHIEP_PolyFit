@@ -28,7 +28,6 @@ class UserCatalogueController extends Controller
     }
 
     public function index(Request $request) {
-        $this->authorize('modules', 'user.catalogue.index');
         $userCatalogues = $this->userCatalogueService->paginate($request);
         $config = [
             'js' => [

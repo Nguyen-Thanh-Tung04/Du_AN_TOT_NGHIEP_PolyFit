@@ -458,9 +458,9 @@
             // Tính toán tổng cộng khi chọn hình thức vận chuyển
             $('input[name="shipping_method"]').change(function() {
                 let shippingCost = parseInt($(this).val());
-
+                
                 // Giữ nguyên giá trị giảm giá, không lấy lại từ HTML vì có thể bị sai
-                let finalTotal = totalAmount + shippingCost - discountAmount;
+                let finalTotal = Number(totalAmount) + Number(shippingCost) - Number(discountAmount);
 
                 // Cập nhật lại các giá trị hiển thị
                 $('#shippingCost').text(formatCurrency(shippingCost));

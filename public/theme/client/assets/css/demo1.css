@@ -212,7 +212,7 @@
   height: 5px;
   width: 50px;
   margin: 0 auto;
-  background: #3474d4;
+  background: rgb(249, 58, 11);
   left: 4px;
   right: auto;
 }
@@ -321,7 +321,7 @@
   border-radius: 0;
   text-align: center;
   color: #ffffff;
-  background-color: #3474d4;
+  background-color: rgb(249, 58, 11);
 }
 .main-slider-nav .swiper-buttons .swiper-button-next:hover {
   background-color: #555;
@@ -344,7 +344,7 @@
   border-radius: 0;
   text-align: center;
   color: #ffffff;
-  background-color: #3474d4;
+  background-color: rgb(249, 58, 11);
 }
 .main-slider-nav .swiper-buttons .swiper-button-prev:hover {
   background-color: #555;
@@ -406,8 +406,8 @@
 
 .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-primary:hover {
   color: #ffffff;
@@ -416,13 +416,13 @@
 }
 .btn-primary:focus {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-primary:active {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 .btn-color-dark {
@@ -449,30 +449,30 @@
 }
 .btn-check:focus + .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-check:checked + .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-check:active + .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 .btn-primary.active {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 .show > .btn-primary.dropdown-toggle {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 /*-------------------------------------------------
@@ -595,7 +595,7 @@
   text-transform: uppercase;
   padding: 0 18px;
   letter-spacing: 0.02rem;
-  background-color: #3474d4;
+  background-color: rgb(249, 58, 11);
   color: #ffffff;
   line-height: 40px;
   display: -webkit-box;
@@ -822,7 +822,7 @@
   font-weight: 600;
 }
 .ec-fs-pro-inner .ec-fs-pro-content .ec-fs-pro-book span {
-  color: #3474d4;
+  color: rgb(249, 58, 11);
 }
 .ec-fs-pro-inner .ec-fs-pro-content .ec-fs-pro-btn a {
   height: 35px;
@@ -1070,7 +1070,7 @@
 }
 .ec-offer-content .ec-offer-title {
   font-size: 60px;
-  color: #3474d4;
+  color: rgb(249, 58, 11);
   margin-bottom: 5px;
   letter-spacing: 2px;
 	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -1080,7 +1080,7 @@
 }
 .ec-offer-content .ec-offer-stitle {
   font-size: 40px;
-  color: #3474d4;
+  color: rgb(249, 58, 11);
   margin-bottom: 13px;
   letter-spacing: 1.5px;
   font-family: "Montserrat";

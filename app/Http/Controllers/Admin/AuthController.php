@@ -48,6 +48,7 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
+        
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->user_catalogue_id == 3) {
@@ -56,7 +57,7 @@ class AuthController extends Controller
             }
             return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công.');
         }
-        return redirect()->route('auth.login')->with('error', 'Email hoặc mật khẩu không chính xác.');
+        return redirect()->route('auth.login')->with('error', 'Email hoặc mật khẩu không chính xác.')->withInput();;
     }
 
     public function showFormRegister()
