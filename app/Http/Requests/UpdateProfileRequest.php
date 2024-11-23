@@ -26,6 +26,7 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'email' => 'required|email|',
+            // 'phone' =>'digits:10',
             'province_id' => 'max:255',
             'district_id' => 'max:255',
             'ward_id' => 'max:255',
@@ -35,10 +36,10 @@ class UpdateProfileRequest extends FormRequest
     public function messages(): array{
         return[
             'name.required'=> 'Không được để trống tên ',
+            'name.max'=> 'Không được quá 255 ký tự ',
             'email.required'=>'Không được để trống email',
             'email.email'=>'Email không đúng định dạng',
-            'phone.digits:10'=>'Số điện thoại không đúng',
-            'birthday.date'=>'Ngày sinh không đúng'
+            // 'phone.digits'=>'Số điện thoại không đúng',
         ];
     }
 
