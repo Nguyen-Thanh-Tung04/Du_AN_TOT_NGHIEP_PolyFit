@@ -352,6 +352,10 @@
                     sendAjaxRequest('{{ route("order.store") }}', 'POST', function(response) {
                         // Success callback
                         toastr.success(response.message);
+                        
+                         // Thay đổi lịch sử trình duyệt để khi người dùng nhấn nút Back, họ sẽ về trang giỏ hàng
+                        history.replaceState(null, null, '{{ route("cart.index") }}');
+
                         window.location.href = '{{ url("order") }}/' + response.order_id;
                     }, function(response) {
                         // Error callback (nếu cần thêm xử lý lỗi khác)
