@@ -20962,7 +20962,7 @@ i.ecicon.eci-star-o {
 }
 
 i.ecicon.eci-star.fill {
-  color: #ff6262;
+  color: #eec317;
   opacity: 0.7;
 }
 
@@ -34155,7 +34155,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 }
 
 .ec-catalog-multi-vendor .ec-multi-vendor-detail .ec-page-description-info {
-  padding: 30px;
+  padding: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

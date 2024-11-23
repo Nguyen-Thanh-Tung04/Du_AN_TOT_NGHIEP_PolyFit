@@ -83,10 +83,8 @@ class CheckoutController
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $currentMinute = now()->minute;
                             $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
-                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]) // Giờ kết thúc > giờ hiện tại
-                                ->orWhereRaw('SUBSTRING_INDEX(time_slot, "-", -1) = ? AND ? < 60', [$currentHour, $currentMinute]); // Trường hợp giờ kết thúc trùng và phút < 60
+                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
                         });
                 })
                 ->where('status', 1)
