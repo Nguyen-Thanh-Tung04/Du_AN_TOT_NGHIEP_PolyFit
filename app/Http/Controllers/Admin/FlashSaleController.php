@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreFlashSaleRequest;
+use App\Http\Requests\UpdateFlashSaleRequest;
 use App\Models\FlashSale;
 use App\Models\FlashSaleProduct;
 use App\Models\Product;
@@ -119,27 +121,8 @@ class FlashSaleController extends Controller
         return view('admin.dashboard.layout', compact('template', 'config', 'products', 'getCategoryAttr'));
     }
 
-    public function store(Request $request)
+    public function store(StoreFlashSaleRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'date' => 'required|date|after_or_equal:today',
-            'time_slot' => 'required|in:0-9,9-12,12-15,15-18,18-21,21-24',
-            'status' => 'required|integer|in:0,1',
-            'products' => 'required|array',
-            'products.*.*.variant_id' => 'required|integer|exists:variants,id',
-            'products.*.*.flash_price' => 'required|numeric|min:0',
-            'products.*.*.listed_price' => 'required|numeric|min:0',
-            'products.*.*.discount_percentage' => 'required|numeric|min:0|max:100',
-            'products.*.*.quantity' => 'required|integer|min:0',
-            'products.*.*.status' => 'required|integer|in:0,1',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors()->first()
-            ]);
-        }
 
         $flashSale = FlashSale::create([
             'date' => $request->date,
@@ -164,7 +147,7 @@ class FlashSaleController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Flash sale created successfully',
+            'message' => 'Tạo flash sale thành công.',
         ]);
     }
 
@@ -222,28 +205,8 @@ class FlashSaleController extends Controller
         return view('admin.dashboard.layout', compact('template', 'config', 'flashSale', 'products', 'availableSlots', 'selectedProductIds'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateFlashSaleRequest $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'date' => 'required|date|after_or_equal:today',
-            'time_slot' => 'required|in:0-9,9-12,12-15,15-18,18-21,21-24',
-            'status' => 'required|integer|in:0,1',
-            'products' => 'required|array',
-            'products.*.*.variant_id' => 'required|integer|exists:variants,id',
-            'products.*.*.flash_price' => 'required|numeric|min:0',
-            'products.*.*.listed_price' => 'required|numeric|min:0',
-            'products.*.*.discount_percentage' => 'required|numeric|min:0|max:100',
-            'products.*.*.quantity' => 'required|integer|min:0',
-            'products.*.*.status' => 'required|integer|in:0,1',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors()->first()
-            ]);
-        }
-
         $flashSale = FlashSale::findOrFail($id);
         $startTime = explode('-', $flashSale->time_slot)[0];
         $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
@@ -253,8 +216,6 @@ class FlashSaleController extends Controller
         }
 
         $flashSale->update([
-            'date' => $request->date,
-            'time_slot' => $request->time_slot,
             'status' => $request->status
         ]);
 
