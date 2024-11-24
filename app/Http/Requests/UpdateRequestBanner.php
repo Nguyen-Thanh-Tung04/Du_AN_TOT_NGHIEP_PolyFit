@@ -25,7 +25,7 @@ class UpdateRequestBanner extends FormRequest
             'title_main' => 'required|string|max:255',
             'title_sub' => 'required|string|max:255',
             'content' =>'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image',
             'link' => 'required|url',
             'is_active' => 'required|boolean',
         ];
