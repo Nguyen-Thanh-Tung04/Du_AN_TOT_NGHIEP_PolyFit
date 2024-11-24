@@ -41,53 +41,67 @@
                                 </div>
                             @endif
 
-                            <!-- Hiển thị lỗi validation nếu có -->
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+
                             <div class="ec-contact-form">
-                                <form action="{{route('sendMail')}}" method="post">
+                                <form action="{{ route('sendMail') }}" method="post">
                                     @csrf
+
+                                    <!-- First Name Field -->
                                     <span class="ec-contact-wrap">
                                         <label>Họ</label>
-                                        <input type="text" name="firstname" placeholder="Nhập họ của bạn"
-                                            required />
+                                        <input type="text" name="firstname" placeholder="Nhập họ của bạn" value="{{ old('firstname') }}" required />
+                                        @error('firstname')
+                                            <div class="text-danger error-message">
+                                                <strong>* {{ $message }}</strong>
+                                            </div>
+                                        @enderror
                                     </span>
+
+                                    <!-- Last Name Field -->
                                     <span class="ec-contact-wrap">
                                         <label>Tên</label>
-                                        <input type="text" name="lastname" placeholder="Nhập tên của bạn"
-                                            required />
+                                        <input type="text" name="lastname" placeholder="Nhập tên của bạn" value="{{ old('lastname') }}" required />
+                                        @error('lastname')
+                                            <div class="text-danger error-message">
+                                                <strong>* {{ $message }}</strong>
+                                            </div>
+                                        @enderror
                                     </span>
+
+                                    <!-- Email Field -->
                                     <span class="ec-contact-wrap">
                                         <label>Email</label>
-                                        <input type="email" name="email" placeholder="Nhập địa chỉ email của bạn"
-                                            required />
+                                        <input type="email" name="email" placeholder="Nhập địa chỉ email của bạn" value="{{ old('email') }}" required />
+                                        @error('email')
+                                            <div class="text-danger error-message">
+                                                <strong>* {{ $message }}</strong>
+                                            </div>
+                                        @enderror
                                     </span>
+
+                                    <!-- Phone Number Field -->
                                     <span class="ec-contact-wrap">
                                         <label>Số Điện Thoại</label>
-                                        <input type="text" name="phonenumber" placeholder="Nhập số điện thoại của bạn"
-                                            required />
+                                        <input type="text" name="phonenumber" placeholder="Nhập số điện thoại của bạn" value="{{ old('phonenumber') }}" required />
+                                        @error('phonenumber')
+                                        <div class="text-danger error-message">
+                                            <strong>* {{ $message }}</strong>
+                                        </div>
+                                    @enderror
                                     </span>
+
+                                    <!-- Address/Comment Field -->
                                     <span class="ec-contact-wrap">
                                         <label>Nhận xét/Câu hỏi</label>
-                                        <textarea name="address"
-                                            placeholder="Hãy để lại ý kiến ​​của bạn tại đây.."></textarea>
+                                        <textarea name="address" placeholder="Hãy để lại ý kiến của bạn tại đây.." required>{{ old('address') }}</textarea>
+                                        @error('address')
+                                            <div class="text-danger error-message">
+                                                <strong>* {{ $message }}</strong>
+                                            </div>
+                                        @enderror
                                     </span>
-                                    <span class="ec-contact-wrap ec-recaptcha">
-                                        <span class="g-recaptcha"
-                                            data-sitekey="6LfKURIUAAAAAO50vlwWZkyK_G2ywqE52NU7YO0S"
-                                            data-callback="verifyRecaptchaCallback"
-                                            data-expired-callback="expiredRecaptchaCallback"></span>
-                                        <input class="form-control d-none" data-recaptcha="true"
-                                            data-error="Please complete the Captcha">
-                                        <span class="help-block with-errors"></span>
-                                    </span>
+
+                                    <!-- Submit Button -->
                                     <span class="ec-contact-wrap ec-contact-btn">
                                         <button class="btn btn-primary" type="submit">Gửi</button>
                                     </span>
