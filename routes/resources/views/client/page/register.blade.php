@@ -14,7 +14,7 @@
                     <div class="col-md-6 col-sm-12">
                         <!-- ec-breadcrumb-list start -->
                         <ul class="ec-breadcrumb-list">
-                            <li class="ec-breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                            <li class="ec-breadcrumb-item"><a href="{{ url('/') }}">Trang chủ</a></li>
                             <li class="ec-breadcrumb-item active">Đăng ký</li>
                         </ul>
                         <!-- ec-breadcrumb-list end -->
@@ -25,21 +25,28 @@
     </div>
 </div>
 <!-- Ec breadcrumb end -->
-
-<!-- Start Register -->
 <section class="ec-page-content section-space-p">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="section-title">
-                    <h2 class="ec-bg-title">Đăng ký</h2>
-                    <h2 class="ec-title">Đăng ký</h2>
-                    <p class="sub-title mb-3">Để trải nghiệm tốt nhất .</p>
+        <div class="row align-items-center">
+            <!-- Phần bên trái -->
+            <div class="col-md-7 d-flex justify-content-center align-items-center position-relative">
+                <div class="login-image-wrapper">
+                    <img src="{{ asset('theme/client/assets/images/bg/banner.jpg') }}" alt="Login Image" class="img-fluid-ac login-image" />
+                    <div class="image-text">
+                        <h4 >Chào mừng bạn!</h4>
+                        <p>Đăng nhập ngay để khám phá thế giới sản phẩm tuyệt vời.</p>
+                    </div>
                 </div>
             </div>
-            <div class="ec-register-wrapper col-md-6">
-                <div class="ec-register-container">
-                    <div class="ec-register-form">
+
+            <!-- Phần bên phải -->
+            <div class="col-md-5 d-flex align-items-center">
+                <div class="ec-login-wrapper">
+                    <div class="ec-login-container">
+                        <div class="section-titlen text-center">
+                            <h2 class="ec-title">Đăng Ký </h2>
+                        </div>
+                        <div class="ec-login-form">
                         <form action="{{ route('auth.register') }}" method="post">
                             @csrf
                             <span class="ec-register-wrap">
@@ -78,12 +85,11 @@
                                 <button class="btn btn-primary" type="submit">Đăng ký</button>
                             </span>
                         </form>
-
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- End Register -->
 @endsection

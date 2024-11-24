@@ -75,4 +75,13 @@ class ReviewController extends Controller
         ]);
     }
 
+    public function about_reviews_list()
+    {
+        // Lấy danh sách đánh giá có số điểm là 5 sao
+        $reviews = Review::with(['user', 'product'])
+            ->where('score', 5)
+            ->get();
+
+        return view('client.page.about', compact('reviews'));
+    }
 }

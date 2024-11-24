@@ -87,12 +87,17 @@
                                                 </td>
                                                 <td data-label="Đơn giá" class="ec-cart-pro-price">
                                                     <span class="amount">
-                                                        @if($item->sale_price)
+                                                        @if($item->flash_sale_price)
                                                         <span class="text-decoration-line-through listed_price">{{ number_format($item->listed_price) }}₫</span>
-                                                        <span class="sale_price"> {{ number_format($item->sale_price) }}₫</span>
+                                                        <span class="sale_price"> {{ number_format($item->flash_sale_price) }}₫</span>
                                                         @else
-                                                        <span class="listed_price">{{ number_format($item->listed_price) }}₫</span>
-                                                        @endif
+                                                        @if($item->normal_price < $item->listed_price)
+                                                            <span class="text-decoration-line-through listed_price">{{ number_format($item->listed_price) }}₫</span>
+                                                            <span class="sale_price">{{ number_format($item->normal_price) }}₫</span>
+                                                            @else
+                                                            <span class="listed_price">{{ number_format($item->listed_price) }}₫</span>
+                                                            @endif
+                                                            @endif
 
                                                     </span>
                                                 </td>
@@ -109,7 +114,11 @@
                                                     </div>
                                                 </td>
                                                 <td data-label="Số tiền" class="ec-cart-pro-subtotal total-price">
-                                                    {{ number_format(($item->sale_price ?? $item->listed_price) * $item->quantity) }}₫
+                                                    @if($item->flash_sale_price)
+                                                    {{ number_format(($item->flash_sale_price * $item->flash_sale_qty) + ($item->normal_price * $item->normal_qty)) }}₫
+                                                    @else
+                                                    {{ number_format($item->normal_price * $item->quantity) }}₫
+                                                    @endif
                                                 </td>
                                                 <td data-label="Xóa" class="ec-cart-pro-remove">
                                                     <button class="delete-item fs-5" data-cart-id="{{ $item->id }}"><i class="ecicon eci-trash-o"></i></button>
@@ -143,7 +152,7 @@
                                         </div>
                                         <div class="fw-bolder pt-3 border-top">
                                             <span class="text-left">Tổng số tiền</span>
-                                            <span id="total" class="text-right">0₫</span>
+                                            <span id="total" class="text-right fw-bold fs-4 text-danger">0₫</span>
                                         </div>
 
 
@@ -253,6 +262,9 @@
                         var row = $('#cart-item-' + itemId);
 
                         row.find('.total-price').text(response.data.total_price + '₫');
+                        if (response.data.flash_sale_exceeded) {
+                            toastr.warning(response.message);
+                        }
                     } else {
                         toastr.warning(response.message);
                     }

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('message_private', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_send');
-            $table->integer('user_receiver'); // sửa chính tả
+            $table->unsignedBigInteger('user_send');
+            $table->unsignedBigInteger('user_receiver'); // sửa chính tả
             $table->text('message'); // thay đổi kiểu dữ liệu nếu cần
-            $table->boolean('read')->default(false); // thêm trường read nếu cần
+            $table->tinyInteger('is_read')->default(0);
             $table->timestamps();
 
             // Thêm khóa ngoại nếu muốn đảm bảo tính toàn vẹn dữ liệu
