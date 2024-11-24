@@ -28,7 +28,7 @@ class HomeController extends Controller
 
         $users = User::select('users.id', 'users.name', 'users.image')
             ->leftJoin('message_private as m', function ($join) {
-                $join->on('users.id', '=', 'm.user_receiver')
+                $join->on('users.id', '=', 'm.user_reciever')
                     ->where('m.created_at', '>=', now()->subMinutes(5));
             })
             ->where('users.user_catalogue_id', 2)
