@@ -15,13 +15,13 @@
                                     @php
                                     $today = now()->format('Y-m-d');
                                     @endphp
-                                    <input class="form-control" type="date" name="date" id="date" value="{{ $flashSale->date }}" min="{{ $today }}" required>
+                                    <input class="form-control" type="date" name="date" id="date" value="{{ $flashSale->date }}" min="{{ $today }}" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label for="time_slot">Khung giờ</label>
-                                    <select name="time_slot" id="time_slot" class="form-control" required>
+                                    <select name="time_slot" id="time_slot" class="form-control" disabled>
                                         @foreach($availableSlots as $slot)
                                         @php
                                         $times = explode('-', $slot);
@@ -52,10 +52,10 @@
                             <div class="col-lg-12 mb-15">
                                 <div class="uk-flex uk-flex-space-between">
                                     <h3>Danh sách sản phẩm tham gia</h3>
-                                    <button id="openPopup" class="btn btn-danger">
+                                    <a id="openPopup" class="btn btn-danger">
                                         <i class="fa fa-plus mr-5"></i>
                                         Thêm sản phẩm
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
             <!-- Body -->
             <div class="popup-body">
                 <div class="table-responsive">
-                    <table class="table table-sm table-striped table-bordered">
+                    <table class="table table-sm table-striped table-bordered" id="product-flash">
                         <thead>
                             <tr>
                                 <th>
@@ -170,9 +170,10 @@
                             <tr class="{{ $isSelected ? 'active-bg' : '' }}">
                                 <td>
                                     <input type="checkbox" class="checkBoxItem" value="{{ $product->id }}" {{ $isSelected ? 'checked' : '' }}>
+
                                 </td>
                                 <td class="text-center">
-                                    <span><img class="image img-cover" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt=""></span>
+                                    <span><img class="image img-cover datatable-image" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" alt=""></span>
                                 </td>
                                 <td>{{ $product->code }}</td>
                                 <td>{{ $product->name }}</td>
@@ -197,6 +198,27 @@
 </div>
 <script>
     $(document).ready(function() {
+        var checkedRows = {};
+
+        var table = $('#product-flash').DataTable({
+            language: {
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Xem _MENU_ mục",
+                "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                "sInfoPostFix": "",
+                "sSearch": "Tìm:",
+                "sUrl": "",
+            }
+        });
+
+        $('#product-flash').on('change', 'input[type="checkbox"]', function() {
+            var rowId = $(this).val();
+            checkedRows[rowId] = $(this).is(':checked');
+        });
+
         $('#openPopup').on('click', function(e) {
             e.preventDefault();
             $('#productPopup').show();
@@ -204,6 +226,11 @@
 
         $('#closePopup, #cancelSelection').on('click', function() {
             $('#productPopup').fadeOut();
+        });
+
+        $('.checkBoxItem:checked').each(function() {
+            var rowId = $(this).val();
+            checkedRows[rowId] = $(this).is(':checked');
         });
 
         $(document).on('click', '.remove-product-flash', function() {
@@ -249,8 +276,10 @@
 
         $('#confirmSelection').on('click', function() {
             let selectedProductIds = [];
-            $('.checkBoxItem:checked').each(function() {
-                selectedProductIds.push($(this).val());
+            $.each(checkedRows, function(rowId, isChecked) {
+                if (isChecked) {
+                    selectedProductIds.push(rowId);
+                }
             });
 
             if (selectedProductIds.length > 0) {

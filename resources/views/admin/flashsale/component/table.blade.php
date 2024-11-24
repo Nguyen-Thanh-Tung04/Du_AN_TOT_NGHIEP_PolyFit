@@ -2,9 +2,6 @@
     <table class="table table-sm table-striped table-bordered">
         <thead>
             <tr>
-                <th>
-                    <input type="checkbox" value="" id="checkAll" class="input-checkbox">
-                </th>
                 <th class="text-center">Khung giờ</th>
                 <th class="text-center">Số sản phẩm tham gia</th>
                 <th class="text-center">Trạng thái</th>
@@ -16,9 +13,6 @@
             @if (isset($flashSales) && is_object($flashSales))
             @foreach($flashSales as $flashSale)
             <tr>
-                <td>
-                    <input type="checkbox" value="{{ $flashSale['id'] }}" class="input-checkbox checkBoxItem">
-                </td>
                 <td class="text-center">{{ $flashSale['time_slot'] }}</td>
                 <td class="text-center">{{ $flashSale['product_count'] }}</td>
                 <td class="text-center">{{ $flashSale['status'] }}</td>
@@ -28,7 +22,8 @@
                         data-field="status"
                         data-model="FlashSale"
                         data-modelId="{{ $flashSale['id'] }}"
-                        {{ ($flashSale['is_active'] == 1) ? 'checked' : '' }} />
+                        {{ ($flashSale['is_active'] == 1) ? 'checked' : '' }}
+                        {{ ($flashSale['status'] == "Đã diễn ra") ? 'disabled' : '' }} />
                 </td>
                 <td class="text-center">
                     <a href="{{ route('flashsale.show', $flashSale['id']) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>

@@ -17,7 +17,7 @@
                 <div class="panel-heading">
                     <div class="panel-title">Thông tin chung</div>
                     <div class="panel-description">
-                        <p>Bạn đang muốn xóa quyền có tên là: {{ $permission->canonical }}</p>
+                        <p>Bạn đang muốn xóa quyền có tên là: {{ $permission->name }}</p>
                         <p>Lưu ý: Không thể khôi phục quyền sau khi xóa. Hãy chắc chắn bạn muốn thực hiện chức năng này.<span class="text-danger">(*) </span>là bắt buộc</p>
                     </div>
                 </div>

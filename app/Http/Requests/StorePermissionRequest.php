@@ -23,11 +23,6 @@ class StorePermissionRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'canonical' => [
-            'required', 
-            'unique:permissions,canonical,' .$this->id,
-            'regex:/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*$/',
-        ],
         ];
     }
 
@@ -35,9 +30,6 @@ class StorePermissionRequest extends FormRequest
     {
         return [
             'name.required' => 'Bạn chưa nhập tên quyền.',
-            'canonical.required' => 'Bạn chưa nhập đường dẫn.',
-            'canonical.unique' => 'Đường dẫn đã tồn tại.',
-            'canonical.regex' => 'Đường dẫn chưa đúng định dạng. VD: product.index',
         ];
     }
 }

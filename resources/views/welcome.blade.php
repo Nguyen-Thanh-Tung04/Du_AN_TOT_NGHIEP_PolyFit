@@ -4,7 +4,7 @@
 
 <div class="ec-side-cart-overlay"></div>
 <!-- Main Slider Start -->
-<div class="sticky-header-next-sec ec-main-slider section section-space-pb">
+<div class="sticky-header-next-sec ec-main-slider section section-space-pb bg-white">
     <div class="ec-slider swiper-container main-slider-nav main-slider-dot">
         <!-- Main slider -->
         <div class="swiper-wrapper">
@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                             <div class="ec-slide-content slider-animation">
-                            <h1 class="ec-slide-title">Bộ thời trang sang trọng quý phái</h1>
+                                <h1 class="ec-slide-title">Bộ thời trang sang trọng quý phái</h1>
                                 <h2 class="ec-slide-stitle">Khuyến mại</h2>
                                 <p>Chúng tôi hi vọng sẽ giúp thỏa mãn mong muốn mua sắm của quý khách !</p>
                                 <a href="{{ url('/product_detail') }}" class="btn btn-lg btn-secondary">Đặt hàng
@@ -50,31 +50,17 @@
 </section>
 <!-- ec Product tab Area End -->
 
-
-<!-- Product tab Area Start -->
-<section class="section ec-product-tab section-space-p" id="collection">
-
+<section class="section ec-product-tab section-space-p .bg-white" id="collection">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="section-title">
-                    <h2 class="ec-bg-title fs-1">Sản phẩm của chúng tôi</h2>
-                    <h2 class="ec-title fs-1">Sản phẩm của chúng tôi</h2>
-                    <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
+                    <h2 class="ec-bg-title">Sản phẩm mới</h2>
+                    <h2 class="ec-title">Sản phẩm mới</h2>
+                    <!-- <p class="sub-title">Browse The Collection of Top Products</p> -->
                 </div>
             </div>
 
-
-            <!-- Tab Start -->
-            <div class="col-md-12 text-center">
-                <ul class="ec-pro-tab-nav nav justify-content-center">
-                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
-                            href="{{ url('/product_detail') }}tab-pro-for-all">Tất cả sản phẩm</a></li>
-                    {{-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                            href="{{ url('/product_detail') }}tab-pro-for-men">Sản phẩm mới nhất</a></li> --}}
-                </ul>
-            </div>
-            <!-- Tab End -->
         </div>
         <div class="row">
             <div class="col">
@@ -82,351 +68,458 @@
                     <!-- 1st Product tab start -->
                     <div class="tab-pane fade show active" id="tab-pro-for-all">
                         <div class="row">
-                            @foreach ($products as $product)
+                            @foreach ($newProducts as $product)
                             @php
                             $gallery = json_decode($product->gallery);
                             @endphp
-                            <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
                                 <!-- START single card -->
-                                <div class="ec-product-ds">
-                                    <div class="ec-product-image {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}">
-                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
+                                <div class="ec-product-tp">
+                                    <div class="ec-product-image">
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img src="{{ !empty($gallery) ? $gallery[0] : '' }}" class="img-center" alt="">
                                             @if($product->variants->sum('quantity') === 0)
-                                                <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
-                                                <div class="out-of-stock-label">Hết hàng</div>
+                                            <div class="out-of-stock-label">Hết hàng</div>
                                             @endif
                                         </a>
+
                                     </div>
                                     <div class="ec-product-body">
+                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+
                                         <ul class="ec-rating">
                                             @php
-                                                $averageScore = $product->averageScore(); // Gọi phương thức averageScore
+                                            $averageScore = $product->averageScore();
                                             @endphp
 
                                             @if ($averageScore)
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    @if ($i <= $averageScore)
-                                                        <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
-                                                    @else
-                                                        <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                    @endif
-                                                @endfor
-                                            @else
                                             @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= 5)
-                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
+                                                @if ($i <=$averageScore)
+                                                <li class="ecicon eci-star fill">
+                                                </li> <!-- Sao đầy -->
                                                 @else
-                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
                                                 @endif
-                                            @endfor
-                                            @endif
+                                                @endfor
+                                                @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <=5)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                    @endfor
+                                                    @endif
                                         </ul>
-
-                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                                         <div class="ec-price">
-                                            <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
-                                            {{ number_format($product->min_price, 0) }} VNĐ
-                                            {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
+                                            @if ($product->min_price)
+
+                                            <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->min_price, 0) }}₫
+                                            @else
+
+                                            {{ number_format($product->listed_price, 0) }}₫
+                                            @endif
+
                                         </div>
-                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
+                                        <div class="ec-link-btn">
+                                            <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
+                                        </div>
                                     </div>
+
                                 </div>
-                                <!--/END single card -->
+                                <!-- START single card -->
+                            </div>
+                            @endforeach
+                            <div class="col-sm-12 shop-all-btn"><a href="{{ route('home.shop')}}">Xem tất cả sản phẩm</a></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section ec-category-section ec-category-wrapper-4 section-space-p">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="section-title">
+                    <h2 class="ec-bg-title">Danh mục</h2>
+                    <h2 class="ec-title">Danh mục</h2>
+                    <!-- <p class="sub-title">Browse The Collection of Top Categories</p> -->
+                </div>
+            </div>
+        </div>
+        <div class="row cat-space-3 cat-auto margin-minus-tb-15">
+            @foreach($categories as $category)
+            <div class="col-lg-2 col-md-4 col-sm-12">
+                <div class="cat-card">
+                    <div class="card-img">
+                        <img class="cat-icon" src="{{ asset(Storage::url($category->image)) }}" alt="cat-icon">
+                    </div>
+                    <div class="cat-detail">
+                        <h4>{{ $category->name }}</h4>
+                        <a class="btn-primary" href="{{ route('home.shop') }}?category={{ $category->id }}">Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+@if ($productsFlashSale->isNotEmpty())
+<section class="section ec-catalog-multi-vendor margin-bottom-30 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="ec-multi-vendor-detail">
+                <div class="ec-page-description ec-page-description-info d-flex justify-content-between align-items-center" style="background-color: #fac3aa8c;">
+                    <div>
+
+                        <img src="{{ asset('theme\client\assets\images\bg\sieugiaodich.png') }}" style="width: 70%;" alt="">
+                    </div>
+                    <div class="">
+                        <a href="{{route('flash-sale') }}" class="text-decoration-none more fw-normal fs-5 text-dark d-flex align-items-center">Xem Thêm <i style="padding-top: 5px;" class="fi-rs-angle-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row vendor-row">
+            <div class="ec-multi-vendor-slider">
+                @foreach($productsFlashSale as $product)
+                @php
+                $gallery = json_decode($product->gallery);
+                @endphp
+                <div class="ec-product-inner">
+                    <div class="ec-pro-image-outer">
+                        <div class="ec-pro-image">
+                            <a href="{{ route('client.product.show', $product->id) }}" class="image">
+                                <img class="main-image" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
+                                    alt="Product" />
+
+                            </a>
+                            <span class="percentage">
+                                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                    <path d="M9.23077 0H4.23077L0 7.82222L3.5 9.14286V16L10 5.68889L6.53846 4.62222L9.23077 0Z" fill="url(#paint0_linear_2216_10611)"></path>
+                                    <defs>
+                                        <linearGradient id="paint0_linear_2216_10611" x1="0" y1="0" x2="0" y2="16" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#FFFF"></stop>
+                                            <stop offset="1" stop-color="#FFFF"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>{{number_format($product->discount_percentage)}}%
+                            </span>
+                            <span class="flags">
+                                <span class="sale">
+                                    Sale</span>
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="ec-pro-content">
+                        <h5 class="ec-pro-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h5>
+                        <div class="ec-pri.ecicon.eci-star.fillo-rating">
+                            @if ($product->averageScore())
+
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <=round($product->averageScore()))
+                                <i class="ecicon eci-star fill"></i>
+                                @else
+                                <i class="ecicon eci-star"></i>
+                                @endif
+                                @endfor
+                                @else
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <=5)
+                                    <i class="ecicon eci-star fill">
+                                    </i>
+                                    @else
+                                    <i class="ecicon eci-star"></i>
+                                    @endif
+                                    @endfor
+                                    @endif
+                        </div>
+
+                        <span class="ec-price">
+                            <span class="old-price">{{ number_format($product->listed_price, 0) }}₫</span>
+                            <span class="new-price"> {{ number_format($product->flash_sale_price, 0) }}₫</span>
+                        </span>
+                        <div class="ec-pro-option">
+
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+
+            </div>
+        </div>
+    </div>
+</section>
+@else
+@endif
+
+
+
+
+<section class="section ec-services-section section-space-p" id="services">
+    <h2 class="d-none">Dịch vụ</h2>
+    <div class="container">
+        <div class="row">
+            <div class="ec_ser_content ec_ser_content_1 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                <div class="ec_ser_inner">
+                    <div class="ec-service-image">
+                        <i class="fi fi-ts-truck-moving"></i>
+                    </div>
+                    <div class="ec-service-desc">
+                        <h2>Miễn phí vận chuyển</h2>
+                        <p>Miễn phí vận chuyển cho tất cả các đơn hàng tại Hoa Kỳ hoặc đơn hàng trên 200 đô la</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ec_ser_content ec_ser_content_2 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                <div class="ec_ser_inner">
+                    <div class="ec-service-image">
+                        <i class="fi fi-ts-hand-holding-seeding"></i>
+                    </div>
+                    <div class="ec-service-desc">
+                        <h2>Hỗ trợ 24X7</h2>
+                        <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ec_ser_content ec_ser_content_3 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                <div class="ec_ser_inner">
+                    <div class="ec-service-image">
+                        <i class="fi fi-ts-badge-percent"></i>
+                    </div>
+                    <div class="ec-service-desc">
+                        <h2>Trả hàng trong vòng 30 ngày</h2>
+                        <p>Chỉ cần trả lại trong vòng 30 ngày để đổi hàng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ec_ser_content ec_ser_content_4 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                <div class="ec_ser_inner">
+                    <div class="ec-service-image">
+                        <i class="fi fi-ts-donate"></i>
+                    </div>
+                    <div class="ec-service-desc">
+                        <h2>Thanh toán an toàn</h2>
+                        <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--services Section End -->
+
+
+
+<section class="section ec-product-tab section-space-p .bg-white" id="collection">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="section-title">
+                    <h2 class="ec-bg-title">Sản phẩm bán chạy</h2>
+                    <h2 class="ec-title">Sản phẩm bán chạy</h2>
+                    <!-- <p class="sub-title">Browse The Collection of Top Products</p> -->
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="tab-content">
+                    <!-- 1st Product tab start -->
+                    <div class="tab-pane fade show active" id="tab-pro-for-all">
+                        <div class="row">
+                            @foreach ($bestSellingProducts as $product)
+                            @php
+                            $gallery = json_decode($product->gallery);
+                            @endphp
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                                <!-- START single card -->
+                                <div class="ec-product-tp">
+                                    <div class="ec-product-image">
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img src="{{ !empty($gallery) ? $gallery[0] : '' }}" class="img-center" alt="">
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
+                                        </a>
+
+                                    </div>
+                                    <div class="ec-product-body">
+                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+
+                                        <ul class="ec-rating">
+                                            @php
+                                            $averageScore = $product->averageScore();
+                                            @endphp
+
+                                            @if ($averageScore)
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <=$averageScore)
+                                                <li class="ecicon eci-star fill">
+                                                </li> <!-- Sao đầy -->
+                                                @else
+                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                                @endfor
+                                                @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <=5)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                    @endfor
+                                                    @endif
+                                        </ul>
+                                        <div class="ec-price">
+                                            @if ($product->min_price)
+
+                                            <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->min_price, 0) }}₫
+                                            @else
+
+                                            {{ number_format($product->listed_price, 0) }}₫
+                                            @endif
+
+                                        </div>
+                                        <div class="ec-link-btn">
+                                            <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- START single card -->
                             </div>
                             @endforeach
 
                         </div>
                     </div>
-                </div>
-                <!-- ec 1st Product tab end -->
-                <!-- ec 2nd Product tab start -->
-                <div class="tab-pane fade" id="tab-pro-for-men">
 
                 </div>
-                <!-- ec 2nd Product tab end -->
-
             </div>
-
         </div>
     </div>
+</section>
+
+<!-- Ec Brand Section Start -->
+<section class="section ec-brand-area section-space-p">
+    <h2 class="d-none">Thương hiệu</h2>
+    <div class="container">
+        <div class="row">
+            <div class="ec-brand-outer">
+                <ul id="ec-brand-slider">
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/1.png') }}" /></a></div>
+                    </li>
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/2.png') }}" /></a></div>
+                    </li>
+
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/4.png') }}" /></a></div>
+                    </li>
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/5.png') }}" /></a></div>
+                    </li>
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/6.png') }}" /></a></div>
+                    </li>
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/7.png') }}" /></a></div>
+                    </li>
+                    <li class="ec-brand-item" data-animation="zoomIn">
+                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                                    title="brand"
+                                    src="{{ asset('theme/client/assets/images/brand-image/8.png') }}" /></a></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-
-    <section class="section ec-services-section section-space-p" id="services">
-        <h2 class="d-none">Dịch vụ</h2>
-        <div class="container">
-            <div class="row">
-                <div class="ec_ser_content ec_ser_content_1 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
-                    <div class="ec_ser_inner">
-                        <div class="ec-service-image">
-                            <i class="fi fi-ts-truck-moving"></i>
-                        </div>
-                        <div class="ec-service-desc">
-                            <h2>Miễn phí vận chuyển</h2>
-                            <p>Miễn phí vận chuyển cho tất cả các đơn hàng tại Hoa Kỳ hoặc đơn hàng trên 200 đô la</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="ec_ser_content ec_ser_content_2 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
-                    <div class="ec_ser_inner">
-                        <div class="ec-service-image">
-                            <i class="fi fi-ts-hand-holding-seeding"></i>
-                        </div>
-                        <div class="ec-service-desc">
-                            <h2>Hỗ trợ 24X7</h2>
-                            <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="ec_ser_content ec_ser_content_3 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
-                    <div class="ec_ser_inner">
-                        <div class="ec-service-image">
-                            <i class="fi fi-ts-badge-percent"></i>
-                        </div>
-                        <div class="ec-service-desc">
-                            <h2>Trả hàng trong vòng 30 ngày</h2>
-                            <p>Chỉ cần trả lại trong vòng 30 ngày để đổi hàng</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="ec_ser_content ec_ser_content_4 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
-                    <div class="ec_ser_inner">
-                        <div class="ec-service-image">
-                            <i class="fi fi-ts-donate"></i>
-                        </div>
-                        <div class="ec-service-desc">
-                            <h2>Thanh toán an toàn</h2>
-                            <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+</section>
+<!-- Ec Brand Section End -->
+<div class="ec-style ec-right-bottom">
+    <!-- Start Floating Panel Container -->
+    <div class="ec-panel" style="display: block;">
+        <!-- Panel Header -->
+        <div class="ec-header">
+            <strong>Cần hỗ trợ?</strong>
+            <p>Liên hệ với nhân viên?</p>
         </div>
-    </section>
-    <!--services Section End -->
+        <!-- Panel Content -->
+        <div class="ec-body">
+            <ul>
+                <!-- Start Single Contact List -->
 
-    <!--  offer Section Start -->
-    <section class="section ec-offer-section section-space-p section-space-m">
-        <h2 class="d-none">Lời đề nghị</h2>
-        <div class="container">
-            <div class="row justify-content-end">
-                {{-- <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
-                    <h2 class="ec-offer-title">Mũ</h2>
-                    <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
-                    <span class="ec-offer-img" data-animation="zoomIn"><img src="{{ asset(Storage::url($category->image)) }}" width="200px"
-                            alt="offer image" /></span>
-                    <span class="ec-offer-desc">Mũ</span>
-                    <span class="ec-offer-price">{{ number_format($product->listed_price, 0) }} đ</span>
-                    <a class="btn btn-primary" href="shop-left-sidebar-col-3.html" data-animation="zoomIn">Mua ngay</a>
-                </div> --}}
-            </div>
-        </div>
-    </section>
-    <!-- offer Section End -->
-    <!-- New Product Start -->
-    <section class="section ec-new-product section-space-p" id="arrivals">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="section-title">
-                        <h2 class="ec-bg-title">Sản phẩm giảm giá</h2>
-                        <h2 class="ec-title">Sản phẩm giảm giá</h2>
-                        <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="tab-content">
-                        <!-- 1st Product tab start -->
-                        <div class="tab-pane fade show active" id="tab-pro-for-all">
-                            <div class="row">
-                                @foreach ($products as $product)
-                                @php
-                                $gallery = json_decode($product->gallery);
-                                @endphp
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <!-- START single card -->
-                                    <div class="ec-product-ds">
-                                        <div class="ec-product-image {{ $product->variants->sum('quantity') === 0 ? 'out-of-stock' : '' }}">
-                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ !empty($gallery) ? $gallery[0] : '' }}" alt="" style="height: 300px" />
-                                            @if($product->variants->sum('quantity') === 0)
-                                                <!-- Hiển thị nhãn 'Hết hàng' nếu sản phẩm hết số lượng -->
-                                                <div class="out-of-stock-label">Hết hàng</div>
-                                            @endif
-                                        </a>
-                                    </div>
-                                        <div class="ec-product-body">
-                                            <ul class="ec-rating">
-                                                @php
-                                                    $averageScore = $product->averageScore(); // Gọi phương thức averageScore
-                                                @endphp
+                @foreach($users as $item)
+                @php
+                $checkUrlImg = \Illuminate\Support\Str::contains($item->image, '/userfiles/') ? $item->image : Storage::url($item->image);
+                @endphp
+                <li id="user{{ $item->id }}">
+                    <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
+                        <div class="d-flex bd-highlight">
+                            <!-- Profile Picture -->
+                            <div class="ec-img-cont">
+                                @if(isset($item->image))
+                                <img src="{{$checkUrlImg }}" class="ec-user-img" alt="Profile image">
+                                @else
+                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
+                                @endif
+                            </div>
 
-                                                @if ($averageScore)
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        @if ($i <= $averageScore)
-                                                            <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
-                                                        @else
-                                                            <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                        @endif
-                                                    @endfor
-                                                @else
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= 5)
-                                                    <li class="ecicon eci-star fill"></li> <!-- Sao đầy -->
-                                                @else
-                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                @endif
-                                            @endfor
-                                                @endif
-                                            </ul>
-                                            <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
-                                            <div class="ec-price">
-                                                <span>{{ number_format($product->listed_price, 0) }}VNĐ </span>
-                                                {{ number_format($product->min_price, 0) }} VNĐ
-                                                {{-- - {{ number_format($product->max_price, 0) }} VNĐ --}}
-                                            </div>
-                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Thêm giỏ hàng</a>
-                                        </div>
-                                    </div>
-                                    <!--/END single card -->
-                                </div>
-                                @endforeach
+                            <!-- Display Name & Last Seen -->
+                            <div class="ec-user-info">
+                                <span>{{ $item->name }}</span>
+                                <!-- Phần tử hiển thị thời gian hoạt động -->
+                                <p style="margin-top: 2px;" class="activity-time"></p>
+                            </div>
 
+                            <!-- Chat Icon -->
+                            <div class="ec-chat-icon">
+                                <i class="fa fa-whatsapp"></i>
                             </div>
                         </div>
-                    </div>
-                    <!-- ec 1st Product tab end -->
-                    <!-- ec 2nd Product tab start -->
-                    <div class="tab-pane fade" id="tab-pro-for-men">
+                    </a>
+                </li>
 
-                    </div>
-                    <!-- ec 2nd Product tab end -->
-                    <!-- ec 3rd Product tab start -->
-                    <div class="tab-pane fade" id="tab-pro-for-women">
 
-                    </div>
-                    <!-- ec 3rd Product tab end -->
-                    <!-- ec 4th Product tab start -->
-                    <div class="tab-pane fade" id="tab-pro-for-child">
-
-                    </div>
-                    <!-- ec 4th Product tab end -->
-                </div>
-
+                @endforeach
+                <!--/ End Single Contact List -->
+            </ul>
+        </div>
+    </div>
+    <!--/ End Floating Panel Container -->
+    <!-- Start Right Floating Button-->
+    <div class="ec-right-bottom">
+        <div class="ec-box">
+            <div class="ec-button rotateForward">
+                <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
             </div>
         </div>
-    </section>
-    <!-- New Product end -->
-     
-    <!-- Ec Brand Section Start -->
-    <section class="section ec-brand-area section-space-p">
-        <h2 class="d-none">Thương hiệu</h2>
-        <div class="container">
-            <div class="row">
-                <div class="ec-brand-outer">
-                    <ul id="ec-brand-slider">
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/1.png') }}" /></a></div>
-                        </li>
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/2.png') }}" /></a></div>
-                        </li>
+    </div>
+    <!--/ End Right Floating Button-->
 
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/4.png') }}" /></a></div>
-                        </li>
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/5.png') }}" /></a></div>
-                        </li>
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/6.png') }}" /></a></div>
-                        </li>
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/7.png') }}" /></a></div>
-                        </li>
-                        <li class="ec-brand-item" data-animation="zoomIn">
-                            <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
-                                        title="brand"
-                                        src="{{ asset('theme/client/assets/images/brand-image/8.png') }}" /></a></div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Ec Brand Section End -->
-    <div class="ec-style ec-right-bottom">
-     <!-- Start Floating Panel Container -->
-     <div class="ec-panel" style="display: block;">
-         <!-- Panel Header -->
-         <div class="ec-header">
-             <strong>Cần hỗ trợ?</strong>
-             <p>Liên hệ với nhân viên?</p>
-         </div>
-         <!-- Panel Content -->
-         <div class="ec-body">
-             <ul>
-                 <!-- Start Single Contact List -->
-
-                 @foreach($users as $item)
-                 <li id="user{{ $item->id }}">
-                     <a class="ec-list" href="{{ route('chat-private', $item->id) }}">
-                         <div class="d-flex bd-highlight">
-                             <!-- Profile Picture -->
-                             <div class="ec-img-cont">
-                                 @if(isset($item->image))
-                                 <img src="{{ $item->image }}" class="ec-user-img" alt="Profile image">
-                                 @else
-                                 <img src="{{ asset('theme/client/assets/images/whatsapp/profile_01.jpg') }}" class="ec-user-img" alt="Profile image">
-                                 @endif
-                             </div>
-
-                             <!-- Display Name & Last Seen -->
-                             <div class="ec-user-info">
-                                 <span>{{ $item->name }}</span>
-                                 <!-- Phần tử hiển thị thời gian hoạt động -->
-                                 <p style="margin-top: 2px;" class="activity-time"></p>
-                             </div>
-
-                             <!-- Chat Icon -->
-                             <div class="ec-chat-icon">
-                                 <i class="fa fa-whatsapp"></i>
-                             </div>
-                         </div>
-                     </a>
-                 </li>
-
-
-                 @endforeach
-                 <!--/ End Single Contact List -->
-             </ul>
-         </div>
-     </div>
-     <!--/ End Floating Panel Container -->
-     <!-- Start Right Floating Button-->
-     <div class="ec-right-bottom">
-         <div class="ec-box">
-             <div class="ec-button rotateForward">
-                 <img class="whatsapp" src="{{ asset('theme/client/assets/images/common/whatsapp.png') }}" alt="whatsapp icon">
-             </div>
-         </div>
-     </div>
-     <!--/ End Right Floating Button-->
-     
- </div>
- <!-- Whatsapp end -->
-    @endsection
+</div>
+<!-- Whatsapp end -->
+@endsection

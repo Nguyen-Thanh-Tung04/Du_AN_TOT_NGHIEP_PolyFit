@@ -248,7 +248,7 @@
                                             $checkUrlImg = \Illuminate\Support\Str::contains($profile->image, '/userfiles/') ? $profile->image : $profile->image;
                                         @endphp
                                         <img class="image-thumb-preview ec-image-preview v-img"
-                                            src="{{ $checkUrlImg }}" alt="edit" />
+                                            src="{{ Storage::url($checkUrlImg) }}" alt="edit" />
                                     </div>
                                 </div>
                             </div>
@@ -291,7 +291,7 @@
                                             @if (isset($provinces))
                                             @foreach($provinces as $province)
                                             <option value="{{ $province->code }}"
-                                                {{ old('province_id') == $province->code ? 'selected' : '' }}>
+                                                {{ $profile->province_id == $province->code ? 'selected' : '' }}>
                                                 {{ $province->name }}
                                             </option>
                                             @endforeach
@@ -309,6 +309,14 @@
                                     <span class="ec-bl-select-inner">
                                         <select name="district_id" id="districtId" class="ec-bill-select districts location col-md-12" data-target="wards" value="{{$profile->district_id}}">
                                             <option value="">[Chọn Quận/Huyện]</option>
+                                            @if (isset($districts))
+                                            @foreach($districts as $district)
+                                            <option value="{{ $district->code }}"
+                                                {{ $profile->district_id == $district->code ? 'selected' : '' }}>
+                                                {{ $district->name }}
+                                            </option>
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </span>
                                 </span>
@@ -323,6 +331,14 @@
                                         <select id="wardId" name="ward_id"
                                             class="ec-bill-select wards col-md-12">
                                             <option value="">[Chọn Phường/Xã]</option>
+                                            @if (isset($wards))
+                                            @foreach($wards as $ward)
+                                            <option value="{{ $ward->code }}"
+                                                {{ $profile->ward_id == $ward->code ? 'selected' : '' }}>
+                                                {{ $ward->name }}
+                                            </option>
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </span>
                                 </span>
@@ -356,7 +372,7 @@
     var district_id = '{{ (isset($user->district_id)) ? $user->district_id : old('district_id') }}'
     var ward_id = '{{ (isset($user->ward_id)) ? $user->ward_id : old('ward_id') }}'
     console.log(ward_id);
-    
+
 </script>
 <script src="{{ asset('admin/library/location.js') }}"></script>
 @endsection

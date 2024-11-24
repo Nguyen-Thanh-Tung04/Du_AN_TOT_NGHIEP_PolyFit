@@ -20,7 +20,7 @@
                             </tr>
                             @foreach ($permissions as $permission)
                             <tr>
-                                <td><a href="" class="uk-flex uk-flex-middle uk-flex-space-between">{{ $permission->name }} <span style="color:red;">({{ $permission->canonical }})</span> </a></td>
+                                <td><a href="" class="uk-flex uk-flex-middle uk-flex-space-between">{{ $permission->name }}</a></td>
                                 @foreach ($userCatalogues as $userCatalogue)
                                 <td>
                                     <input {{ (collect($userCatalogue->permissions)->contains('id', $permission->id) ? 'checked' : '') }} 

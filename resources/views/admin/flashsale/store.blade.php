@@ -59,10 +59,10 @@
                             <div class="col-lg-12 mb-15">
                                 <div class="uk-flex uk-flex-space-between">
                                     <h3>Danh sách sản phẩm tham gia</h3>
-                                    <button id="openPopup" class="btn btn-danger">
+                                    <a id="openPopup" class="btn btn-danger">
                                         <i class="fa fa-plus mr-5"></i>
                                         Thêm sản phẩm
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +109,32 @@
 </div>
 <script>
     $(document).ready(function() {
+        var checkedRows = {};
+
+        var table = $('#product-flash').DataTable({
+            language: {
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Xem _MENU_ mục",
+                "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                "sInfoPostFix": "",
+                "sSearch": "Tìm:",
+                "sUrl": "",
+            }
+        });
+
+        $('#product-flash').on('change', 'input[type="checkbox"]', function() {
+            var rowId = $(this).val();
+            checkedRows[rowId] = $(this).is(':checked');
+        });
+
+        table.on('draw', function() {
+            $.each(checkedRows, function(rowId, isChecked) {
+                $('input[type="checkbox"][value="' + rowId + '"]').prop('checked', isChecked);
+            });
+        });
         $('#openPopup').on('click', function(e) {
             e.preventDefault();
             $('#productPopup').show();
@@ -121,10 +147,13 @@
 
         $('#confirmSelection').on('click', function() {
             let selectedProductIds = [];
-            $('.checkBoxItem:checked').each(function() {
-                selectedProductIds.push($(this).val());
-            });
 
+
+            $.each(checkedRows, function(rowId, isChecked) {
+                if (isChecked) {
+                    selectedProductIds.push(rowId);
+                }
+            });
             if (selectedProductIds.length > 0) {
                 $.ajax({
                     url: '{{ route("flashsale.getSelectedProducts") }}',
