@@ -15,13 +15,13 @@
                                     @php
                                     $today = now()->format('Y-m-d');
                                     @endphp
-                                    <input class="form-control" type="date" name="date" id="date" value="{{ $flashSale->date }}" min="{{ $today }}" required>
+                                    <input class="form-control" type="date" name="date" id="date" value="{{ $flashSale->date }}" min="{{ $today }}" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label for="time_slot">Khung giờ</label>
-                                    <select name="time_slot" id="time_slot" class="form-control" required>
+                                    <select name="time_slot" id="time_slot" class="form-control" disabled>
                                         @foreach($availableSlots as $slot)
                                         @php
                                         $times = explode('-', $slot);
@@ -52,10 +52,10 @@
                             <div class="col-lg-12 mb-15">
                                 <div class="uk-flex uk-flex-space-between">
                                     <h3>Danh sách sản phẩm tham gia</h3>
-                                    <button id="openPopup" class="btn btn-danger">
+                                    <a id="openPopup" class="btn btn-danger">
                                         <i class="fa fa-plus mr-5"></i>
                                         Thêm sản phẩm
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

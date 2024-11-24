@@ -1,0 +1,62 @@
+[33m5d3ba63[m[33m ([m[1;36mHEAD -> [m[1;32mhung[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: checkout: moving from tung to hung
+[33m46f3a3a[m[33m ([m[1;31morigin/tung[m[33m, [m[1;32mtung[m[33m)[m HEAD@{1}: pull origin tung: Fast-forward
+[33m9100ceb[m HEAD@{2}: checkout: moving from hung to tung
+[33m5d3ba63[m[33m ([m[1;36mHEAD -> [m[1;32mhung[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: merge main: Fast-forward
+[33ma0c8bc6[m HEAD@{4}: checkout: moving from main to hung
+[33m5d3ba63[m[33m ([m[1;36mHEAD -> [m[1;32mhung[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{5}: pull origin main: Fast-forward
+[33m0065f78[m HEAD@{6}: checkout: moving from hung to main
+[33ma0c8bc6[m HEAD@{7}: commit: tìm kiếm
+[33ma0f66a6[m HEAD@{8}: commit (merge): Merge branch 'hung' of https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit into hung
+[33mbe99cb3[m HEAD@{9}: commit (merge): sửa tìm kiếm
+[33m9fbf00c[m HEAD@{10}: checkout: moving from main to hung
+[33m0065f78[m HEAD@{11}: pull origin main: Fast-forward
+[33m991411d[m HEAD@{12}: checkout: moving from hung to main
+[33m9fbf00c[m HEAD@{13}: commit: sửa thông báo liên hệ
+[33m0df6461[m HEAD@{14}: commit: đặt lại mk
+[33mb8d3080[m HEAD@{15}: commit: hung
+[33mdfe0b9e[m HEAD@{16}: commit: hung
+[33md1cc26a[m HEAD@{17}: commit (merge): Merge branch 'main' into hung
+[33m5527e36[m HEAD@{18}: pull origin hung: Fast-forward
+[33m52ec27c[m HEAD@{19}: commit: hung
+[33mcc7a291[m HEAD@{20}: commit (merge): hung
+[33mad5aae5[m HEAD@{21}: checkout: moving from main to hung
+[33m991411d[m HEAD@{22}: pull origin main: Fast-forward
+[33mf79a8d1[m HEAD@{23}: checkout: moving from hung to main
+[33mad5aae5[m HEAD@{24}: commit: hung
+[33m7873437[m HEAD@{25}: checkout: moving from hung to hung
+[33m7873437[m HEAD@{26}: commit: hung
+[33m030ea4f[m HEAD@{27}: commit: hung
+[33mbba5802[m HEAD@{28}: checkout: moving from hung to hung
+[33mbba5802[m HEAD@{29}: pull origin main: Merge made by the 'ort' strategy.
+[33mb331d85[m HEAD@{30}: commit: hùng
+[33mf79a8d1[m HEAD@{31}: merge main: Fast-forward
+[33ma8dc6c9[m HEAD@{32}: checkout: moving from main to hung
+[33mf79a8d1[m HEAD@{33}: pull origin main: Fast-forward
+[33m9b41e6e[m HEAD@{34}: checkout: moving from hung to main
+[33ma8dc6c9[m HEAD@{35}: commit: đổ giao diện
+[33mbbde2a4[m HEAD@{36}: checkout: moving from hung to hung
+[33mbbde2a4[m HEAD@{37}: pull origin main: Fast-forward
+[33m1f44848[m HEAD@{38}: commit: đổ giao diện
+[33m13f6217[m HEAD@{39}: checkout: moving from main to hung
+[33m9b41e6e[m HEAD@{40}: checkout: moving from main to main
+[33m9b41e6e[m HEAD@{41}: checkout: moving from hung to main
+[33m13f6217[m HEAD@{42}: pull origin hung: Merge made by the 'ort' strategy.
+[33mf59abc0[m HEAD@{43}: merge main: Merge made by the 'ort' strategy.
+[33mde1f825[m HEAD@{44}: checkout: moving from main to hung
+[33m9b41e6e[m HEAD@{45}: checkout: moving from hung to main
+[33mde1f825[m HEAD@{46}: checkout: moving from main to hung
+[33m9b41e6e[m HEAD@{47}: checkout: moving from hung to main
+[33mde1f825[m HEAD@{48}: checkout: moving from main to hung
+[33m9b41e6e[m HEAD@{49}: checkout: moving from hung to main
+[33mde1f825[m HEAD@{50}: checkout: moving from main to hung
+[33m9b41e6e[m HEAD@{51}: pull origin main: Fast-forward
+[33m461765b[m HEAD@{52}: checkout: moving from hung to main
+[33mde1f825[m HEAD@{53}: commit: đổ giao diện trang chủ
+[33m461765b[m HEAD@{54}: merge main: Fast-forward
+[33me29dac2[m HEAD@{55}: checkout: moving from main to hung
+[33m461765b[m HEAD@{56}: pull origin main: Fast-forward
+[33me29dac2[m HEAD@{57}: checkout: moving from main to main
+[33me29dac2[m HEAD@{58}: checkout: moving from hung to main
+[33me29dac2[m HEAD@{59}: checkout: moving from hung to hung
+[33me29dac2[m HEAD@{60}: checkout: moving from main to hung
+[33me29dac2[m HEAD@{61}: clone: from https://github.com/Nguyen-Thanh-Tung04/Du_AN_TOT_NGHIEP_PolyFit

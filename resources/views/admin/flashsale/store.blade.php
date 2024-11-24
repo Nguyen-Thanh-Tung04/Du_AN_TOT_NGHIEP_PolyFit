@@ -59,10 +59,10 @@
                             <div class="col-lg-12 mb-15">
                                 <div class="uk-flex uk-flex-space-between">
                                     <h3>Danh sách sản phẩm tham gia</h3>
-                                    <button id="openPopup" class="btn btn-danger">
+                                    <a id="openPopup" class="btn btn-danger">
                                         <i class="fa fa-plus mr-5"></i>
                                         Thêm sản phẩm
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

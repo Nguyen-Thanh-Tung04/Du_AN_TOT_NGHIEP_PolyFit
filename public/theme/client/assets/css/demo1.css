@@ -8,7 +8,7 @@
     - Common
     - Popup Model
     - Breadcrumb
-03. Layout 
+03. Layout
     - Header Section
     - Mainslider Section
     - Product Tab Section
@@ -28,122 +28,122 @@
   Fonts Family & Style CSS
 ---------------------------------------------------*/
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-Thin.ttf") format("truetype");
-  font-weight: 100;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-ExtraLight.ttf") format("truetype");
-  font-weight: 200;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-ExtraLight.ttf") format("truetype");
+    font-weight: 200;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-Light.ttf");
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-Light.ttf");
+    font-weight: 300;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
-  font-weight: 800;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Poppins, sans-serif";
-  src: url("../fonts/poppins/Poppins-Black.ttf") format("truetype");
-  font-weight: 900;
-  font-style: normal;
+    font-family: "Poppins, sans-serif";
+    src: url("../fonts/poppins/Poppins-Black.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Fjalla One";
-  src: url("../fonts/fjalla/FjallaOne-Regular.ttf") format("truetype");
+    font-family: "Fjalla One";
+    src: url("../fonts/fjalla/FjallaOne-Regular.ttf") format("truetype");
 }
 @font-face {
-  font-family: "Montserrat";
-  src: url("../fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Montserrat";
+    src: url("../fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Montserrat";
-  src: url("../fonts/montserrat/Montserrat-SemiBold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Montserrat";
+    src: url("../fonts/montserrat/Montserrat-SemiBold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Montserrat";
-  src: url("../fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
-  font-weight: 800;
-  font-style: normal;
+    font-family: "Montserrat";
+    src: url("../fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Montserrat";
-  src: url("../fonts/montserrat/Montserrat-ExtraBold.ttf") format("truetype");
-  font-weight: 900;
-  font-style: normal;
+    font-family: "Montserrat";
+    src: url("../fonts/montserrat/Montserrat-ExtraBold.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Oswald";
-  src: url("../fonts/oswald/Oswald-ExtraLight.ttf") format("truetype");
-  font-weight: 200;
-  font-style: normal;
+    font-family: "Oswald";
+    src: url("../fonts/oswald/Oswald-ExtraLight.ttf") format("truetype");
+    font-weight: 200;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Oswald";
-  src: url("../fonts/oswald/Oswald-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
+    font-family: "Oswald";
+    src: url("../fonts/oswald/Oswald-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Oswald";
-  src: url("../fonts/oswald/Oswald-Regular.ttf");
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Oswald";
+    src: url("../fonts/oswald/Oswald-Regular.ttf");
+    font-weight: 400;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Oswald";
-  src: url("../fonts/oswald/Oswald-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
+    font-family: "Oswald";
+    src: url("../fonts/oswald/Oswald-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Oswald";
-  src: url("../fonts/oswald/Oswald-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
+    font-family: "Oswald";
+    src: url("../fonts/oswald/Oswald-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
 }
 @font-face {
-  font-family: "Oswald";
-  src: url("../fonts/oswald/Oswald-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Oswald";
+    src: url("../fonts/oswald/Oswald-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
 }
 /*-------------------------------------------------
   Site Main Slider CSS
@@ -175,7 +175,7 @@
 }
 
 .ec-slide-3 {
-  background-image: url("../images/main-slider-banner/3.html");
+  background-image: url("../images/main-slider-banner/1.html");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -212,7 +212,7 @@
   height: 5px;
   width: 50px;
   margin: 0 auto;
-  background: #3474d4;
+  background: rgb(249, 58, 11);
   left: 4px;
   right: auto;
 }
@@ -321,7 +321,7 @@
   border-radius: 0;
   text-align: center;
   color: #ffffff;
-  background-color: #3474d4;
+  background-color: rgb(249, 58, 11);
 }
 .main-slider-nav .swiper-buttons .swiper-button-next:hover {
   background-color: #555;
@@ -344,7 +344,7 @@
   border-radius: 0;
   text-align: center;
   color: #ffffff;
-  background-color: #3474d4;
+  background-color: rgb(249, 58, 11);
 }
 .main-slider-nav .swiper-buttons .swiper-button-prev:hover {
   background-color: #555;
@@ -406,8 +406,8 @@
 
 .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-primary:hover {
   color: #ffffff;
@@ -416,13 +416,13 @@
 }
 .btn-primary:focus {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-primary:active {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 .btn-color-dark {
@@ -449,30 +449,30 @@
 }
 .btn-check:focus + .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-check:checked + .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .btn-check:active + .btn-primary {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 .btn-primary.active {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 .show > .btn-primary.dropdown-toggle {
   color: #ffffff;
-  background-color: #3474d4;
-  border-color: #3474d4;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 
 /*-------------------------------------------------
@@ -595,7 +595,7 @@
   text-transform: uppercase;
   padding: 0 18px;
   letter-spacing: 0.02rem;
-  background-color: #3474d4;
+  background-color: rgb(249, 58, 11);
   color: #ffffff;
   line-height: 40px;
   display: -webkit-box;
@@ -822,7 +822,7 @@
   font-weight: 600;
 }
 .ec-fs-pro-inner .ec-fs-pro-content .ec-fs-pro-book span {
-  color: #3474d4;
+  color: rgb(249, 58, 11);
 }
 .ec-fs-pro-inner .ec-fs-pro-content .ec-fs-pro-btn a {
   height: 35px;
@@ -1070,7 +1070,7 @@
 }
 .ec-offer-content .ec-offer-title {
   font-size: 60px;
-  color: #3474d4;
+  color: rgb(249, 58, 11);
   margin-bottom: 5px;
   letter-spacing: 2px;
 	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -1080,7 +1080,7 @@
 }
 .ec-offer-content .ec-offer-stitle {
   font-size: 40px;
-  color: #3474d4;
+  color: rgb(249, 58, 11);
   margin-bottom: 13px;
   letter-spacing: 1.5px;
   font-family: "Montserrat";
@@ -1400,3 +1400,141 @@ li.ec-brand-item {
   }
 }
 /*# sourceMappingURL=demo1.css.map */
+/* Đảm bảo row chiếm đủ chiều cao */
+.ec-page-content .row {
+    min-height: 80vh; /* Chiều cao toàn màn hình */
+    display: flex; /* Kích hoạt Flexbox */
+    align-items: stretch; /* Giúp các phần tử bên trong có cùng chiều cao */
+}
+
+/* Ảnh bên trái */
+.login-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.image-text {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.image-text h4 {
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.image-text p {
+    margin-top: 5px;
+    font-size: 1.2rem;
+}
+
+.ec-login-wrapper {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+
+}
+.ec-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+/* Tổng thể danh mục */
+.category-item {
+    display: flex; /* Sử dụng Flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: space-between; /* Khoảng cách đều giữa các phần */
+    background-color: #ffffff; /* Nền trắng */
+    border: 1px solid #e0e0e0; /* Viền nhạt */
+    border-radius: 10px; /* Bo tròn góc */
+    padding: 15px 20px; /* Khoảng cách bên trong */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.category-item:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Bóng đổ đậm hơn khi hover */
+    transform: translateY(-3px); /* Nhẹ nâng lên khi hover */
+}
+
+/* Ảnh danh mục */
+.category-image img {
+    width: 50px; /* Chiều rộng ảnh */
+    height: 50px; /* Chiều cao ảnh */
+    object-fit: contain; /* Giữ tỷ lệ ảnh */
+    margin-right: 15px; /* Khoảng cách với thông tin danh mục */
+}
+
+/* Thông tin danh mục */
+.category-info {
+    display: flex;
+    flex-direction: column; /* Các phần tử xếp dọc */
+    justify-content: center; /* Căn giữa nội dung */
+    flex-grow: 1; /* Đẩy link "Show All" sang phải */
+}
+
+/* Tiêu đề và số lượng */
+.category-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Căn đều giữa tên và số lượng */
+    margin-bottom: 5px;
+}
+
+.category-name {
+    font-size: 1rem; /* Kích thước chữ tên */
+    font-weight: bold; /* Chữ đậm */
+    color: #333333; /* Màu chữ */
+}
+
+.category-count {
+    font-size: 0.9rem; /* Kích thước chữ số lượng */
+    color: #888888; /* Màu chữ nhạt */
+}
+
+/* Link "Show All" */
+.category-link {
+    font-size: 0.9rem; /* Kích thước chữ */
+    color: #ff7e5f; /* Màu cam nhấn */
+    text-decoration: none; /* Xóa gạch chân */
+    display: inline-block; /* Để căn chỉnh với biểu tượng */
+    transition: color 0.3s ease; /* Hiệu ứng hover */
+}
+
+.category-link i {
+    margin-left: 5px; /* Khoảng cách giữa chữ và biểu tượng */
+}
+
+.category-link:hover {
+    color: #ff4e3b; /* Màu đậm hơn khi hover */
+}
+/* Đặt chiều rộng cho phần chứa văn bản */
+.header-right {
+  width: 100%;
+  overflow: hidden; /* Ẩn phần văn bản ngoài vùng hiển thị */
+}
+
+/* Tạo hiệu ứng cho văn bản chạy */
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap; /* Ngăn chặn ngắt dòng */
+  padding-left: 100%; /* Đẩy văn bản ra ngoài bên phải */
+  animation: marqueeAnimation 10s linear infinite; /* Thêm hiệu ứng chạy chữ */
+}
+
+/* Định nghĩa hiệu ứng chuyển động chữ */
+@keyframes marqueeAnimation {
+  0% {
+      transform: translateX(-10%); /* Bắt đầu từ ngoài bên phải */
+  }
+  100% {
+      transform: translateX(-100%); /* Chạy hết đến ngoài bên trái */
+  }
+}
