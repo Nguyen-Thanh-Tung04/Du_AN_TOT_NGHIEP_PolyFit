@@ -28,9 +28,8 @@ class CartController extends Controller
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $currentMinute = now()->minute;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour])
-                                ->orWhereRaw('? = SUBSTRING_INDEX(time_slot, "-", -1) AND ? < 60', [$currentHour, $currentMinute]);
+                            $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
                         });
                 })
                 ->where('status', 1)
@@ -201,7 +200,8 @@ class CartController extends Controller
                         ->where('date', now()->toDateString())
                         ->where(function ($query) {
                             $currentHour = now()->hour;
-                            $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                            $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
                         });
                 })
                 ->where('status', 1)
@@ -293,7 +293,8 @@ class CartController extends Controller
                             ->where('date', now()->toDateString())
                             ->where(function ($query) {
                                 $currentHour = now()->hour;
-                                $query->whereRaw('? BETWEEN SUBSTRING_INDEX(time_slot, "-", 1) AND SUBSTRING_INDEX(time_slot, "-", -1)', [$currentHour]);
+                                $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                                    ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
                             });
                     })
                     ->where('status', 1)

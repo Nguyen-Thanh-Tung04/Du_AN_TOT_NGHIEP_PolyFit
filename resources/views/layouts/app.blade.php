@@ -51,6 +51,7 @@
 </head>
 
 <body>
+
     <div id="app">
     @include('client.layouts.header')
         <main class="py-4">

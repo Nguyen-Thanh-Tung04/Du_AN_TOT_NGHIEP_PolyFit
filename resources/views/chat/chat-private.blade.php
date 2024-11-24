@@ -54,6 +54,9 @@
                         </div>
                     </div>
                     @foreach ($messagePrivate as $item)
+                    @php
+                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                    @endphp
                     @if ($item->id_user_send === Auth::user()->id)
                     <div class="d-flex justify-content-end mb-4">
                         <div class="msg_cotainer_send">
