@@ -55,7 +55,7 @@
                                     </span> --}}
                                     <div class="ec-check-bill-form">
                                         <div class="form-flex">
-                                            <form action="{{ route('order.store') }}" method="POST">
+                                            <form id="orderForm" action="{{ route('order.store') }}" method="POST">
                                                 @csrf
                                                 <span class="ec-bill-wrap ec-bill-half">
                                                     <label>Họ và tên*</label>
@@ -296,6 +296,16 @@
     var province_id = "{{ (isset($user->province_id)) ? $user->province_id : old('province_id') }}"
     var district_id = "{{ (isset($user->district_id)) ? $user->district_id : old('district_id') }}"
     var ward_id = "{{ (isset($user->ward_id)) ? $user->ward_id : old('ward_id') }}"
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('orderForm');
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function(event) {
+            // Vô hiệu hóa nút submit
+            submitButton.disabled = true;
+        });
+    });
 </script>
 <script src="{{ asset('admin/library/location.js') }}"></script>
 <script>
