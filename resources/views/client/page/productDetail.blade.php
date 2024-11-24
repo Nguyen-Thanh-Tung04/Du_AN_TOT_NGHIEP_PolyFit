@@ -371,7 +371,7 @@
             <div class="col-md-12 text-center">
                 <div class="section-title">
                     <h2 class="ec-bg-title">Sản phẩm cùng hạng mục</h2>
-                    <h2 class="ec-title">Sản phẩm cùng danh mục</h2>
+                    <h2 class="ec-title">Sản phẩm cùng danh mục </h2>
                     <p class="sub-title">PolyFit - Sự Lựa Chọn Hoàn Hảo Cho Bạn</p>
                 </div>
             </div>
@@ -453,10 +453,7 @@
         let variants = JSON.parse(document.getElementById('product-variants').dataset.variants);
         let selectedSizeId = null;
         let selectedColorId = null;
-        var isInFlashSale = "{{ $product->is_in_flash_sale ? 'true' : 'false' }}";
         var flashSaleEndTime = "{{ $flashSaleEndTime }}";
-
-        // console.log(isInFlashSale + 'tung');
 
         const coutDown = (hours, minutes, seconds) => {
             let countDownDate = new Date().getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
@@ -490,7 +487,7 @@
             }, 1000);
         };
 
-        if (isInFlashSale === 'true') {
+        if (flashSaleEndTime) {
             var countDownDate = new Date(flashSaleEndTime).getTime();
             var now = new Date().getTime();
 

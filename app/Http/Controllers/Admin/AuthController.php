@@ -32,23 +32,31 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
+
             if ($user->publish !== 1) {
-                return redirect()->route('auth.client-login')->with('error', 'Tài khoản của bạn đang bị khóa hoặc chưa được kích hoạt.');
+                return redirect()
+                    ->route('auth.client-login')
+                    ->with('error', 'Tài khoản của bạn đang bị khóa hoặc chưa được kích hoạt.');
             }
+
             return redirect()->route('home')->with('success', 'Đăng nhập thành công.');
         }
-        return redirect()->route('auth.client-login')->with('error', 'Email hoặc mật khẩu không chính xác.');
-    }
 
+        return redirect()
+            ->route('auth.client-login')
+            ->with('error', 'Email hoặc mật khẩu không chính xác.')
+            ->withInput();
+    }
     public function logined(AuthRequest $request)
     {
         $credentials = [
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
-        
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->user_catalogue_id == 3) {
@@ -77,22 +85,22 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::user();
-        
+
         // Kiểm tra trạng thái người dùng trước khi đăng xuất
         if ($user && $user->user_catalogue_id  != 3) {
             Auth::logout();
- 
+
             $request->session()->invalidate();
-         
+
             $request->session()->regenerateToken();
 
             // Chuyển hướng tới trang đăng nhập của admin
             return redirect()->route('auth.login');
         } else if ($user && $user->user_catalogue_id === 3) {
             Auth::logout();
- 
+
             $request->session()->invalidate();
-         
+
             $request->session()->regenerateToken();
 
             // Chuyển hướng tới trang đăng nhập của client

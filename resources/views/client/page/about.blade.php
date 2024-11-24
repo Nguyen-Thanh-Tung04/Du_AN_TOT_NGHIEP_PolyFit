@@ -78,63 +78,63 @@
 </div>
 <!-- ekka Cart End -->
 
-<!-- Ec breadcrumb start -->
-<div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="row ec_breadcrumb_inner">
-                    <div class="col-md-6 col-sm-12">
-                        <h2 class="ec-breadcrumb-title">Giới thiệu</h2>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <!-- ec-breadcrumb-list start -->
-                        <ul class="ec-breadcrumb-list">
-                            <li class="ec-breadcrumb-item"><a href="index.html">Trang chủ</a></li>
-                            <li class="ec-breadcrumb-item active">Giới thiệu</li>
-                        </ul>
-                        <!-- ec-breadcrumb-list end -->
+    <!-- Ec breadcrumb start -->
+    <div class="sticky-header-next-sec  ec-breadcrumb ">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row ec_breadcrumb_inner">
+                        <div class="col-md-6 col-sm-12">
+                            <h2 class="ec-breadcrumb-title">Giới thiệu</h2>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <!-- ec-breadcrumb-list start -->
+                            <ul class="ec-breadcrumb-list">
+                                <li class="ec-breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                                <li class="ec-breadcrumb-item active">Giới thiệu</li>
+                            </ul>
+                            <!-- ec-breadcrumb-list end -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Ec breadcrumb end -->
+    <!-- Ec breadcrumb end -->
 
-<!-- Ec About Us page -->
-<section class="ec-page-content section-space-p">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="section-title">
-                    <h2 class="ec-bg-title">Giới thiệu về chúng tôi</h2>
-                    <h2 class="ec-title">Giới thiệu về chúng tôi</h2>
-                    <p class="sub-title mb-3">Về công ty kinh doanh của chúng tôi</p>
-                </div>
-            </div>
-            <div class="ec-common-wrapper">
-                <div class="row">
-                    <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
-                        <div class="ec-cms-block-inner">
-                            <img class="a-img" src="{{asset('theme/client/assets/images/offer-image/1.jpg')}}" alt="about">
-                        </div>
+    <!-- Ec About Us page -->
+    <section class="ec-page-content section-space-p">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title">
+                        <h2 class="ec-bg-title">Giới thiệu về chúng tôi</h2>
+                        <h2 class="ec-title">Giới thiệu về chúng tôi</h2>
+                        <p class="sub-title mb-3">Về công ty kinh doanh của chúng tôi</p>
                     </div>
-                    <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
-                        <div class="ec-cms-block-inner">
-                            <h3 class="ec-cms-block-title">Bạn biết gì về PolyFit ?</h3>
-                            <p>SỨ MỆNH
-                                Không ngừng sáng tạo và tỉ mỉ từ công đoạn sản xuất đến
-                                các khâu dịch vụ, nhằm mang đến cho Quý Khách Hàng những
-                                trải nghiệm mua sắm đặc biệt nhất: sản phẩm chất lượng - dịch
-                                vụ hoàn hảo - xu hướng thời trang mới mẻ và tinh tế. Thông qua các
-                                sản phẩm thời trang, PolyFit luôn mong muốn truyền tải đến bạn những thông
-                                điệp tốt đẹp cùng với nguồn cảm hứng trẻ trung và tích cực.</p>
-                            <p>TẦM NHÌN
-                                Với mục tiêu xây dựng và phát triển những giá trị bền vững,
-                                trong 10 năm tới, PolyFit sẽ trở thành thương hiệu dẫn đầu về
-                                thời trang phái mạnh trên thị trường Việt Nam.</p>
-                            <p>THÔNG ĐIỆP PolyFit GỬI ĐẾN BẠN
+                </div>
+                <div class="ec-common-wrapper">
+                    <div class="row">
+                        <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
+                            <div class="ec-cms-block-inner ">
+                            <img class="a-img" src="{{asset('theme/client/assets/images/offer-image/1.jpg')}}" alt="about" style="height: 400px">
+                            </div>
+                        </div>
+                        <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
+                            <div class="ec-cms-block-inner py-3">
+                                <h3 class="ec-cms-block-title">Bạn biết gì về PolyFit ?</h3>
+                                <p>SỨ MỆNH
+                                    Không ngừng sáng tạo và tỉ mỉ từ công đoạn sản xuất đến 
+                                    các khâu dịch vụ, nhằm mang đến cho Quý Khách Hàng những 
+                                    trải nghiệm mua sắm đặc biệt nhất: sản phẩm chất lượng - dịch 
+                                    vụ hoàn hảo - xu hướng thời trang mới mẻ và tinh tế. Thông qua các 
+                                    sản phẩm thời trang, PolyFit luôn mong muốn truyền tải đến bạn những thông
+                                     điệp tốt đẹp cùng với nguồn cảm hứng trẻ trung và tích cực.</p>
+                                <p>TẦM NHÌN
+                                    Với mục tiêu xây dựng và phát triển những giá trị bền vững,
+                                     trong 10 năm tới, PolyFit sẽ trở thành thương hiệu dẫn đầu về
+                                      thời trang phái mạnh trên thị trường Việt Nam.</p>
+                                <p>THÔNG ĐIỆP PolyFit GỬI ĐẾN BẠN
 
                                 PolyFit muốn truyền cảm hứng tích cực đến các chàng trai:
                                 Việc mặc đẹp rất quan trọng, nó thể hiện được cá tính,
@@ -148,88 +148,57 @@
     </div>
 </section>
 
-<!-- ec testmonial Start -->
-<section class="section ec-test-section section-space-ptb-100 section-space-m" id="reviews">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="section-title mb-0">
-                    <h2 class="ec-bg-title">Testimonial</h2>
-                    <h2 class="ec-title">Đánh giá của khách hàng</h2>
-                    <p class="sub-title mb-3">Khách hàng nói gì về chúng tôi</p>
+    <!-- ec testmonial Start -->
+    <section class="section ec-test-section section-space-ptb-100 section-space-m" id="reviews">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title mb-0">
+                        <h2 class="ec-bg-title">Testimonial</h2>
+                        <h2 class="ec-title">Đánh giá của khách hàng</h2>
+                        <p class="sub-title mb-3">Khách hàng nói gì về chúng tôi</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="ec-test-outer">
-                <ul id="ec-testimonial-slider">
-                    <li class="ec-test-item">
-                        <i class="fi-rr-quote-right top"></i>
-                        <div class="ec-test-inner">
-                            <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                    src="{{asset('theme/client/assets/images/testimonial/1.jpg')}}" /></div>
-                            <div class="ec-test-content">
-                                <div class="ec-test-desc">Lúc đầu mình không kỳ vọng nhiều vì mua online. Nhưng khi nhận rất ok nha chất vải và mẫu đẹp so với giá tiền. Phần eo có cách điệu nên che khuyết điểm vòng 2 to tốt, tôn dáng. Ship giao hành nhanh và thân thiện.</div>
-                                <div class="ec-test-name">Thanh Tùng</div>
-                                <div class="ec-test-designation">Tổng giám đốc</div>
-                                <div class="ec-test-rating">
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
+            <div class="row">
+                <div class="ec-test-outer">
+                    <ul id="ec-testimonial-slider">
+                        @foreach($reviews as $review)
+                            <li class="ec-test-item">
+                                <i class="fi-rr-quote-right top"></i>
+                                <div class="ec-test-inner">
+                                    <div class="ec-test-img">
+                                        <!-- Hiển thị ảnh của khách hàng -->
+                                        <img alt="testimonial" title="testimonial" src="{{ $review->user->image ?? asset('theme/client/assets/images/default-avatar.png') }}" />
+                                    </div>
+                                    <div class="ec-test-content">
+                                        <div class="ec-test-desc">{{ $review->content }}</div>
+                                        <div class="ec-test-name">{{ $review->user->name ?? 'Khách hàng ẩn danh' }}</div>
+                                        <div class="ec-test-designation">{{ $review->user->designation ?? 'Khách hàng' }}</div>
+                                        <div class="ec-test-rating">
+                                            <div class="ec-test-rating">
+                                                @for ($i = 0; $i < $review->score; $i++)
+                                                    <i class="ecicon eci-star" style="color: gold;"></i>
+                                                @endfor
+                                                @for ($i = $review->score; $i < 5; $i++)
+                                                    <i class="ecicon eci-star" style="color: gold;"></i>
+                                                @endfor
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <i class="fi-rr-quote-right bottom"></i>
-                    </li>
-                    <li class="ec-test-item ">
-                        <i class="fi-rr-quote-right top"></i>
-                        <div class="ec-test-inner">
-                            <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                    src="{{asset('theme/client/assets/images/testimonial/2.jpg')}}" /></div>
-                            <div class="ec-test-content">
-                                <div class="ec-test-desc">Em áo ba lỗ này form đẹp, tôn dáng lắm ạ. Em 46kg mặc size M thoải mái. Vải mát, co giãn phù hợp để đi tập thể dục, mặc cùng áo vest đi làm được luôn ấy. Đóng gói cẩn thận, còn tặng thêm buộc tóc dễ thương, giao hàng nhanh. Với mức giá này là ok, mọi người nên mua nhé.</div>
-                                <div class="ec-test-name">Quang Toản</div>
-                                <div class="ec-test-designation">Phó giám đốc</div>
-                                <div class="ec-test-rating">
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <i class="fi-rr-quote-right bottom"></i>
-                    </li>
-                    <li class="ec-test-item">
-                        <i class="fi-rr-quote-right top"></i>
-                        <div class="ec-test-inner">
-                            <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                    src="{{asset('theme/client/assets/images/testimonial/3.jpg')}}" /></div>
-                            <div class="ec-test-content">
-                                <div class="ec-test-desc">Mua đúng đợt sale nên em váy yếm jean này chỉ có hơn 200k.
-                                    Chất jean co giãn xịn sò, dễ phối đồ, mặc được 4 mùa. Quá ưng luôn.</div>
-                                <div class="ec-test-name">Văn Dương</div>
-                                <div class="ec-test-designation">Thư kí</div>
-                                <div class="ec-test-rating">
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                    <i class="ecicon eci-star fill"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <i class="fi-rr-quote-right bottom"></i>
-                    </li>
-                </ul>
+                                <i class="fi-rr-quote-right bottom"></i>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
+            
         </div>
-    </div>
-</section>
-<!-- ec testmonial end -->
+    </section>
+    
+    <!-- ec testmonial end -->
 
 <!--  services Section Start -->
 <section class="section ec-services-section section-space-p" id="services">

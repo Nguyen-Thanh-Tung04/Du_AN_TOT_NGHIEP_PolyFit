@@ -79,12 +79,12 @@
 
 </head>
 
-<body>
+<body class="bg-white">
     @include('client.layouts.header')
 
     <main>
-        <h1>@yield('title')</h1>
-        <p>@yield('content')</p>
+        @yield('title')
+        @yield('content')
     </main>
     @vite(['resources/js/app.js'])
     @vite(['resources/js/order.js'])

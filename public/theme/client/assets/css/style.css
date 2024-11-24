@@ -16063,7 +16063,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Montserrat, sans-serif";
 }
 
 /*----  Section  ----*/
@@ -16072,11 +16072,11 @@ h6 {
 }
 
 .section-space-p {
-  padding: 50px 0;
+  padding: 20px 0;
 }
 
 .section-space-pb {
-  padding-bottom: 50px;
+  padding-bottom: 10px;
 }
 
 .section-space-pt {
@@ -16225,7 +16225,7 @@ h6 {
 }
 
 .section-title .ec-title {
-  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Montserrat, sans-serif";
   font-size: 30px;
   font-weight: 800;
   margin-bottom: 7px;
@@ -17115,7 +17115,7 @@ h6 {
   padding: 12px 15px 15px;
   text-align: center;
   color: #fff;
-  background: #2ab674;
+  background: rgb(249, 58, 11);
 }
 
 .ec-style .ec-panel .ec-body {
@@ -19650,7 +19650,7 @@ body.ec-open:before {
 .ec-side-cart .ec-cart-inner .ec-cart-title .cart_title {
   font-size: 17px;
   color: #555;
-  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Montserrat, sans-serif";
   font-weight: 600;
 }
 
@@ -20448,7 +20448,6 @@ button.btn-close.qty_close {
   position: relative;
   display: block;
   overflow: hidden;
-  pointer-events: none;
 }
 
 .ec-product-inner .ec-pro-image .image img {
@@ -20971,7 +20970,7 @@ i.ecicon.eci-star-o {
 }
 
 i.ecicon.eci-star.fill {
-  color: #ff6262;
+  color: #eec317;
   opacity: 0.7;
 }
 
@@ -21406,7 +21405,7 @@ section.ec-test-section {
 }
 
 .ec-test-section .ec-test-name {
-  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Montserrat, sans-serif";
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -21625,7 +21624,7 @@ section.ec-instagram-section {
 }
 
 .ec-footer .footer-top .ec-footer-widget .ec-footer-heading {
-  font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Montserrat, sans-serif";
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 11px;
@@ -21636,6 +21635,7 @@ section.ec-instagram-section {
   width: 100%;
   padding-bottom: 10px;
   border-bottom: 1px solid #eeeeee;
+  padding-left: 29px;
 }
 
 .ec-footer .footer-top .ec-footer-widget .ec-footer-links .ec-footer-link {
@@ -23189,7 +23189,8 @@ select::-ms-expand {
   Login Page CSS
 ---------------------------------------------------*/
 .ec-login-wrapper {
-  max-width: 530px;
+  max-width: 500px;
+
   margin: 0 auto 0;
 }
 
@@ -23198,6 +23199,7 @@ select::-ms-expand {
   padding: 34px 38px 34px;
   text-align: left;
   background-color: #fff;
+    height: 520px;
 }
 
 .ec-login-wrapper .ec-login-container .ec-login-form form {
@@ -34164,7 +34166,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 }
 
 .ec-catalog-multi-vendor .ec-multi-vendor-detail .ec-page-description-info {
-  padding: 30px;
+  padding: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
