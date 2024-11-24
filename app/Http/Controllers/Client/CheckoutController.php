@@ -50,8 +50,6 @@ class CheckoutController
         }
         $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
 
-<<<<<<< HEAD
-=======
         // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
         foreach ($productVariants as $productVariant) {
             $requestedQuantity = $quantities[$productVariant->id];
@@ -61,7 +59,6 @@ class CheckoutController
             }
         }
 
->>>>>>> luan
         $total = 0;
         $firstProduct = null;
 
