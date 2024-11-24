@@ -1,0 +1,353 @@
+.product-option {
+    margin: 5px;
+    padding: 5px 20px;
+    border: none;
+    font-weight: 500;
+    background-color: #ffff;
+    color: #000c;
+    border: 1px solid rgba(0, 0, 0, .09);
+    cursor: pointer;
+}
+
+.product-option.active {
+    color: #ffffff;
+    background-color: #3474d4;
+    border-color: #3474d4;
+}
+
+.product-option:disabled {
+    background-color: #fafafa;
+    color: rgba(0, 0, 0, .26);
+    border-color: #fafafa;
+    border: 1px solid rgba(0, 0, 0, .09);
+    cursor: not-allowed;
+}
+
+.disabled-input {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.colored-toast.swal2-icon-success {
+    background-color: #a5dc86 !important;
+}
+
+.colored-toast.swal2-icon-error {
+    background-color: #f27474 !important;
+}
+
+.colored-toast.swal2-icon-warning {
+    background-color: #f8bb86 !important;
+}
+
+.colored-toast.swal2-icon-info {
+    background-color: #3fc3ee !important;
+}
+
+.colored-toast.swal2-icon-question {
+    background-color: #87adbd !important;
+}
+
+.colored-toast .swal2-title {
+    color: white;
+}
+
+.colored-toast .swal2-close {
+    color: white;
+}
+
+.colored-toast .swal2-html-container {
+    color: white;
+}
+
+#voucherList li:hover {
+    background: #e2e6ea;
+    /* Màu nền khi hover */
+    cursor: pointer;
+    /* Con trỏ chuột khi hover */
+}
+
+#voucherList li {
+    margin-right: 5px;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f8f9fa;
+    border: 1px solid #ced4da;
+    color: #333;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.mb-50 {
+    margin-bottom: 50px;
+}
+
+.custom-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 5px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.custom-btn i {
+    margin-right: 10px;
+}
+
+.danger-btn {
+    background: linear-gradient(90deg, #ff5f6d, #ffc371);
+}
+
+.danger-btn:hover {
+    background: linear-gradient(90deg, #ff1e42, #ff9f67);
+}
+
+.success-btn {
+    background: linear-gradient(90deg, #38ef7d, #11998e);
+}
+
+.success-btn:hover {
+    background: linear-gradient(90deg, #33d76d, #0fa879);
+    transform: translateY(-3px);
+}
+
+.alert-danger {
+    background-color: #d05656;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.alert-danger i {
+    margin-right: 10px;
+}
+
+.btn-buy {
+    background-color: #dc2626;
+    color: #fff;
+    margin-left: 0 !important;
+}
+
+.btn-buy:hover {
+    background-color: #b91c1c;
+    color: #fff;
+}
+
+.btn-cart:hover {
+    background-color: #1d4fa1;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+.product {
+    background: #fff;
+    padding: 1.25rem 2.1875rem 0 1.25rem;
+
+}
+
+.flash-sale {
+    margin-top: 10px;
+}
+
+.time-sale {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: .625rem;
+    height: 36px;
+    color: #fff;
+    padding: 0 20px;
+    background-image: url(""), -webkit-gradient(linear, right top, left top, color-stop(9%, #f0451e), color-stop(96%, #f32424));
+    background-image: url(""), linear-gradient(-90deg, #f0451e 9%, #f32424 96%);
+
+}
+
+
+.flash-sale-logo--white {
+    color: #fff;
+}
+
+.flash-sale-logo {
+    display: inline-block;
+}
+
+.shop-svg-icon {
+    margin-left: auto;
+    margin-right: 6px;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    position: relative;
+}
+
+.end-text {
+    text-transform: uppercase;
+    margin-right: .225rem;
+    font-weight: 400;
+}
+
+.flash-sale-countdown {
+    margin-left: 0;
+    height: 24px;
+    font-weight: 400;
+    align-items: flex-start;
+    transform: scale(0.84);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    cursor: default;
+    display: flex;
+    color: #000;
+}
+
+.flash-sale-countdown p {
+    margin-top: 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.flash-sale-countdown span {
+    background: #222;
+    color: #f4f4f4;
+    width: 27px;
+    display: inline-block;
+    height: 24px;
+    float: left;
+    line-height: 23px;
+    margin-left: 6px;
+    border-radius: 2px;
+}
+
+.tempo {
+    width: 350px;
+    padding: 0;
+}
+
+.tempo li {
+    text-align: left;
+    display: inline-block;
+    font-size: 24px;
+    width: 31%;
+    margin-top: -50px;
+    margin-left: -1px;
+}
+
+
+
+.flex,
+.h-center {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.flex-column {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.p-15 {
+    padding: 15px 20px;
+    background: #fafafa;
+}
+
+.items-center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.old-price {
+    font-size: 1rem;
+    text-decoration: line-through;
+    color: #929292;
+    margin-right: 10px;
+}
+
+.sale-price {
+    font-size: 1.875rem;
+    font-weight: 500;
+    color: #d0011b;
+}
+
+.box-sale {
+    font-size: .75rem;
+    color: #fff;
+    text-transform: uppercase;
+    background: #d0011b;
+    border-radius: 2px;
+    padding: 2px 4px;
+    font-weight: 600;
+    line-height: 1;
+    margin-left: 15px;
+    white-space: nowrap;
+}
+
+@media screen and (min-width: 992px) {
+    .produc-name {
+        width: 1200px;
+    }
+}
+
+.flash-sale-banner {
+    background-color: #ff6f61;
+    /* Màu cam nhạt */
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    /* Căn giữa nội dung */
+}
+
+.countdown-timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.flash-sale-banner h4,
+.flash-sale-banner h5 {
+    margin: 0;
+}
+
+.flash-sale-banner p {
+    margin: 5px 0;
+}
+
+.countdown-timer span {
+    background-color: #333;
+    color: white;
+    padding: 4px;
+}

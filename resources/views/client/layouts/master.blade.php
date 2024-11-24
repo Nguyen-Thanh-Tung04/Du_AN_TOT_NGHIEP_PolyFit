@@ -73,18 +73,18 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
-    
+
 
 
 
 </head>
 
-<body>
+<body class="bg-white">
     @include('client.layouts.header')
 
     <main>
-        <h1>@yield('title')</h1>
-        <p>@yield('content')</p>
+        @yield('title')
+        @yield('content')
     </main>
     @vite(['resources/js/app.js'])
     @vite(['resources/js/order.js'])

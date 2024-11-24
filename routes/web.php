@@ -28,6 +28,7 @@ use App\Http\Controllers\admin\ReviewController;
 use App\Http\Controllers\Client\OrderHistoryController;
 use App\Http\Controllers\User\LienheController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Client\SaleController;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -65,11 +66,14 @@ Route::post('/get-pass', [HomeController::class, 'postGetPass'])->name('postGetP
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
-Route::get('/about', function () {
-    return view('client.page.about');
-});
+// Route::get('/about', function () {
+//     return view('client.page.about');
+// });
+Route::get('/about', [App\Http\Controllers\client\ReviewController::class, 'about_reviews_list'])->name('about');
+
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
+Route::get('/flash-sale', [SaleController::class, 'index'])->name('flash-sale');
 
 
 Route::get('/history', function () {
@@ -143,6 +147,7 @@ Route::middleware('checkLoginClient')->group(function () {
     Route::post('/message-private', [ChatController::class, 'messagePrivate']);
     Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
+    Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');
@@ -151,10 +156,10 @@ Route::get('huongdev', function () {
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
     ->name('dashboard.index')
-    ->middleware('checkLogin');
+    ->middleware('logined');
 Route::post('dashboard/index', [DashboardController::class, 'statistical_sale'])
     ->name('dashboard.post')
-    ->middleware('checkLogin');
+    ->middleware('logined');
 // USER
 Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserController::class, 'index'])

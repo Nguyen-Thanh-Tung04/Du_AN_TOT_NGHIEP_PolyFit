@@ -9,9 +9,13 @@
                     <div class="d-flex bd-highlight" id="user{{ $user->id }}">
                         <div class="img_cont">
                             @php
-                                $checkUrlImg = \Illuminate\Support\Str::contains($user->image, '/userfiles/') ? $user->image : Storage::url($user->image);
+                            $checkUrlImg = \Illuminate\Support\Str::contains($user->image, '/userfiles/') ? $user->image : Storage::url($user->image);
                             @endphp
+                            @if(isset($user->image))
                             <img src="{{ $checkUrlImg }}" class="rounded-circle user_img">
+                            @else
+                            <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
+                            @endif
                             <!-- <span class="online_icon"></span> -->
                         </div>
                         <div class="user_info">
@@ -50,6 +54,9 @@
                         </div>
                     </div>
                     @foreach ($messagePrivate as $item)
+                    @php
+                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                    @endphp
                     @if ($item->id_user_send === Auth::user()->id)
                     <div class="d-flex justify-content-end mb-4">
                         <div class="msg_cotainer_send">
@@ -57,9 +64,11 @@
                             <span class="msg_time" data-timestamp="{{ $item->created_at->timestamp }}"></span>
                         </div>
                         <div class="img_cont_msg d-flex align-items-top">
-
+                            @php
+                            $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                            @endphp
                             @if(isset($item->image_user_send))
-                            <img src="{{ Storage::url($item->image_user_send) }}" class="rounded-circle user_img_msg">
+                            <img src="{{ $checkUrlImg }}" class="rounded-circle user_img_msg">
                             @else
                             <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
                             @endif
@@ -71,7 +80,7 @@
                         <div class="img_cont_msg d-flex align-items-top">
                             <a href="{{ url('chat-private/' . $item->id_user_reciever) }}">
                                 @php
-                                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                                $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
                                 @endphp
                                 @if(isset($item->image_user_send))
 
@@ -244,7 +253,20 @@
         if (event.key === 'Enter') {
             event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter (nếu có)
             messageContent = content_message.value.trim();
-            sendMess();
+            // Nếu không nhập nội dung
+            if (messageContent === '') {
+                // Hiển thị Toast nếu không hợp lệ
+                Toastify({
+                    text: "Nội dung tin nhắn không thể trống!",
+                    duration: 3000, // Hiển thị trong 3 giây
+                    backgroundColor: "red", // Màu nền đỏ
+                    gravity: "top", // Vị trí ở phía trên
+                    position: "right" // Vị trí bên phải
+                }).showToast();
+            } else {
+                // Nếu có nội dung, tiếp tục xử lý gửi tin nhắn
+                sendMess(messageContent);
+            }
         }
     })
 
@@ -254,14 +276,17 @@
             send_btn.removeChild(fa_location_arrow);
         }
         messageContent = content_message.value.trim();
-        sendMess()
-        // axios.post('/message-private', {
-        //         message: messageContent,
-        //         idUserReciever: idUserReciever.value,
-        //     })
-        //     .then(function(response) {
-
-        //     })
+        if (messageContent === '') {
+            Toastify({
+                text: "Nội dung tin nhắn không thể trống!",
+                duration: 3000,
+                backgroundColor: "red",
+                gravity: "top",
+                position: "right"
+            }).showToast();
+        } else {
+            sendMess(messageContent);
+        }
     })
 
     const sendMess = () => {
@@ -326,8 +351,15 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             var card_header_msg_head = document.querySelector('.msg_head');
 
-            let image = event.idUserSend.image ? event.idUserSend.image :
+            let image_url = event.idUserSend?.image ?
+                event.idUserSend.image :
                 "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+
+            // Kiểm tra và xử lý đường dẫn ảnh
+            let image = image_url.includes('http') ?
+                image_url :
+                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -371,8 +403,14 @@
             var msg_card_body = document.querySelector('.msg_card_body');
             const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
             var ui = ''
-            let image = event.idUserSend.image ? event.idUserSend.image :
-            "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+            let image_url = event.idUserSend?.image ?
+                event.idUserSend.image :
+                "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+
+            // Kiểm tra và xử lý đường dẫn ảnh
+            let image = image_url.includes('http') ?
+                image_url :
+                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
                    <div class="d-flex justify-content-end mb-4">

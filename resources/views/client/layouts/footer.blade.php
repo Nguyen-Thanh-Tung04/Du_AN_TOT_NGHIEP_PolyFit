@@ -1,5 +1,5 @@
  <!-- Footer Start -->
- <footer class="ec-footer section-space-mt">
+ <footer class="ec-footer section-space-mt bg-white">
      <div class="footer-container">
          <div class="footer-offer">
              <div class="container">

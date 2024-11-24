@@ -88,11 +88,16 @@ class UserCatalogueService
         DB::beginTransaction();
         try {
             $permissions = $request->input('permission');
-       
-            if (count($permissions)) {
-                foreach ($permissions as $key => $val) {
-                    $userCatalogue = $this->userCatalogueRepository->findById($key);
-                    $userCatalogue->permissions()->sync($val);
+            $userCatalogues = $this->userCatalogueRepository->all();
+
+            foreach ($userCatalogues as $userCatalogue) {
+                // Kiểm tra nếu userCatalogue hiện tại có trong mảng $permissions
+                if (isset($permissions[$userCatalogue->id])) {
+                    // Nếu có, đồng bộ các quyền được chọn
+                    $userCatalogue->permissions()->sync($permissions[$userCatalogue->id]);
+                } else {
+                    // Nếu không có, đồng bộ mảng rỗng để xóa tất cả các quyền hiện tại
+                    $userCatalogue->permissions()->sync([]);
                 }
             }
 
