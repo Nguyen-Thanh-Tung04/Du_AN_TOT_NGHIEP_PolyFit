@@ -181,4 +181,69 @@
 
 
 
+/* header dòng chạy */
+.scrolling-text {
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.2rem; /* Tăng kích thước chữ */
+    color: #333; /* Màu chữ rõ ràng hơn */
+    background: #f9f9f9; /* Màu nền nhạt */
+    padding: 10px 20px;
+    position: relative;
+}
+
+.scrolling-text::before, 
+.scrolling-text::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 50px; /* Kích thước fade hiệu ứng */
+    height: 100%;
+    background: linear-gradient(to right, rgba(249, 249, 249, 1), rgba(249, 249, 249, 0));
+    z-index: 1;
+}
+
+.scrolling-text::before {
+    left: 0;
+}
+
+.scrolling-text::after {
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.scrolling-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.scrolling-text a:hover {
+    text-decoration: underline;
+}
+
+.scrolling-text span.hotline {
+    margin-left: 10px;
+    font-style: italic;
+}
+
+@keyframes scroll-text {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.scrolling-text {
+    animation: scroll-text 20s linear infinite; /* Tăng thời gian để chạy chậm hơn */
+}
+
+
+
+
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */

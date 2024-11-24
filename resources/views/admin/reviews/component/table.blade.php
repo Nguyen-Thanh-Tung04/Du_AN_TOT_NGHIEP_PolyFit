@@ -27,7 +27,7 @@
                 </td>
                 <td class="text-center">{{ $review->order->code }}</td> 
                 <td class="text-center">{{ $review->email }}</td>
-                <td class="text-center">{{ $review->content }}</td>
+                <td class="text-center">{{ Str::limit($review->content, 60, '...') }}</td>
                 <td class="text-center">{{ $review->score }}</td>
                 <td class="text-center">{{ $review->created_at->format('Y-m-d') }}</td>
                 <td class="text-center js-switch-{{ $review->id }}">

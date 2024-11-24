@@ -79,7 +79,7 @@
     <!-- ekka Cart End -->
 
     <!-- Ec breadcrumb start -->
-    <div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
+    <div class="sticky-header-next-sec  ec-breadcrumb ">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -116,12 +116,12 @@
                 <div class="ec-common-wrapper">
                     <div class="row">
                         <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
-                            <div class="ec-cms-block-inner">
-                            <img class="a-img" src="{{asset('theme/client/assets/images/offer-image/1.jpg')}}" alt="about">
+                            <div class="ec-cms-block-inner ">
+                            <img class="a-img" src="{{asset('theme/client/assets/images/offer-image/1.jpg')}}" alt="about" style="height: 400px">
                             </div>
                         </div>
                         <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
-                            <div class="ec-cms-block-inner">
+                            <div class="ec-cms-block-inner py-3">
                                 <h3 class="ec-cms-block-title">Bạn biết gì về PolyFit ?</h3>
                                 <p>SỨ MỆNH
                                     Không ngừng sáng tạo và tỉ mỉ từ công đoạn sản xuất đến 
@@ -163,72 +163,41 @@
             <div class="row">
                 <div class="ec-test-outer">
                     <ul id="ec-testimonial-slider">
-                        <li class="ec-test-item">
-                            <i class="fi-rr-quote-right top"></i>
-                            <div class="ec-test-inner">
-                                <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                        src="{{asset('theme/client/assets/images/testimonial/1.jpg')}}" /></div>
-                                <div class="ec-test-content">
-                                    <div class="ec-test-desc">Lúc đầu mình không kỳ vọng nhiều vì mua online. Nhưng khi nhận rất ok nha chất vải và mẫu đẹp so với giá tiền. Phần eo có cách điệu nên che khuyết điểm vòng 2 to tốt, tôn dáng. Ship giao hành nhanh và thân thiện.</div>
-                                    <div class="ec-test-name">Thanh Tùng</div>
-                                    <div class="ec-test-designation">Tổng giám đốc</div>
-                                    <div class="ec-test-rating">
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
+                        @foreach($reviews as $review)
+                            <li class="ec-test-item">
+                                <i class="fi-rr-quote-right top"></i>
+                                <div class="ec-test-inner">
+                                    <div class="ec-test-img">
+                                        <!-- Hiển thị ảnh của khách hàng -->
+                                        <img alt="testimonial" title="testimonial" src="{{ $review->user->image ?? asset('theme/client/assets/images/default-avatar.png') }}" />
+                                    </div>
+                                    <div class="ec-test-content">
+                                        <div class="ec-test-desc">{{ $review->content }}</div>
+                                        <div class="ec-test-name">{{ $review->user->name ?? 'Khách hàng ẩn danh' }}</div>
+                                        <div class="ec-test-designation">{{ $review->user->designation ?? 'Khách hàng' }}</div>
+                                        <div class="ec-test-rating">
+                                            <div class="ec-test-rating">
+                                                @for ($i = 0; $i < $review->score; $i++)
+                                                    <i class="ecicon eci-star" style="color: gold;"></i>
+                                                @endfor
+                                                @for ($i = $review->score; $i < 5; $i++)
+                                                    <i class="ecicon eci-star" style="color: gold;"></i>
+                                                @endfor
+                                            </div>
+                                            
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <i class="fi-rr-quote-right bottom"></i>
-                        </li>
-                        <li class="ec-test-item ">
-                            <i class="fi-rr-quote-right top"></i>
-                            <div class="ec-test-inner">
-                                <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                        src="{{asset('theme/client/assets/images/testimonial/2.jpg')}}" /></div>
-                                <div class="ec-test-content">
-                                    <div class="ec-test-desc">Em áo ba lỗ này form đẹp, tôn dáng lắm ạ. Em 46kg mặc size M thoải mái. Vải  mát, co giãn phù hợp để đi tập thể dục, mặc cùng áo vest đi làm được luôn ấy. Đóng gói cẩn thận, còn tặng thêm buộc tóc dễ thương, giao hàng nhanh. Với mức giá này là ok, mọi người nên mua nhé.</div>
-                                    <div class="ec-test-name">Quang Toản</div>
-                                    <div class="ec-test-designation">Phó giám đốc</div>
-                                    <div class="ec-test-rating">
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <i class="fi-rr-quote-right bottom"></i>
-                        </li>
-                        <li class="ec-test-item">
-                            <i class="fi-rr-quote-right top"></i>
-                            <div class="ec-test-inner">
-                                <div class="ec-test-img"><img alt="testimonial" title="testimonial"
-                                        src="{{asset('theme/client/assets/images/testimonial/3.jpg')}}" /></div>
-                                <div class="ec-test-content">
-                                    <div class="ec-test-desc">Mua đúng đợt sale nên em váy yếm jean này chỉ có hơn 200k. 
-                                        Chất jean co giãn xịn sò, dễ phối đồ, mặc được 4 mùa. Quá ưng luôn.</div>
-                                    <div class="ec-test-name">Văn Dương</div>
-                                    <div class="ec-test-designation">Thư kí</div>
-                                    <div class="ec-test-rating">
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                        <i class="ecicon eci-star fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <i class="fi-rr-quote-right bottom"></i>
-                        </li>
+                                <i class="fi-rr-quote-right bottom"></i>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
+            
         </div>
     </section>
+    
     <!-- ec testmonial end -->
 
     <!--  services Section Start -->

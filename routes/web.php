@@ -66,9 +66,11 @@ Route::post('/get-pass', [HomeController::class, 'postGetPass'])->name('postGetP
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
-Route::get('/about', function () {
-    return view('client.page.about');
-});
+// Route::get('/about', function () {
+//     return view('client.page.about');
+// });
+Route::get('/about', [App\Http\Controllers\client\ReviewController::class, 'about_reviews_list'])->name('about');
+
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
 Route::get('/flash-sale', [SaleController::class, 'index'])->name('flash-sale');
