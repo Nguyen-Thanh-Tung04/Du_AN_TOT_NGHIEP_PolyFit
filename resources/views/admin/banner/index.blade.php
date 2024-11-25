@@ -80,10 +80,6 @@
                                                 <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
                                             @endforeach
                                         </select>
-                                        <select name="user_catalogue_id" class="form-control mr-10 setupSelect2">
-                                            <option value="0" selected="selected">Chọn Nhóm Thành Viên</option>
-                                            <option value="1">Quản Trị Viên</option>
-                                        </select>
                                         <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
                                             <div class="input-group">
                                                 <input type="text"
@@ -136,7 +132,7 @@
                         <td>{{$banner->content}}</td>
                         <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
                         <td>{{$banner->link}}</td>
-                        <td>{{ $banner->is_active ? 'Active' : 'Inactive' }}</td>
+                        <td>{{ $banner->is_active ? 'Hoạt động' : 'Không hoạt động' }}</td>
                         <td class="text-center">
                             <a href="{{ route('banner.edit', $banner->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
                             <form action="{{ route('banner.delete', $banner->id) }}" method="POST" style="display: inline-block;"   >

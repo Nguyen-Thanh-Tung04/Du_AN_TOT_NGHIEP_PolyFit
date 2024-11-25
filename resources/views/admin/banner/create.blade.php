@@ -36,7 +36,7 @@
                                     <input
                                         type="text"
                                         name="title_main"
-                                        value="{{ old('code') }}"
+                                        value="{{ old('title_main') }}"
                                         class="form-control"
                                         placeholder="Nhập tiêu đề"
                                     >
@@ -53,7 +53,7 @@
                                     <input
                                         type="text"
                                         name="title_sub"
-                                        value="{{ old('code') }}"
+                                        value="{{ old('title_sub') }}"
                                         class="form-control"
                                         placeholder="Nhập tiêu đề"
                                     >
@@ -71,7 +71,7 @@
                                     <input
                                         type="text"
                                         name="content"
-                                        value="{{ old('code') }}"
+                                        value="{{ old('content') }}"
                                         class="form-control"
                                         placeholder="Nhập tiêu đề"
                                     >

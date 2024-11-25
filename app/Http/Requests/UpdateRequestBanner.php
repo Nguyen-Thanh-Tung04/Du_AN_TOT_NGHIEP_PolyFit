@@ -25,7 +25,7 @@ class UpdateRequestBanner extends FormRequest
             'title_main' => 'required|string|max:255',
             'title_sub' => 'required|string|max:255',
             'content' =>'required|string|max:255',
-            'image' => 'nullable|image',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'link' => 'required|url',
             'is_active' => 'required|boolean',
         ];
@@ -45,6 +45,8 @@ class UpdateRequestBanner extends FormRequest
             'image.required' => 'Không được để trống ảnh',
             'link.required' =>'Không được để trống đường dẫn',
             'link.url'=> 'Phải là một đường dẫn',
+            'image.max'=>'Ảnh không được quá kích thước',
+            'image.mimes'=>'Ảnh phải đúng định dạng'
         ];
     }
 }
