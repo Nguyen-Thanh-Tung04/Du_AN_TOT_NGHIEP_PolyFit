@@ -94,7 +94,7 @@
                                     <tr>
                                         <td class="text-center">{{ $history->code }}</td> 
                                         <td class="text-center">{{ $history->email }}</td>
-                                        <td class="text-center">{{ $history->content }}</td>
+                                        <td class="text-center">{{ Str::limit($history->content, 60, '...') }}</td>
                                         <td class="text-center">{{ $history->score }}</td>
                                         <td class="text-center">{{ $history->created_at->format('Y-m-d') }}</td>
                                         <td class="text-center">

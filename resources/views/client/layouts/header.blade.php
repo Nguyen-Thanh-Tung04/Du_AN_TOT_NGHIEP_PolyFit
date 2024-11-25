@@ -32,7 +32,18 @@
                 </div>
                 <!-- Header Top social End -->
                 <!-- Header Top Message Start -->
-
+                <div class="col-8 header-right">
+                    <div class="marquee-text">
+                        🚛 <strong>PolyFit</strong> - Đồng hành cùng bạn trên mọi nẻo đường.
+                        <span class="hotline">Hotline: <a href="tel:0868686868">0868 686 868</a></span> 📞
+                    </div>
+                </div>
+                <div class="col text-center header-top-center">
+                    <div class="header-top-message">
+                        <i class="fas fa-gift" style="margin-right: 8px;"></i>
+                        <span>Ưu đãi đặc biệt</span>
+                    </div>
+                </div>
 
                 <!-- Header Top responsive Action -->
                 <div class="col d-lg-none ">

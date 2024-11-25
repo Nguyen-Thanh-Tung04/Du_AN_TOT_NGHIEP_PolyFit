@@ -16,6 +16,7 @@ use App\Models\Banner;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\Variant;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,8 +45,8 @@ class HomeController extends Controller
 
 
         // dd($users);
-        // Sử dụng join để kết nối bảng product và variants
-        $products = Product::select(
+        // Top 8 sản phẩm mới đang có status active và tổng số lượng các variant > 0
+        $newProducts = Product::select(
             'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
@@ -53,49 +54,112 @@ class HomeController extends Controller
             DB::raw('SUM(variants.quantity) as total_quantity')
         )
             ->join('variants', 'products.id', '=', 'variants.product_id')
+            ->where('products.status', 1)
             ->groupBy('products.id')
             ->having('total_quantity', '>', 0) // Chỉ lấy sản phẩm có tổng quantity > 0
+            ->orderBy('products.created_at', 'desc')
+            ->limit(8)
             ->get();
 
-        // câu lệnh hiển thị sản phẩm giảm giá
-        $discounted = Product::select(
+        // Top 8 sản phẩm bán chạy dựa vào bảng order_items
+        $bestSellingProducts = Product::select(
             'products.*',
             DB::raw('MIN(variants.sale_price) as min_price'),
+            DB::raw('MAX(variants.sale_price) as max_price'),
             DB::raw('MIN(variants.listed_price) as listed_price'),
-            DB::raw('SUM(variants.quantity) as total_quantity')
+            DB::raw('SUM(order_items.quantity) as total_sold')
         )
             ->join('variants', 'products.id', '=', 'variants.product_id')
-            ->whereColumn('variants.listed_price', '>', 'variants.sale_price')
+            ->join('order_items', 'variants.id', '=', 'order_items.variant_id')
+            ->where('products.status', 1)
             ->groupBy('products.id')
-            ->having('total_quantity', '>', 0) // Chỉ lấy sản phẩm có tổng quantity > 0
+            ->having('total_sold', '>', 0) // Chỉ lấy sản phẩm có tổng quantity sold > 0
+            ->orderBy('total_sold', 'desc')
+            ->limit(8)
             ->get();
+
+
+        $productsFlashSale = $this->getActiveFlashSaleProducts();
+
+        // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
+        foreach ($newProducts as $product) {
+            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
+        }
+
+        // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
+        foreach ($bestSellingProducts as $product) {
+            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
+        }
 
         $banners = Banner::where('is_active',1)->get();
 
         $data = [
-            'products' => $products,
-            'discounted' => $discounted,
+            'newProducts' => $newProducts,
+            'bestSellingProducts' => $bestSellingProducts,
             'users' => $users,
             'user' => $user,
             'banners' => $banners
 
         ];
 
-        $category = Category::all();
+        $categories = Category::where('is_active', 1)->get();
 
-        // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
-        foreach ($products as $product) {
-            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
-        }
 
-        return view('welcome', $data, compact('category'));
+
+        return view('client.welcome', $data, compact('categories', 'productsFlashSale'));
+    }
+
+    public function getActiveFlashSaleProducts()
+    {
+        $currentDateTime = Carbon::now();
+
+        $products = Product::where('status', 1)
+            ->whereHas('flashSaleProducts.flashSale', function ($query) use ($currentDateTime) {
+                $query->where('status', 1)
+                    ->where('date', $currentDateTime->toDateString())
+                    ->where(function ($query) use ($currentDateTime) {
+                        $currentHour = now()->hour;
+                        $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                            ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
+                    });
+            })
+            ->with(['flashSaleProducts' => function ($query) {
+                $query->whereHas('flashSale', function ($query) {
+                    $query->where('status', 1)
+                        ->where('quantity', '>', 0)
+                        ->where('date', now()->toDateString())
+                        ->where(function ($query) {
+                            $currentHour = now()->hour;
+                            $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
+                        });
+                })
+                    ->orderBy('flash_price', 'asc');
+            }])
+            ->get();
+
+        $products->each(function ($product) {
+            $product->averageScore = $product->averageScore();
+            $flashSaleProduct = $product->flashSaleProducts->first();
+            if ($flashSaleProduct) {
+                $product->flash_sale_price = $flashSaleProduct->flash_price;
+                $product->listed_price = $flashSaleProduct->listed_price;
+                $product->discount_percentage = $flashSaleProduct->discount_percentage;
+            } else {
+                $product->flash_sale_price = null;
+                $product->listed_price = $product->variants->min('listed_price');
+                $product->discount_percentage = null;
+            }
+        });
+
+        return $products;
     }
 
 
     public function search(Request $request)
     {
         $search = $request->input('search'); // Lấy từ khóa tìm kiếm
-        $categories = Category::all();
+        $categories = Category::where('is_active', 1)->get();
 
         // Khởi tạo truy vấn với các điều kiện mặc định
         $query = Product::with('variants', 'reviews')->where('products.status', 1);

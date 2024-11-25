@@ -140,7 +140,7 @@
                                         <td>{{ $voucher->min_order_value}}</td>
                                         <td>{{ $voucher->max_order_value}}</td>
                                         <td>{{ $voucher->discount_type == 'fixed' ? 'Giảm giá cố định' : 'Giảm giá theo tỷ lệ' }}</td>
-                                        <td>{{ $voucher->quantity }}</td>
+                                        <td>{{ number_format($voucher->quantity, 2, '.', ',') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($voucher->end_time)->format('d/m/Y') }}</td>
                                         <td class="text-center">

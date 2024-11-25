@@ -1,0 +1,184 @@
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+@keyframes jittery {
+    0% {
+        transform: translate(0, 0);
+    }
+    20% {
+        transform: translate(-2px, -2px);
+    }
+    40% {
+        transform: translate(2px, 2px);
+    }
+    60% {
+        transform: translate(-2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@-webkit-keyframes jittery {
+    0% {
+        transform: translate(0, 0);
+    }
+    20% {
+        transform: translate(-2px, -2px);
+    }
+    40% {
+        transform: translate(2px, 2px);
+    }
+    60% {
+        transform: translate(-2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.ec-btn-ds .btn-jittery {
+    animation: jittery 4s infinite;
+    -webkit-animation: jittery 4s infinite;
+}
+
+.custom-file-2 {
+    display: inline-block;
+    padding: 15px 10px;
+    cursor: pointer;
+    background-color: #63B8FF;
+    color: #fff;
+    text-overflow: ellipsis;
+    border-radius: 50%;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.custom-file-2 i {
+    font-size: 48px;
+}
+
+#filesel_2 {
+    display: block;
+    color: #63B8FF;
+    font-weight: 700;
+}
+
+
+  /* CSS cho nút "Đăng nhập để viết đánh giá" */
+  #loginBtn {
+    background-color: #dc3545; /* Màu đỏ */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Bo tròn viền */
+    text-transform: uppercase; /* Chuyển đổi chữ hoa */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+#loginBtn:hover {
+    background-color: hsl(354, 83%, 64%); /* Màu đỏ tối hơn khi di chuột vào */
+}
+.out-of-stock {
+    opacity: 0.5; /* Làm mờ sản phẩm */
+    position: relative;
+}
+
+.out-of-stock .out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.2em;
+    z-index: 10;
+}
+
+.ec-add-to-cart.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: gray;
+}
+.ec-product-image.out-of-stock {
+    position: relative;
+}
+
+.ec-product-image.out-of-stock img {
+    opacity: 0.7; /* Làm mờ nhẹ hình ảnh */
+}
+
+.ec-product-image .out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1em;
+    pointer-events: none; /* Đảm bảo nhãn không cản trở hành động nhấp */
+}
+
+/* Định dạng nhãn "Hết hàng" */
+.out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6); /* Nền trong suốt tối màu */
+    padding: 5px 10px;
+    border-radius: 5px;
+    pointer-events: none; /* Đảm bảo nhãn không ảnh hưởng đến sự kiện click */
+    z-index: 10;
+}
+
+
+
+/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
