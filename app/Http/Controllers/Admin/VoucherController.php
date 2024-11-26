@@ -27,6 +27,9 @@ class VoucherController extends Controller
                     ->orWhere('name', 'LIKE', "%{$keyword}%");
             });
         }
+        if ($request->has('discount_type') && $request->discount_type !== '') {
+            $query->where('discount_type', $request->discount_type);
+        }
         $vouchers = $query->paginate($request->get('perpage', 20));
 
         return view('admin.vouchers.index', compact('vouchers'));

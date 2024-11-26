@@ -220,6 +220,8 @@
 
         discountTypeSelect.addEventListener('change', toggleMaxDiscountValue);
     });
+    
+
 </script>
 @endsection
 @endsection
