@@ -135,12 +135,23 @@
                                         </td>
                                         <td>{{ $voucher->code }}</td>
                                         <td>{{ $voucher->name }}</td>
-                                        <td>{{ $voucher->value }}</td>
-                                        <td>{{ $voucher->max_discount_value }}</td>
-                                        <td>{{ $voucher->min_order_value}}</td>
-                                        <td>{{ $voucher->max_order_value}}</td>
+                                        <td>
+                                            {{ $voucher->value == floor($voucher->value) ? number_format($voucher->value, 0) : number_format($voucher->value, 2) }}
+                                            @if($voucher->discount_type == 'percentage')%
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $voucher->max_discount_value == floor($voucher->max_discount_value) ? number_format($voucher->max_discount_value, 0) : number_format($voucher->max_discount_value, 2) }}
+                                           
+                                        </td>
+                                        <td>
+                                            {{ $voucher->min_order_value == floor($voucher->min_order_value) ? number_format($voucher->min_order_value, 0) : number_format($voucher->min_order_value, 2) }}
+                                        </td>
+                                        <td>
+                                            {{ $voucher->max_order_value == floor($voucher->max_order_value) ? number_format($voucher->max_order_value, 0) : number_format($voucher->max_order_value, 2) }}
+                                        </td>
                                         <td>{{ $voucher->discount_type == 'fixed' ? 'Giảm giá cố định' : 'Giảm giá theo tỷ lệ' }}</td>
-                                        <td>{{ number_format($voucher->quantity, 2, '.', ',') }}</td>
+                                        <td>{{ number_format($voucher->quantity) }}</td>
                                         <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($voucher->end_time)->format('d/m/Y') }}</td>
                                         <td class="text-center">
@@ -153,7 +164,7 @@
                                         </td>
                                         <td class="text-center">
                                             <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                            <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;"   >
+                                            <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button>
@@ -162,6 +173,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                            
                         </table>
                         {{-- {{ $vouchers->links('pagination::bootstrap-5') }} --}}
                     </div>
