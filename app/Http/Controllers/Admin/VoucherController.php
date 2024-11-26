@@ -16,10 +16,11 @@ class VoucherController extends Controller
     public function index(Request $request)
     {
         $query = Voucher::query();
+        
         if ($request->has('publish') && $request->publish !== '') {
             $query->where('status', $request->publish);
         }
-
+    
         if ($request->has('keyword') && $request->keyword !== '') {
             $keyword = $request->keyword;
             $query->where(function ($q) use ($keyword) {
@@ -27,13 +28,18 @@ class VoucherController extends Controller
                     ->orWhere('name', 'LIKE', "%{$keyword}%");
             });
         }
+    
         if ($request->has('discount_type') && $request->discount_type !== '') {
             $query->where('discount_type', $request->discount_type);
         }
-        $vouchers = $query->paginate($request->get('perpage', 20));
-
+    
+        $perpage = $request->get('perpage', 20);
+        $vouchers = $query->paginate($perpage);
+    
+    
         return view('admin.vouchers.index', compact('vouchers'));
     }
+    
 
 
 
