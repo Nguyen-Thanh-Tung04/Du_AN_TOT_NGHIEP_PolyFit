@@ -102,8 +102,10 @@ class HomeController extends Controller
 
         ];
 
-        $categories = Category::where('is_active', 1)->get();
-
+        $categories = Category::where('is_active', 1)
+        ->withCount('products') // Đếm số lượng sản phẩm
+        ->get();
+        // dd($categories);
 
 
         return view('client.welcome', $data, compact('categories', 'productsFlashSale'));
