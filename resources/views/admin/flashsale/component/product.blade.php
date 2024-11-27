@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th>
-                    <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                    <!-- <input type="checkbox" value="" id="checkAll" class="input-checkbox"> -->
                 </th>
                 <th class="text-center" style="width:100px;">Ảnh</th>
                 <th>Mã sản phẩm</th>
