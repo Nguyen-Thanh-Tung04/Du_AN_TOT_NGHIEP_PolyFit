@@ -73,7 +73,7 @@
                             <tr>
                                 <th>Mã sản phẩm</th>
                                 <th>Tên sản phẩm</th>
-                                <th>Anh sản phẩm</th>
+                                <th>Ảnh sản phẩm</th>
                                 <th>Biến thể</th>
                                 <th>Đơn giá</th>
                                 <th>Số lượng</th>

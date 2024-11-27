@@ -68,10 +68,10 @@
                             <div class="action">
                                 <div class="uk-flex uk-flex-middle">
                                     <div class="uk-flex uk-flex-middle mr-10 ml-10">
-                                        <label for="start_date" class="mr-2">Ngày bắt đầu:</label>
+                                        <label for="start_date" class="mr-5">Ngày bắt đầu:</label>
                                         <input type="date" name="start_date" class="form-control mr-10" value="{{ request('start_date') }}">
                 
-                                        <label for="end_date" class="mr-2">Ngày kết thúc:</label>
+                                        <label for="end_date" class="mr-5">Ngày kết thúc:</label>
                                         <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
                                     </div>
                 
