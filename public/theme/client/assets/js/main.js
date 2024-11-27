@@ -251,19 +251,19 @@ function ecCheckCookie() {
         }
     };
 
-    $(window).on("scroll", function () {
-        var distance = $('.sticky-header-next-sec').offset().top,
-            $window = $(window);
+    // $(window).on("scroll", function () {
+    //     var distance = $('.sticky-header-next-sec').offset().top,
+    //         $window = $(window);
 
-        if ($window.scrollTop() <= distance + 50) {
-            // alert("1");
-            $("#ec-main-menu-desk").removeClass("menu_fixed");
-        }
-        else {
-            // alert("2");
-            checkScroll();
-        }
-    });
+    //     if ($window.scrollTop() <= distance + 50) {
+    //         // alert("1");
+    //         $("#ec-main-menu-desk").removeClass("menu_fixed");
+    //     }
+    //     else {
+    //         // alert("2");
+    //         checkScroll();
+    //     }
+    // });
 
 
     /*-----------------------------  Navigation for scroll section to section  --------------------*/

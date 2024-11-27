@@ -14,16 +14,14 @@ class ChatController extends Controller
     {
         $authUserId = Auth::user()->id; // ID người dùng hiện tại
         $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
-        // dd($authUserRole);
-        // Truy vấn chung
-        $query = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id') // Join bảng users với bảng message_private
+        $query = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id') 
             ->where('message_private.created_at', function ($query) {
                 $query->selectRaw('MAX(created_at)')
                     ->from('message_private as mp_sub')
-                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
+                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); 
             })
-            ->where('users.id', '<>', Auth::user()->id) // Loại trừ người dùng hiện tại
-            ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian tạo tin nhắn giảm dần
+            ->where('users.id', '<>', Auth::user()->id)
+            ->orderByDesc('message_private.created_at')
             ->select(
                 'message_private.user_send',
                 'message_private.message',
