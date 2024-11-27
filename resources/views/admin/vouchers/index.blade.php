@@ -170,14 +170,14 @@
                                         <td>{{ number_format($voucher->quantity) }}</td>
                                         <td>{{ \Carbon\Carbon::parse($voucher->start_time)->format('d/m/Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($voucher->end_time)->format('d/m/Y') }}</td>
-                                        <td class="text-center">
+                                        <td class="text-center js-switch-{{ $voucher->id }}">
                                             <input type="checkbox" value="{{ $voucher->status }}" 
-                                                   class="js-switch status" 
-                                                   data-field="status" 
-                                                   data-model="Voucher"
-                                                   data-modelId="{{ $voucher->id }}"
-                                                   {{ $voucher->status ? 'checked' : '' }} />
-                                        </td>
+                                            class="js-switch status " 
+                                            data-field="is_active" 
+                                            data-model="Category"
+                                            data-modelId="{{ $voucher->id }}"
+                                            {{ ($voucher->status == 1) ? 'checked' : '' }} />
+                                        </td> 
                                         <td class="text-center">
                                             <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
                                             <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;">

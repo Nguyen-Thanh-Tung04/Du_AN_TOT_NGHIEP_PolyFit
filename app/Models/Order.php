@@ -32,7 +32,9 @@ class Order extends Model
 
     const PAYMENT_METHOD_NAMES = [
         self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
-        self::PAYMENT_METHOD_ONLINE => 'Thanh toán trực tuyến',
+        self::PAYMENT_METHOD_ONLINE => 'Thanh toán VNPAY',
+        self::PAYMENT_METHOD_ONLINE => 'Thanh toán MOMO',
+
     ];
 
     protected $fillable = [

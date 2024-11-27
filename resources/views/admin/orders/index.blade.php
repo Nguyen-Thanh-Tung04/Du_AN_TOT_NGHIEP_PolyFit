@@ -67,10 +67,16 @@
                             </div>
                             <div class="action">
                                 <div class="uk-flex uk-flex-middle">
-                                  
+                                    <div class="uk-flex uk-flex-middle mr-10 ml-10">
+                                        <label for="start_date" class="mr-2">Ngày bắt đầu:</label>
+                                        <input type="date" name="start_date" class="form-control mr-10" value="{{ request('start_date') }}">
+                
+                                        <label for="end_date" class="mr-2">Ngày kết thúc:</label>
+                                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                                    </div>
                 
                                     <!-- Dropdown for order status filtering -->
-                                    <select name="status" class="form-control mr-10 setupSelect2">
+                                    <select name="status" class="form-control mr-10">
                                         <option value="">-- Tất cả trạng thái --</option> <!-- Default option for all statuses -->
                                         @foreach ($orderStatuses as $key => $value)
                                             <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $value }}</option>
@@ -90,7 +96,7 @@
                                                     class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
                                             </span>
                                         </div>
-                                        <a href="{{ route('orders.export') }}" class="btn btn-success mb-3 float-right">
+                                        <a href="{{ route('orders.export', request()->query()) }}" class="btn btn-success mb-3 float-right">
                                             <i class="fa fa-file-excel"></i> Xuất Excel
                                         </a>
                                     </div>
@@ -120,12 +126,12 @@
                                     <td>{{ $order->full_name }}</td>
                                     <td>{{ $order->address }}</td>
                                     <td>{{ $order->phone }}</td>
-                                    <td>{{ number_format($order->total_price, 2) }} VNĐ</td>
+                                    <td>{{ number_format($order->total_price) }} VNĐ</td>
                                     <td>
                                         <form action="{{ route('orders.update', $order->id) }}" method="POST" class="form-status">
                                             @csrf
                                             @method('PUT')
-                                            <select name="status" class="form-select w-75 setupSelect2"
+                                            <select name="status" class="form-control mr-10"
                                                 data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
                                                 @foreach ($orderStatuses as $key => $value)
                                                     <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }} 
@@ -139,18 +145,9 @@
                                     
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                                     <td class="text-center d-flex justify-content-center">
-                                        <a href="{{ route('orders.show', $order->id) }}" class="me-2">
-                                            <i class="mdi mdi-eye text-muted fs-18 rounded-2 border p-1" style="font-size: 20px"></i>
+                                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-warning">
+                                            <i class="fa fa-eye"></i>
                                         </a>
-                                        @if ($order->status == $cancelledOrder)
-                                            <form action="{{ route('orders.destroy', $order->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có đồng ý xóa không?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -168,24 +165,25 @@
 <script src="admin/js/plugins/switchery/switchery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    function confirmSubmit(selectElement) {
+     function confirmSubmit(selectElement) {
         var form = selectElement.form;
         var selectedOption = selectElement.options[selectElement.selectedIndex].text;
         var defaultValue = selectElement.getAttribute('data-default-value');
 
-        if (confirm('Bạn có chắc chắn thay đổi trạng thái đơn hàng thành "' + selectedOption + '" không?')) {
-            form.submit();
-        } else {
-            selectElement.value = defaultValue; 
-        }
-    }
-    
-    $(document).ready(function() {
-        $('.setupSelect2').select2({
-            placeholder: "Chọn trạng thái",
-            allowClear: true,
-            width: '100%', // Chiều rộng thẻ
+        Swal.fire({
+            title: 'Xác nhận thay đổi',
+            text: `Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng thành "${selectedOption}" không?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            } else {
+                selectElement.value = defaultValue; 
+            }
         });
-    });
+    }
 </script>
 @endsection

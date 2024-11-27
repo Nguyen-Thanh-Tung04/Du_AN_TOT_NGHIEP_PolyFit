@@ -28,7 +28,7 @@ class VoucherController extends Controller
                     ->orWhere('name', 'LIKE', "%{$keyword}%");
             });
         }
-    
+        $query->orderBy('created_at', 'desc');
         if ($request->has('discount_type') && $request->discount_type !== '') {
             $query->where('discount_type', $request->discount_type);
         }
