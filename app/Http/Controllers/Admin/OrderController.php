@@ -16,37 +16,38 @@ class OrderController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $query = Order::query();
+{
+    $query = Order::query();
 
-        if ($status = request('status')) {
-            $query->where('status', $status);
-        }
-
-        if ($keyword = request('keyword')) {
-            $query->where(function ($q) use ($keyword) {
-                $q->where('full_name', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('code', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('phone', 'LIKE', '%' . $keyword . '%');
-            });
-        }
-
-        if ($startDate = request('start_date')) {
-            $query->whereDate('created_at', '>=', $startDate);
-        }
-
-        if ($endDate = request('end_date')) {
-            $query->whereDate('created_at', '<=', $endDate);
-        }
-
-        $listOrder = $query->orderByDesc('id')->paginate(request('perpage', 20));
-
-        $orderStatuses = Order::STATUS_NAMES;
-        $cancelledOrder = Order::STATUS_HUY_DON_HANG;
-        $delivered = Order::STATUS_DA_GIAO_HANG;
-
-        return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder', 'delivered'));
+    if ($status = request('status')) {
+        $query->where('status', $status);
     }
+
+    if ($keyword = request('keyword')) {
+        $query->where(function ($q) use ($keyword) {
+            $q->where('full_name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('code', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('phone', 'LIKE', '%' . $keyword . '%');
+        });
+    }
+
+    if ($startDate = request('start_date')) {
+        $query->whereDate('created_at', '>=', $startDate);
+    }
+
+    if ($endDate = request('end_date')) {
+        $query->whereDate('created_at', '<=', $endDate);
+    }
+
+    $listOrder = $query->orderByDesc('id')->paginate(request('perpage', 20));
+
+    $orderStatuses = Order::STATUS_NAMES;
+    $cancelledOrder = Order::STATUS_HUY_DON_HANG;
+    $completedOrder = Order::STATUS_HOAN_THANH;
+
+    return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder', 'completedOrder'));
+}
+
 
 
 

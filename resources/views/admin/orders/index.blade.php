@@ -111,7 +111,6 @@
                             <tr>
                                 <th>Mã đơn hàng</th>
                                 <th>Tên Khách Hàng</th>
-                                <th>Địa Chỉ</th>
                                 <th>Điện Thoại</th>
                                 <th>Tổng Tiền</th>
                                 <th>Trạng Thái</th>
@@ -124,7 +123,6 @@
                                 <tr>
                                     <td>{{ $order->code }}</td>
                                     <td>{{ $order->full_name }}</td>
-                                    <td>{{ $order->address }}</td>
                                     <td>{{ $order->phone }}</td>
                                     <td>{{ number_format($order->total_price) }} VNĐ</td>
                                     <td>
@@ -134,13 +132,15 @@
                                             <select name="status" class="form-control mr-10"
                                                 data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
                                                 @foreach ($orderStatuses as $key => $value)
-                                                    <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }} 
-                                                        {{ ($key == $cancelledOrder || $key == $delivered) ? 'disabled' : '' }}>
+                                                    <option value="{{ $key }}" 
+                                                        {{ $order->status == $key ? 'selected' : '' }}
+                                                        {{ ($key == $cancelledOrder || $key == $completedOrder) ? 'disabled' : '' }}>
                                                         {{ $value }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </form>
+                                        
                                     </td>
                                     
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>

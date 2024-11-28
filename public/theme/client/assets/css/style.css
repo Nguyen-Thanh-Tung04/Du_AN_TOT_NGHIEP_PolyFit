@@ -68,122 +68,141 @@
   Fonts Family & Style CSS
 ---------------------------------------------------*/
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Thin.ttf") format("truetype");
-    font-weight: 100;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-ExtraLight.ttf") format("truetype");
-    font-weight: 200;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Light.ttf");
-    font-weight: 300;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
-    font-weight: 600;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
-    font-weight: 800;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Black.ttf") format("truetype");
-    font-weight: 900;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Fjalla One";
-    src: url("../fonts/fjalla/FjallaOne-Regular.ttf") format("truetype");
+  font-family: "Fjalla One";
+  src: url("../fonts/fjalla/FjallaOne-Regular.ttf") format("truetype");
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-SemiBold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat/Montserrat-SemiBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
-    font-weight: 800;
-    font-style: normal;
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-ExtraBold.ttf") format("truetype");
-    font-weight: 900;
-    font-style: normal;
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat/Montserrat-ExtraBold.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-ExtraLight.ttf") format("truetype");
-    font-weight: 200;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Light.ttf") format("truetype");
-    font-weight: 300;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Regular.ttf");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Medium.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-SemiBold.ttf") format("truetype");
-    font-weight: 600;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
 
 /*-------------------------------------------------
@@ -23199,7 +23218,7 @@ select::-ms-expand {
   padding: 34px 38px 34px;
   text-align: left;
   background-color: #fff;
-    height: 520px;
+  height: 520px;
 }
 
 .ec-login-wrapper .ec-login-container .ec-login-form form {
@@ -26405,12 +26424,18 @@ i.ecicon.eci-star-o {
 #ec-progressbar li {
   list-style-type: none;
   font-size: 14px;
-  width: 20%;
+  width: 16%;
   float: left;
   position: relative;
   font-weight: 400;
   text-align: center;
 }
+
+.ec-track-icon img {
+  width: 70px;
+  height: 70px;
+}
+
 
 #ec-progressbar li .ec-progressbar-track {
   position: relative;
@@ -26499,6 +26524,10 @@ i.ecicon.eci-star-o {
 }
 
 #ec-progressbar li:nth-child(4) .ec-progressbar-track:after {
+  left: -50%;
+}
+
+#ec-progressbar li:nth-child(5) .ec-progressbar-track:after {
   left: -50%;
 }
 

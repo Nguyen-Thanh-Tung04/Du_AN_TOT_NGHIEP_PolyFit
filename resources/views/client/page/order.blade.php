@@ -45,24 +45,52 @@
                 <div class="ec-trackorder-bottom">
                     <div class="ec-progress-track">
                         <ul id="ec-progressbar">
-                            <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_1.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Chờ xác nhận</span></li>
-                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_2.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận</span></li>
-                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_3.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
-                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_4.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang vận chuyển <br> </span></li>
-                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_5.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
+                            <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_1.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Chờ xác nhận</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_2.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đã xác nhận</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_3.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đang chuẩn bị</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_4.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đang vận chuyển <br></span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_5.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đã Giao hàng</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 6 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track06.png') }}"  alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Hoàn thành</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
+                
                 <div class="text-right mt-5">
                     <form id="cancelOrderForm" action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
                         @csrf
@@ -72,7 +100,7 @@
                             <button type="button" id="cancelOrderButton" class="custom-btn danger-btn">
                                 <i class="fas fa-times-circle"></i> Hủy đơn hàng
                             </button>
-                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN)
+                            @elseif ($order->status === \App\Models\Order::STATUS_DA_GIAO_HANG)
                             <input type="hidden" name="da_giao_hang" value="1">
                             <button type="button" id="confirmReceivedButton" class="custom-btn success-btn">
                                 <i class="fas fa-check-circle"></i> Đã nhận hàng
@@ -97,9 +125,10 @@
                 $totalPrice = 0;
                 @endphp
             @foreach ($order->orderItems as $orderItem)
-           {{ $totalPrice += $orderItem->price * $orderItem->quantity;}}
+           
             @php
             $gallery = json_decode($orderItem->product->gallery);
+            $totalPrice += $orderItem->price * $orderItem->quantity;
             @endphp
             <div class="ec-trackorder-inner">
                 <div class="row align-items-center p-3">
@@ -112,7 +141,6 @@
                         <div class="text-muted">x{{ $orderItem->quantity }}</div>
                     </div>
                     <div class="col-3 text-right">
-                        <del class="fs-6 fw-light text-dark">₫{{ number_format($orderItem->price, 0, ',', '.') }}</del>
                         <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
                     </div>
                 </div>
