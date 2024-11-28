@@ -31,7 +31,7 @@ class AutoCompleteOrderStatus implements ShouldQueue
             return; 
         }
 
-        if ($order->status == Order::STATUS_DA_GIAO_HANG) {
+        if ($order->status == Order::STATUS_GIAO_HANG_THANH_CONG) {
             $previousStatus = $order->status;
 
             $order->status = Order::STATUS_HOAN_THANH;

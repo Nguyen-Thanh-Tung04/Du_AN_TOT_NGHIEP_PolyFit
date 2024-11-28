@@ -112,6 +112,7 @@
                                 <th>Mã đơn hàng</th>
                                 <th>Tên Khách Hàng</th>
                                 <th>Điện Thoại</th>
+                                
                                 <th>Tổng Tiền</th>
                                 <th>Trạng Thái</th>
                                 <th>Ngày Tạo</th>

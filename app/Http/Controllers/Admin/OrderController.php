@@ -127,7 +127,7 @@ class OrderController extends Controller
         $order->status = $newStatus;
         $order->save();
 
-        if ($newStatus == Order::STATUS_DA_GIAO_HANG) {
+        if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
             AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(10));
         }
 

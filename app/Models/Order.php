@@ -14,7 +14,7 @@ class Order extends Model
     const STATUS_DA_XAC_NHAN = 2;
     const STATUS_DANG_CHUAN_BI = 3;
     const STATUS_DANG_VAN_CHUYEN = 4;
-    const STATUS_DA_GIAO_HANG = 5;
+    const STATUS_GIAO_HANG_THANH_CONG = 5;
     const STATUS_HOAN_THANH = 6;
     const STATUS_HUY_DON_HANG = 7;
 
@@ -23,7 +23,7 @@ class Order extends Model
         self::STATUS_DA_XAC_NHAN => 'Đã xác nhận',
         self::STATUS_DANG_CHUAN_BI => 'Đang chuẩn bị',
         self::STATUS_DANG_VAN_CHUYEN => 'Đang vận chuyển',
-        self::STATUS_DA_GIAO_HANG => 'Đã giao hàng',
+        self::STATUS_GIAO_HANG_THANH_CONG => 'Giao hàng thành công',
         self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
         self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
