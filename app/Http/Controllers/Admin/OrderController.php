@@ -9,6 +9,7 @@ use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\AutoCompleteOrderStatus; // Thêm dòng này
 
 class OrderController extends Controller
 {
@@ -97,34 +98,40 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $order = Order::query()->findOrFail($id);
-        $currentStatus = $order->status;
-        $newStatus = $request->input('status');
-        $statuses = array_keys(Order::STATUS_NAMES);
+{
+    $order = Order::findOrFail($id);
+    $currentStatus = $order->status;
+    $newStatus = $request->input('status');
+    $statuses = array_keys(Order::STATUS_NAMES);
 
-        // Kiểm tra nếu đơn hàng đã bị hủy thì không được thay đổi trạng thái
-        if ($currentStatus === Order::STATUS_HUY_DON_HANG) {
-            return redirect()->route('orders.index')->with('error', 'Đơn hàng đã bị hủy không thể thay đổi trạng thái.');
-        }
-
-        if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
-            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái.');
-        }
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'previous_status' => $order->status,
-            'new_status' => $request->status,
-            'cancel_reason' => $request->cancel_reason,
-            'changed_by' => auth()->id(),
-            'changed_at' => now(),
-        ]);
-
-        $order->status = $newStatus;
-        $order->save();
-
-        return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+    // Kiểm tra nếu đơn hàng đã bị hủy thì không được thay đổi trạng thái
+    if ($currentStatus === Order::STATUS_HUY_DON_HANG) {
+        return redirect()->route('orders.index')->with('error', 'Đơn hàng đã bị hủy không thể thay đổi trạng thái.');
     }
+
+    if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
+        return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái.');
+    }
+
+    // Tạo lịch sử trạng thái
+    OrderStatusHistory::create([
+        'order_id' => $order->id,
+        'previous_status' => $order->status,
+        'new_status' => $request->status,
+        'cancel_reason' => $request->cancel_reason,
+        'changed_by' => auth()->id(),
+        'changed_at' => now(),
+    ]);
+
+    $order->status = $newStatus;
+    $order->save();
+
+    if ($newStatus == Order::STATUS_DA_GIAO_HANG) {
+        AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(10));
+    }
+
+    return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+}
 
 
     /**
