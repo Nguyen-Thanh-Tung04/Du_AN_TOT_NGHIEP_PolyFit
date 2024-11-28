@@ -17,21 +17,22 @@ class OrderHistoryController extends Controller
             ->where('user_id', auth()->id())
             ->orderBy('id', 'desc')
             ->get();
-
+    
         // Phân loại đơn hàng
         $pendingOrders = $orders->where('status', Order::STATUS_CHO_XAC_NHAN);
         $confirmedOrders = $orders->where('status', Order::STATUS_DA_XAC_NHAN);
         $preparingOrders = $orders->where('status', Order::STATUS_DANG_CHUAN_BI);
         $shippingOrders = $orders->where('status', Order::STATUS_DANG_VAN_CHUYEN);
-        $deliveredOrders = $orders->where('status', Order::STATUS_DA_GIAO_HANG);
+        $deliveredOrders = $orders->whereIn('status', [Order::STATUS_DA_GIAO_HANG, Order::STATUS_HOAN_THANH]); 
         $cancelledOrders = $orders->where('status', Order::STATUS_HUY_DON_HANG);
-
+    
         $pendingCount = $pendingOrders->count();
         $confirmedCount = $confirmedOrders->count();
         $preparingCount = $preparingOrders->count();
         $shippingCount = $shippingOrders->count();
-        $deliveredCount = $deliveredOrders->count();
+        $deliveredCount = $deliveredOrders->count(); 
         $cancelledCount = $cancelledOrders->count();
+    
         return view('client.page.history', compact(
             'orders',
             'pendingOrders',
@@ -48,6 +49,7 @@ class OrderHistoryController extends Controller
             'cancelledCount'
         ));
     }
+    
 
     public function show($id)
     {

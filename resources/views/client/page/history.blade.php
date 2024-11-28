@@ -84,7 +84,7 @@
                             <div class="tab-pane fade" id="cancelled-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $cancelledOrders])
                             </div>
-                        
+                        </div>
                         
                         
                            
