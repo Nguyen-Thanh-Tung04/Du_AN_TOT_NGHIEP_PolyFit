@@ -160,37 +160,39 @@ Route::post('dashboard/index', [DashboardController::class, 'statistical_sale'])
 // USER
 Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserController::class, 'index'])
-        ->name('index');
+        ->name('index')
+        ->middleware('checkModulePermission:user.index');
     Route::get('create', [UserController::class, 'create'])
-        ->name('create');
+        ->name('create')
+        ->middleware('checkModulePermission:user.create');
     Route::post('store', [UserController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [UserController::class, 'edit'])
-        ->name('edit');
-    Route::get('{id}/edit', [UserController::class, 'edit'])
-        ->name('edit');
+        ->name('edit')
+        ->middleware('checkModulePermission:user.edit');
     Route::post('{id}/update', [UserController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [UserController::class, 'delete'])
-        ->name('delete');
+        ->name('delete')
+        ->middleware('checkModulePermission:user.delete');
     Route::delete('{id}/destroy', [UserController::class, 'destroy'])
         ->name('destroy');
 });
 Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(function () {
     Route::get('index', [MemberController::class, 'index'])
-        ->name('index');
+        ->name('index')
+        ->middleware('checkModulePermission:guest.index');
     Route::get('create', [MemberController::class, 'create'])
         ->name('create');
     Route::post('store', [MemberController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [MemberController::class, 'edit'])
         ->name('edit');
-    Route::get('{id}/edit', [MemberController::class, 'edit'])
-        ->name('edit');
     Route::post('{id}/update', [MemberController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [MemberController::class, 'delete'])
-        ->name('delete');
+        ->name('delete')
+        ->middleware('checkModulePermission:guest.delete');
     Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
         ->name('destroy');
 });
@@ -198,19 +200,21 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
 // USER
 Route::prefix('permission/')->name('permission.')->middleware('checkLogin')->group(function () {
     Route::get('index', [PermissionController::class, 'index'])
-        ->name('index');
+        ->name('index')
+        ->middleware('checkModulePermission:permission.index');
     Route::get('create', [PermissionController::class, 'create'])
-        ->name('create');
+        ->name('create')
+        ->middleware('checkModulePermission:permission.create');
     Route::post('store', [PermissionController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [PermissionController::class, 'edit'])
-        ->name('edit');
-    Route::get('{id}/edit', [PermissionController::class, 'edit'])
-        ->name('edit');
+        ->name('edit')
+        ->middleware('checkModulePermission:permission.edit');
     Route::post('{id}/update', [PermissionController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [PermissionController::class, 'delete'])
-        ->name('delete');
+        ->name('delete')
+        ->middleware('checkModulePermission:permission.delete');
     Route::delete('{id}/destroy', [PermissionController::class, 'destroy'])
         ->name('destroy');
 });
@@ -234,19 +238,24 @@ Route::prefix('category/')->name('category.')->middleware('checkLogin')->group(f
 
 Route::prefix('flashsale/')->name('flashsale.')->middleware('checkLogin')->group(function () {
     Route::get('index', [FlashSaleController::class, 'index'])
-        ->name('index');
+        ->name('index')
+        ->middleware('checkModulePermission:flashsale.index');
     Route::get('create', [FlashSaleController::class, 'create'])
-        ->name('create');
+        ->name('create')
+        ->middleware('checkModulePermission:flashsale.create');
     Route::post('store', [FlashSaleController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [FlashSaleController::class, 'edit'])
-        ->name('edit');
+        ->name('edit')
+        ->middleware('checkModulePermission:flashsale.edit');
     Route::get('{id}/show', [FlashSaleController::class, 'show'])
-        ->name('show');
+        ->name('show')
+        ->middleware('checkModulePermission:flashsale.detail');
     Route::put('{id}/update', [FlashSaleController::class, 'update'])
         ->name('update');
     Route::delete('{id}/destroy', [FlashSaleController::class, 'destroy'])
-        ->name('destroy');
+        ->name('destroy')
+        ->middleware('checkModulePermission:flashsale.delete');
     Route::patch('/{id}/status', [FlashSaleController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/get-selected-products', [ProductCatalogueController::class, 'getSelectedProducts'])->name('getSelectedProducts');
     Route::get('/get-occupied-time-slots', [FlashSaleController::class, 'getOccupiedTimeSlots'])->name('getOccupiedTimeSlots');
@@ -297,25 +306,25 @@ Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, '
 Route::prefix('user/catalogue/')->name('user.catalogue.')->middleware('checkLogin')->group(function () {
     Route::get('index', [UserCatalogueController::class, 'index'])
         ->name('index')
-        ->middleware('checkModulePermission:xem vai trò người dùng');
+        ->middleware('checkModulePermission:user.catalogue.index');
     Route::get('create', [UserCatalogueController::class, 'create'])
         ->name('create')
-        ->middleware('checkModulePermission:thêm vai trò người dùng');
+        ->middleware('checkModulePermission:user.catalogue.create');
     Route::post('store', [UserCatalogueController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [UserCatalogueController::class, 'edit'])
         ->name('edit')
-        ->middleware('checkModulePermission:sửa vai trò người dùng');
+        ->middleware('checkModulePermission:user.catalogue.edit');
     Route::post('{id}/update', [UserCatalogueController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [UserCatalogueController::class, 'delete'])
         ->name('delete')
-        ->middleware('checkModulePermission:xóa vai trò người dùng');
+        ->middleware('checkModulePermission:user.catalogue.delete');
     Route::delete('{id}/destroy', [UserCatalogueController::class, 'destroy'])
         ->name('destroy');
     Route::get('permission', [UserCatalogueController::class, 'permission'])
         ->name('permission')
-        ->middleware('checkModulePermission:phân quyền vai trò người dùng');
+        ->middleware('checkModulePermission:user.catalogue.permission');
     Route::post('updatePermission', [UserCatalogueController::class, 'updatePermission'])
         ->name('updatePermission');
 });
@@ -323,66 +332,66 @@ Route::prefix('user/catalogue/')->name('user.catalogue.')->middleware('checkLogi
 // Category
 Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])->name('index')
-        ->middleware('checkModulePermission:xem danh mục sản phẩm');
+        ->middleware('checkModulePermission:category.index');
     Route::get('create', [CategoryController::class, 'create'])
         ->name('create')
-        ->middleware('checkModulePermission:thêm danh mục sản phẩm');
+        ->middleware('checkModulePermission:category.create');
     Route::post('store', [CategoryController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [CategoryController::class, 'edit'])
         ->name('edit')
-        ->middleware('checkModulePermission:sửa danh mục sản phẩm');
+        ->middleware('checkModulePermission:category.edit');
     Route::post('{id}/update', [CategoryController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [CategoryController::class, 'delete'])
         ->name('delete')
-        ->middleware('checkModulePermission:xóa danh mục sản phẩm');
+        ->middleware('checkModulePermission:category.delete');
     Route::delete('{id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
-    Route::get('index', [ReviewController::class, 'index'])->name('index')->middleware('checkModulePermission:xem đánh giá');
-    Route::get('history', [ReviewController::class, 'history'])->name("history")->middleware('checkModulePermission:lịch sử đánh giá');
-    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail')->middleware('checkModulePermission:chi tiết đánh giá');
+    Route::get('index', [ReviewController::class, 'index'])->name('index')->middleware('checkModulePermission:review.index');
+    Route::get('history', [ReviewController::class, 'history'])->name("history")->middleware('checkModulePermission:review.history');
+    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail')->middleware('checkModulePermission:review.detail');
 
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
-        ->name('edit')->middleware('checkModulePermission:sửa đánh giá');
+        ->name('edit')->middleware('checkModulePermission:review.edit');
     Route::post('{id}/update', [ReviewController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [ReviewController::class, 'delete'])
         ->name('delete');
     Route::delete('{id}/destroy', [ReviewController::class, 'destroy'])
-        ->name('destroy')->middleware('checkModulePermission:xóa đánh giá');
+        ->name('destroy')->middleware('checkModulePermission:review.delete');
 });
 // Review reply
 Route::post('reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply');
 
 // voucher
 Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(function () {
-    Route::get('index', [VoucherController::class, 'index'])->name('index')->middleware('checkModulePermission:xem voucher');
-    Route::get('create', [VoucherController::class, 'create'])->name('create')->middleware('checkModulePermission:thêm voucher');
+    Route::get('index', [VoucherController::class, 'index'])->name('index')->middleware('checkModulePermission:voucher.index');
+    Route::get('create', [VoucherController::class, 'create'])->name('create')->middleware('checkModulePermission:voucher.create');
     Route::post('store', [VoucherController::class, 'store'])->name('store');
-    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit')->middleware('checkModulePermission:sửa voucher');
+    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit')->middleware('checkModulePermission:voucher.edit');
     Route::put('{voucher}/update', [VoucherController::class, 'update'])->name('update');
     Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
-    Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:xóa voucher');
+    Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:voucher.delete');
 });
 // banner
 Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(function () {
-    Route::get('index', [BannerController::class, 'index'])->name('index')->middleware('checkModulePermission:xem banner');
-    Route::get('create', [BannerController::class, 'create'])->name('create')->middleware('checkModulePermission:thêm banner');
+    Route::get('index', [BannerController::class, 'index'])->name('index')->middleware('checkModulePermission:banner.index');
+    Route::get('create', [BannerController::class, 'create'])->name('create')->middleware('checkModulePermission:banner.create');
     Route::post('store', [BannerController::class, 'store'])->name('store');
-    Route::get('edit/{id}', [BannerController::class, 'edit'])->name('edit')->middleware('checkModulePermission:sửa banner');
+    Route::get('edit/{id}', [BannerController::class, 'edit'])->name('edit')->middleware('checkModulePermission:banner.edit');
     Route::put('update/{id}', [BannerController::class, 'update'])->name('update');
-    Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete')->middleware('checkModulePermission:xóa banner');
+    Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete')->middleware('checkModulePermission:banner.delete');
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
-    Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:xem đơn hàng');
-    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:chi tiết đơn hàng');
-    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:sửa đơn hàng');
-    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:xóa đơn hàng');
-    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:xuất đơn hàng');
+    Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:order.index');
+    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:order.detail');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:order.edit');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
+    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
@@ -397,23 +406,23 @@ Route::middleware(['checkLoginClient'])->group(function () {
 Route::prefix('product')->name('product.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ProductController::class, 'index'])
         ->name('index')
-        ->middleware('checkModulePermission:xem sản phẩm');
+        ->middleware('checkModulePermission:product.index');
     Route::get('{id}/detail', [ProductController::class, 'detail'])
         ->name('detail')
-        ->middleware('checkModulePermission:chi tiết sản phẩm');
+        ->middleware('checkModulePermission:product.detail');
     Route::get('create', [ProductController::class, 'create'])
         ->name('create')
-        ->middleware('checkModulePermission:thêm sản phẩm');
+        ->middleware('checkModulePermission:product.create');
     Route::post('store', [ProductController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [ProductController::class, 'edit'])
         ->name('edit')
-        ->middleware('checkModulePermission:sửa sản phẩm');
+        ->middleware('checkModulePermission:product.edit');
     Route::post('{id}/update', [ProductController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [ProductController::class, 'delete'])
         ->name('delete')
-        ->middleware('checkModulePermission:xóa sản phẩm');
+        ->middleware('checkModulePermission:product.delete');
     Route::delete('{id}/destroy', [ProductController::class, 'destroy'])
         ->name('destroy');
     Route::delete('{id}/destroyVariant', [ProductController::class, 'destroyVariantDetail'])
@@ -422,20 +431,20 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
     Route::prefix('size')->name('size.')->group(function () {
         Route::get('index', [ProductSizeController::class, 'index'])
             ->name('index')
-            ->middleware('checkModulePermission:xem kích cỡ');
+            ->middleware('checkModulePermission:size.index');
         Route::get('create', [ProductSizeController::class, 'create'])
             ->name('create')
-            ->middleware('checkModulePermission:thêm kích cỡ');
+            ->middleware('checkModulePermission:size.create');
         Route::post('store', [ProductSizeController::class, 'store'])
             ->name('store');
         Route::get('{id}/edit', [ProductSizeController::class, 'edit'])
             ->name('edit')
-            ->middleware('checkModulePermission:sửa kích cỡ');
+            ->middleware('checkModulePermission:size.edit');
         Route::post('{id}/update', [ProductSizeController::class, 'update'])
             ->name('update');
         Route::get('{id}/delete', [ProductSizeController::class, 'delete'])
             ->name('delete')
-            ->middleware('checkModulePermission:xóa kích cỡ');
+            ->middleware('checkModulePermission:size.delete');
         Route::delete('{id}/destroy', [ProductSizeController::class, 'destroy'])
             ->name('destroy');
     });
@@ -443,20 +452,20 @@ Route::prefix('product')->name('product.')->middleware('checkLogin')->group(func
     Route::prefix('color')->name('color.')->group(function () {
         Route::get('index', [ProductColorController::class, 'index'])
             ->name('index')
-            ->middleware('checkModulePermission:xem màu sắc');
+            ->middleware('checkModulePermission:color.index');
         Route::get('create', [ProductColorController::class, 'create'])
             ->name('create')
-            ->middleware('checkModulePermission:thêm màu sắc');
+            ->middleware('checkModulePermission:color.create');
         Route::post('store', [ProductColorController::class, 'store'])
             ->name('store');
         Route::get('{id}/edit', [ProductColorController::class, 'edit'])
             ->name('edit')
-            ->middleware('checkModulePermission:sửa màu sắc');
+            ->middleware('checkModulePermission:color.edit');
         Route::post('{id}/update', [ProductColorController::class, 'update'])
             ->name('update');
         Route::get('{id}/delete', [ProductColorController::class, 'delete'])
             ->name('delete')
-            ->middleware('checkModulePermission:xóa màu sắc');
+            ->middleware('checkModulePermission:color.delete');
         Route::delete('{id}/destroy', [ProductColorController::class, 'destroy'])
             ->name('destroy');
     });

@@ -23,6 +23,7 @@ class StorePermissionRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'canonical' => 'required|unique:permissions',
         ];
     }
 
@@ -30,6 +31,8 @@ class StorePermissionRequest extends FormRequest
     {
         return [
             'name.required' => 'Bạn chưa nhập tên quyền.',
+            'canonical.required' => 'Bạn chưa nhập đường dẫn.',
+            'canonical.unique' => 'Đường dẫn đã tồn tại.',
         ];
     }
 }

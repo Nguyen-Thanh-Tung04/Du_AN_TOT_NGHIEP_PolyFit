@@ -496,8 +496,7 @@
                     success: function(response) {
                         if (response.success) {
                             // Cập nhật giá trị giảm giá dựa trên mã voucher
-                            discountAmount = response.discount;
-                            console.log(discountAmount);
+                            discountAmount = Number(response.discount);
 
                             // Cập nhật lại giá trị hiển thị cho giảm giá
                             $('#discountAmount').text('-' + formatCurrency(discountAmount));
@@ -506,8 +505,7 @@
                             let shippingCost = parseInt($('input[name="shipping_method"]:checked').val()) || 0;
 
                             // Tính toán tổng tiền thanh toán mới (sử dụng giá trị trả về từ server)
-                            let finalTotal = response.final_total + shippingCost; // Dùng final_total từ server
-
+                            let finalTotal = Number(response.final_total) + Number(shippingCost); // Dùng final_total từ server
                             // Cập nhật lại giá trị hiển thị
                             $('#finalTotal').text(formatCurrency(finalTotal));
                             toastr.success(response.message);
@@ -535,7 +533,7 @@
                 let shippingCost = parseInt($('input[name="shipping_method"]:checked').val());
 
                 // Tính toán lại tổng tiền
-                let finalTotal = totalAmount + shippingCost;
+                let finalTotal = Number(totalAmount) + Number(shippingCost);
 
                 // Cập nhật lại giá trị hiển thị
                 $('#finalTotal').text(formatCurrency(finalTotal));

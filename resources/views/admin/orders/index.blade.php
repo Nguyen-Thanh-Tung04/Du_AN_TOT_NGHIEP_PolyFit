@@ -84,7 +84,7 @@
                                     </select>
                 
                                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
-                                        <div class="input-group">
+                                        <div class="input-group mr-10">
                                             <input type="text"
                                                 name="keyword"
                                                 value="{{ request('keyword') ?: old('keyword') }}"

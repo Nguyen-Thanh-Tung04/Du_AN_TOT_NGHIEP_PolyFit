@@ -21,7 +21,7 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-lg-12 mb-15">
+                            <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Tên quyền
                                         <span class="text-danger">(*)</span></label>
@@ -29,6 +29,20 @@
                                         type="text"
                                         name="name"
                                         value="{{ old('name') }}"
+                                        class="form-control"
+                                        placeholder=""
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Đường dẫn
+                                        <span class="text-danger">(*)</span></label>
+                                    <input
+                                        type="text"
+                                        name="canonical"
+                                        value="{{ old('canonical') }}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
