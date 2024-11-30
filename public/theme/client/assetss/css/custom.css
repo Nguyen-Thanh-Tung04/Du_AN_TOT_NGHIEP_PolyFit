@@ -323,7 +323,6 @@ body {
 }
 
 .flash-sale-banner {
-    background-color: #ff6f61;
     /* Màu cam nhạt */
     color: white;
     padding: 20px;
@@ -351,3 +350,4 @@ body {
     color: white;
     padding: 4px;
 }
+

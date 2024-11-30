@@ -1344,7 +1344,7 @@ function ecCheckCookie() {
 
     /*----------------------------- Recent auto popup -----------------------------------*/
     // Hiển thị liên tục sau 15s
-    setInterval(function () { $(".recent-purchase").stop().slideToggle('slow'); }, 10000);
+    setInterval(function () { $(".recent-purchase").stop().slideToggle('slow'); }, 8000);
     $(".recent-close").click(function () {
         $(".recent-purchase").stop().slideToggle('slow');
     });
