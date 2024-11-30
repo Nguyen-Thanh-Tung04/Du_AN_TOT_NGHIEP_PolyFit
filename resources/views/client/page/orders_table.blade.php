@@ -30,7 +30,7 @@
                     <td>
                         <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary text-white">Xem</a>
                          <!-- Viết đánh giá Button -->
-                         @if($order->status_name == 'Đã giao hàng') <!-- Check if the order is delivered -->
+                         @if($order->status_name == 'Hoàn thành') <!-- Check if the order is delivered -->
                             @if(!$order->has_review) <!-- Check if a review has already been submitted -->
                                 <!-- Write Review Button -->
                                 <button type="button" class="btn btn-primary open-review-modal" 

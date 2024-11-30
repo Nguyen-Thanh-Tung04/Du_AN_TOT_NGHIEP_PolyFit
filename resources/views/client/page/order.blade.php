@@ -245,30 +245,7 @@
 </section>
 @section('scripts')
 <script>
-      document.getElementById('confirmReceivedButton').addEventListener('click', function () {
-        Swal.fire({
-            title: 'Xác nhận nhận hàng',
-            text: "Bạn có chắc chắn đã nhận hàng?",
-            icon: 'question',  // Icon hỏi
-            showCancelButton: true,
-            confirmButtonText: 'Có',
-            cancelButtonText: 'Không',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Hiển thị thông báo thành công với dấu kiểm (chữ "V")
-                Swal.fire({
-                    icon: 'success',  // Dấu kiểm (V)
-                    title: 'Đã nhận hàng!',
-                    text: 'Cảm ơn bạn đã xác nhận.',
-                    confirmButtonText: 'Đóng'
-                }).then(() => {
-                    document.getElementById('cancelOrderForm').submit();  // Submit form sau khi xác nhận
-                });
-            }
-        });
-    });
-    document.getElementById('cancelOrderButton').addEventListener('click', function() {
+     document.getElementById('cancelOrderButton').addEventListener('click', function() {
         Swal.fire({
             title: 'Lý do hủy đơn hàng',
             input: 'select',
@@ -297,6 +274,31 @@
                     form.appendChild(reasonInput);
                     form.submit();
                 }
+            }
+        });
+    });
+</script>
+<script>
+      document.getElementById('confirmReceivedButton').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Xác nhận nhận hàng',
+            text: "Bạn có chắc chắn đã nhận hàng?",
+            icon: 'question',  // Icon hỏi
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hiển thị thông báo thành công với dấu kiểm (chữ "V")
+                Swal.fire({
+                    icon: 'success',  // Dấu kiểm (V)
+                    title: 'Đã nhận hàng!',
+                    text: 'Cảm ơn bạn đã xác nhận.',
+                    confirmButtonText: 'Đóng'
+                }).then(() => {
+                    document.getElementById('cancelOrderForm').submit();  // Submit form sau khi xác nhận
+                });
             }
         });
     });
