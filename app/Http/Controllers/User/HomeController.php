@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\ResetPasswordMail;
+use App\Models\Banner;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\Variant;
@@ -66,7 +67,8 @@ class HomeController extends Controller
             DB::raw('MIN(variants.sale_price) as min_price'),
             DB::raw('MAX(variants.sale_price) as max_price'),
             DB::raw('MIN(variants.listed_price) as listed_price'),
-            DB::raw('SUM(order_items.quantity) as total_sold')
+            DB::raw('SUM(order_items.quantity) as total_sold'),
+            DB::raw('SUM(variants.quantity) as total_quantity') // Thêm tổng số lượng sản phẩm
         )
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->join('order_items', 'variants.id', '=', 'order_items.variant_id')
@@ -74,10 +76,15 @@ class HomeController extends Controller
             ->groupBy('products.id')
             ->having('total_sold', '>', 0) // Chỉ lấy sản phẩm có tổng quantity sold > 0
             ->orderBy('total_sold', 'desc')
-            ->limit(8)
+            ->limit(4)
             ->get();
 
 
+        // Tính phần trăm bán chạy cho từng sản phẩm
+        foreach ($bestSellingProducts as $product) {
+            $product->progress = $product->total_quantity > 0 ? min(($product->total_sold / $product->total_quantity) * 100, 100) : 0;
+        }
+        
         $productsFlashSale = $this->getActiveFlashSaleProducts();
 
         // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
@@ -90,16 +97,21 @@ class HomeController extends Controller
             $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
         }
 
+        $banners = Banner::where('is_active', 1)->get();
+
         $data = [
             'newProducts' => $newProducts,
             'bestSellingProducts' => $bestSellingProducts,
             'users' => $users,
-            'user' => $user
+            'user' => $user,
+            'banners' => $banners
 
         ];
 
-        $categories = Category::where('is_active', 1)->get();
-
+        $categories = Category::where('is_active', 1)
+            ->withCount('products') // Đếm số lượng sản phẩm
+            ->get();
+        // dd($categories);
 
 
         return view('client.welcome', $data, compact('categories', 'productsFlashSale'));

@@ -3,52 +3,64 @@
     height: 46px;
     padding: 0 10px;
 }
-.rate:not(:checked) > input {
-    position:absolute;
-    top:-9999px;
+
+.rate:not(:checked)>input {
+    position: absolute;
+    top: -9999px;
 }
-.rate:not(:checked) > label {
-    float:right;
-    width:1em;
-    overflow:hidden;
-    white-space:nowrap;
-    cursor:pointer;
-    font-size:30px;
-    color:#ccc;
+
+.rate:not(:checked)>label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
 }
-.rate:not(:checked) > label:before {
+
+.rate:not(:checked)>label:before {
     content: '★ ';
 }
-.rate > input:checked ~ label {
-    color: #ffc700;    
+
+.rate>input:checked~label {
+    color: #ffc700;
 }
-.rate:not(:checked) > label:hover,
-.rate:not(:checked) > label:hover ~ label {
-    color: #deb217;  
+
+.rate:not(:checked)>label:hover,
+.rate:not(:checked)>label:hover~label {
+    color: #deb217;
 }
-.rate > input:checked + label:hover,
-.rate > input:checked + label:hover ~ label,
-.rate > input:checked ~ label:hover,
-.rate > input:checked ~ label:hover ~ label,
-.rate > label:hover ~ input:checked ~ label {
+
+.rate>input:checked+label:hover,
+.rate>input:checked+label:hover~label,
+.rate>input:checked~label:hover,
+.rate>input:checked~label:hover~label,
+.rate>label:hover~input:checked~label {
     color: #c59b08;
 }
+
 @keyframes jittery {
     0% {
         transform: translate(0, 0);
     }
+
     20% {
         transform: translate(-2px, -2px);
     }
+
     40% {
         transform: translate(2px, 2px);
     }
+
     60% {
         transform: translate(-2px, 2px);
     }
+
     80% {
         transform: translate(2px, -2px);
     }
+
     100% {
         transform: translate(0, 0);
     }
@@ -58,18 +70,23 @@
     0% {
         transform: translate(0, 0);
     }
+
     20% {
         transform: translate(-2px, -2px);
     }
+
     40% {
         transform: translate(2px, 2px);
     }
+
     60% {
         transform: translate(-2px, 2px);
     }
+
     80% {
         transform: translate(2px, -2px);
     }
+
     100% {
         transform: translate(0, 0);
     }
@@ -102,23 +119,30 @@
 }
 
 
-  /* CSS cho nút "Đăng nhập để viết đánh giá" */
-  #loginBtn {
-    background-color: #dc3545; /* Màu đỏ */
+/* CSS cho nút "Đăng nhập để viết đánh giá" */
+#loginBtn {
+    background-color: #dc3545;
+    /* Màu đỏ */
     color: white;
     border: none;
-    border-radius: 5px; /* Bo tròn viền */
-    text-transform: uppercase; /* Chuyển đổi chữ hoa */
+    border-radius: 5px;
+    /* Bo tròn viền */
+    text-transform: uppercase;
+    /* Chuyển đổi chữ hoa */
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+    transition: background-color 0.3s;
+    /* Hiệu ứng chuyển đổi màu nền */
 }
 
 #loginBtn:hover {
-    background-color: hsl(354, 83%, 64%); /* Màu đỏ tối hơn khi di chuột vào */
+    background-color: hsl(354, 83%, 64%);
+    /* Màu đỏ tối hơn khi di chuột vào */
 }
+
 .out-of-stock {
-    opacity: 0.5; /* Làm mờ sản phẩm */
+    opacity: 0.5;
+    /* Làm mờ sản phẩm */
     position: relative;
 }
 
@@ -141,12 +165,14 @@
     pointer-events: none;
     background-color: gray;
 }
+
 .ec-product-image.out-of-stock {
     position: relative;
 }
 
 .ec-product-image.out-of-stock img {
-    opacity: 0.7; /* Làm mờ nhẹ hình ảnh */
+    opacity: 0.7;
+    /* Làm mờ nhẹ hình ảnh */
 }
 
 .ec-product-image .out-of-stock-label {
@@ -160,7 +186,8 @@
     border-radius: 4px;
     font-weight: bold;
     font-size: 1em;
-    pointer-events: none; /* Đảm bảo nhãn không cản trở hành động nhấp */
+    pointer-events: none;
+    /* Đảm bảo nhãn không cản trở hành động nhấp */
 }
 
 /* Định dạng nhãn "Hết hàng" */
@@ -172,10 +199,12 @@
     color: white;
     font-size: 1.2em;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.6); /* Nền trong suốt tối màu */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Nền trong suốt tối màu */
     padding: 5px 10px;
     border-radius: 5px;
-    pointer-events: none; /* Đảm bảo nhãn không ảnh hưởng đến sự kiện click */
+    pointer-events: none;
+    /* Đảm bảo nhãn không ảnh hưởng đến sự kiện click */
     z-index: 10;
 }
 
@@ -189,19 +218,23 @@
     display: block;
     width: 100%;
     font-weight: bold;
-    font-size: 1.2rem; /* Tăng kích thước chữ */
-    color: #333; /* Màu chữ rõ ràng hơn */
-    background: #f9f9f9; /* Màu nền nhạt */
+    font-size: 1.2rem;
+    /* Tăng kích thước chữ */
+    color: #333;
+    /* Màu chữ rõ ràng hơn */
+    background: #f9f9f9;
+    /* Màu nền nhạt */
     padding: 10px 20px;
     position: relative;
 }
 
-.scrolling-text::before, 
+.scrolling-text::before,
 .scrolling-text::after {
     content: '';
     position: absolute;
     top: 0;
-    width: 50px; /* Kích thước fade hiệu ứng */
+    width: 50px;
+    /* Kích thước fade hiệu ứng */
     height: 100%;
     background: linear-gradient(to right, rgba(249, 249, 249, 1), rgba(249, 249, 249, 0));
     z-index: 1;
@@ -234,14 +267,56 @@
     0% {
         transform: translateX(100%);
     }
+
     100% {
         transform: translateX(-100%);
     }
 }
 
 .scrolling-text {
-    animation: scroll-text 20s linear infinite; /* Tăng thời gian để chạy chậm hơn */
+    animation: scroll-text 20s linear infinite;
+    /* Tăng thời gian để chạy chậm hơn */
 }
+
+
+/* Tùy chỉnh màu sắc của thanh tiến độ */
+/* Căn chỉnh phần tử text ở bên trái */
+.textLeft{
+    text-align: left;
+    display: block;
+    /* Chuyển thành block để chiếm toàn bộ chiều rộng */
+    margin-bottom: 10px;
+    /* Thêm một chút khoảng cách bên dưới */
+}
+
+.progress {
+    height: 10px;
+    /* Giảm chiều cao của thanh tiến độ */
+    background-color: #e0e0e0;
+    /* Màu nền của thanh tiến độ */
+}
+
+/* Tùy chỉnh màu sắc của thanh tiến độ */
+.progress-bar {
+    background-color: #f39c12;
+    /* Màu vàng */
+}
+
+/* Hiệu ứng cho thanh tiến độ */
+/* .progress-bar-animated {
+    animation: progressBar 1000s infinite;
+} */
+
+/* Hiệu ứng thay đổi độ rộng thanh tiến độ */
+/* @keyframes progressBar {
+    0% {
+        width: 10%;
+    }
+
+    100% {
+        width: 100%;
+    }
+} */
 
 
 

@@ -15,7 +15,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
@@ -35,11 +35,12 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Include jQuery (cần thiết cho Bootstrap) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- Include Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.9/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.9/dist/sweetalert2.all.min.js"></script>
 
     <!-- Main Style -->
     <link rel="stylesheet" href="{{asset('theme/client/assets/css/demo1.css')}}" />
@@ -74,8 +75,8 @@
                  <div class="row">
                      <div class="col-sm-12 col-lg-3 ec-footer-contact">
                          <div class="ec-footer-widget">
-                             <div class="ec-footer-logo"><a href="#"><img src="{{ asset('theme/client/assets/images/logo/footer-logo.png') }}"
-                                         alt=""><img class="dark-footer-logo" src="{{ asset('theme/client/assets/images/logo/dark-logo.png') }}"
+                             <div class="ec-footer-logo"><a href="#"><img src="{{ asset('theme/client/assets/images/logo/logo1.png') }}"
+                                         alt=""><img class="dark-footer-logo" src="{{ asset('theme/client/assets/images/logo/logo1.png') }}"
                                          alt="Site Logo" style="display: none;" /></a></div>
                              <h4 class="ec-footer-heading">Liên hệ với chúng tôi</h4>
                              <div class="ec-footer-links">
@@ -244,7 +245,7 @@
 
 
  {{-- <div class="recent-purchase">
-     <img src="{{asset('theme/client/assets/images/product-image/1.jpg')}}" alt="payment image">
+     <img src="{{ asset('theme/client/assets/images/product-image/1.jpg')}}" alt="payment image">
      <div class="detail">
          <p>Có người mới mua</p>
          <h6>giày trẻ em thời trang</h6>

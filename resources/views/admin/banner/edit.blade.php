@@ -32,14 +32,38 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Tiêu đề
+                                    <label class="control-label text-left">Tiêu đề chính
                                         <span class="text-danger">(*)</span></label>
-                                        <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $banner->title) }}" required>
-                                    @error('title')
+                                        <input type="text" class="form-control" id="title_main" name="title_main" value="{{ old('title_main', $banner->title_main) }}" required>
+                                    @error('title_main')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Tiêu đề phụ
+                                        <span class="text-danger">(*)</span></label>
+                                        <input type="text" class="form-control" id="title_sub" name="title_sub" value="{{ old('title_sub', $banner->title_sub) }}" required>
+                                    @error('title_sub')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Nội dung
+                                        <span class="text-danger">(*)</span></label>
+                                        <input type="text" class="form-control" id="content" name="content" value="{{ old('content', $banner->content) }}" required>
+                                    @error('content')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Hình ảnh
@@ -55,13 +79,14 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Liên kết
                                         <span class="text-danger"></span></label>
                                         <input type="url" class="form-control" id="link" name="link" value="{{ old('link', $banner->link) }}">
-                                    @error('value')
+                                    @error('link')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -73,7 +98,7 @@
                                             <option value="1" {{ $banner->is_active ? 'selected' : '' }}>Kích hoạt</option>
                                             <option value="0" {{ !$banner->is_active ? 'selected' : '' }}>Ẩn</option>
                                         </select>
-                                    @error('value')
+                                    @error('is_active')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -160,7 +160,7 @@
 
 .ec-slide-1 {
   width: 100%;
-  background-image: url("../images/main-slider-banner/1.jpg");
+  /* background-image: url("../images/main-slider-banner/1.jpg"); */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -212,7 +212,7 @@
   height: 5px;
   width: 50px;
   margin: 0 auto;
-  background: rgb(249, 58, 11);
+  background: #ee4d2d;
   left: 4px;
   right: auto;
 }
@@ -321,7 +321,7 @@
   border-radius: 0;
   text-align: center;
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
 }
 .main-slider-nav .swiper-buttons .swiper-button-next:hover {
   background-color: #555;
@@ -344,7 +344,7 @@
   border-radius: 0;
   text-align: center;
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
 }
 .main-slider-nav .swiper-buttons .swiper-button-prev:hover {
   background-color: #555;
@@ -406,8 +406,8 @@
 
 .btn-primary {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 .btn-primary:hover {
   color: #ffffff;
@@ -416,13 +416,13 @@
 }
 .btn-primary:focus {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 .btn-primary:active {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 
 .btn-color-dark {
@@ -449,30 +449,30 @@
 }
 .btn-check:focus + .btn-primary {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 .btn-check:checked + .btn-primary {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 .btn-check:active + .btn-primary {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 
 .btn-primary.active {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 
 .show > .btn-primary.dropdown-toggle {
   color: #ffffff;
-  background-color: rgb(249, 58, 11);
-  border-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
+  border-color: #ee4d2d;
 }
 
 /*-------------------------------------------------
@@ -595,7 +595,7 @@
   text-transform: uppercase;
   padding: 0 18px;
   letter-spacing: 0.02rem;
-  background-color: rgb(249, 58, 11);
+  background-color: #ee4d2d;
   color: #ffffff;
   line-height: 40px;
   display: -webkit-box;
@@ -822,7 +822,7 @@
   font-weight: 600;
 }
 .ec-fs-pro-inner .ec-fs-pro-content .ec-fs-pro-book span {
-  color: rgb(249, 58, 11);
+  color: #ee4d2d;
 }
 .ec-fs-pro-inner .ec-fs-pro-content .ec-fs-pro-btn a {
   height: 35px;
@@ -1070,7 +1070,7 @@
 }
 .ec-offer-content .ec-offer-title {
   font-size: 60px;
-  color: rgb(249, 58, 11);
+  color: #ee4d2d;
   margin-bottom: 5px;
   letter-spacing: 2px;
 	font-family: Poppins, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -1080,7 +1080,7 @@
 }
 .ec-offer-content .ec-offer-stitle {
   font-size: 40px;
-  color: rgb(249, 58, 11);
+  color: #ee4d2d;
   margin-bottom: 13px;
   letter-spacing: 1.5px;
   font-family: "Montserrat";
@@ -1532,9 +1532,15 @@ li.ec-brand-item {
 /* Định nghĩa hiệu ứng chuyển động chữ */
 @keyframes marqueeAnimation {
   0% {
-      transform: translateX(-10%); /* Bắt đầu từ ngoài bên phải */
+      transform: translateX(0%); /* Bắt đầu từ ngoài bên phải */
   }
   100% {
       transform: translateX(-100%); /* Chạy hết đến ngoài bên trái */
   }
+}
+
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marqueeAnimation 15s linear infinite; /* Tăng thời gian chạy animation */
 }

@@ -27,7 +27,6 @@ class UpdatePasswordRequest extends FormRequest
             'new_password_confirmation'=>['required','string','min:8'],
         ];
     }
-
     public function messages(): array
     {
         return [
