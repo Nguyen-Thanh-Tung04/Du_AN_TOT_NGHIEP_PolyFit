@@ -8,7 +8,7 @@ return [
             'name' => ['user', 'member', 'permission'],
             'subModule' => [
                 [
-                    'title' => 'Quản lý Vai Trò',
+                    'title' => 'Quản lý Chức Vụ',
                     'route' => 'user/catalogue/index',
                 ],
                 [

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Events\OrderPlaced;
-
+use Ramsey\Uuid\Type\Integer;
 
 class CheckoutController
 {
@@ -286,7 +286,11 @@ class CheckoutController
             return redirect()->back();
         }
 
-
+        if ($request->input('discount_amount')) {
+            $totalAmount = ($totalAmount + $request->input('shipping_cost')) - $request->input('discount_amount');
+        } else {
+            $totalAmount = ($totalAmount + $request->input('shipping_cost'));
+        }
 
         $order = Order::create([
             'user_id' => $user->id,
@@ -300,10 +304,10 @@ class CheckoutController
             'address' => $request->input('address'),
             'phone' => $request->input('phone'),
             'note' => $request->input('note') ?? null,
-            'shipping_cost' => $request->input('shipping_cost'),
-            'total_price' => $totalAmount + $request->input('shipping_cost'),
+            'shipping_cost' => (int)$request->input('shipping_cost'),
+            'total_price' => $totalAmount,
             'discount_amount' => $request->input('discount_amount'),
-            'payment_method' => $request->input('payment_method'),
+            'payment_method' => (int)$request->input('payment_method'),
         ]);
 
         foreach ($productVariants as $variant) {
