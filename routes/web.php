@@ -193,6 +193,7 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
         ->name('delete');
     Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
         ->name('destroy');
+    Route::get('/exportMember', [MemberController::class, 'exportMember'])->name('exportMember');
 });
 
 // USER
