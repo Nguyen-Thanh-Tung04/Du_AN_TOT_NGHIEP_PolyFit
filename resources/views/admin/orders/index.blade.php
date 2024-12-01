@@ -16,7 +16,7 @@
         <h2>Quản lý đơn hàng</h2>
         <ol class="breadcrumb" style="margin-bottom: 10px;">
             <li>
-                <a href="{{ route('dashboard.index') }}">Dashboard</a>
+                <a href="{{ route('dashboard.index') }}">Trang chủ</a>
             </li>
             <li class="active"><strong>Danh sách đơn hàng</strong></li>
         </ol>

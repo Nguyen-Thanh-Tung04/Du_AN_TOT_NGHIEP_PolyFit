@@ -17,7 +17,7 @@ $segment = request()->segment(1);
                         @else
                             <!-- Nếu không có ảnh đại diện -->
                             <img alt="image" class="rounded-circle mx-auto d-block" 
-                                src="{{ asset('userfiles/image/avata_null.jpg')}}" 
+                                src="{{ asset('/userfiles/thumb/Images/avata_null.jpg')}}" 
                                 style="width: 80px; height: 80px; object-fit: cover; overflow: hidden; border-radius: 50%;" />
                         @endif
                     @else

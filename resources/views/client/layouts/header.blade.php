@@ -133,7 +133,7 @@
                                     <img
                                         style="height: 40px; width: 40px;"
                                         class="img-profile rounded-circle"
-                                        src="{{ asset('userfiles/image/avata_null.jpg') }}"
+                                        src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}"
                                         alt="Default Avatar">
                                     @endif
                                     @else
@@ -273,7 +273,7 @@
                             </li> --}}
                             <li><a href="{{ url('/about') }}">Giới thiệu</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                            <li><a href="{{ url('/flash-sale') }}">Flash Sale</a></li>
+                            <li><a href="{{ url('/flash-sale') }}">Flash Sale🔥</a></li>
                             <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
                     </div>
                 </div>

@@ -198,6 +198,7 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
         ->middleware('checkModulePermission:guest.delete');
     Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
         ->name('destroy');
+    Route::get('/exportMember', [MemberController::class, 'exportMember'])->name('exportMember');
 });
 
 // USER
@@ -390,11 +391,12 @@ Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(funct
     Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete')->middleware('checkModulePermission:banner.delete');
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
-    Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:order.index');
-    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:order.detail');
-    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:order.edit');
-    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
-    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
+    Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:xem đơn hàng');
+    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:chi tiết đơn hàng');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:sửa đơn hàng');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:xóa đơn hàng');
+    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:xuất đơn hàng');
+    Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
