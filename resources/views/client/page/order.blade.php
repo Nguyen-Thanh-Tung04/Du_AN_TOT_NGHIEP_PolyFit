@@ -36,8 +36,7 @@
                             <div class="alert alert-danger">
                                 Đơn hàng đã bị hủy.
                             </div>
-                        @else
-                            <div>Dự kiến giao đến bạn ngày {{ $order->estimated_delivery_date }}</div>
+                       
                         @endif
                     </div>
                 </div>
@@ -47,19 +46,19 @@
                     <div class="ec-progress-track">
                         <ul id="ec-progressbar">
                             <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_1.png') }}" alt="track_order"></span><span
+                                        src="{{ asset('theme/client/assetss/images/icons/track_1.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Chờ xác nhận</span></li>
                             <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_2.png') }}" alt="track_order"></span><span
+                                        src="{{ asset('theme/client/assetss/images/icons/track_2.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận</span></li>
                             <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_3.png') }}" alt="track_order"></span><span
+                                        src="{{ asset('theme/client/assetss/images/icons/track_3.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
                             <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_4.png') }}" alt="track_order"></span><span
+                                        src="{{ asset('theme/client/assetss/images/icons/track_4.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đang vận chuyển <br> </span></li>
                             <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assets/images/icons/track_5.png') }}" alt="track_order"></span><span
+                                        src="{{ asset('theme/client/assetss/images/icons/track_5.png') }}" alt="track_order"></span><span
                                     class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
                         </ul>
                     </div>
@@ -68,15 +67,14 @@
                     <form id="cancelOrderForm" action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
                         @csrf
                         @method('PUT')
-                        @if ($order->status === \App\Models\Order::STATUS_CHO_XAC_NHAN) 
+                        @if ($order->status === \App\Models\Order::STATUS_CHO_XAC_NHAN)
                             <input type="hidden" name="huy_don_hang" value="1">
                             <button type="button" id="cancelOrderButton" class="custom-btn danger-btn">
                                 <i class="fas fa-times-circle"></i> Hủy đơn hàng
                             </button>
-                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN) 
+                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN)
                             <input type="hidden" name="da_giao_hang" value="1">
-                            <button type="submit" class="custom-btn success-btn"
-                                onclick="return confirm('Xác nhận đã nhận hàng?')">
+                            <button type="button" id="confirmReceivedButton" class="custom-btn success-btn">
                                 <i class="fas fa-check-circle"></i> Đã nhận hàng
                             </button>
                         @endif
@@ -219,6 +217,29 @@
 </section>
 @section('scripts')
 <script>
+      document.getElementById('confirmReceivedButton').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Xác nhận nhận hàng',
+            text: "Bạn có chắc chắn đã nhận hàng?",
+            icon: 'question',  // Icon hỏi
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hiển thị thông báo thành công với dấu kiểm (chữ "V")
+                Swal.fire({
+                    icon: 'success',  // Dấu kiểm (V)
+                    title: 'Đã nhận hàng!',
+                    text: 'Cảm ơn bạn đã xác nhận.',
+                    confirmButtonText: 'Đóng'
+                }).then(() => {
+                    document.getElementById('cancelOrderForm').submit();  // Submit form sau khi xác nhận
+                });
+            }
+        });
+    });
     document.getElementById('cancelOrderButton').addEventListener('click', function() {
         Swal.fire({
             title: 'Lý do hủy đơn hàng',

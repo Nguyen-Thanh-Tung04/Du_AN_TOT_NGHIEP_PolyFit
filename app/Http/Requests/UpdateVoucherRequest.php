@@ -24,7 +24,6 @@ class UpdateVoucherRequest extends FormRequest
             'quantity' => 'required|integer|min:1',
             'start_time' => 'required|date|after_or_equal:today',
             'end_time' => 'required|date|after:start_time',
-            'status' => 'required|boolean',
         ];
     }
     
@@ -35,12 +34,10 @@ class UpdateVoucherRequest extends FormRequest
             $minOrderValue = $this->input('min_order_value');
             $maxOrderValue = $this->input('max_order_value');
 
-            // Kiểm tra max_discount_value phải nhỏ hơn min_order_value
             if ($maxDiscountValue !== null && $minOrderValue !== null && $maxDiscountValue >= $minOrderValue) {
                 $validator->errors()->add('max_discount_value', 'Giá trị giảm giá tối đa phải nhỏ hơn giá trị đơn hàng tối thiểu.');
             }
 
-            // Kiểm tra max_discount_value phải nhỏ hơn max_order_value
             if ($maxDiscountValue !== null && $maxOrderValue !== null && $maxDiscountValue >= $maxOrderValue) {
                 $validator->errors()->add('max_discount_value', 'Giá trị giảm giá tối đa phải nhỏ hơn giá trị đơn hàng tối đa.');
             }
@@ -92,8 +89,7 @@ class UpdateVoucherRequest extends FormRequest
             'end_time.date' => 'Thời gian kết thúc phải là một ngày hợp lệ.',
             'end_time.after' => 'Thời gian kết thúc phải sau thời gian bắt đầu.',
 
-            'status.required' => 'Trạng thái là bắt buộc.',
-            'status.boolean' => 'Trạng thái phải là đúng hoặc sai.',
+       
         ];
     }
 }

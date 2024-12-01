@@ -25,14 +25,15 @@ class Order extends Model
         self::STATUS_DANG_VAN_CHUYEN => 'Đang vận chuyển',
         self::STATUS_DA_GIAO_HANG => 'Đã giao hàng',
         self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
-        // self::STATUS_CHO_XAC_NHAN_HUY => 'Chờ xác nhận hủy',
     ];
     const PAYMENT_METHOD_COD = 1;
     const PAYMENT_METHOD_ONLINE = 2;
 
     const PAYMENT_METHOD_NAMES = [
         self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
-        self::PAYMENT_METHOD_ONLINE => 'Thanh toán trực tuyến',
+        self::PAYMENT_METHOD_ONLINE => 'Thanh toán VNPAY',
+        self::PAYMENT_METHOD_ONLINE => 'Thanh toán MOMO',
+
     ];
 
     protected $fillable = [

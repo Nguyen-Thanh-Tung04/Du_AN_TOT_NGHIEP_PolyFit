@@ -19,27 +19,37 @@ class OrderController extends Controller
     public function index()
     {
         $query = Order::query();
-        
+
         if ($status = request('status')) {
             $query->where('status', $status);
         }
-    
+
         if ($keyword = request('keyword')) {
             $query->where(function ($q) use ($keyword) {
                 $q->where('full_name', 'LIKE', '%' . $keyword . '%')
-                  ->orWhere('code', 'LIKE', '%' . $keyword . '%')
-                  ->orWhere('phone', 'LIKE', '%' . $keyword . '%');
+                    ->orWhere('code', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('phone', 'LIKE', '%' . $keyword . '%');
             });
         }
-    
-        $listOrder = $query->orderByDesc('id')->paginate(request('perpage', 20)); // Pagination with perpage
+
+        if ($startDate = request('start_date')) {
+            $query->whereDate('created_at', '>=', $startDate);
+        }
+
+        if ($endDate = request('end_date')) {
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        $listOrder = $query->orderByDesc('id')->paginate(request('perpage', 20));
+
         $orderStatuses = Order::STATUS_NAMES;
         $cancelledOrder = Order::STATUS_HUY_DON_HANG;
         $delivered = Order::STATUS_DA_GIAO_HANG;
-    
+
         return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder', 'delivered'));
     }
-    
+
+
 
 
 
@@ -131,10 +141,13 @@ class OrderController extends Controller
         }
         return redirect()->back()->with('error', 'Không thể xóa được đơn hàng');
     }
-    public function exportOrders()
+    public function exportOrders(Request $request)
     {
-        
-        return Excel::download(new OrdersExport, 'ListOrder.xlsx');
+        $status = $request->input('status');
+        $keyword = $request->input('keyword');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        return Excel::download(new OrdersExport($status, $keyword, $startDate, $endDate), 'ListOrder.xlsx');
     }
     public function exportPDF($id) 
     {

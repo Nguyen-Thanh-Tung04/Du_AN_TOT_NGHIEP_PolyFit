@@ -31,20 +31,56 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Tiêu đề
+                                    <label class="control-label text-left">Tiêu đề chính
                                         <span class="text-danger">(*)</span></label>
                                     <input
                                         type="text"
-                                        name="title"
+                                        name="title_main"
                                         value="{{ old('code') }}"
                                         class="form-control"
                                         placeholder="Nhập tiêu đề"
                                     >
-                                    @error('title')
+                                    @error('title_main')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Tiêu đề phụ
+                                        <span class="text-danger">(*)</span></label>
+                                    <input
+                                        type="text"
+                                        name="title_sub"
+                                        value="{{ old('code') }}"
+                                        class="form-control"
+                                        placeholder="Nhập tiêu đề"
+                                    >
+                                    @error('title_sub')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
+                                    <label class="control-label text-left">Nội dung
+                                        <span class="text-danger">(*)</span></label>
+                                    <input
+                                        type="text"
+                                        name="content"
+                                        value="{{ old('code') }}"
+                                        class="form-control"
+                                        placeholder="Nhập tiêu đề"
+                                    >
+                                    @error('content')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Hình ảnh
@@ -54,13 +90,14 @@
                                         name="image"
                                         value="{{ old('image') }}"
                                         class="form-control"
-                                        placeholder="Nhập tên voucher"
+                                        placeholder=""
                                     >
                                     @error('image')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-6 mb-15">
@@ -74,7 +111,7 @@
                                         class="form-control"
                                         placeholder="Nhập link liên kết(Không bắt buộc)"
                                     >
-                                    @error('value')
+                                    @error('link')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -86,13 +123,7 @@
                                             <option value="1" selected>Kích hoạt</option>
                                             <option value="0">Ẩn</option>
                                         </select>
-                                    <input
-                                        type="url"
-                                        name="is_active"
-                                        value="{{ old('link') }}"
-                                        class="form-control"
-                                        placeholder=""
-                                    >
+
                                     @error('value')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror

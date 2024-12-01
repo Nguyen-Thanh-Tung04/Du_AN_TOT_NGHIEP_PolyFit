@@ -27,7 +27,7 @@
 <!-- Ec breadcrumb end -->
 
 <!-- Ec About Us page -->
-<section class="ec-page-content section-space-p">
+<section class="section-space-p">
     <div class="container">
         <form id="checkoutForm" action="{{ route('checkout.show') }}" method="POST">
             @csrf

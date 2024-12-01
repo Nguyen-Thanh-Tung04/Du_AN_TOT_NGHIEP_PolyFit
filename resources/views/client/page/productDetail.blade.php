@@ -203,7 +203,7 @@
 
                                         </div>
                                         <div class="ec-single-cart ">
-                                            <button id="buyNow" class="btn btn-buy">Mua ngay</button>
+                                            <button id="buyNow" class="btn" style="background-color: #007bff; color: white; border: 1px solid #007bff; padding: 10px 20px; font-size: 16px; ">Mua ngay</button>
                                         </div>
                                     </div>
                                     <div class="ec-single-social">

@@ -84,10 +84,9 @@
                             </div>
                             <div class="col-lg-6 mb-15" id="max_discount_value_container">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá trị tối đa</label>
+                                    <label class="control-label text-left">Giá trị tối đa<span class="text-danger">(*)</span></label>
                                     <input
                                         type="number"
-                                        step="0.01"
                                         name="max_discount_value"
                                         value="{{ old('max_discount_value') }}"
                                         class="form-control"
@@ -103,11 +102,10 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá trị đơn hàng tối thiểu
+                                    <label class="control-label text-left">Giá trị đơn hàng tối thiểu<span class="text-danger">(*)</span>
                                     </label>
                                     <input
                                         type="number"
-                                        step="0.01"
                                         name="min_order_value"
                                         value="{{ old('min_order_value') }}"
                                         class="form-control"
@@ -120,11 +118,10 @@
                             </div>
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
-                                    <label class="control-label text-left">Giá trị đơn hàng tối đa
+                                    <label class="control-label text-left">Giá trị đơn hàng tối đa<span class="text-danger">(*)</span>
                                     </label>
                                     <input
                                         type="number"
-                                        step="0.01"
                                         name="max_order_value"
                                         value="{{ old('max_order_value') }}"
                                         class="form-control"
@@ -196,21 +193,6 @@
                                         class="form-control"
                                     >
                                     @error('end_time')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 mb-15">
-                                <div class="form-row">
-                                    <label class="control-label text-left">Trạng thái
-                                        <span class="text-danger">(*)</span></label>
-                                    <select name="status" class="form-control">
-                                        <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Hoạt động</option>
-                                        <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Không hoạt động</option>
-                                    </select>
-                                    @error('status')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
