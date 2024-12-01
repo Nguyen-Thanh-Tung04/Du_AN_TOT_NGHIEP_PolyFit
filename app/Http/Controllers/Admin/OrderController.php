@@ -159,7 +159,7 @@ class OrderController extends Controller
         $pdf->loadHTML($this->print_order_convert($id));
     
         // Trả về file PDF để tải về
-        return $pdf->stream();
+        return $pdf->download();
     }
     
     public function print_order_convert($id)

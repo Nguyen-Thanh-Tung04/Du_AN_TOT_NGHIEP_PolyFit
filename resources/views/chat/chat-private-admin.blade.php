@@ -26,7 +26,7 @@
                                         @if(isset($item->user_image))
                                         <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                         @else
-                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                        <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
                                         @endif
                                         <!-- <span class="online_icon"></span> -->
                                     </div>
@@ -65,7 +65,7 @@
                                 @if(isset($user->image))
                                 <img src="{{ $checkUrlImg }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
                                 @else
-                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
+                                <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
                                 @endif
                                 <span class="online_icon2 online_icon" style="left: 50px; top: 51px; display: none;"></span>
                             </div>
@@ -100,7 +100,7 @@
                                 </span>
                                 @else
                                 <span class="chat-img1 pull-right">
-                                    <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                    <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
                                 </span>
                                 @endif
 
@@ -118,7 +118,7 @@
                                     <img src="{{ Storage::url($item->image_user_send) }}" alt="User Avatar" class="img-circle">
                                     @else
                                     <span class="chat-img1 pull-right">
-                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                        <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
                                     </span>
                                     @endif
 
@@ -345,12 +345,12 @@
             var card_header_msg_head = document.querySelector('.msg_head')
             let image_url = event.idUserSend?.image ?
                 event.idUserSend.image :
-                "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
 
             // Kiểm tra và xử lý đường dẫn ảnh
             let image = image_url.includes('http') ?
                 image_url :
-                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                '/storage/' + event.idUserSend?.image || "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -399,12 +399,12 @@
             var ui = ''
             let image_url = event.idUserSend?.image ?
                 event.idUserSend.image :
-                "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
 
             // Kiểm tra và xử lý đường dẫn ảnh
             let image = image_url.includes('http') ?
                 image_url :
-                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                '/storage/' + event.idUserSend?.image || "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
                    <div class="d-flex justify-content-end mb-4">
@@ -464,7 +464,7 @@
                         if (user.user_image) {
                             image = 'storage/' + user.user_image
                         } else {
-                            image = 'theme/client/assets/images/whatsapp/admin.jpg'
+                            image = 'userfiles\thumb\Images\avata_null.jpg'
                         }
                         ui += `
                         <li class="left clearfix">
