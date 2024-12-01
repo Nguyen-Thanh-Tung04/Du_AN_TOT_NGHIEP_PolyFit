@@ -17,10 +17,15 @@
         <h2>Chi tiết đơn hàng</h2>
         <ol class="breadcrumb" style="margin-bottom: 10px;">
             <li>
-                <a href="{{ route('dashboard.index') }}">Dashboard</a>
+                <a href="{{ route('dashboard.index') }}">Trang chủ</a>
             </li>
             <li class="active"><strong>Chi tiết đơn hàng</strong></li>
         </ol>
+    </div>
+    <div class="col-lg-4">
+        <div class="title-action">
+            <a href="{{ route('orders.exportPDF', ['id' => $donHang->id]) }}" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> In hóa đơn </a>
+        </div>
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -52,6 +57,7 @@
                                         <li>Trạng thái: <b>{{ $trangThaiDonHang[$donHang->status] ?? 'Trạng thái không xác định' }}</b></li>
                                         <li>Phương thức thanh toán: <b>{{ $trangThaiThanhToan[$donHang->payment_method] ?? 'Phương thức không xác định' }}</b></li>
                                         <li>Tiền ship: <b>{{ number_format($donHang->shipping_cost, 0, '', '.') }} đ</b></li>
+                                        <li>Giảm giá: <b>{{ number_format($donHang->discount_amount, 0, '', '.') }} đ</b></li>
                                         <li>Tổng tiền: <b class="fs-5 text-danger">{{ number_format($donHang->total_price, 0, '', '.') }} đ</b></li>
                                     </ul>
                                 </td>

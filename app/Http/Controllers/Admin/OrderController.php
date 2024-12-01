@@ -9,6 +9,7 @@ use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\PDF;
 
 class OrderController extends Controller
 {
@@ -135,4 +136,29 @@ class OrderController extends Controller
         
         return Excel::download(new OrdersExport, 'ListOrder.xlsx');
     }
+    public function exportPDF($id) 
+    {
+        // Tạo đối tượng DomPDF
+        $pdf = \App::make('dompdf.wrapper');
+        
+    
+        // Load nội dung HTML từ phương thức print_order_convert
+        $pdf->loadHTML($this->print_order_convert($id));
+    
+        // Trả về file PDF để tải về
+        return $pdf->stream();
+    }
+    
+    public function print_order_convert($id)
+    {
+        // Trả về HTML hợp lệ để tạo file PDF
+        $order = Order::with(['user', 'orderItems.variant.product', 'statusHistories.user',])->findOrFail($id);
+
+        $statusOrder = Order::STATUS_NAMES;
+        $statusPayment = Order::PAYMENT_METHOD_NAMES;
+        $order->statusHistories = $order->statusHistories()->orderBy('changed_at', 'desc')->get();
+        // dd($order, $statusOrder, $statusPayment);
+        return view('admin.orders.invoice', compact('order', 'statusOrder', 'statusPayment'));
+    }
+
 }

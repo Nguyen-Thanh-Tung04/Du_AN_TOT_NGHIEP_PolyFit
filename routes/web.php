@@ -384,6 +384,7 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:sửa đơn hàng');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:xóa đơn hàng');
     Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:xuất đơn hàng');
+    Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
