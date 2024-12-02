@@ -111,7 +111,7 @@
                 @else
                 @if($flashSale)
                 <div class="text-center p-5">
-                    <h4>
+                    <h4 class="text-black">
                         Hiện tại không có sản phẩm trong chương trình flash sale
                     </h4>
 

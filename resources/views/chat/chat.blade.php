@@ -26,7 +26,8 @@
                                         @if(isset($item->user_image))
                                         <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                         @else
-                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                        <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}"
+                                        class="img-circle" alt="Profile image">
                                         @endif
                                         <!-- <span class="online_icon"></span> -->
                                     </div>
@@ -59,7 +60,7 @@
                                 @if(isset($user->image))
                                 <img src="{{ $user->image }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
                                 @else
-                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
+                                <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
                                 @endif
                                 <span class="online_icon2 online_icon" style="left: 50px; top: 51px; display: block;"></span>
                             </div>
@@ -196,7 +197,7 @@
                         if (user.user_image) {
                             image = 'storage/' + user.user_image
                         } else {
-                            image = 'theme/client/assets/images/whatsapp/admin.jpg'
+                            image = 'userfiles\thumb\Images\avata_null.jpg'
                         }
                         ui += `
                         <li class="left clearfix">

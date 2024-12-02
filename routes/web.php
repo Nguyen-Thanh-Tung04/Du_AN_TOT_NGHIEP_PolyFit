@@ -137,7 +137,6 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
-    // Route::post('/chat-private/search',[ChatController::class,'search']);
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
     Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
     Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
