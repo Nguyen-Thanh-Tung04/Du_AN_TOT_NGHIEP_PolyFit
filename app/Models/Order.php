@@ -24,7 +24,7 @@ class Order extends Model
         self::STATUS_DANG_CHUAN_BI => 'Đang chuẩn bị',
         self::STATUS_DANG_VAN_CHUYEN => 'Đang vận chuyển',
         self::STATUS_GIAO_HANG_THANH_CONG => 'Giao hàng thành công',
-        self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
+        self::STATUS_HUY_DON_HANG => 'Hủy đơn hàng',
         self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
     const PAYMENT_METHOD_COD = 1;

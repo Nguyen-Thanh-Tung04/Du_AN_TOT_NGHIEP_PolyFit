@@ -135,7 +135,7 @@
                                                 @foreach ($orderStatuses as $key => $value)
                                                     <option value="{{ $key }}" 
                                                         {{ $order->status == $key ? 'selected' : '' }}
-                                                        {{ ($key == $cancelledOrder || $key == $completedOrder) ? 'disabled' : '' }}>
+                                                        {{ ($key == $completedOrder) ? 'disabled' : '' }}>
                                                         {{ $value }}
                                                     </option>
                                                 @endforeach

@@ -9,7 +9,7 @@ use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Jobs\AutoCompleteOrderStatus; // Thêm dòng này
+use App\Jobs\AutoCompleteOrderStatus;
 
 class OrderController extends Controller
 {
@@ -105,20 +105,18 @@ class OrderController extends Controller
         $newStatus = $request->input('status');
         $statuses = array_keys(Order::STATUS_NAMES);
 
+        // Kiểm tra nếu đơn hàng đã bị hủy
         if ($currentStatus === Order::STATUS_HUY_DON_HANG) {
             return redirect()->route('orders.index')->with('error', 'Đơn hàng đã bị hủy không thể thay đổi trạng thái.');
         }
-
-        // Lấy vị trí của trạng thái hiện tại và trạng thái mới trong mảng trạng thái
-        $currentIndex = array_search($currentStatus, $statuses);
-        $newIndex = array_search($newStatus, $statuses);
-
-        // Kiểm tra trạng thái mới có phải trạng thái liền kề hay không
-        if ($newIndex !== $currentIndex + 1) {
-            return redirect()->route('orders.index')->with('error', 'Chuyển trạng thái không hợp lệ.');
+        if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
+            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái');
         }
+        if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
+            return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
+        }
+       
 
-        // Tạo lịch sử trạng thái
         OrderStatusHistory::create([
             'order_id' => $order->id,
             'previous_status' => $order->status,
@@ -128,17 +126,20 @@ class OrderController extends Controller
             'changed_at' => now(),
         ]);
 
-        // Cập nhật trạng thái mới
         $order->status = $newStatus;
         $order->save();
 
-        // Gọi job tự động nếu trạng thái là "Giao hàng thành công"
+        // Nếu trạng thái giao hàng thành công, gửi yêu cầu hoàn thành
         if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
             AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(10));
         }
 
         return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
+
+
+
+
 
 
 
