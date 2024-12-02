@@ -631,11 +631,19 @@ class CheckoutController
                         $flashSalePrice = $flashSaleProduct->flash_price;
                     }
 
+                    // Kiểm tra nếu sản phẩm hết hàng (số lượng <= 0)
+                    if ($flashSaleQty == 0 && $normalQty == 0) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                        ], 400);
+                    }
+
                     $totalAmount += ($flashSalePrice * $flashSaleQty) + ($normalPrice * $normalQty);
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Sản phẩm không đủ số lượng: ' . $variant['product_variant_id'],
+                        'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
                     ], 400);
                 }
             }
@@ -730,7 +738,7 @@ class CheckoutController
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Sản phẩm không đủ số lượng: ' . $variant['product_variant_id'],
+                        'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
                     ], 400);
                 }
             }

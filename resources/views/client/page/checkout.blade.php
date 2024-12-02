@@ -39,7 +39,7 @@
                             <div class="ec-checkout-block ec-check-bill">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="ec-checkout-title">Địa chỉ nhận hàng</h3>
-                                    <a class="btn btn-secondary" style="" href="">Thêm địa chỉ mới</a>
+                                    {{-- <a class="btn btn-secondary" style="" href="">Thêm địa chỉ mới</a> --}}
                                 </div>
                                 <div class="ec-bl-block-content">
                                     {{-- <div class="ec-check-subtitle">Tùy chọn</div>
@@ -440,13 +440,9 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                for (let field in errors) {
-                                    if (errors.hasOwnProperty(field)) {
-                                        toastr.error(errors[field][0]); // Hiển thị lỗi đầu tiên cho mỗi trường
-                                    }
-                                }
+                            if (xhr.status === 400) { // Kiểm tra mã lỗi 400
+                                let message = xhr.responseJSON.message;
+                                toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
                             } else {
                                 toastr.error('Có lỗi xảy ra: ' + error);
                             }

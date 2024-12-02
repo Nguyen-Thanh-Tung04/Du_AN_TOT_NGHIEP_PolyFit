@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('variant_id')->nullable();
             $table->unsignedBigInteger('order_id');
-            $table->foreign('variant_id')->references('id')->on('variants')->onDelete('set null');
+            $table->foreign('variant_id')->references('id')->on('variants')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->double('price', 8, 2);
             $table->string('color');
