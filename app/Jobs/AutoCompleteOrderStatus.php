@@ -42,7 +42,7 @@ class AutoCompleteOrderStatus implements ShouldQueue
                     'previous_status' => $previousStatus,
                     'new_status' => Order::STATUS_HOAN_THANH,
                     'cancel_reason' => null,  
-                    'changed_by' => 'Hệ thống',  
+                    'changed_by' => null,  
                     'changed_at' => now(),  
                 ]);
             } else {

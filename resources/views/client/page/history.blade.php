@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
+<section class="ec-vendor-uploads ec-user-account section-space-p">
     <div class="container">
         <div class="row">
             <div class="ec-shop-rightside">

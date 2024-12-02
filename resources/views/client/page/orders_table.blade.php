@@ -53,7 +53,6 @@
                         }), 0, ',', '.') }} đ</strong>
                     </div>
                     <div class="order-actions">
-                        <a href="{{ route('order.history.show', $order->id) }}" class="text-danger">Xem chi tiết</a>
                         @if($order->status_name == 'Hoàn thành' && !$order->has_review)
                             <button type="button" class="btn btn-primary btn-sm open-review-modal"
                                 data-order-id="{{ $order->id }}" 
@@ -71,10 +70,21 @@
                             </button>
                         @elseif($order->status_name == 'Hoàn thành' && $order->has_review)
                             <button type="button" class="btn btn-secondary btn-sm open-view-review-modal"
-                                data-order-id="{{ $order->id }}">
+                                data-order-id="{{ $order->id }}"
+                                data-products="{{ json_encode($order->orderItems->map(function($item) {
+                                    return [
+                                        'id' => $item->variant->product->id,
+                                        'name' => $item->variant->product->name,
+                                        'image' => $item->image,
+                                        'color' => $item->color,
+                                        'size' => $item->size,
+                                    ];
+                                })) }}"
+                                >
                                 Xem đánh giá
                             </button>
                         @endif
+                        <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary text-white">Xem chi tiết</a>
                     </div>
                 </div>
             </div>

@@ -56,7 +56,7 @@
                             @php
                             $perpage = request('perpage') ?: old('perpage');
                             @endphp
-                            <div class="perpage">
+                            {{-- <div class="perpage">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <select name="perpage" class="form-control input-control input-sm perpage filter mr-10">
                                         @for($i = 20; $i <= 200; $i+=20)
@@ -64,7 +64,7 @@
                                         @endfor
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="action">
                                 <div class="uk-flex uk-flex-middle">
                                     <div class="uk-flex uk-flex-middle mr-10 ml-10">

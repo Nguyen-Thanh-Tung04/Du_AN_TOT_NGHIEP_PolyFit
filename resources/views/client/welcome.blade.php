@@ -150,9 +150,9 @@
                                             @endif
 
                                         </div>
-                                        <div class="ec-link-btn">
+                                        {{-- <div class="ec-link-btn">
                                             <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
                                 </div>
@@ -427,9 +427,9 @@
                                             @endif
 
                                         </div>
-                                        <div class="ec-link-btn">
+                                        {{-- <div class="ec-link-btn">
                                             <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
                                 </div>
