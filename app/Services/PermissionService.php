@@ -36,6 +36,7 @@ class PermissionService
         try {
             $payloadPermission = $request->only([
                 'name',
+                'canonical',
             ]);
             $permission = $this->permissionRepository->create($payloadPermission);
             DB::commit();
@@ -55,6 +56,7 @@ class PermissionService
        
             $payloadPermission = $request->only([
                 'name',
+                'canonical',
             ]);
             $flagUpdatePermission = $this->permissionRepository->update($id, $payloadPermission);
             DB::commit();

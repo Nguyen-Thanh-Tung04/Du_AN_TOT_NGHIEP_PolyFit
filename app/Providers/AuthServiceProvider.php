@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('modules', function($user, $permissionName){
             if($user->publish == 2) return false;
             $permission = $user->user_catalogues->permissions;
-            if ($permission->contains('name', $permissionName)) {
+            if ($permission->contains('canonical', $permissionName)) {
                 return true;
             }
             return false;

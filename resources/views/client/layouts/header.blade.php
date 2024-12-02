@@ -273,7 +273,7 @@
                             </li> --}}
                             <li><a href="{{ url('/about') }}">Giới thiệu</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                            <li><a href="{{ url('/flash-sale') }}">Flash Sale🔥</a></li>
+                            <li><a href="{{ url('/flash-sale') }}">Flash Sale</a></li>
                             <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
                     </div>
                 </div>
