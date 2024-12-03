@@ -50,37 +50,45 @@
                         }), 0, ',', '.') }} đ</strong>
                     </div>
                     <div class="order-actions">
-                        @if($order->status_name == 'Hoàn thành' && !$order->has_review)
-                            <button type="button" class="btn btn-primary btn-sm open-review-modal"
-                                data-order-id="{{ $order->id }}" 
-                                data-products="{{ json_encode($order->orderItems->map(function($item) {
-                                    return [
-                                        'id' => $item->id,
-                                        'name' => $item->name,
-                                        'image' => $item->image,
-                                        'color' => $item->color,
-                                        'size' => $item->size,
-                                    ];
-                                })) }}">
-
-                                Viết đánh giá
-                            </button>
-                        @elseif($order->status_name == 'Hoàn thành' && $order->has_review)
-                            <button type="button" class="btn btn-secondary btn-sm open-view-review-modal"
-                                data-order-id="{{ $order->id }}"
-                                data-products="{{ json_encode($order->orderItems->map(function($item) {
-                                    return [
-                                        'id' => $item->id,
-                                        'name' => $item->name,
-                                        'image' => $item->image,
-                                        'color' => $item->color,
-                                        'size' => $item->size,
-                                    ];
-                                })) }}"
-                                >
-                                Xem đánh giá
-                            </button>
-                        @endif
+                            @php
+                                $hasVariant = $order->orderItems->contains(function($item) {
+                                    return $item->variant == null;
+                                });
+                                if ($hasVariant && $order->status_name == 'Hoàn thành'){
+                                    $classBtn = 'btn btn-secondary btn-sm open-view-review-modal';
+                                }elseif(!$hasVariant && $order->status_name == 'Hoàn thành' && $order->has_review){
+                                    $classBtn = 'btn btn-secondary btn-sm open-view-review-modal';
+                                }elseif(!$hasVariant && $order->status_name == 'Hoàn thành' && !$order->has_review){
+                                    $classBtn = 'btn btn-primary btn-sm open-review-modal';
+                                }
+                            @endphp
+                            @if ($order->status_name == 'Hoàn thành')
+                                <button type="button" class="<?= $classBtn ?>"
+                                    data-order-id="{{ $order->id }}" 
+                                    data-products="{{ json_encode($order->orderItems->map(function($item) {
+                                        return [
+                                            'id' => $item->id,
+                                            'name' => $item->name,
+                                            'image' => $item->image,
+                                            'color' => $item->color,
+                                            'size' => $item->size,
+                                        ];
+                                    })) }}">
+                                    @if ($hasVariant && $order->status_name == 'Hoàn thành')
+                                        Xem đánh giá
+                                    @elseif(!$hasVariant && $order->status_name == 'Hoàn thành' && $order->has_review)
+                                        Xem đánh giá
+                                    @elseif(!$hasVariant && $order->status_name == 'Hoàn thành' && !$order->has_review)
+                                        Viết đánh giá
+                                    @endif
+                                        {{-- @if ($order->status_name == 'Hoàn thành' && !$order->has_review)
+                                        Viết đánh giá
+                                        @elseif ($order->status_name == 'Hoàn thành' && $order->has_review)
+                                        Xem đánh giá
+                                        @endif
+                                    @endif --}}
+                                </button>
+                            @endif
                         <a href="{{ route('order.history.show', $order->id) }}" class="btn btn-primary text-white">Xem chi tiết</a>
                     </div>
                 </div>
