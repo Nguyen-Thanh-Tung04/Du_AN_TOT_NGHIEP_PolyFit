@@ -109,14 +109,19 @@ class OrderController extends Controller
         if ($currentStatus === Order::STATUS_HUY_DON_HANG) {
             return redirect()->route('orders.index')->with('error', 'Đơn hàng đã bị hủy không thể thay đổi trạng thái.');
         }
+
+        $currentIndex = array_search($currentStatus, $statuses);
+        $newIndex = array_search($newStatus, $statuses);
+
+        if ($newIndex === false || abs($currentIndex - $newIndex) !== 1) {
+            return redirect()->route('orders.index')->with('error', 'Chỉ có thể chuyển sang trạng thái liền kề.');
+        }
+
         if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
             return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái');
         }
-        if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
-            return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
-        }
-       
 
+        // Lưu lại lịch sử trạng thái
         OrderStatusHistory::create([
             'order_id' => $order->id,
             'previous_status' => $order->status,
@@ -126,6 +131,7 @@ class OrderController extends Controller
             'changed_at' => now(),
         ]);
 
+        // Cập nhật trạng thái đơn hàng
         $order->status = $newStatus;
         $order->save();
 
@@ -136,6 +142,7 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
+
 
 
 

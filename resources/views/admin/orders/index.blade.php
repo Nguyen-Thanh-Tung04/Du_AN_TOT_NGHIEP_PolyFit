@@ -133,11 +133,11 @@
                                             <select name="status" class="form-control mr-10"
                                                 data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
                                                 @foreach ($orderStatuses as $key => $value)
-                                                    <option value="{{ $key }}" 
-                                                        {{ $order->status == $key ? 'selected' : '' }}
-                                                        {{ ($key == $completedOrder) ? 'disabled' : '' }}>
-                                                        {{ $value }}
-                                                    </option>
+                                                <option value="{{ $key }}" 
+                                                {{ $order->status == $key ? 'selected' : '' }}
+                                                {{ ($key == $completedOrder || $key == $cancelledOrder) ? 'disabled' : '' }}>
+                                                {{ $value }}
+                                            </option>
                                                 @endforeach
                                             </select>
                                         </form>
