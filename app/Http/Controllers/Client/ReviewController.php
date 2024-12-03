@@ -66,7 +66,7 @@ class ReviewController extends Controller
     public function getReviews($orderId)
     {
         $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
-        $reviews = Review::whereIn('product_id', $order->orderItems->pluck('variant.product_id'))
+        $reviews = Review::where('order_id', $orderId)
             ->with('user')
             ->get();
 

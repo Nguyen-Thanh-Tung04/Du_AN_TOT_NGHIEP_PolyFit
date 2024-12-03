@@ -33,123 +33,11 @@
     </div>
 </div>
 
-<section class="section ec-product-tab section-space-p .bg-white" id="collection">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="section-title">
-                    <h2 class="ec-bg-title">Sản phẩm bán chạy</h2>
-                    <h2 class="ec-title">Sản phẩm bán chạy</h2>
-                    <!-- <p class="sub-title">Browse The Collection of Top Products</p> -->
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="tab-content">
-                    <!-- 1st Product tab start -->
-                    <div class="tab-pane fade show active" id="tab-pro-for-all">
-                        <div class="row">
-                            @foreach ($bestSellingProducts as $index => $product) <!-- Dùng $index để tính toán sự thay đổi width -->
-                            @php
-                                $gallery = json_decode($product->gallery);
-                                // Tính tổng số lượng và số lượng còn lại
-                                $progressWidth = $product->progress; // Sử dụng giá trị progress đã tính từ controller
-
-                            @endphp
-                            <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
-                                <!-- START single card -->
-                                <div class="ec-product-tp">
-                                    <div class="ec-product-image">
-                                        <a href="{{ route('client.product.show', $product->id) }}">
-                                            <img src="{{ !empty($gallery) ? $gallery[0] : '' }}" class="img-center" alt="">
-                                            @if($product->variants->sum('quantity') === 0)
-                                            <div class="out-of-stock-label">Hết hàng</div>
-                                            @endif
-                                        </a>
-                                    </div>
-                                    <div class="ec-product-body">
-                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
-                                        
-                                        <ul class="ec-rating">
-                                            @php
-                                            $averageScore = $product->averageScore();
-                                            @endphp
-
-                                            @if ($averageScore)
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <=$averageScore)
-                                                <li class="ecicon eci-star fill">
-                                                </li> <!-- Sao đầy -->
-                                                @else
-                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                @endif
-                                                @endfor
-                                                @else
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    @if ($i <=5)
-                                                    <li class="ecicon eci-star fill">
-                                                    </li> <!-- Sao đầy -->
-                                                    @else
-                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
-                                                    @endif
-                                                    @endfor
-                                                    @endif
-                                        </ul>
-                        
-                                        <div class="ec-price">
-                                            @if ($product->min_price)
-                                            <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->min_price, 0) }}₫
-                                            @else
-                                            {{ number_format($product->listed_price, 0) }}₫
-                                            @endif
-                                        </div>
-                        
-                                        <div class="ec-link-btn">
-                                            <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                        </div>
-                        
-                                        <!-- Progress Bar -->
-                                        <span class="textLeft mt-2">
-                                            @if ($product->variants->sum('quantity') === 0)
-                                                🔥 Cháy hết hàng
-                                            @elseif ($product->progress > 80)
-                                                🔥 Sắp cháy hàng 
-                                            @else
-                                                🔥 Đang bán chạy 
-                                                {{-- ({{ round($product->progress, 2) }}%)  --}}
-                                            @endif
-                                        </span>
-                                        
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                                 id="progressBar" 
-                                                 role="progressbar" 
-                                                 style="width: {{ $product->variants->sum('quantity') === 0 ? '100%' : $progressWidth . '%' }}" 
-                                                 aria-valuenow="{{ $product->variants->sum('quantity') === 0 ? 100 : $progressWidth }}" 
-                                                 aria-valuemin="0" 
-                                                 aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                <!-- END single card -->
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <section class="section ec-about-sec section-space-p mt-4">
     <div class="container">
         <div class="row">
             <div class="section-title d-none">
-                <h2 class="ec-title">About</h2>
+                <h2 class="ec-title">Giới thiệu</h2>
             </div>
             <div class="col-lg-6">
                 <div class="ec-about">
@@ -162,7 +50,7 @@
                     <h5>Khám phá những mẫu quần áo thời trang phù hợp với xu hướng mới nhất.</h5>
                     <p>Chúng tôi cung cấp những thiết kế độc đáo, chất lượng cao dành cho bạn. Từng sản phẩm đều được chọn lọc kỹ càng để mang lại sự thoải mái và tự tin trong mọi hoạt động.</p>
                     <p>Đừng bỏ lỡ cơ hội sở hữu những bộ trang phục hiện đại, giúp bạn thể hiện cá tính và gu thẩm mỹ của mình.</p>
-                    <a class="btn btn-lg btn-primary" href="shop-banner-left-sidebar-col-3.html">Mua ngay</a>
+                    <a class="btn btn-lg btn-primary" href="{{ route('home.shop') }}">Mua ngay</a>
 
                 </div>
             </div>
@@ -188,6 +76,114 @@
                 </div>
             </div>
             @endforeach
+        </div>
+    </div>
+</section>
+<section class="section ec-product-tab section-space-p .bg-white" id="collection">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="section-title">
+                    <h2 class="ec-bg-title">Sản phẩm bán chạy</h2>
+                    <h2 class="ec-title">Sản phẩm bán chạy</h2>
+                    <!-- <p class="sub-title">Browse The Collection of Top Products</p> -->
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="tab-content">
+                    <!-- 1st Product tab start -->
+                    <div class="tab-pane fade show active" id="tab-pro-for-all">
+                        <div class="row">
+                            @foreach ($bestSellingProducts as $index => $product) <!-- Dùng $index để tính toán sự thay đổi width -->
+                            @php
+                            $gallery = json_decode($product->gallery);
+                            // Tính tổng số lượng và số lượng còn lại
+                            $progressWidth = $product->progress; // Sử dụng giá trị progress đã tính từ controller
+
+                            @endphp
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                                <!-- START single card -->
+                                <div class="ec-product-tp">
+                                    <div class="ec-product-image">
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img src="{{ !empty($gallery) ? $gallery[0] : '' }}" class="img-center" alt="">
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
+                                        </a>
+                                    </div>
+                                    <div class="ec-product-body">
+                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+
+                                        <ul class="ec-rating">
+                                            @php
+                                            $averageScore = $product->averageScore();
+                                            @endphp
+
+                                            @if ($averageScore)
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <=$averageScore)
+                                                <li class="ecicon eci-star fill">
+                                                </li> <!-- Sao đầy -->
+                                                @else
+                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                                @endfor
+                                                @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <=5)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                    @endfor
+                                                    @endif
+                                        </ul>
+
+                                        <div class="ec-price">
+                                            @if ($product->min_price)
+                                            <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->min_price, 0) }}₫
+                                            @else
+                                            {{ number_format($product->listed_price, 0) }}₫
+                                            @endif
+                                        </div>
+
+                                        <!-- Progress Bar -->
+                                        <span class="textLeft mt-2">
+                                            @if ($product->variants->sum('quantity') === 0)
+                                            🔥 Cháy hết hàng
+                                            @elseif ($product->progress > 80)
+                                            🔥 Sắp cháy hàng
+                                            @else
+                                            🔥 Đang bán chạy
+                                            {{-- ({{ round($product->progress, 2) }}%) --}}
+                                            @endif
+                                        </span>
+
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                id="progressBar"
+                                                role="progressbar"
+                                                style="width: {{ $product->variants->sum('quantity') === 0 ? '100%' : $progressWidth . '%' }}"
+                                                aria-valuenow="{{ $product->variants->sum('quantity') === 0 ? 100 : $progressWidth }}"
+                                                aria-valuemin="0"
+                                                aria-valuemax="100">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- END single card -->
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -263,22 +259,22 @@
                                             @endif
 
                                         </div>
-                                        <div class="ec-link-btn">
+                                        {{-- <div class="ec-link-btn">
                                             <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                        </div>
-                                    </div>
-
+                                    </div> --}}
                                 </div>
-                                <!-- START single card -->
-                            </div>
-                            @endforeach
-                            <div class="col-sm-12 shop-all-btn"><a href="{{ route('home.shop')}}">Xem tất cả sản phẩm</a></div>
-                        </div>
-                    </div>
 
+                            </div>
+                            <!-- START single card -->
+                        </div>
+                        @endforeach
+                        <div class="col-sm-12 shop-all-btn"><a href="{{ route('home.shop')}}">Xem tất cả sản phẩm</a></div>
+                    </div>
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
 </section>
 
@@ -300,7 +296,7 @@
                                 <span class="ec-banner-discount">Giảm giá 30%</span>
                             </div> -->
                             <div class="banner-content">
-                                <span class="ec-banner-btn"><a href="#">Đặt hàng ngay</a></span>
+                                <span class="ec-banner-btn"><a href="{{ route('home.shop') }}">Đặt hàng ngay</a></span>
                             </div>
                         </div>
                     </div>
@@ -314,7 +310,7 @@
                                 <span class="ec-banner-discount">Mua 3 sản phẩm bất kỳ &amp; nhận<br> Giảm giá 20%</span>
                             </div> -->
                             <div class="banner-content">
-                                <span class="ec-banner-btn"><a href="#">Đặt hàng ngay</a></span>
+                                <span class="ec-banner-btn"><a href="{{ route('home.shop') }}">Đặt hàng ngay</a></span>
                             </div>
                         </div>
                     </div>
@@ -469,6 +465,97 @@
     </div>
 </section>
 
+
+<section class="section ec-product-tab section-space-p .bg-white" id="collection">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="section-title">
+                    <h2 class="ec-bg-title">Sản phẩm bán chạy</h2>
+                    <h2 class="ec-title">Sản phẩm bán chạy</h2>
+                    <!-- <p class="sub-title">Browse The Collection of Top Products</p> -->
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="tab-content">
+                    <!-- 1st Product tab start -->
+                    <div class="tab-pane fade show active" id="tab-pro-for-all">
+                        <div class="row">
+                            @foreach ($bestSellingProducts as $product)
+                            @php
+                            $gallery = json_decode($product->gallery);
+                            @endphp
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                                <!-- START single card -->
+                                <div class="ec-product-tp">
+                                    <div class="ec-product-image">
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img src="{{ !empty($gallery) ? $gallery[0] : '' }}" class="img-center" alt="">
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
+                                        </a>
+
+                                    </div>
+                                    <div class="ec-product-body">
+                                        <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
+
+                                        <ul class="ec-rating">
+                                            @php
+                                            $averageScore = $product->averageScore();
+                                            @endphp
+
+                                            @if ($averageScore)
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <=$averageScore)
+                                                <li class="ecicon eci-star fill">
+                                                </li> <!-- Sao đầy -->
+                                                @else
+                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                                @endfor
+                                                @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <=5)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                    @endfor
+                                                    @endif
+                                        </ul>
+                                        <div class="ec-price">
+                                            @if ($product->min_price)
+
+                                            <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->min_price, 0) }}₫
+                                            @else
+
+                                            {{ number_format($product->listed_price, 0) }}₫
+                                            @endif
+
+                                        </div>
+                                        {{-- <div class="ec-link-btn">
+                                            <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
+                                    </div> --}}
+                                </div>
+
+                            </div>
+                            <!-- START single card -->
+                        </div>
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
 
 <!-- Ec Brand Section Start -->
 <section class="section ec-services-section section-space-p" id="services">

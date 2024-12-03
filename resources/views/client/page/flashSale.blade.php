@@ -98,9 +98,9 @@
                                 <div class="ec-price">
                                     <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->flash_sale_price, 0) }}₫
                                 </div>
-                                <div class="ec-link-btn">
+                                {{-- <div class="ec-link-btn">
                                     <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                </div>
+                                </div> --}}
                             </div>
 
                         </div>

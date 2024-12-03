@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
+<section class="ec-vendor-uploads ec-user-account section-space-p">
     <div class="container">
         <div class="row">
             <div class="ec-shop-rightside">
@@ -84,7 +84,7 @@
                             <div class="tab-pane fade" id="cancelled-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $cancelledOrders])
                             </div>
-                        
+                        </div>
                         
                         
                            

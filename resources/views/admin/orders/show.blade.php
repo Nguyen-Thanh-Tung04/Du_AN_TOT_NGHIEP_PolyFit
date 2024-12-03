@@ -130,7 +130,7 @@
                                 <td>{{ $trangThaiDonHang[$history->previous_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $trangThaiDonHang[$history->new_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $history->cancel_reason ?? '-' }}</td>
-                                <td>{{ $history->user->name ?? 'N/A' }}</td>
+                                <td>{{ $history->user->name ?? 'Hệ thống' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($history->created_at)->format('d-m-Y H:i:s') }}</td>
                             </tr>
                             @endforeach
