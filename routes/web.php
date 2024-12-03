@@ -137,7 +137,6 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
-    // Route::post('/chat-private/search',[ChatController::class,'search']);
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
     Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
     Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
@@ -195,6 +194,7 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
         ->middleware('checkModulePermission:guest.delete');
     Route::delete('{id}/destroy', [MemberController::class, 'destroy'])
         ->name('destroy');
+    Route::get('/exportMember', [MemberController::class, 'exportMember'])->name('exportMember');
 });
 
 // USER
@@ -392,14 +392,14 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:order.edit');
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
     Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
+    Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
+    
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
     Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
     Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
 });
-
-
 
 
 // Products
@@ -487,9 +487,6 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
-
-
-
 
 // Route để xem đánh giá cho một đơn hàng cụ thể
 Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

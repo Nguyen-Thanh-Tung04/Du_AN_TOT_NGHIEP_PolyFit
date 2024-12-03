@@ -58,7 +58,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
+    public function province() {
+        return $this->belongsTo(Province::class, 'province_id', 'code');
+    }
+    public function district() {
+        return $this->belongsTo(District::class, 'district_id', 'code');
+    }
+    public function ward() {
+        return $this->belongsTo(Ward::class, 'ward_id', 'code');
+    }
     public function user_catalogues() {
         return $this->belongsTo(UserCatalogue::class, 'user_catalogue_id', 'id');
     }
@@ -66,4 +74,5 @@ class User extends Authenticatable
     public function orders() {
         return $this->hasMany(Order::class, 'user_id', 'id');
     }
+
 }

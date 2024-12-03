@@ -74,7 +74,35 @@
 
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
 
+    <style>
+        .ec-product-image {
+            position: relative;
+            overflow: hidden;
+        }
 
+        .ec-product-image .hover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .ec-product-image:hover .hover-image {
+            opacity: 1;
+        }
+
+        .ec-product-image .default-image {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .ec-product-image:hover .default-image {
+            opacity: 0;
+        }
+
+    </style>
 
 
 </head>

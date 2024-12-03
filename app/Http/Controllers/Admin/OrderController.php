@@ -9,6 +9,8 @@ use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\AutoCompleteOrderStatus;
+use Barryvdh\DomPDF\PDF;
 
 class OrderController extends Controller
 {
@@ -43,10 +45,11 @@ class OrderController extends Controller
 
         $orderStatuses = Order::STATUS_NAMES;
         $cancelledOrder = Order::STATUS_HUY_DON_HANG;
-        $delivered = Order::STATUS_DA_GIAO_HANG;
+        $completedOrder = Order::STATUS_HOAN_THANH;
 
-        return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder', 'delivered'));
+        return view('admin.orders.index', compact('listOrder', 'orderStatuses', 'cancelledOrder', 'completedOrder'));
     }
+
 
 
 
@@ -95,26 +98,31 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // Controller's update method
     public function update(Request $request, string $id)
     {
-        $order = Order::query()->findOrFail($id);
+        $order = Order::findOrFail($id);
         $currentStatus = $order->status;
         $newStatus = $request->input('status');
         $statuses = array_keys(Order::STATUS_NAMES);
 
-        // Kiểm tra nếu đơn hàng đã bị hủy thì không được thay đổi trạng thái
+        // Kiểm tra nếu đơn hàng đã bị hủy
         if ($currentStatus === Order::STATUS_HUY_DON_HANG) {
             return redirect()->route('orders.index')->with('error', 'Đơn hàng đã bị hủy không thể thay đổi trạng thái.');
         }
-
         if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
-            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái.');
+            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái');
         }
+        if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
+            return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
+        }
+       
+
         OrderStatusHistory::create([
             'order_id' => $order->id,
             'previous_status' => $order->status,
-            'new_status' => $request->status,
-            'cancel_reason' => $request->cancel_reason,
+            'new_status' => $newStatus,
+            'cancel_reason' => $request->cancel_reason ?? null,
             'changed_by' => auth()->id(),
             'changed_at' => now(),
         ]);
@@ -122,8 +130,19 @@ class OrderController extends Controller
         $order->status = $newStatus;
         $order->save();
 
+        // Nếu trạng thái giao hàng thành công, gửi yêu cầu hoàn thành
+        if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
+            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(10));
+        }
+
         return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
+
+
+
+
+
+
 
 
     /**
@@ -148,4 +167,29 @@ class OrderController extends Controller
         $endDate = $request->input('end_date');
         return Excel::download(new OrdersExport($status, $keyword, $startDate, $endDate), 'ListOrder.xlsx');
     }
+    public function exportPDF($id) 
+    {
+        // Tạo đối tượng DomPDF
+        $pdf = \App::make('dompdf.wrapper');
+        
+    
+        // Load nội dung HTML từ phương thức print_order_convert
+        $pdf->loadHTML($this->print_order_convert($id));
+    
+        // Trả về file PDF để tải về
+        return $pdf->download();
+    }
+    
+    public function print_order_convert($id)
+    {
+        // Trả về HTML hợp lệ để tạo file PDF
+        $order = Order::with(['user', 'orderItems.variant.product', 'statusHistories.user',])->findOrFail($id);
+
+        $statusOrder = Order::STATUS_NAMES;
+        $statusPayment = Order::PAYMENT_METHOD_NAMES;
+        $order->statusHistories = $order->statusHistories()->orderBy('changed_at', 'desc')->get();
+        // dd($order, $statusOrder, $statusPayment);
+        return view('admin.orders.invoice', compact('order', 'statusOrder', 'statusPayment'));
+    }
+
 }

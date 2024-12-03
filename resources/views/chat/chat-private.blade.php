@@ -14,7 +14,7 @@
                             @if(isset($user->image))
                             <img src="{{ $checkUrlImg }}" class="rounded-circle user_img">
                             @else
-                            <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
+                            <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
                             @endif
                             <!-- <span class="online_icon"></span> -->
                         </div>
@@ -70,7 +70,7 @@
                             @if(isset($item->image_user_send))
                             <img src="{{ $checkUrlImg }}" class="rounded-circle user_img_msg">
                             @else
-                            <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
+                            <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
                             @endif
                         </div>
 
@@ -116,43 +116,9 @@
     </div>
 </div>
 @endsection
+
 @section('script')
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<script>
-    function chatUserInactive(activeUserIds) {
-        axios.post('/user-inactive', {
-            activeUserIds: activeUserIds
-        }).then(res => {
-            var card_header_msg_head = document.querySelector('.msg_head');
-            var idUserReciever = document.querySelector('#idUserReciever');
-
-            if (idUserReciever) { // Kiểm tra nếu idUserReciever tồn tại
-                res.data.inactiveUsers.forEach(user => {
-                    if (user.id == idUserReciever.value) { // Kiểm tra nếu idUserReciever trùng với user.id
-                        var UI_bd_highlight = `
-                        <div class="d-flex bd-highlight">
-                            <div class="img_cont">
-                                <img src="/storage/${user.image ? user.image : 'default-image-path.jpg'}" class="rounded-circle user_img">
-                            </div>
-                            <div class="user_info">
-                                <span style="color: #000">{{ $user->name }}</span>
-                            </div>
-                        </div>
-                    `;
-                        card_header_msg_head.insertAdjacentHTML('beforeend', UI_bd_highlight);
-                    }
-                });
-            } else {
-                console.error("Không tìm thấy phần tử idUserReciever");
-            }
-        }).catch(error => {
-            console.error("Lỗi khi lấy dữ liệu người dùng không hoạt động:", error);
-        });
-    }
-</script>
 <script type="module">
     $(document).ready(function() {
         scrollToBottom()
@@ -160,189 +126,135 @@
     Echo.join('chat')
         .here(users => {
             users.forEach(user => {
-                console.log(user);
-
                 var userItem = document.querySelector(`#user${user.id}`);
                 if (userItem) {
                     var imgCont = userItem.querySelector('.img_cont');
-                    var user_info = userItem.querySelector('.user_info');
+                    var userInfo = userItem.querySelector('.user_info');
 
                     // Tạo và thêm thẻ span và thẻ p
                     var status = document.createElement('span');
-                    var is_active = document.createElement('p');
+                    var isActive = document.createElement('p');
                     status.classList.add('online_icon');
-                    is_active.classList.add('is_active');
-                    is_active.textContent = 'Đang hoạt động';
+                    isActive.classList.add('is_active');
+                    isActive.textContent = 'Đang hoạt động';
 
-                    // Thêm dấu chấm vào imgCont và trạng thái vào user_info
                     imgCont.appendChild(status);
-                    user_info.appendChild(is_active);
+                    userInfo.appendChild(isActive);
                 }
             });
         })
         .joining(user => {
             var el = document.querySelector(`#user${user.id}`);
             if (el) {
-                var img_cont = el.querySelector('.img_cont');
-                var user_info = el.querySelector('.user_info');
+                var imgCont = el.querySelector('.img_cont');
+                var userInfo = el.querySelector('.user_info');
 
-                if (img_cont) {
-                    var el_status = document.createElement('span');
-                    el_status.classList.add('online_icon');
-                    img_cont.appendChild(el_status);
+                if (imgCont && !imgCont.querySelector('.online_icon')) {
+                    var elStatus = document.createElement('span');
+                    elStatus.classList.add('online_icon');
+                    imgCont.appendChild(elStatus);
                 }
 
-                if (user_info) {
-                    var el_active = document.createElement('p');
-                    el_active.classList.add('is_active');
-                    el_active.textContent = 'Đang hoạt động';
-                    user_info.appendChild(el_active);
+                if (userInfo && !userInfo.querySelector('.is_active')) {
+                    var elActive = document.createElement('p');
+                    elActive.classList.add('is_active');
+                    elActive.textContent = 'Đang hoạt động';
+                    userInfo.appendChild(elActive);
                 }
             }
         })
         .leaving(user => {
             var el = document.querySelector(`#user${user.id}`);
             if (el) {
-                var img_cont = el.querySelector('.img_cont');
-                var user_info = el.querySelector('.user_info');
+                var imgCont = el.querySelector('.img_cont');
+                var userInfo = el.querySelector('.user_info');
 
-                // Xóa dấu chấm xanh
-                var el_status = img_cont.querySelector('.online_icon');
-                if (el_status) {
-                    img_cont.removeChild(el_status);
-                }
+                var elStatus = imgCont.querySelector('.online_icon');
+                if (elStatus) imgCont.removeChild(elStatus);
 
-                // Xóa trạng thái "Đang hoạt động"
-                var el_active = user_info.querySelector('.is_active');
-                if (el_active) {
-                    user_info.removeChild(el_active);
-                }
+                var elActive = userInfo.querySelector('.is_active');
+                if (elActive) userInfo.removeChild(elActive);
             }
         });
 
+    // Xử lý sự kiện gửi tin nhắn
+    var contentMessage = document.querySelector('#content_message');
+    var sendBtn = document.querySelector('.send_btn');
+    var faLocationArrow = document.createElement('i');
+    faLocationArrow.classList.add('fas', 'fa-location-arrow');
 
-
-    var content_message = document.querySelector('#content_message')
-
-    var idUserReciever = document.querySelector('#idUserReciever')
-    console.log(idUserReciever);
-
-    var fa_location_arrow = document.createElement('i')
-    fa_location_arrow.classList.add('fas', 'fa-location-arrow');
-
-    var send_btn = document.querySelector('.send_btn')
-
-    content_message.addEventListener('input', function() {
-        if (content_message.value.trim() == '') {
-            if (send_btn.contains(fa_location_arrow)) {
-                send_btn.removeChild(fa_location_arrow);
-            }
+    contentMessage.addEventListener('input', function() {
+        if (contentMessage.value.trim() === '') {
+            sendBtn.removeChild(faLocationArrow);
         } else {
-            if (!send_btn.contains(fa_location_arrow)) {
-                send_btn.appendChild(fa_location_arrow);
-                fa_location_arrow.style.cursor = 'pointer'
-                fa_location_arrow.style.color = '#000'
-
+            if (!sendBtn.contains(faLocationArrow)) {
+                sendBtn.appendChild(faLocationArrow);
+                faLocationArrow.style.cursor = 'pointer';
             }
         }
     });
 
-    let messageContent = ''
+    faLocationArrow.addEventListener('click', function() {
+        let messageContent = contentMessage.value.trim();
+        contentMessage.value = '';
+        sendBtn.removeChild(faLocationArrow);
 
-    content_message.addEventListener('keypress', e => {
+        if (messageContent) sendMess(messageContent);
+    });
+
+    contentMessage.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter (nếu có)
-            messageContent = content_message.value.trim();
-            // Nếu không nhập nội dung
-            if (messageContent === '') {
-                // Hiển thị Toast nếu không hợp lệ
-                Toastify({
-                    text: "Nội dung tin nhắn không thể trống!",
-                    duration: 3000, // Hiển thị trong 3 giây
-                    backgroundColor: "red", // Màu nền đỏ
-                    gravity: "top", // Vị trí ở phía trên
-                    position: "right" // Vị trí bên phải
-                }).showToast();
-            } else {
-                // Nếu có nội dung, tiếp tục xử lý gửi tin nhắn
+            event.preventDefault();
+            let messageContent = contentMessage.value.trim();
+            if (messageContent) {
                 sendMess(messageContent);
+                contentMessage.value = '';
+                sendBtn.removeChild(faLocationArrow);
             }
         }
-    })
+    });
 
-    fa_location_arrow.addEventListener('click', function() {
-
-        if (send_btn.contains(fa_location_arrow)) {
-            send_btn.removeChild(fa_location_arrow);
-        }
-        messageContent = content_message.value.trim();
-        if (messageContent === '') {
-            Toastify({
-                text: "Nội dung tin nhắn không thể trống!",
-                duration: 3000,
-                backgroundColor: "red",
-                gravity: "top",
-                position: "right"
-            }).showToast();
-        } else {
-            sendMess(messageContent);
-        }
-    })
-
-    const sendMess = () => {
+    function sendMess(messageContent) {
         axios.post('/message-private', {
                 message: messageContent,
-                idUserReciever: idUserReciever.value,
+                idUserReciever: document.querySelector('#idUserReciever').value,
             })
             .then(function(response) {
-                content_message.value = ''
-                scrollToBottom()
+                scrollToBottom();
             })
+            .catch(function(error) {
+                console.error('Lỗi khi gửi tin nhắn:', error);
+                alert('Không thể gửi tin nhắn. Vui lòng thử lại.');
+            });
     }
-</script>
-<script type="module">
     function timeSince(date) {
         const seconds = Math.floor((new Date() - date) / 1000);
         let interval = Math.floor(seconds / 31536000);
-
-        if (interval >= 1) {
-            return interval + " năm" + " trước";
-        }
+        if (interval >= 1) return interval + " năm" + " trước";
         interval = Math.floor(seconds / 2592000);
-        if (interval >= 1) {
-            return interval + " tháng" + " trước";
-        }
+        if (interval >= 1) return interval + " tháng" + " trước";
         interval = Math.floor(seconds / 86400);
-        if (interval >= 1) {
-            return interval + " ngày" + " trước";
-        }
+        if (interval >= 1) return interval + " ngày" + " trước";
         interval = Math.floor(seconds / 3600);
-        if (interval >= 1) {
-            return interval + " giờ" + " trước";
-        }
+        if (interval >= 1) return interval + " giờ" + " trước";
         interval = Math.floor(seconds / 60);
-        if (interval >= 1) {
-            return interval + " phút" + " trước";
-        }
+        if (interval >= 1) return interval + " phút" + " trước";
         return Math.floor(seconds) + " giây" + " trước";
     }
 
     function updateTimes() {
-        var msgTimes = document.querySelectorAll('.msg_time');
-        msgTimes.forEach(function(span) {
+        document.querySelectorAll('.msg_time').forEach(function(span) {
             const timestamp = span.getAttribute('data-timestamp');
             if (timestamp) {
                 const date = new Date(timestamp * 1000);
                 span.innerHTML = timeSince(date);
-            } else {
-                console.error('Timestamp is null for span:', span);
             }
         });
     }
 
     updateTimes();
-
     setInterval(updateTimes, 1000);
+    // Lắng nghe sự kiện tin nhắn
     Echo.private("chat.private.{{ Auth::user()->id }}.{{ $user->id }}")
         .listen('ChatPrivateEvent', event => {
             console.log(event);
@@ -353,12 +265,11 @@
 
             let image_url = event.idUserSend?.image ?
                 event.idUserSend.image :
-                "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
-
+                "{{ asset('userfiles/thumb/Images/avata_null.jpg') }}";
             // Kiểm tra và xử lý đường dẫn ảnh
             let image = image_url.includes('http') ?
                 image_url :
-                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                '/storage/' + event.idUserSend?.image || "{{ asset('userfiles/thumb/Images/avata_null.jpg') }}";
 
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
@@ -386,17 +297,12 @@
                                    <span class="msg_time" data-timestamp="${currentTimestamp}"></span>
                                 </div>
                             </div> 
-                     
                      `
             }
-
-
             msg_card_body.insertAdjacentHTML('beforeend', ui)
             updateTimes();
             scrollToBottom()
         })
-
-
 
     Echo.private("chat.private.{{ $user->id }}.{{ Auth::user()->id }}")
         .listen('ChatPrivateEvent', event => {
@@ -436,10 +342,8 @@
                                     <span class="msg_time msg_time_receiver" data-timestamp="${currentTimestamp}"></span>
                                 </div>
                             </div> 
-                     
                      `
             }
-
             msg_card_body.insertAdjacentHTML('beforeend', ui)
             updateTimes();
             scrollToBottom()

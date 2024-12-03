@@ -283,6 +283,7 @@
 
 
     HT.checkAll = () => {
+    
         if ($('#checkAll').length) {
             $(document).on('click', '#checkAll', function () {
                 let isChecked = $(this).prop('checked');

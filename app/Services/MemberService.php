@@ -25,6 +25,11 @@ class MemberService
         );
         return $getUserCatalogue;
     }
+    public function getAllMember() {
+        
+        $users = $this->memberRepository->getAllMember();
+        return $users;
+    }
 
     public function paginate($request) {
         $condition['keyword'] = addslashes($request->input('keyword'));
