@@ -177,6 +177,7 @@
         // Lấy order_idtừ button
         var orderId = $(this).data('order-id');
         var products = $(this).data('products');
+        
 
         // Đổ dữ liệu vào modal
         $('#order_id').val(orderId);
@@ -411,7 +412,16 @@
 
                     
                 } else {
-                    alert(response.message || 'Có lỗi xảy ra.');
+                    Swal.fire({
+                        title: 'Thông báo',
+                        text: response.message || 'có lỗi xảy ra.',
+                        icon: 'error',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 6000,
+                        showCloseButton: true
+                    });
                 }
             },
             error: function (xhr) {

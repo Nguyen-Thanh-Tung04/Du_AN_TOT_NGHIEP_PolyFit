@@ -13,7 +13,7 @@ class OrderHistoryController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['user', 'orderItems.variant.product'])
+        $orders = Order::with(['user', 'orderItems'])
             ->where('user_id', auth()->id())
             ->orderBy('id', 'desc')
             ->get();

@@ -25,13 +25,10 @@
 
                 <div class="order-items">
                     @foreach ($order->orderItems as $item)
-                    @php
-                        $gallery = json_decode($item->product->gallery);
-                    @endphp
                         <div class="item-row d-flex align-items-center mb-3">
-                            <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" width="100px" class="rounded">
+                            <img src="{{ $item->image ?? '' }}" width="100px" class="rounded">
                             <div class="item-details ms-3">
-                                <div>{{ $item->variant->product->name }}</div>
+                                <div>{{ $item->name }}</div>
                                 <div class="text-muted">Màu: {{ $item->color }}, Size: {{ $item->size }}</div>
                             </div>
                             <div class="ms-auto">
@@ -58,8 +55,8 @@
                                 data-order-id="{{ $order->id }}" 
                                 data-products="{{ json_encode($order->orderItems->map(function($item) {
                                     return [
-                                        'id' => $item->variant->product->id,
-                                        'name' => $item->variant->product->name,
+                                        'id' => $item->id,
+                                        'name' => $item->name,
                                         'image' => $item->image,
                                         'color' => $item->color,
                                         'size' => $item->size,
@@ -73,8 +70,8 @@
                                 data-order-id="{{ $order->id }}"
                                 data-products="{{ json_encode($order->orderItems->map(function($item) {
                                     return [
-                                        'id' => $item->variant->product->id,
-                                        'name' => $item->variant->product->name,
+                                        'id' => $item->id,
+                                        'name' => $item->name,
                                         'image' => $item->image,
                                         'color' => $item->color,
                                         'size' => $item->size,

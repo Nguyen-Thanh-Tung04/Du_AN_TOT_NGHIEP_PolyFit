@@ -125,18 +125,16 @@
                 $totalPrice = 0;
                 @endphp
             @foreach ($order->orderItems as $orderItem)
-           
             @php
-            $gallery = json_decode($orderItem->product->gallery);
             $totalPrice += $orderItem->price * $orderItem->quantity;
             @endphp
             <div class="ec-trackorder-inner">
                 <div class="row align-items-center p-3">
                     <div class="col-1">
-                        <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
+                        <img src="{{ $orderItem->image ?? '' }}">
                     </div>
                     <div class="col-8">
-                        <h6>{{ $orderItem->variant->product->name }}</h6>
+                        <h6>{{ $orderItem->name }}</h6>
                         <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
                         <div class="text-muted">x{{ $orderItem->quantity }}</div>
                     </div>

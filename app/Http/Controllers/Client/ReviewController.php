@@ -36,7 +36,19 @@ class ReviewController extends Controller
 
             // Retrieve the order and its items
             $order = Order::with('orderItems')->findOrFail($request->input('id_order'));
-            $products = $order->orderItems->pluck('variant.product_id')->unique(); // Get unique product IDs
+            $products = $order->orderItems
+            ->pluck('variant.product_id')          // Trích xuất product_id từ variant
+            ->filter(function ($productId) {
+                return !is_null($productId);        // Loại bỏ các giá trị null
+            })
+            ->values()                            // Loại bỏ các khóa
+            ->unique();     
+            if ($products->count() <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm không còn tồn tại.',
+                ]);
+            }                      // Chỉ giữ các giá trị duy nhất
 
             // Create a new review for each product
             foreach ($products as $productId) {
