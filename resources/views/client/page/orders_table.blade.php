@@ -54,7 +54,7 @@
                     </div>
                     <div class="order-actions">
                         @if($order->status_name == 'Hoàn thành' && !$order->has_review)
-                            <button type="button" class="btn btn-primary btn-sm open-review-modal"
+                            <button type="button" class="btn btn-secondary btn-sm open-review-modal"
                                 data-order-id="{{ $order->id }}" 
                                 data-products="{{ json_encode($order->orderItems->map(function($item) {
                                     return [

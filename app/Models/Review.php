@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\ReviewHistory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 
@@ -60,25 +61,25 @@ class Review extends Model
             ]);
         });
 
-        static::updated(function ($review) {
-            ReviewHistory::create([
-                'review_id' => $review->id,
-                'user_id' => $review->account_id,
-                'content' => $review->content,
-                'score' => $review->score,
-                'action' => 'update',
-                'type' => 'review',
-            ]);
-        });
+        // static::updated(function ($review) {
+        //     ReviewHistory::create([
+        //         'review_id' => $review->id,
+        //         'user_id' => $review->account_id,
+        //         'content' => $review->content,
+        //         'score' => $review->score,
+        //         'action' => 'update',
+        //         'type' => 'review',
+        //     ]);
+        // });
 
         static::softDeleted(function ($review) {
             ReviewHistory::create([
                 'review_id' => $review->id,
-                'user_id' => $review->account_id,
+                'user_id' => Auth::id(),
                 'content' => $review->content,
                 'score' => $review->score,
                 'action' => 'delete',
-                'type' => 'review',
+                'type' => 'admin_Delete',
             ]);
         });
     }
