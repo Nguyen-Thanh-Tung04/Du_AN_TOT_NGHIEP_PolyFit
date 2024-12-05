@@ -46,7 +46,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="ec-about-detail">
-                    <h4 class="text-upper">Phong cách nổi bật, đẳng cấp sang trọng nhất.</h4>
+                    <h4 class="text-upper" style="font-weight: 700;">Phong cách nổi bật, đẳng cấp sang trọng nhất.</h4>
                     <h5>Khám phá những mẫu quần áo thời trang phù hợp với xu hướng mới nhất.</h5>
                     <p>Chúng tôi cung cấp những thiết kế độc đáo, chất lượng cao dành cho bạn. Từng sản phẩm đều được chọn lọc kỹ càng để mang lại sự thoải mái và tự tin trong mọi hoạt động.</p>
                     <p>Đừng bỏ lỡ cơ hội sở hữu những bộ trang phục hiện đại, giúp bạn thể hiện cá tính và gu thẩm mỹ của mình.</p>

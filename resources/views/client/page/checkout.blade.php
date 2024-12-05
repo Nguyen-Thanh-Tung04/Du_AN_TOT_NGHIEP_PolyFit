@@ -179,6 +179,7 @@
                                 <div class="col-sm-12 mb-6">
                                     <div class="ec-product-inner product-variant-item"
                                         data-product-variant-id="{{ $item->id }}"
+                                        data-name="{{ $item->product->name }}"
                                         data-image="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
                                         data-price="{{ $item->new_price != null ? $item->new_price : $item->normal_price }}"
                                         data-size="{{ $item->size->name }}"
@@ -324,6 +325,7 @@
                 let productVariants = [];
                 $('.product-variant-item').each(function() {
                     let productVariantId = $(this).data('product-variant-id');
+                    let name = $(this).data('name');
                     let image = $(this).data('image');
                     let price = $(this).data('price');
                     let color = $(this).data('color');
@@ -332,6 +334,7 @@
 
                     productVariants.push({
                         product_variant_id: productVariantId,
+                        name: name,
                         image: image,
                         price: price,
                         color: color,

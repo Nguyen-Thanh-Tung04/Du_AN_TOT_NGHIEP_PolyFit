@@ -350,6 +350,7 @@ class CheckoutController
             if ($flashSaleQty > 0) {
                 OrderItem::create([
                     'order_id' => $order->id,
+                    'name' => $variant['name'],
                     'variant_id' => $variant['product_variant_id'],
                     'price' => $flashSalePrice,
                     'quantity' => $flashSaleQty,
@@ -363,6 +364,7 @@ class CheckoutController
             if ($normalQty > 0) {
                 OrderItem::create([
                     'order_id' => $order->id,
+                    'name' => $variant['name'],
                     'variant_id' => $variant['product_variant_id'],
                     'price' => $normalPrice,
                     'quantity' => $normalQty,
