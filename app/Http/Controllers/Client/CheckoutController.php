@@ -793,7 +793,7 @@ class CheckoutController
                 ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
 
             //Send Mail
-            // Mail::to($user->email)->queue(new OrderPlacedMail($order));
+            Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
             // Xóa thông tin trong session
             session()->forget('checkout_data');
