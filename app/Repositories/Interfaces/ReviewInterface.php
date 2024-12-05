@@ -11,6 +11,7 @@ interface ReviewInterface
         array $condition = [],
         int $perpage = 1,
         array $extend = [],
+        array $trashed=[]
     );
     public function delete(int $id = 0);
     // cập nhật trạng thái

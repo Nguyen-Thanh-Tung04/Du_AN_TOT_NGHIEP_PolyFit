@@ -1,7 +1,7 @@
 <form action="{{ route('reviews.index') }}">
     <div class="filter-wraper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
-            @php
+            {{-- @php
                 $perpage = request('perpage') ?: old('perpage');
             @endphp
             <div class="perpage">
@@ -12,10 +12,14 @@
                         @endfor
                     </select>
                 </div>
-            </div>
+            </div> --}}
             <div class="action">
                 <div class="uk-flex uk-flex-middle">
-
+                    <select name="trashed" class="form-control mr-10 setupSelect2">
+                        <option value="0"  {{ (request('repluy') == 0) ? 'selected' : '' }}>Tất cả đánh giá</option>
+                        <option value="1" {{ request('trashed') == 1 ? 'selected' : '' }}>Đánh giá đã bị xóa</option>
+                        <option value="2" {{ request('trashed') === '0' ? 'selected' : '' }}>Đánh giá chưa bị xóa</option>
+                    </select>
                      <!-- Thêm bộ lọc theo điểm số đánh giá (score) -->
                      <select name="score" class="form-control mr-10 setupSelect2">
                         <option value="">Tất cả điểm số</option>

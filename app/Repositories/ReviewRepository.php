@@ -33,20 +33,22 @@ class ReviewRepository implements ReviewInterface
         array $columns = ['*'],
         array $conditions = [],
         int $perPage = 10,
-        array $extend = []
+        array $extend = [],
+        array $trashed = []
     ) {
         $query = Review::query()
+            ->withTrashed()
             ->join('users', 'reviews.account_id', '=', 'users.id')
             ->join('products', 'reviews.product_id', '=', 'products.id')
-            ->join('orders', 'reviews.order_id', '=', 'orders.id') // Join with the orders table
+            ->join('orders', 'reviews.order_id', '=', 'orders.id')
             ->select(
                 'reviews.*',
                 'users.email',
                 'users.name',
                 'users.image',
                 'products.code as product_code',
-                'orders.id as order_id' // Select order ID
-
+                'orders.id as order_id',
+                'reviews.deleted_at'  // Thêm trường deleted_at để phân biệt bản ghi xóa mềm
             )
             ->orderBy('reviews.created_at', 'desc');
 
@@ -56,6 +58,14 @@ class ReviewRepository implements ReviewInterface
                 $q->where('orders.code', 'like', '%' . $conditions['keyword'] . '%')
                     ->orWhere('users.email', 'like', '%' . $conditions['keyword'] . '%');
             });
+        }
+        // Lọc theo đánh giá đã bị xóa mềm
+        if (!is_null($conditions['trashed'])) {
+            if ($conditions['trashed'] == '1') {
+                $query->whereNotNull('reviews.deleted_at'); // Lấy đánh giá đã bị xóa mềm
+            } elseif ($conditions['trashed'] == '2') {
+                $query->whereNull('reviews.deleted_at'); // Lấy đánh giá chưa bị xóa mềm
+            }
         }
 
         // Thêm điều kiện lọc theo trạng thái
@@ -71,7 +81,7 @@ class ReviewRepository implements ReviewInterface
                 $query->doesntHave('replies'); // Đánh giá chưa trả lời
             }
         }
-        
+
         // Thêm điều kiện lọc theo score
         if (isset($conditions['score']) && !empty($conditions['score'])) {
             $query->where('reviews.score', '=', $conditions['score']);
