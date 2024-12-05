@@ -23,7 +23,7 @@ class ReviewHistory extends Model
 
     public function review()
     {
-        return $this->belongsTo(Review::class, 'review_id');
+        return $this->belongsTo(Review::class, 'review_id')->withTrashed();
     }
 
     public function reply()

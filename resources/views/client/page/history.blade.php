@@ -313,7 +313,8 @@
                         reviewsHtml = `
                             <div class="ec-t-review-item d-flex">
                 <div class="ec-t-review-avtar">
-                    <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" width="70px" class="rounded-circle" alt="" />
+                    ${review.user.image ? `<img src="/storage/${review.user.image}" class="rounded-circle" alt="" style="width: 70px; height: 70px; object-fit: cover;" />` 
+                    : '<img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" width="70px" class="rounded-circle" alt="" />'}
                 </div>
                 <div class="mx-5 ec-t-review-content">
                     <div class="ec-t-review-top">

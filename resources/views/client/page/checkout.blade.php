@@ -244,11 +244,6 @@
                                         <input type="radio" id="del1" name="shipping_method" value="20000" checked>
                                         <label for="del1">đ20.000</label>
                                     </span>
-                                    <span>
-                                        <span class="ec-del-opt-head">Giao hàng nhanh</span>
-                                        <input type="radio" id="del2" name="shipping_method" value="40000">
-                                        <label for="del2">đ40.000</label>
-                                    </span>
                                 </span>
                                 <span class="ec-del-commemt">
                                     <span class="ec-del-opt-head">Lưu ý khi giao hàng</span>
