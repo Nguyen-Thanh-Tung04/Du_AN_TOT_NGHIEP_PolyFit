@@ -741,9 +741,10 @@ class CheckoutController
                     if ($flashSaleQty > 0) {
                         OrderItem::create([
                             'order_id' => $order->id,
+                            'name' => $variant['name'],
                             'variant_id' => $variant['product_variant_id'],
-                            'price' => $flashSalePrice,
-                            'quantity' => $flashSaleQty,
+                            'price' => $normalPrice,
+                            'quantity' => $normalQty,
                             'image' => $variant['image'],
                             'color' => $variant['color'],
                             'size' => $variant['size'],
@@ -754,6 +755,7 @@ class CheckoutController
                     if ($normalQty > 0) {
                         OrderItem::create([
                             'order_id' => $order->id,
+                            'name' => $variant['name'],
                             'variant_id' => $variant['product_variant_id'],
                             'price' => $normalPrice,
                             'quantity' => $normalQty,
@@ -791,7 +793,7 @@ class CheckoutController
                 ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
 
             //Send Mail
-            Mail::to($user->email)->queue(new OrderPlacedMail($order));
+            // Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
             // Xóa thông tin trong session
             session()->forget('checkout_data');

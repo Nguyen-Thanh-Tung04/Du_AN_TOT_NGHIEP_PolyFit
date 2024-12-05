@@ -76,7 +76,6 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-
         $donHang = Order::with(['user', 'orderItems.variant.product', 'statusHistories.user',])->findOrFail($id);
 
         $trangThaiDonHang = Order::STATUS_NAMES;
