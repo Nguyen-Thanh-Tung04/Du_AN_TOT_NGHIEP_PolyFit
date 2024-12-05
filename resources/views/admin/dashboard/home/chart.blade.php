@@ -335,20 +335,12 @@
                         const lineData = []; // Dữ liệu cho biểu đồ đường
 
                         // Kiểm tra xem $grossProfit có tồn tại không
-                        @if(isset($grossProfit) && count($grossProfit) > 0)
+                        @if (isset($grossProfit) && count($grossProfit) > 0)
                         // Duyệt qua $grossProfit để lấy tên sản phẩm, lợi nhuận gộp và số lượng
-                        @foreach($grossProfit as $item)
-                        labels.push('{{ $item->product_name }} - Tháng {{ $item->month }}');
-                        barData.push({
-                            {
-                                $item - > gross_profit
-                            }
-                        }); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
-                        lineData.push({
-                            {
-                                $item - > total_quantity
-                            }
-                        }); // Thêm số lượng vào dữ liệu cho biểu đồ đường
+                        @foreach ($grossProfit as $item)
+                        labels.push('Tháng {{ $item->month }}');
+                        barData.push({{ $item->gross_profit }}); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
+                        lineData.push({{ $item->total_quantity }}); // Thêm số lượng vào dữ liệu cho biểu đồ đường
                         @endforeach
                         @else
                         // Nếu không có dữ liệu, thêm giá trị mặc định
@@ -473,27 +465,13 @@
                                         // Nếu có dữ liệu, sử dụng màu sắc phù hợp cho từng trạng thái
                                         foreach ($orderStatus as $status) {
                                             switch ($status->status) {
-                                                case 1:
-                                                    echo "'rgb(255, 205, 86)',";
-                                                    break;
-                                                case 2:
-                                                    echo "'rgba(75, 192, 192, 0.2)',";
-                                                    break;
-                                                case 3:
-                                                    echo "'rgb(201, 203, 207)',";
-                                                    break;
-                                                case 4:
-                                                    echo "'rgb(54, 162, 235)',";
-                                                    break;
-                                                case 5:
-                                                    echo "'rgb(75, 192, 192)',";
-                                                    break;
-                                                case 6:
-                                                    echo "'rgb(255, 99, 99)',";
-                                                    break;
-                                                default:
-                                                    echo "'rgb(0, 0, 0)',";
-                                                    break;
+                                                case 1: echo "'rgb(255, 205, 86)',"; break;
+                                                case 2: echo "'rgba(75, 192, 192, 0.2)',"; break;
+                                                case 3: echo "'rgb(201, 203, 207)',"; break;
+                                                case 4: echo "'rgb(54, 162, 235)',"; break;
+                                                case 5: echo "'rgb(75, 192, 192)',"; break;
+                                                case 6: echo "'rgb(255, 99, 99)',"; break;
+                                                default: echo "'rgb(0, 0, 0)',"; break;
                                             }
                                         }
                                     } else {

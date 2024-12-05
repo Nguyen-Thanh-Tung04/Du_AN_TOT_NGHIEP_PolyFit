@@ -440,13 +440,9 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                for (let field in errors) {
-                                    if (errors.hasOwnProperty(field)) {
-                                        toastr.error(errors[field][0]); // Hiển thị lỗi đầu tiên cho mỗi trường
-                                    }
-                                }
+                            if (xhr.status === 400) { // Kiểm tra mã lỗi 400
+                                let message = xhr.responseJSON.message;
+                                toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
                             } else {
                                 toastr.error('Có lỗi xảy ra: ' + error);
                             }

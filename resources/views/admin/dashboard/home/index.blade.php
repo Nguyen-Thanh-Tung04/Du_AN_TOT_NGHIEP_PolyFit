@@ -289,7 +289,7 @@
                         @if (isset($grossProfit) && count($grossProfit) > 0)
                         // Duyệt qua $grossProfit để lấy tên sản phẩm, lợi nhuận gộp và số lượng
                         @foreach ($grossProfit as $item)
-                        labels.push('{{ $item->product_name }} - Tháng {{ $item->month }}');
+                        labels.push('Tháng {{ $item->month }}');
                         barData.push({{ $item->gross_profit }}); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
                         lineData.push({{ $item->total_quantity }}); // Thêm số lượng vào dữ liệu cho biểu đồ đường
                         @endforeach

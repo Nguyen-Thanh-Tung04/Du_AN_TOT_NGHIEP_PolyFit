@@ -471,8 +471,8 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="section-title">
-                    <h2 class="ec-bg-title">Sản phẩm bán chạy</h2>
-                    <h2 class="ec-title">Sản phẩm bán chạy</h2>
+                    <h2 class="ec-bg-title">Sản phẩm hot</h2>
+                    <h2 class="ec-title">Sản phẩm hot</h2>
                     <!-- <p class="sub-title">Browse The Collection of Top Products</p> -->
                 </div>
             </div>

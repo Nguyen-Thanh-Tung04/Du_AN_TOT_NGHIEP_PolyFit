@@ -20,9 +20,9 @@
             </li>
             <li class="active"><strong>Danh sách đơn hàng</strong></li>
         </ol>
-        
+
     </div>
-     
+
 </div>
 <div class="row mt-20">
     <div class="col-lg-12">
@@ -61,103 +61,122 @@
                                     <select name="perpage" class="form-control input-control input-sm perpage filter mr-10">
                                         @for($i = 20; $i <= 200; $i+=20)
                                             <option {{ ($perpage == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }} bản ghi</option>
-                                        @endfor
-                                    </select>
+                            @endfor
+                            </select>
+                        </div>
+                    </div> --}}
+                    <div class="action">
+                        <div class="uk-flex uk-flex-middle">
+                            <div class="uk-flex uk-flex-middle uk-flex-space-between" style="padding-top: 23px;">
+                                <select name="perpage" class="form-control input-control input-sm perpage filter mr-10">
+                                    <option value="20">20 bản ghi</option>
+                                    <option value="40">40 bản ghi</option>
+                                    <option value="60">60 bản ghi</option>
+                                    <option value="80">80 bản ghi</option>
+                                    <option value="100">100 bản ghi</option>
+                                    <option value="120">120 bản ghi</option>
+                                    <option value="140">140 bản ghi</option>
+                                    <option value="160">160 bản ghi</option>
+                                    <option value="180">180 bản ghi</option>
+                                    <option value="200">200 bản ghi</option>
+                                </select>
+                            </div>
+                            <div class="uk-flex uk-flex-middle mr-10 ml-10">
+                            <div class="input-group">
+                            <label for="start_date" class="mr-5">Ngày bắt đầu:</label>
+                            <input type="date" name="start_date" class="form-control mr-10" value="{{ request('start_date') }}">
+                            </div>
+                            <div class="input-group">
+                                
+                            <label for="end_date" class="mr-5">Ngày kết thúc:</label>
+                                <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                            </div>
+
+                            </div>
+
+                            <!-- Dropdown for order status filtering -->
+                            <select name="status" class="form-control mr-10" style="margin-top: 23px;">
+                                <option value="">-- Tất cả trạng thái --</option> <!-- Default option for all statuses -->
+                                @foreach ($orderStatuses as $key => $value)
+                                <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $value }}</option>
+                                @endforeach
+                            </select>
+
+                            <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10" style="padding-top: 23px;">
+                                <div class="input-group mr-10">
+                                    <input type="text"
+                                        name="keyword"
+                                        value="{{ request('keyword') ?: old('keyword') }}"
+                                        placeholder="Nhập Từ Khóa bạn muốn tìm kiếm..."
+                                        style="width: 300px"
+                                        class="form-control">
+                                    <span class="input-group-btn">
+                                        <button type="submit" name="search" value="search"
+                                            class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
+                                    </span>
                                 </div>
-                            </div> --}}
-                            <div class="action">
-                                <div class="uk-flex uk-flex-middle">
-                                    <div class="uk-flex uk-flex-middle mr-10 ml-10">
-                                        <label for="start_date" class="mr-5">Ngày bắt đầu:</label>
-                                        <input type="date" name="start_date" class="form-control mr-10" value="{{ request('start_date') }}">
-                
-                                        <label for="end_date" class="mr-5">Ngày kết thúc:</label>
-                                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
-                                    </div>
-                
-                                    <!-- Dropdown for order status filtering -->
-                                    <select name="status" class="form-control mr-10">
-                                        <option value="">-- Tất cả trạng thái --</option> <!-- Default option for all statuses -->
-                                        @foreach ($orderStatuses as $key => $value)
-                                            <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                
-                                    <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
-                                        <div class="input-group mr-10">
-                                            <input type="text"
-                                                name="keyword"
-                                                value="{{ request('keyword') ?: old('keyword') }}"
-                                                placeholder="Nhập Từ Khóa bạn muốn tìm kiếm..."
-                                                style="width: 300px"
-                                                class="form-control">
-                                            <span class="input-group-btn">
-                                                <button type="submit" name="search" value="search"
-                                                    class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
-                                            </span>
-                                        </div>
-                                        <a href="{{ route('orders.export', request()->query()) }}" class="btn btn-success mb-3 float-right">
-                                            <i class="fa fa-file-excel"></i> Xuất Excel
-                                        </a>
-                                    </div>
-                                </div>
+                                <a href="{{ route('orders.export', request()->query()) }}" class="btn btn-success mb-3 float-right">
+                                    <i class="fa fa-file-excel"></i> Xuất Excel
+                                </a>
                             </div>
                         </div>
                     </div>
-                </form>  
-                <div class="table-responsive">
-                    <table class="table table-sm table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Mã đơn hàng</th>
-                                <th>Tên Khách Hàng</th>
-                                <th>Điện Thoại</th>
-                                
-                                <th>Tổng Tiền</th>
-                                <th>Trạng Thái</th>
-                                <th>Ngày Tạo</th>
-                                <th class="text-center">Thao Tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($listOrder as $order)
-                                <tr>
-                                    <td>{{ $order->code }}</td>
-                                    <td>{{ $order->full_name }}</td>
-                                    <td>{{ $order->phone }}</td>
-                                    <td>{{ number_format($order->total_price) }} VNĐ</td>
-                                    <td>
-                                        <form action="{{ route('orders.update', $order->id) }}" method="POST" class="form-status">
-                                            @csrf
-                                            @method('PUT')
-                                            <select name="status" class="form-control mr-10"
-                                                data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
-                                                @foreach ($orderStatuses as $key => $value)
-                                                    <option value="{{ $key }}" 
-                                                        {{ $order->status == $key ? 'selected' : '' }}
-                                                        {{ ($key == $completedOrder) ? 'disabled' : '' }}>
-                                                        {{ $value }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </form>
-                                        
-                                    </td>
-                                    
-                                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
-                                    <td class="text-center d-flex justify-content-center">
-                                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-warning">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Tên Khách Hàng</th>
+                        <th>Điện Thoại</th>
+
+                        <th>Tổng Tiền</th>
+                        <th>Trạng Thái</th>
+                        <th>Ngày Tạo</th>
+                        <th class="text-center">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($listOrder as $order)
+                    <tr>
+                        <td>{{ $order->code }}</td>
+                        <td>{{ $order->full_name }}</td>
+                        <td>{{ $order->phone }}</td>
+                        <td>{{ number_format($order->total_price) }} VNĐ</td>
+                        <td>
+                            <form action="{{ route('orders.update', $order->id) }}" method="POST" class="form-status">
+                                @csrf
+                                @method('PUT')
+                                <select name="status" class="form-control mr-10"
+                                    data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
+                                    @foreach ($orderStatuses as $key => $value)
+                                    <option value="{{ $key }}"
+                                        {{ $order->status == $key ? 'selected' : '' }}
+                                        {{ ($key == $completedOrder || $key == $cancelledOrder) ? 'disabled' : '' }}>
+                                        {{ $value }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </form>
+
+                        </td>
+
+                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
+                        <td class="text-center d-flex justify-content-center">
+                            <a href="{{ route('orders.show', $order->id) }}" class="btn btn-warning">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
+</div>
 </div>
 
 @endsection
@@ -166,7 +185,7 @@
 <script src="admin/js/plugins/switchery/switchery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-     function confirmSubmit(selectElement) {
+    function confirmSubmit(selectElement) {
         var form = selectElement.form;
         var selectedOption = selectElement.options[selectElement.selectedIndex].text;
         var defaultValue = selectElement.getAttribute('data-default-value');
@@ -182,7 +201,7 @@
             if (result.isConfirmed) {
                 form.submit();
             } else {
-                selectElement.value = defaultValue; 
+                selectElement.value = defaultValue;
             }
         });
     }
