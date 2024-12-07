@@ -111,14 +111,13 @@ class FlashSaleController extends Controller
     public function create(Request $request)
     {
         $template = 'admin.flashsale.store';
-        $products = $this->productService->paginate($request);
-        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $products = Product::with('variants')->where('status', 1)->get();
         $config = [
             'seo' => config('apps.flashsale'),
             'method' => 'create',
             ...$this->configData()
         ];
-        return view('admin.dashboard.layout', compact('template', 'config', 'products', 'getCategoryAttr'));
+        return view('admin.dashboard.layout', compact('template', 'config', 'products'));
     }
 
     public function store(StoreFlashSaleRequest $request)

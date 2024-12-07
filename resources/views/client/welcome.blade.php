@@ -71,7 +71,7 @@
                             <span class="category-name">{{ $category->name }}</span>
                             <span class="category-count">{{ $category->products_count ?? 0 }}</span>
                         </div>
-                        <a href="{{ route('home.shop') }}" class="category-link">Chi tiết <i class="ecicon eci-angle-double-right"></i></a>
+                        <a href="{{ route('home.shop', ['category' => $category->id]) }}" class="category-link">Chi tiết <i class="ecicon eci-angle-double-right"></i></a>
                     </div>
                 </div>
             </div>

@@ -122,6 +122,12 @@
                 "sInfoPostFix": "",
                 "sSearch": "Tìm:",
                 "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "Đầu",
+                    "sPrevious": "Trước",
+                    "sNext": "Tiếp",
+                    "sLast": "Cuối"
+                }
             },
             columnDefs: [{
                 orderable: false,
