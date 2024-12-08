@@ -52,18 +52,27 @@ class CheckoutController
         if (empty($productVarians)) {
             return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm nào để thanh toán.');
         }
+
+        $existingVariants = Variant::whereIn('id', $productVarians)->pluck('id')->all();
+
+        $nonExistingVariants = array_diff($productVarians, $existingVariants);
+        if (!empty($nonExistingVariants)) {
+            return redirect()->back()->with('error', 'Thuộc tính sản phẩm không tồn tại.');
+        }
+
         $quantities = [];
         foreach ($productVarians as $id) {
             $quantities[$id] = $request->input("quantities.$id");
         }
         $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
 
+
         // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
         foreach ($productVariants as $productVariant) {
             $requestedQuantity = $quantities[$productVariant->id];
 
-            if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) { // Giả sử `quantity` là cột chứa số lượng hàng trong kho
-                return redirect()->back()->with('error', 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.');
+            if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) {
+                return redirect()->back()->with('error', $productVariant->product->name . " còn " . $productVariant->quantity . " sản phẩm trong kho.");
             }
         }
 
@@ -443,11 +452,11 @@ class CheckoutController
                 $vnp_Returnurl = route('vnpay.return');
                 $vnp_TmnCode = "QAZ9JCE2"; //Mã website tại VNPAY 
                 $vnp_HashSecret = "M2B6JJ8UT7G5Z3AX737YGFBAV026H5OW"; //Chuỗi bí mật
-        
+
                 $dateCode = date('Ymd');
                 $randomNumberCode = mt_rand(10000000, 99999999);
                 $code = 'SP-' . $dateCode . $randomNumberCode;
-        
+
                 $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
                 $vnp_OrderInfo = 'Thanh toán đơn hàng';
                 $vnp_OrderType = 'other';
@@ -455,7 +464,7 @@ class CheckoutController
                 $vnp_Locale = 'vn';
                 // $vnp_BankCode = 'NCB';
                 $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-        
+
                 $inputData = array(
                     "vnp_Version" => "2.1.0",
                     "vnp_TmnCode" => $vnp_TmnCode,
@@ -470,11 +479,11 @@ class CheckoutController
                     "vnp_ReturnUrl" => $vnp_Returnurl,
                     "vnp_TxnRef" => $vnp_TxnRef,
                 );
-        
+
                 // if (isset($vnp_BankCode) && $vnp_BankCode != "") {
                 //     $inputData['vnp_BankCode'] = $vnp_BankCode;
                 // }
-        
+
                 //var_dump($inputData);
                 ksort($inputData);
                 $query = "";
@@ -489,13 +498,13 @@ class CheckoutController
                     }
                     $query .= urlencode($key) . "=" . urlencode($value) . '&';
                 }
-        
+
                 $vnp_Url = $vnp_Url . "?" . $query;
                 if (isset($vnp_HashSecret)) {
                     $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                     $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
                 }
-        
+
                 return response()->json([
                     'success' => true,
                     'code' => '00',
@@ -509,8 +518,6 @@ class CheckoutController
                 ], 400);
             }
         }
-
-        
     }
 
     public function execPostRequest($url, $data)
@@ -569,7 +576,7 @@ class CheckoutController
 
                 $dateOrderId = date('Ymd');
                 $randomNumberOrderId = mt_rand(10000000, 99999999);
-        
+
                 $amount = $request->input('final_total');
                 $partnerCode = 'MOMOBKUN20180529';
                 $accessKey = 'klm05TvNBzhg7h7j';
@@ -578,9 +585,9 @@ class CheckoutController
                 $orderId = 'SP-' . $dateOrderId . $randomNumberOrderId . "";
                 $redirectUrl = route('vnpay.return');
                 $ipnUrl = route('vnpay.return');
-        
+
                 $extraData = "";
-        
+
                 $requestId = time() . "";
                 $requestType = "payWithATM";
                 // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
@@ -604,7 +611,7 @@ class CheckoutController
                 );
                 $result = $this->execPostRequest($endpoint, json_encode($data));
                 $jsonResult = json_decode($result, true);  // decode json
-        
+
                 //Just a example, please check more in there
                 return response()->json([
                     'success' => true,
@@ -618,7 +625,6 @@ class CheckoutController
                 ], 400);
             }
         }
-        
     }
 
     public function vnpayReturn(Request $request)
