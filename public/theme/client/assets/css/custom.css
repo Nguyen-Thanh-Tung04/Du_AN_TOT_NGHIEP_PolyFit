@@ -325,7 +325,7 @@ body {
 .flash-sale-banner {
     /* Màu cam nhạt */
     color: white;
-    padding: 50px;
+    padding: 50px 0;
     border-radius: 5px;
     text-align: center;
     /* Căn giữa nội dung */

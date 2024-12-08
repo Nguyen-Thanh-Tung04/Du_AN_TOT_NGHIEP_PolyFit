@@ -39,7 +39,7 @@
                             <div class="ec-checkout-block ec-check-bill">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="ec-checkout-title">Địa chỉ nhận hàng</h3>
-                                    <a class="btn btn-secondary" style="" href="">Thêm địa chỉ mới</a>
+                                    {{-- <a class="btn btn-secondary" style="" href="">Thêm địa chỉ mới</a> --}}
                                 </div>
                                 <div class="ec-bl-block-content">
                                     {{-- <div class="ec-check-subtitle">Tùy chọn</div>
@@ -179,6 +179,7 @@
                                 <div class="col-sm-12 mb-6">
                                     <div class="ec-product-inner product-variant-item"
                                         data-product-variant-id="{{ $item->id }}"
+                                        data-name="{{ $item->product->name }}"
                                         data-image="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
                                         data-price="{{ $item->new_price != null ? $item->new_price : $item->normal_price }}"
                                         data-size="{{ $item->size->name }}"
@@ -242,11 +243,6 @@
                                         <span class="ec-del-opt-head">Giao hàng tiết kiệm</span>
                                         <input type="radio" id="del1" name="shipping_method" value="20000" checked>
                                         <label for="del1">đ20.000</label>
-                                    </span>
-                                    <span>
-                                        <span class="ec-del-opt-head">Giao hàng nhanh</span>
-                                        <input type="radio" id="del2" name="shipping_method" value="40000">
-                                        <label for="del2">đ40.000</label>
                                     </span>
                                 </span>
                                 <span class="ec-del-commemt">
@@ -329,6 +325,7 @@
                 let productVariants = [];
                 $('.product-variant-item').each(function() {
                     let productVariantId = $(this).data('product-variant-id');
+                    let name = $(this).data('name');
                     let image = $(this).data('image');
                     let price = $(this).data('price');
                     let color = $(this).data('color');
@@ -337,6 +334,7 @@
 
                     productVariants.push({
                         product_variant_id: productVariantId,
+                        name: name,
                         image: image,
                         price: price,
                         color: color,
@@ -440,13 +438,9 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                for (let field in errors) {
-                                    if (errors.hasOwnProperty(field)) {
-                                        toastr.error(errors[field][0]); // Hiển thị lỗi đầu tiên cho mỗi trường
-                                    }
-                                }
+                            if (xhr.status === 400) { // Kiểm tra mã lỗi 400
+                                let message = xhr.responseJSON.message;
+                                toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
                             } else {
                                 toastr.error('Có lỗi xảy ra: ' + error);
                             }

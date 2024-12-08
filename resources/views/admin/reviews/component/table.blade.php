@@ -21,7 +21,7 @@
              @endphp
     @foreach($reviews as $review)
         @if ($review->order->id !== $lastOrderId)  <!-- Kiểm tra xem ID đơn hàng hiện tại có khác không -->
-            <tr class="{{ stripos($review->content, 'đểu') !== false ? 'bg-danger text-white' : '' }}">
+            <tr class="{{ stripos($review->content, 'deo') !== false ? 'bg-danger text-white' : '' }}">
                 <td>
                     <input type="checkbox" value="{{ $review->id }}" class="input-checkbox checkBoxItem">
                 </td>
@@ -29,7 +29,7 @@
                 <td class="text-center">{{ $review->email }}</td>
                 <td class="text-center">{{ Str::limit($review->content, 60, '...') }}</td>
                 <td class="text-center">{{ $review->score }}</td>
-                <td class="text-center">{{ $review->created_at->format('Y-m-d') }}</td>
+                <td class="text-center">{{ $review->created_at->format('d-m-Y') }}</td>
                 <td class="text-center js-switch-{{ $review->id }}">
                     <input type="checkbox" value="{{ $review->status }}" 
                     class="js-switch status" 
@@ -40,18 +40,28 @@
                 </td>
                 <td class="text-center">
                     <div class="d-inline-flex">
-                        <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0" style="display: inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-delete" >
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </form>
-                       
+                        @if(!$review->trashed()) <!-- Kiểm tra nếu bản ghi chưa bị xóa mềm -->
+                            <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                    
+                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0" style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        @endif
+                    
+                        <!-- Hiển thị nút "Xem lại" nếu bị xóa mềm -->
+                        @if($review->trashed())
+                            <a href="{{ route('reviews.history_detail', $review->id) }}" class="btn btn-warning">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        @endif
                     </div>
+                    
                 </td>
                 
                 

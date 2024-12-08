@@ -88,13 +88,11 @@
                         </thead>
                         <tbody>
                             @foreach($donHang->orderItems as $item)
-                            @php
-                            $gallery = json_decode($item->product->gallery);
-                            @endphp
+                        
                             <tr>
-                                <td>{{ $item->product->code }}</td>
-                                <td>{{ $item->variant->product->name }}</td>
-                                <td><img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" width="100px"></td>
+                                <td>{{ $item->code }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td><img src="{{ $item->image ?? '' }}" width="100px"></td>
 
                                 <td>(Màu: {{ $item->color }}, Kích thước: {{ $item->size }})</td>
                                 <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
@@ -130,7 +128,7 @@
                                 <td>{{ $trangThaiDonHang[$history->previous_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $trangThaiDonHang[$history->new_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $history->cancel_reason ?? '-' }}</td>
-                                <td>{{ $history->user->name ?? 'N/A' }}</td>
+                                <td>{{ $history->user->name ?? 'Hệ thống' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($history->created_at)->format('d-m-Y H:i:s') }}</td>
                             </tr>
                             @endforeach

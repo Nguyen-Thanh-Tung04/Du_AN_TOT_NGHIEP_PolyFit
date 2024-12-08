@@ -140,7 +140,6 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
-    // Route::post('/chat-private/search',[ChatController::class,'search']);
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
     Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
     Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
@@ -391,20 +390,19 @@ Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(funct
     Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete')->middleware('checkModulePermission:banner.delete');
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
-    Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:xem đơn hàng');
-    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:chi tiết đơn hàng');
-    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:sửa đơn hàng');
-    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:xóa đơn hàng');
-    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:xuất đơn hàng');
+    Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:order.index');
+    Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:order.detail');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:order.edit');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
+    Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
     Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
+    
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
     Route::get('/history/{id}', [OrderHistoryController::class, 'show'])->name('order.history.show');
     Route::put('/history/{id}', [OrderHistoryController::class, 'update'])->name('order.history.update');
 });
-
-
 
 
 // Products
@@ -493,9 +491,6 @@ Route::prefix('cart')->name('cart.')->middleware('checkLoginClient')->group(func
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('checkLoginClient');
 //Reviews
 Route::post('/submit-review', [App\Http\Controllers\client\ReviewController::class, 'store']);
-
-
-
 
 // Route để xem đánh giá cho một đơn hàng cụ thể
 Route::get('/reviews/{orderId}', [App\Http\Controllers\client\ReviewController::class, 'getReviews']);

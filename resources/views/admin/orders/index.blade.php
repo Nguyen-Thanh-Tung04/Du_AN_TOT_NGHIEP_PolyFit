@@ -5,7 +5,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 <link href="admin/css/customize.css" rel="stylesheet">
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/al...in.css">
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 @endsection
@@ -16,13 +16,13 @@
         <h2>Quản lý đơn hàng</h2>
         <ol class="breadcrumb" style="margin-bottom: 10px;">
             <li>
-                <a href="{{ route('dashboard.index') }}">Trang chủ</a>
+                <a href="{{ route('dashboard.index') }}">Dashboard</a>
             </li>
             <li class="active"><strong>Danh sách đơn hàng</strong></li>
         </ol>
-        
+
     </div>
-     
+
 </div>
 <div class="row mt-20">
     <div class="col-lg-12">
@@ -59,8 +59,7 @@
                             <div class="perpage">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <select name="perpage" class="form-control input-control input-sm perpage filter mr-10">
-                                        @for($i = 20; $i <= 200; $i+=20)
-                                            <option {{ ($perpage == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }} bản ghi</option>
+                                        @for($i = 20; $i <= 200; $i+=20)/-strong/-heart:>:o:-((:-h <option {{ ($perpage == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }} bản ghi</option>
                                         @endfor
                                     </select>
                                 </div>
@@ -84,7 +83,7 @@
                                     </select>
                 
                                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
-                                        <div class="input-group mr-10">
+                                        <div class="input-group">
                                             <input type="text"
                                                 name="keyword"
                                                 value="{{ request('keyword') ?: old('keyword') }}"
@@ -111,8 +110,8 @@
                             <tr>
                                 <th>Mã đơn hàng</th>
                                 <th>Tên Khách Hàng</th>
-                                <th>Địa Chỉ</th>
                                 <th>Điện Thoại</th>
+                                
                                 <th>Tổng Tiền</th>
                                 <th>Trạng Thái</th>
                                 <th>Ngày Tạo</th>
@@ -124,7 +123,6 @@
                                 <tr>
                                     <td>{{ $order->code }}</td>
                                     <td>{{ $order->full_name }}</td>
-                                    <td>{{ $order->address }}</td>
                                     <td>{{ $order->phone }}</td>
                                     <td>{{ number_format($order->total_price) }} VNĐ</td>
                                     <td>
@@ -134,20 +132,21 @@
                                             <select name="status" class="form-control mr-10"
                                                 data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
                                                 @foreach ($orderStatuses as $key => $value)
-                                                    <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }} 
-                                                        {{ ($key == $cancelledOrder || $key == $delivered) ? 'disabled' : '' }}>
-                                                        {{ $value }}
-                                                    </option>
+                                                <option value="{{ $key }}" 
+                                                {{ $order->status == $key ? 'selected' : '' }}
+                                                {{ ($key == $completedOrder || $key == $cancelledOrder) ? 'disabled' : '' }}>
+                                                {{ $value }}
+                                            </option>
                                                 @endforeach
                                             </select>
                                         </form>
+                                        
                                     </td>
                                     
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                                     <td class="text-center d-flex justify-content-center">
                                         <a href="{{ route('orders.show', $order->id) }}" class="btn btn-warning">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
+                                            <i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -165,7 +164,7 @@
 <script src="admin/js/plugins/switchery/switchery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-     function confirmSubmit(selectElement) {
+    function confirmSubmit(selectElement) {
         var form = selectElement.form;
         var selectedOption = selectElement.options[selectElement.selectedIndex].text;
         var defaultValue = selectElement.getAttribute('data-default-value');
@@ -181,7 +180,7 @@
             if (result.isConfirmed) {
                 form.submit();
             } else {
-                selectElement.value = defaultValue; 
+                selectElement.value = defaultValue;
             }
         });
     }

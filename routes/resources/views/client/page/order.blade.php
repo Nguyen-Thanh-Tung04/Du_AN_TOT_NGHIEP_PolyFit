@@ -45,24 +45,52 @@
                 <div class="ec-trackorder-bottom">
                     <div class="ec-progress-track">
                         <ul id="ec-progressbar">
-                            <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_1.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Chờ xác nhận</span></li>
-                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_2.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã xác nhận</span></li>
-                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_3.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang chuẩn bị</span></li>
-                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_4.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đang vận chuyển <br> </span></li>
-                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}"><span class="ec-track-icon"> <img
-                                        src="{{ asset('theme/client/assetss/images/icons/track_5.png') }}" alt="track_order"></span><span
-                                    class="ec-progressbar-track"></span><span class="ec-track-title">Đã nhận được hàng</span></li>
+                            <li class="step0 {{ $order->status >= 1 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_1.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Chờ xác nhận</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 2 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_2.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đã xác nhận</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 3 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_3.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đang chuẩn bị</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 4 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_4.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Đang vận chuyển <br></span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 5 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track_5.png') }}" alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Giao hàng thành công</span>
+                            </li>
+                            <li class="step0 {{ $order->status >= 6 ? 'active' : '' }}">
+                                <span class="ec-track-icon">
+                                    <img src="{{ asset('theme/client/assetss/images/icons/track06.png') }}"  alt="track_order">
+                                </span>
+                                <span class="ec-progressbar-track"></span>
+                                <span class="ec-track-title">Hoàn thành</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
+                
                 <div class="text-right mt-5">
                     <form id="cancelOrderForm" action="{{ route('order.history.update', $order->id) }}" method="POST" class="d-inline">
                         @csrf
@@ -72,8 +100,8 @@
                             <button type="button" id="cancelOrderButton" class="custom-btn danger-btn">
                                 <i class="fas fa-times-circle"></i> Hủy đơn hàng
                             </button>
-                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN)
-                            <input type="hidden" name="da_giao_hang" value="1">
+                            @elseif ($order->status === \App\Models\Order::STATUS_GIAO_HANG_THANH_CONG)
+                            <input type="hidden" name="giao_hang_thanh_cong" value="1">
                             <button type="button" id="confirmReceivedButton" class="custom-btn success-btn">
                                 <i class="fas fa-check-circle"></i> Đã nhận hàng
                             </button>
@@ -97,22 +125,20 @@
                 $totalPrice = 0;
                 @endphp
             @foreach ($order->orderItems as $orderItem)
-           {{ $totalPrice += $orderItem->price * $orderItem->quantity;}}
             @php
-            $gallery = json_decode($orderItem->product->gallery);
+            $totalPrice += $orderItem->price * $orderItem->quantity;
             @endphp
             <div class="ec-trackorder-inner">
                 <div class="row align-items-center p-3">
                     <div class="col-1">
-                        <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
+                        <img src="{{ $orderItem->image ?? '' }}">
                     </div>
                     <div class="col-8">
-                        <h6>{{ $orderItem->variant->product->name }}</h6>
+                        <h6>{{ $orderItem->name }}</h6>
                         <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
                         <div class="text-muted">x{{ $orderItem->quantity }}</div>
                     </div>
                     <div class="col-3 text-right">
-                        <del class="fs-6 fw-light text-dark">₫{{ number_format($orderItem->price, 0, ',', '.') }}</del>
                         <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
                     </div>
                 </div>
@@ -217,30 +243,7 @@
 </section>
 @section('scripts')
 <script>
-      document.getElementById('confirmReceivedButton').addEventListener('click', function () {
-        Swal.fire({
-            title: 'Xác nhận nhận hàng',
-            text: "Bạn có chắc chắn đã nhận hàng?",
-            icon: 'question',  // Icon hỏi
-            showCancelButton: true,
-            confirmButtonText: 'Có',
-            cancelButtonText: 'Không',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Hiển thị thông báo thành công với dấu kiểm (chữ "V")
-                Swal.fire({
-                    icon: 'success',  // Dấu kiểm (V)
-                    title: 'Đã nhận hàng!',
-                    text: 'Cảm ơn bạn đã xác nhận.',
-                    confirmButtonText: 'Đóng'
-                }).then(() => {
-                    document.getElementById('cancelOrderForm').submit();  // Submit form sau khi xác nhận
-                });
-            }
-        });
-    });
-    document.getElementById('cancelOrderButton').addEventListener('click', function() {
+     document.getElementById('cancelOrderButton').addEventListener('click', function() {
         Swal.fire({
             title: 'Lý do hủy đơn hàng',
             input: 'select',
@@ -269,6 +272,31 @@
                     form.appendChild(reasonInput);
                     form.submit();
                 }
+            }
+        });
+    });
+</script>
+<script>
+      document.getElementById('confirmReceivedButton').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Xác nhận nhận hàng',
+            text: "Bạn có chắc chắn đã nhận hàng?",
+            icon: 'question',  // Icon hỏi
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hiển thị thông báo thành công với dấu kiểm (chữ "V")
+                Swal.fire({
+                    icon: 'success',  // Dấu kiểm (V)
+                    title: 'Đã nhận hàng!',
+                    text: 'Cảm ơn bạn đã xác nhận.',
+                    confirmButtonText: 'Đóng'
+                }).then(() => {
+                    document.getElementById('cancelOrderForm').submit();  // Submit form sau khi xác nhận
+                });
             }
         });
     });
