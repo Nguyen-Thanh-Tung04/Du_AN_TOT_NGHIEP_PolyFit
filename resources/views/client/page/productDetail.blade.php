@@ -178,7 +178,7 @@
                                     </div>
                                     <div class="ec-pro-variation">
                                         <div class="ec-pro-variation-inner ec-pro-variation-size">
-                                            <span>SIZE</span>
+                                            <span>Kích thước</span>
                                             <div class="">
                                                 @foreach($product->variants->unique('size_id') as $variant)
                                                 <button class="product-option size-btn" data-id="{{ $variant->size_id }}">{{ $variant->size->name }}</button>
