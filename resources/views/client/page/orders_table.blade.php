@@ -59,7 +59,7 @@
                                 }elseif(!$hasVariant && $order->status_name == 'Hoàn thành' && $order->has_review){
                                     $classBtn = 'btn btn-secondary btn-sm open-view-review-modal';
                                 }elseif(!$hasVariant && $order->status_name == 'Hoàn thành' && !$order->has_review){
-                                    $classBtn = 'btn btn-primary btn-sm open-review-modal';
+                                    $classBtn = 'btn btn-secondary btn-sm open-review-modal';
                                 }
                             @endphp
                             @if ($order->status_name == 'Hoàn thành')
