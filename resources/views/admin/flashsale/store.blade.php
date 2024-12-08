@@ -244,7 +244,8 @@
                         $('.remove-product-flash').on('click', function() {
                             let productId = $(this).data('id');
                             let checkBox = $(`.checkBoxItem[value="${productId}"]`);
-                            checkBox.prop('checked', false).trigger('click'); // Trigger click event
+                            console.log(checkBox);
+                            checkBox.trigger('click'); // Trigger click event
                             $(this).closest('.custom-col-12').remove();
                         });
 

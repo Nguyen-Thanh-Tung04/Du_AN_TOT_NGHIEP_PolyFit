@@ -260,7 +260,6 @@ class FlashSaleController extends Controller
         $currentDateTime = \Carbon\Carbon::now();
         $startTime = explode('-', $flashSale->time_slot)[0];
         $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
-
         if ($flashSaleDateTime->isPast() && $flashSaleDateTime->addHours(explode('-', $flashSale->time_slot)[1] - $startTime)->isFuture()) {
             return response()->json(['status' => false, 'message' => 'Không thể xóa flash sale đang diễn ra.']);
         } elseif ($flashSaleDateTime->isPast()) {
