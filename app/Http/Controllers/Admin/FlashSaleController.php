@@ -111,14 +111,13 @@ class FlashSaleController extends Controller
     public function create(Request $request)
     {
         $template = 'admin.flashsale.store';
-        $products = $this->productService->paginate($request);
-        $getCategoryAttr = $this->productService->getCategoryAttr();
+        $products = Product::with('variants')->where('status', 1)->get();
         $config = [
             'seo' => config('apps.flashsale'),
             'method' => 'create',
             ...$this->configData()
         ];
-        return view('admin.dashboard.layout', compact('template', 'config', 'products', 'getCategoryAttr'));
+        return view('admin.dashboard.layout', compact('template', 'config', 'products'));
     }
 
     public function store(StoreFlashSaleRequest $request)
@@ -261,7 +260,6 @@ class FlashSaleController extends Controller
         $currentDateTime = \Carbon\Carbon::now();
         $startTime = explode('-', $flashSale->time_slot)[0];
         $flashSaleDateTime = \Carbon\Carbon::parse($flashSale->date . ' ' . $startTime . ':00:00');
-
         if ($flashSaleDateTime->isPast() && $flashSaleDateTime->addHours(explode('-', $flashSale->time_slot)[1] - $startTime)->isFuture()) {
             return response()->json(['status' => false, 'message' => 'Không thể xóa flash sale đang diễn ra.']);
         } elseif ($flashSaleDateTime->isPast()) {

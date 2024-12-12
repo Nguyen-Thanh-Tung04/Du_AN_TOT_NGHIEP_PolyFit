@@ -21,6 +21,9 @@ class ClientProductController extends Controller
     {
         $product = Product::with(['category', 'variants.color', 'variants.size'])->findOrFail($id);
 
+        $totalQuantity = $product->variants->sum('quantity');
+        $product->total_quantity = $totalQuantity;
+
         // Kiểm tra xem sản phẩm có trong chương trình flash sale hay không
         $flashSaleProducts = $product->flashSaleProducts()->whereHas('flashSale', function ($query) {
             $query->where('status', 1)
@@ -119,6 +122,7 @@ class ClientProductController extends Controller
                     'data' => [
                         'listed_price' => $variant->listed_price,
                         'sale_price' => $flashSaleProduct->flash_price,
+                        'quantity' => $variant->quantity,
                         'discount_percentage' => $flashSaleProduct->discount_percentage,
                         'is_in_flash_sale' => true
                     ]
@@ -126,13 +130,14 @@ class ClientProductController extends Controller
             } else {
                 $discountPercentage = null;
                 if ($variant->sale_price) {
-                    $discountPercentage = (($variant->listed_price - $variant->sale_price) / $variant->listed_price) * 100;
+                    $discountPercentage = round((($variant->listed_price - $variant->sale_price) / $variant->listed_price) * 100);
                 }
                 return response()->json([
                     'status' => true,
                     'data' => [
                         'listed_price' => $variant->listed_price,
                         'sale_price' => $variant->sale_price,
+                        'quantity' => $variant->quantity,
                         'discount_percentage' => $discountPercentage,
                         'is_in_flash_sale' => false
                     ]

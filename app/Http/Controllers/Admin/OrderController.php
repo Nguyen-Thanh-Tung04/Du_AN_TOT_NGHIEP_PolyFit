@@ -52,8 +52,6 @@ class OrderController extends Controller
 
 
 
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -69,7 +67,6 @@ class OrderController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      */
@@ -82,7 +79,6 @@ class OrderController extends Controller
         $donHang->statusHistories = $donHang->statusHistories()->orderBy('changed_at', 'desc')->get();
         return view('admin.orders.show', compact('donHang', 'trangThaiDonHang', 'trangThaiThanhToan'));
     }
-
 
 
     /**
@@ -163,6 +159,29 @@ class OrderController extends Controller
         $endDate = $request->input('end_date');
         return Excel::download(new OrdersExport($status, $keyword, $startDate, $endDate), 'ListOrder.xlsx');
     }
+    public function exportPDF($id) 
+    {
+        // Tạo đối tượng DomPDF
+        $pdf = \App::make('dompdf.wrapper');
+        
     
+        // Load nội dung HTML từ phương thức print_order_convert
+        $pdf->loadHTML($this->print_order_convert($id));
+    
+        // Trả về file PDF để tải về
+        return $pdf->download();
+    }
+    
+    public function print_order_convert($id)
+    {
+        // Trả về HTML hợp lệ để tạo file PDF
+        $order = Order::with(['user', 'orderItems.variant.product', 'statusHistories.user',])->findOrFail($id);
+
+        $statusOrder = Order::STATUS_NAMES;
+        $statusPayment = Order::PAYMENT_METHOD_NAMES;
+        $order->statusHistories = $order->statusHistories()->orderBy('changed_at', 'desc')->get();
+        // dd($order, $statusOrder, $statusPayment);
+        return view('admin.orders.invoice', compact('order', 'statusOrder', 'statusPayment'));
+    }
 
 }
