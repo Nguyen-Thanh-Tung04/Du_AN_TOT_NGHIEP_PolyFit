@@ -68,122 +68,141 @@
   Fonts Family & Style CSS
 ---------------------------------------------------*/
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Thin.ttf") format("truetype");
-    font-weight: 100;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-ExtraLight.ttf") format("truetype");
-    font-weight: 200;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Light.ttf");
-    font-weight: 300;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
-    font-weight: 600;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
-    font-weight: 800;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Poppins, sans-serif";
-    src: url("../fonts/poppins/Poppins-Black.ttf") format("truetype");
-    font-weight: 900;
-    font-style: normal;
+  font-family: "Poppins, sans-serif";
+  src: url("../fonts/poppins/Poppins-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Fjalla One";
-    src: url("../fonts/fjalla/FjallaOne-Regular.ttf") format("truetype");
+  font-family: "Fjalla One";
+  src: url("../fonts/fjalla/FjallaOne-Regular.ttf") format("truetype");
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("../fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-SemiBold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("../fonts/Roboto/Roboto-SemiBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
-    font-weight: 800;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("../fonts/Roboto/Roboto-Bold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Montserrat";
-    src: url("../fonts/montserrat/Montserrat-ExtraBold.ttf") format("truetype");
-    font-weight: 900;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("../fonts/Roboto/Roboto-ExtraBold.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-ExtraLight.ttf") format("truetype");
-    font-weight: 200;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Light.ttf") format("truetype");
-    font-weight: 300;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Regular.ttf");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Medium.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-SemiBold.ttf") format("truetype");
-    font-weight: 600;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
 }
+
 @font-face {
-    font-family: "Oswald";
-    src: url("../fonts/oswald/Oswald-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Oswald";
+  src: url("../fonts/oswald/Oswald-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
 
 /*-------------------------------------------------
@@ -192,7 +211,7 @@
 body {
   margin: 0 auto;
   background-color: #ffffff;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 400;
   font-style: normal;
@@ -217,6 +236,95 @@ body {
 *::after {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.voucher {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  background-color: #fff;
+  overflow: hidden;
+  margin: 10px auto;
+}
+
+.voucher-left {
+  background-color: #ff4f2d;
+  color: #fff;
+  padding: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.voucher-badge {
+  background-color: #f1c40f;
+  padding: 5px 10px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.voucher-icon {
+  margin-bottom: 10px;
+}
+
+.voucher-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.voucher-right {
+  flex: 2;
+  padding: 20px;
+}
+
+.voucher-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.voucher-subtitle {
+  font-size: 14px;
+  color: #555;
+}
+
+.voucher-details {
+  font-size: 12px;
+  color: #e74c3c;
+  margin: 10px 0;
+}
+
+.voucher-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #777;
+}
+
+.voucher-terms {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.voucher-btn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.voucher-btn:hover {
+  background-color: #c0392b;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -4746,7 +4854,6 @@ textarea.form-control.is-invalid {
 }
 
 .card-subtitle {
-  margin-top: -2.5px;
   margin-bottom: 0;
 }
 
@@ -5716,7 +5823,7 @@ textarea.form-control.is-invalid {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -5889,7 +5996,7 @@ textarea.form-control.is-invalid {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -16054,7 +16161,7 @@ body {
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   top: 0 !important;
 }
 
@@ -16063,7 +16170,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
 }
 
 /*----  Section  ----*/
@@ -16225,7 +16332,6 @@ h6 {
 }
 
 .section-title .ec-title {
-  font-family: "Montserrat, sans-serif";
   font-size: 30px;
   font-weight: 800;
   margin-bottom: 7px;
@@ -18597,7 +18703,7 @@ h6 {
   color: #444444;
   display: block;
   font-size: 15px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   line-height: 22px;
   font-weight: 700;
   margin: 0 auto;
@@ -19125,7 +19231,7 @@ h6 {
   -ms-flex-align: center;
   align-items: center;
   position: relative;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
 }
 
 .ec-main-menu ul li a .fi.fi-rr-sort-amount-down-alt {
@@ -19650,7 +19756,7 @@ body.ec-open:before {
 .ec-side-cart .ec-cart-inner .ec-cart-title .cart_title {
   font-size: 17px;
   color: #555;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-weight: 600;
 }
 
@@ -19728,7 +19834,7 @@ body.ec-open:before {
 .ec-side-cart .ec-menu-title .menu_title {
   font-size: 18px;
   color: #ee4d2d;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-weight: 600;
 }
 
@@ -20820,7 +20926,7 @@ button.btn-close.qty_close {
   font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
 }
 
 .ec-product-inner .ec-pro-content .ec-pro-title a:hover {
@@ -20849,7 +20955,7 @@ button.btn-close.qty_close {
   color: #ee4d2d;
   font-weight: 700;
   font-size: 15px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-product-inner .ec-pro-content .ec-price span.old-price {
@@ -21405,7 +21511,7 @@ section.ec-test-section {
 }
 
 .ec-test-section .ec-test-name {
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -21624,7 +21730,7 @@ section.ec-instagram-section {
 }
 
 .ec-footer .footer-top .ec-footer-widget .ec-footer-heading {
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 11px;
@@ -22281,7 +22387,7 @@ div#ec_news_signup {
 .ec-category-section .ec-cat-tab-nav .cat-link .cat-desc span {
   margin-top: 5px;
   font-size: 17px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-weight: 700;
   color: #444444;
   letter-spacing: 0;
@@ -22830,7 +22936,7 @@ select::-ms-expand {
   position: relative;
   display: block;
   color: #555;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-sidebar-wrap .h3 {
@@ -23028,7 +23134,7 @@ select::-ms-expand {
   border-bottom: none;
   background: #f5f5f5;
   padding: 21px 15px 15px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   border: 1px solid #eeeeee;
 }
 
@@ -23037,7 +23143,7 @@ select::-ms-expand {
   color: #777;
   display: block;
   font-size: 16px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-weight: 600;
   line-height: 20px;
   background: #f7f7f7;
@@ -23199,7 +23305,7 @@ select::-ms-expand {
   padding: 34px 38px 34px;
   text-align: left;
   background-color: #fff;
-    height: 520px;
+  height: 520px;
 }
 
 .ec-login-wrapper .ec-login-container .ec-login-form form {
@@ -23471,7 +23577,7 @@ select::-ms-expand {
   font-weight: 700;
   letter-spacing: 0;
   text-align: left;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-cms-block p {
@@ -23727,7 +23833,7 @@ select::-ms-expand {
 }
 
 .ec_contact_info .ec_contact_info_head {
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 19px;
@@ -23844,7 +23950,7 @@ h2.ec-faq-heading {
   padding: 0;
   margin-bottom: 15px;
   margin-top: 2px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-faq-block {
@@ -23885,7 +23991,7 @@ h4.ec-faq-title {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 h4.ec-faq-title::after {
@@ -24034,7 +24140,7 @@ h4.ec-faq-title::after {
   line-height: 1.5;
   letter-spacing: 0.5px;
   font-weight: 400;
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
 }
 
 .product_page .ec-sidebar-slider .ec-sb-pro-sl .ec-sb-pro-sl-item .ec-pro-content .ec-pro-rating {
@@ -24080,7 +24186,7 @@ h4.ec-faq-title::after {
 }
 
 .product_page .ec-sb-slider-title {
-  font-family: "Montserrat";
+  font-family: "Roboto";
   text-decoration: none;
   color: #212121;
   display: block;
@@ -24248,7 +24354,7 @@ h4.ec-faq-title::after {
   margin: 0 0 20px 0;
   text-decoration: none;
   display: block;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-weight: 800;
   line-height: 30px;
   letter-spacing: 0.02rem;
@@ -24317,7 +24423,7 @@ h4.ec-faq-title::after {
   letter-spacing: 0;
   word-break: break-all;
   line-height: 1.7;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .single-pro-content .ec-single-sales {
@@ -24475,7 +24581,7 @@ h4.ec-faq-title::after {
   font-weight: 700;
   font-size: 22px;
   line-height: 1.2;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   letter-spacing: 0;
 }
 
@@ -24507,7 +24613,7 @@ h4.ec-faq-title::after {
   line-height: 1.1;
   letter-spacing: 0.04rem;
   text-transform: uppercase;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .single-pro-content .ec-pro-variation .ec-pro-variation-inner .ec-pro-variation-content li {
@@ -24884,7 +24990,7 @@ i.ecicon.eci-star-o {
 
 .tab-pane p {
   color: #777;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 14px;
   font-weight: 500;
 }
@@ -24937,7 +25043,7 @@ i.ecicon.eci-star-o {
 
 .ec-single-pro-tab-content .ec-single-pro-tab-moreinfo p {
   color: #777;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 15px;
   font-weight: 500;
 }
@@ -25044,7 +25150,7 @@ i.ecicon.eci-star-o {
   font-weight: 700;
   line-height: 1;
   margin-bottom: 10px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-single-pro-tab-content .ec-ratting-content .ec-ratting-star {
@@ -25412,7 +25518,7 @@ i.ecicon.eci-star-o {
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-weight: 600;
   line-height: 1.5;
   letter-spacing: 0;
@@ -25443,7 +25549,7 @@ i.ecicon.eci-star-o {
   letter-spacing: 0;
   word-break: break-all;
   line-height: 24px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-blog-inner .ec-blog-btn a.btn {
@@ -25469,7 +25575,7 @@ i.ecicon.eci-star-o {
   letter-spacing: 0;
   line-height: 1;
   font-weight: 600;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-sidebar-recent-blog .ec-sidebar-block-item .ec-blog-date {
@@ -25561,7 +25667,7 @@ i.ecicon.eci-star-o {
 }
 
 .ec-blog-detail .ec-blog-title {
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-weight: 600;
   font-size: 24px;
   letter-spacing: 0;
@@ -25626,7 +25732,7 @@ i.ecicon.eci-star-o {
 
 .ec-blog-comment-wrapper .ec-single-comment-wrapper h5 {
   color: #777;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 15px;
   font-weight: 600;
   text-transform: uppercase;
@@ -25960,6 +26066,7 @@ i.ecicon.eci-star-o {
 }
 
 .ec-cart-content .table-content table tbody>tr td.ec-cart-pro-name a {
+  font-family: "Roboto", sans-serif;
   color: #444444;
   font-weight: 400;
   text-decoration: none;
@@ -26227,7 +26334,7 @@ i.ecicon.eci-star-o {
   position: relative;
   display: block;
   color: #555;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   letter-spacing: 0;
   margin: 0 auto;
   text-align: center;
@@ -26322,7 +26429,7 @@ i.ecicon.eci-star-o {
   -ms-flex-align: center;
   align-items: center;
   color: #ffffff;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   background-color: #ee4d2d;
   letter-spacing: 0;
   padding: 15px;
@@ -26369,7 +26476,7 @@ i.ecicon.eci-star-o {
 }
 
 .ec-trackorder-top .ec-order-id {
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 25px;
   font-weight: 600;
   line-height: 40px;
@@ -26405,12 +26512,18 @@ i.ecicon.eci-star-o {
 #ec-progressbar li {
   list-style-type: none;
   font-size: 14px;
-  width: 20%;
+  width: 16%;
   float: left;
   position: relative;
   font-weight: 400;
   text-align: center;
 }
+
+.ec-track-icon img {
+  width: 70px;
+  height: 70px;
+}
+
 
 #ec-progressbar li .ec-progressbar-track {
   position: relative;
@@ -26463,7 +26576,6 @@ i.ecicon.eci-star-o {
   text-transform: capitalize;
   font-weight: 500;
   line-height: 24px;
-  max-width: 50%;
   display: block;
   margin: 0 auto;
   text-align: center;
@@ -26502,6 +26614,10 @@ i.ecicon.eci-star-o {
   left: -50%;
 }
 
+#ec-progressbar li:nth-child(5) .ec-progressbar-track:after {
+  left: -50%;
+}
+
 #ec-progressbar li.active .ec-progressbar-track:before {
   background: #deddff;
   background: #ee4d2d;
@@ -26536,7 +26652,7 @@ i.ecicon.eci-star-o {
   position: relative;
   display: block;
   color: #444444;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   line-height: 1;
 }
 
@@ -26978,13 +27094,13 @@ i.ecicon.eci-star-o {
 .ec-checkout-summary .ec-checkout-summary-total .text-left {
   font-size: 16px;
   font-weight: 700;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-checkout-summary .ec-checkout-summary-total .text-right {
   font-size: 16px;
   font-weight: 700;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 /*-----  Sidebar Page CSS  ------*/
@@ -27324,7 +27440,7 @@ i.ecicon.eci-star-o {
 .ec-tab-wrapper-3 .ec-single-pro-tab-content .ec-single-pro-tab-desc p,
 .ec-tab-wrapper-4 .ec-single-pro-tab-content .ec-single-pro-tab-desc p {
   margin: 0;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 15px;
   font-weight: 500;
 }
@@ -28765,7 +28881,7 @@ i.ecicon.eci-star-o {
   min-height: 50px;
   border-radius: 60px;
   color: #fff;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-weight: bold;
   background: #222;
   cursor: pointer;
@@ -29433,7 +29549,7 @@ i.ecicon.eci-star-o {
 ---------------------------------------------------*/
 /* ----------- Start Product-DS -----------*/
 .ec-product-ds {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   border: 1px solid #eeeeee;
   overflow: hidden;
@@ -29669,7 +29785,7 @@ i.ecicon.eci-star-o {
 /* -----------/ END Product-DS -----------*/
 /* ----------- START Product-csc -----------*/
 .ec-product-csc {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   border: 1px solid #eeeeee;
   overflow: hidden;
@@ -29841,7 +29957,7 @@ i.ecicon.eci-star-o {
 /* -----------/ END Product-csc -----------*/
 /* ----------- START Product-fw -----------*/
 .ec-product-fw {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   background: #fff;
   overflow: hidden;
@@ -29956,7 +30072,7 @@ i.ecicon.eci-star-o {
   font-weight: 500;
   margin: 0 0 5px;
   color: #777;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-product-fw .ec-product-body .ec-rating {
@@ -30008,7 +30124,7 @@ i.ecicon.eci-star-o {
 /* -----------/ END Product-fw -----------*/
 /* ----------- START Product-tp -----------*/
 .ec-product-tp {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   overflow: hidden;
   -webkit-transition: all 0.4s ease-out;
@@ -30182,7 +30298,7 @@ i.ecicon.eci-star-o {
   padding: 15px;
   border: 1px solid;
   border-color: #eeeeee;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   background-color: #fff;
   overflow: hidden;
@@ -31122,7 +31238,7 @@ i.ecicon.eci-star-o {
 /* -----------/ END Product-sup -----------*/
 /* ----------- START Product-sbtn -----------*/
 .ec-product-sbtn {
-  font-family: "Montserrat";
+  font-family: "Roboto";
   text-align: center;
 }
 
@@ -31314,7 +31430,7 @@ i.ecicon.eci-star-o {
 .ec-product-sbtn .ec-title a {
   -webkit-transition: all 500ms;
   transition: all 500ms;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .ec-product-sbtn .ec-title a:hover {
@@ -31694,7 +31810,7 @@ i.ecicon.eci-star-o {
 
 .ec-title a {
   color: #777;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 15px;
   font-weight: 500;
   white-space: nowrap;
@@ -31914,7 +32030,7 @@ i.ecicon.eci-star-o {
   margin: 0;
   color: #777;
   font-size: 16px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 /*-----  Title Section-1 CSS  -----*/
@@ -32595,11 +32711,11 @@ input[type=email]:focus::-webkit-input-placeholder {
 }
 
 .ec-coming-soon-02 .number {
-  font-family: Montserrat;
+  font-family: Roboto;
 }
 
 .ec-coming-soon-02 ::-webkit-input-placeholder {
-  font-family: Montserrat;
+  font-family: Roboto;
 }
 
 .ec-coming-soon-02 .countdown>div {
@@ -32626,7 +32742,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 .ec-coming-soon-02 p.t-text {
   line-height: 26px;
   opacity: 0.9;
-  font-family: Montserrat;
+  font-family: Roboto;
 }
 
 .ec-coming-soon-02 .countdown span {
@@ -32768,7 +32884,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   -webkit-transition: all, 0.5s;
   transition: all, 0.5s;
   line-height: 45px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-card-grid-space .ec-card h1 {
@@ -32779,7 +32895,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   color: #ffffff;
   -webkit-transition: all, 0.5s;
   transition: all, 0.5s;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -32793,7 +32909,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   color: #ffffff;
   -webkit-transition: all, 0.5s;
   transition: all, 0.5s;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-card-grid-space .ec-card .ec-date {
@@ -32807,7 +32923,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   opacity: 0.8;
   -webkit-transition: all, 0.5s;
   transition: all, 0.5s;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .ec-card-grid-space .ec-card .ec-tags {
@@ -33191,7 +33307,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 20px;
 }
 
@@ -33238,7 +33354,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   z-index: 20;
   -webkit-transition: all 0.6s;
   transition: all 0.6s;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   font-size: 14px;
 }
 
@@ -33750,7 +33866,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 .typography h5,
 .typography h6 {
   margin-bottom: 30px;
-  font-family: "Montserrat";
+  font-family: "Roboto";
 }
 
 .typography .ec-fc {
@@ -33841,7 +33957,7 @@ input[type=email]:focus::-webkit-input-placeholder {
   margin-top: 10px;
   counter-increment: count;
   color: #ee4d2d;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 25px;
   text-transform: uppercase;
 }
@@ -34147,7 +34263,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 
 .ec-catalog-multi-vendor .ec-vendor-card .ec-vendor-card-info .info .ec-catalog-ratings h6,
 .ec-catalog-multi-vendor .ec-vendor-card .ec-vendor-card-info .info .ec-catalog-pro-count h6 {
-  font-family: "Montserrat, sans-serif";
+  font-family: "Roboto", sans-serif;
   color: #777;
   font-size: 14px;
 }
@@ -35667,7 +35783,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 }
 
 .ec-offer-counter .numbers {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: #fff;
   font-size: 25px;
 }

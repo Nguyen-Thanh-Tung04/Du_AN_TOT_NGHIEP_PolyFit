@@ -14,17 +14,18 @@ class Order extends Model
     const STATUS_DA_XAC_NHAN = 2;
     const STATUS_DANG_CHUAN_BI = 3;
     const STATUS_DANG_VAN_CHUYEN = 4;
-    const STATUS_DA_GIAO_HANG = 5;
-    const STATUS_HUY_DON_HANG = 6;
-    // const STATUS_CHO_XAC_NHAN_HUY = 7;
+    const STATUS_GIAO_HANG_THANH_CONG = 5;
+    const STATUS_HOAN_THANH = 6;
+    const STATUS_HUY_DON_HANG = 7;
 
     const STATUS_NAMES = [
         self::STATUS_CHO_XAC_NHAN => 'Chờ xác nhận',
         self::STATUS_DA_XAC_NHAN => 'Đã xác nhận',
         self::STATUS_DANG_CHUAN_BI => 'Đang chuẩn bị',
         self::STATUS_DANG_VAN_CHUYEN => 'Đang vận chuyển',
-        self::STATUS_DA_GIAO_HANG => 'Đã giao hàng',
-        self::STATUS_HUY_DON_HANG => 'Đơn hàng đã hủy',
+        self::STATUS_GIAO_HANG_THANH_CONG => 'Giao hàng thành công',
+        self::STATUS_HUY_DON_HANG => 'Hủy đơn hàng',
+        self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
     const PAYMENT_METHOD_COD = 1;
     const PAYMENT_METHOD_ONLINE = 2;
@@ -116,12 +117,15 @@ class Order extends Model
     }
 
     public function getHasReviewAttribute()
-    {
-        // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
-        return $this->orderItems->every(function ($item) {
+{
+    // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
+    return $this->orderItems->every(function ($item) {
+        if ($item->variant && $item->variant->product_id) {
             return Review::where('product_id', $item->variant->product_id)
                 ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
                 ->exists();
-        });
-    }
+        }
+        return false; // Nếu không có variant hoặc product_id, trả về false
+    });
+}
 }

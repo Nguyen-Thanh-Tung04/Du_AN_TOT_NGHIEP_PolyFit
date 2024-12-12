@@ -90,7 +90,6 @@
                                                                 <th class="text-center">Giá niêm yết <span class="text-danger">(*)</span></th>
                                                                 <th class="text-center">Giá sale</th>
                                                                 <th class="text-center">Số lượng <span class="text-danger">(*)</span></th>
-                                                                <th class="text-center">Hành động</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody class="variant-tbody">
@@ -129,9 +128,6 @@
                                                                         <input type="text" name="quantity[]" value="{{ old("quantity.$loop->index", $variant->quantity) }}" placeholder="Số lượng" class="form-control">
                                                                     </td>
                                                                     <input type="hidden" name="variant_id[]" value="{{ $variant->id ?? '' }}">
-                                                                    <td class="text-center">
-                                                                        <a href="" class="btn btn-danger remove-variant" data-variant-id="{{ $variant->id }}"><i class="fa fa-trash "></i></a>
-                                                                    </td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

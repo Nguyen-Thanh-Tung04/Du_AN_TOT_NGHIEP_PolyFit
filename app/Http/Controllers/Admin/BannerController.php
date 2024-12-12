@@ -11,12 +11,28 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $banners = Banner::all();
+        $query = Banner::query();
+
+        if ($request->has('publish') && $request->publish != '') {
+            $query->where('is_active', $request->publish);
+        }
+
+        if ($request->has('keyword') && $request->keyword != '') {
+            $query->where('title_main', 'like', '%' . $request->keyword . '%')
+                ->orWhere('title_sub', 'like', '%' . $request->keyword . '%')
+                ->orWhere('content', 'like', '%' . $request->keyword . '%');
+        }
+
+        $perpage = $request->input('perpage', 20);  
+        $banners = $query->paginate($perpage);
+
         return view('admin.banner.index', compact('banners'));
     }
-    public function create(){
+
+    public function create()
+    {
         return view('admin.banner.create');
     }
     public function store(BannerRequest $request)
@@ -64,5 +80,4 @@ class BannerController extends Controller
         $banner->delete();
         return redirect()->route('banner.index')->with('success', 'Đã xóa thành công.');
     }
-
 }

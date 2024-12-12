@@ -30,6 +30,7 @@ class ReviewService
             'status' => $request->input('status'),
             'repluy' => $request->input('repluy'),
             'score'  => $request->input('score'),
+            'trashed' => $request->input('trashed'),
 
         ];
         $perPage = $request->input('perpage') ?? 10; // Sử dụng giá trị mặc định nếu perpage là null
@@ -79,6 +80,10 @@ class ReviewService
 
             // Xóa phản hồi của đánh giá ban đầu
             ReviewReply::where('review_id', $review->id)->delete(); // Xóa các phản hồi của đánh giá ban đầu
+            // If review has an image, delete it from storage
+            // if ($review->image) {
+            //     Storage::delete($review->image);
+            // }
             // Xóa chính đánh giá ban đầu
             $this->ReviewRepository->delete($id);
 

@@ -17,10 +17,15 @@
         <h2>Chi tiết đơn hàng</h2>
         <ol class="breadcrumb" style="margin-bottom: 10px;">
             <li>
-                <a href="{{ route('dashboard.index') }}">Dashboard</a>
+                <a href="{{ route('dashboard.index') }}">Trang chủ</a>
             </li>
             <li class="active"><strong>Chi tiết đơn hàng</strong></li>
         </ol>
+    </div>
+    <div class="col-lg-4">
+        <div class="title-action">
+            <a href="{{ route('orders.exportPDF', ['id' => $donHang->id]) }}" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> In hóa đơn </a>
+        </div>
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -52,6 +57,7 @@
                                         <li>Trạng thái: <b>{{ $trangThaiDonHang[$donHang->status] ?? 'Trạng thái không xác định' }}</b></li>
                                         <li>Phương thức thanh toán: <b>{{ $trangThaiThanhToan[$donHang->payment_method] ?? 'Phương thức không xác định' }}</b></li>
                                         <li>Tiền ship: <b>{{ number_format($donHang->shipping_cost, 0, '', '.') }} đ</b></li>
+                                        <li>Giảm giá: <b>{{ number_format($donHang->discount_amount, 0, '', '.') }} đ</b></li>
                                         <li>Tổng tiền: <b class="fs-5 text-danger">{{ number_format($donHang->total_price, 0, '', '.') }} đ</b></li>
                                     </ul>
                                 </td>
@@ -82,13 +88,11 @@
                         </thead>
                         <tbody>
                             @foreach($donHang->orderItems as $item)
-                            @php
-                            $gallery = json_decode($item->product->gallery);
-                            @endphp
+                        
                             <tr>
-                                <td>{{ $item->product->code }}</td>
-                                <td>{{ $item->variant->product->name }}</td>
-                                <td><img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}" width="100px"></td>
+                                <td>{{ $item->code }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td><img src="{{ $item->image ?? '' }}" width="100px"></td>
 
                                 <td>(Màu: {{ $item->color }}, Kích thước: {{ $item->size }})</td>
                                 <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
@@ -124,7 +128,7 @@
                                 <td>{{ $trangThaiDonHang[$history->previous_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $trangThaiDonHang[$history->new_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $history->cancel_reason ?? '-' }}</td>
-                                <td>{{ $history->user->name ?? 'N/A' }}</td>
+                                <td>{{ $history->user->name ?? 'Hệ thống' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($history->created_at)->format('d-m-Y H:i:s') }}</td>
                             </tr>
                             @endforeach

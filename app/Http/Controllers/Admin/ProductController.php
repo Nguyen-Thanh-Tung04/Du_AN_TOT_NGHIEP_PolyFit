@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteProductRequest;
+use App\Http\Requests\DeleteVariantRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Requests\DeleteProductRequest;
 use App\Models\Variant;
 use App\Repositories\ProductRepository;
-use App\Services\ProductService;
 
+use App\Services\ProductService;
 use function Termwind\ask;
 use Illuminate\Http\Request;
 
@@ -140,7 +141,7 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
     }
 
-    public function destroyVariantDetail(Request $request) {
+    public function destroyVariantDetail(DeleteVariantRequest $request) {
         if ($this->productService->destroyVariant($request)) {
             return redirect()->route('product.delete', $request->id)->with('success', 'Xóa bản ghi thành công.');
         }

@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
         // Truy vấn tổng số đơn hàng đã thanh toán
         $totalOrders = DB::table('orders')
-            ->where('status', 5) // Đơn hàng đã thanh toán
+            ->where('status', 6) // Đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->count();
@@ -61,7 +61,7 @@ class DashboardController extends Controller
                 DB::raw('COUNT(*) as total_orders'),
                 DB::raw('SUM(total_price) as total_revenue') // Giả sử bạn có cột 'total_price' lưu trữ doanh thu
             )
-            ->where('status', 5) // Đơn hàng đã thanh toán
+            ->where('status', 6) // Đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->groupBy('month')
@@ -76,7 +76,7 @@ class DashboardController extends Controller
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
-            ->limit(10) // Lấy 10 đơn hàng mới nhất
+            ->limit(5) // Lấy 10 đơn hàng mới nhất
             ->get();
 
         // Truy vấn 10 người dùng mới nhất trong tháng này
@@ -106,13 +106,13 @@ class DashboardController extends Controller
 
         // Tính tổng đơn hàng và doanh thu của tháng trước (trường hợp tháng hiện tại có dữ liệu)
         $previousMonthOrders = DB::table('orders')
-            ->where('status', 5) // Chỉ tính đơn hàng đã thanh toán
+            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('created_at', $latestMonth == 1 ? 12 : $latestMonth - 1)
             ->whereYear('created_at', $latestMonth == 1 ? $currentYear - 1 : $currentYear)
             ->count();
 
         $previousMonthRevenue = DB::table('orders')
-            ->where('status', 5) // Chỉ tính đơn hàng đã thanh toán
+            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('created_at', $latestMonth == 1 ? 12 : $latestMonth - 1)
             ->whereYear('created_at', $latestMonth == 1 ? $currentYear - 1 : $currentYear)
             ->sum('total_price');
@@ -151,7 +151,7 @@ class DashboardController extends Controller
                 'products.name as product_name', // Chọn tên sản phẩm từ bảng products
                 DB::raw('MONTH(order_items.created_at) as month') // Lấy tháng từ created_at
             )
-            ->where('orders.status', 5) // Chỉ tính đơn hàng đã thanh toán
+            ->where('orders.status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('order_items.created_at', $currentMonth)
             ->whereYear('order_items.created_at', $currentYear)
             ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
@@ -204,7 +204,7 @@ class DashboardController extends Controller
             ->limit(10) // Lấy 10 đơn hàng mới nhất
             ->get();
         $totalOrders = DB::table('orders')
-            ->where('status', 5) // Chỉ tính những đơn hàng đã thanh toán
+            ->where('status', 6) // Chỉ tính những đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->count();
@@ -222,7 +222,7 @@ class DashboardController extends Controller
                 DB::raw('COUNT(*) as total_orders'),
                 DB::raw('SUM(total_price) as total_revenue') // Giả sử bạn có cột 'total_price' lưu trữ doanh thu
             )
-            ->where('status', 5) // Chỉ tính những đơn hàng đã thanh toán
+            ->where('status', 6) // Chỉ tính những đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->groupBy('month')
@@ -250,13 +250,13 @@ class DashboardController extends Controller
 
         // Tính tổng đơn hàng và doanh thu của tháng trước (trường hợp tháng hiện tại có dữ liệu)
         $previousMonthOrders = DB::table('orders')
-            ->where('status', 5) // Chỉ tính đơn hàng đã thanh toán
+            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth - 1)
             ->whereYear('created_at', $currentYear)
             ->count();
 
         $previousMonthRevenue = DB::table('orders')
-            ->where('status', 5) // Chỉ tính đơn hàng đã thanh toán
+            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth - 1)
             ->whereYear('created_at', $currentYear)
             ->sum('total_price');
@@ -331,9 +331,9 @@ class DashboardController extends Controller
             ->select(
                 DB::raw($choose_time === 'week' ? "CONCAT(YEAR(orders.created_at), '-', LPAD(WEEK(orders.created_at, 3), 2, '0')) AS date" : // Chọn định dạng cho tuần
                     ($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m') AS date" : ($choose_time === 'year' ? "YEAR(orders.created_at) AS date" : "DATE(orders.created_at) AS date"))),
-                DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 5 THEN orders.id END) AS so_luong_don_hang'), // Đếm đơn hàng đã đặt thành công
-                DB::raw('SUM(CASE WHEN orders.status = 5 THEN order_items.quantity ELSE 0 END) AS so_luong_ban_ra'), // Số lượng bán ra cho đơn hàng đã đặt thành công
-                DB::raw('SUM(CASE WHEN orders.status = 5 THEN orders.total_price ELSE 0 END) AS doanh_thu'), // Doanh thu từ đơn hàng đã đặt thành công
+                DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 6 THEN orders.id END) AS so_luong_don_hang'), // Đếm đơn hàng đã đặt thành công
+                DB::raw('SUM(CASE WHEN orders.status = 6 THEN order_items.quantity ELSE 0 END) AS so_luong_ban_ra'), // Số lượng bán ra cho đơn hàng đã đặt thành công
+                DB::raw('SUM(CASE WHEN orders.status = 6 THEN orders.total_price ELSE 0 END) AS doanh_thu'), // Doanh thu từ đơn hàng đã đặt thành công
                 DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 6 THEN orders.id END) AS tong_so_don_hang_huy') // Đếm đơn hàng đã hủy
             )
             ->whereBetween(DB::raw('DATE(orders.created_at)'), [$date_start, $end_date])
@@ -373,7 +373,7 @@ class DashboardController extends Controller
                 'products.name as product_name', // Chọn tên sản phẩm từ bảng products
                 DB::raw('MONTH(order_items.created_at) as month') // Lấy tháng từ created_at
             )
-            ->where('orders.status', 5) // Chỉ tính đơn hàng đã thanh toán
+            ->where('orders.status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('order_items.created_at', $currentMonth)
             ->whereYear('order_items.created_at', $currentYear)
             ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng

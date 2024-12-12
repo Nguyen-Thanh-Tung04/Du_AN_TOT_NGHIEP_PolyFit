@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateMemberRequest;
@@ -11,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Services\MemberService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\MemberRepositoryInterface as MemberRepository;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MemberExport;
 
 class MemberController extends Controller
 {
@@ -107,12 +110,15 @@ class MemberController extends Controller
             'user',
         ));
     }
-
     public function destroy($id) {
         if ($this->memberService->destroy($id)) {
             return redirect()->route('member.index')->with('success', 'Xóa bản ghi thành công.');
         }
         return redirect()->route('member.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
+    }
+
+    public function exportMember() {
+        return Excel::download(new MemberExport($this->memberService), 'Danh sách khách hàng.xlsx');
     }
 
     public function configData() {

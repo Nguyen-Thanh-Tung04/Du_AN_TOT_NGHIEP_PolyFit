@@ -22,16 +22,16 @@ class UpdateProductColorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name.*' => 'required|max:255|unique:colors,name',
+            'name' => 'required|max:255|unique:colors,name,' . ($this->route('id') ?? $this->id),
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.*.required' => 'Bạn chưa nhập tên màu sắc.',
-            'name.*.max' => 'Tên màu sắc tối đa 255 kí tự.',
-            'name.*.unique' => 'Tên màu sắc đã tồn tại.',
+            'name.required' => 'Bạn chưa nhập tên màu sắc.',
+            'name.max' => 'Tên màu sắc tối đa 255 kí tự.',
+            'name.unique' => 'Tên màu sắc đã tồn tại.',
         ];
     }
 }

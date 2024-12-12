@@ -142,10 +142,32 @@
                                                 data-bs-toggle="modal" data-bs-target="#edit_modal">Chỉnh sửa thông tin</a>
                                         </div>
                                         <div class="ec-vendor-block-detail">
-                                            @php
-                                                $checkUrlImg = \Illuminate\Support\Str::contains($profile->image, '/userfiles/') ? $profile->image : $profile->image;
-                                            @endphp
-                                            <img class="v-img" src="{{ Storage::url($checkUrlImg) }}" alt="vendor image">
+                                            @if(Auth::check())
+                                    @php
+                                    $checkUrlImg = Auth::user()->image && \Illuminate\Support\Str::contains(Auth::user()->image, '/userfiles/')
+                                    ? Auth::user()->image
+                                    : (Auth::user()->image ? Storage::url(Auth::user()->image) : null);
+                                    @endphp
+
+                                    @if ($checkUrlImg)
+                                    <!-- Nếu user có ảnh đại diện -->
+                                    <img
+                                        src="{{ $checkUrlImg }}"
+                                        alt="User Avatar"
+                                        class="img-profile rounded-circle border shadow"
+                                        style="height: 80px; width: 80px; object-fit: cover;">
+                                    @else
+                                    <!-- Nếu không có ảnh đại diện -->
+                                    <img
+                                        style="height: 80px; width: 80px;"
+                                        class="img-profile rounded-circle"
+                                        src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}"
+                                        alt="Default Avatar">
+                                    @endif
+                                    @else
+                                    <!-- Nếu chưa đăng nhập -->
+                                    <i class="fi-rr-user"></i>
+                                    @endif
                                             <h5 class="name">{{$profile->name}}</h5>
                                         </div>
                                         <p>Xin chào<span> {{$profile->name}}</span></p>

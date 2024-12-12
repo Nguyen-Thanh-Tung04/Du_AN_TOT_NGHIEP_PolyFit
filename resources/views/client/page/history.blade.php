@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
+<section class="ec-vendor-uploads ec-user-account section-space-p">
     <div class="container">
         <div class="row">
             <div class="ec-shop-rightside">
@@ -84,7 +84,7 @@
                             <div class="tab-pane fade" id="cancelled-orders" role="tabpanel">
                                 @include('client.page.orders_table', ['orders' => $cancelledOrders])
                             </div>
-                        
+                        </div>
                         
                         
                            
@@ -177,6 +177,7 @@
         // Lấy order_idtừ button
         var orderId = $(this).data('order-id');
         var products = $(this).data('products');
+        
 
         // Đổ dữ liệu vào modal
         $('#order_id').val(orderId);
@@ -312,7 +313,8 @@
                         reviewsHtml = `
                             <div class="ec-t-review-item d-flex">
                 <div class="ec-t-review-avtar">
-                    <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" width="70px" class="rounded-circle" alt="" />
+                    ${review.user.image ? `<img src="/storage/${review.user.image}" class="rounded-circle" alt="" style="width: 70px; height: 70px; object-fit: cover;" />` 
+                    : '<img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" width="70px" class="rounded-circle" alt="" />'}
                 </div>
                 <div class="mx-5 ec-t-review-content">
                     <div class="ec-t-review-top">
@@ -353,88 +355,102 @@
     });
 
 
-    // Submit
-    $('#submit-review').on('click', function (e) {
-        e.preventDefault();
+ // Submit review
+$('#submit-review').on('click', function (e) {
+    e.preventDefault();
 
-        // Create a new FormData object
-        var formData = new FormData();
-        
-        // Add data from input fields to formData
-        formData.append('review_text', $('#review_text').val());
-        formData.append('rate', $('input[name="rate"]:checked').val());
-        formData.append('id_order', $('input[name="order_id"]').val()); // Corrected from 'order_id' to 'id_order'
+    // Clear previous error messages
+    $('.error-message').remove(); // Xóa các thông báo lỗi cũ
 
-        var reviewImage = $('#review_image').prop('files')[0]; // Lấy file ảnh đầu tiên
+    // Create a new FormData object
+    var formData = new FormData();
+    
+    // Add data from input fields to formData
+    formData.append('review_text', $('#review_text').val());
+    formData.append('rate', $('input[name="rate"]:checked').val());
+    formData.append('id_order', $('input[name="order_id"]').val()); // Corrected from 'order_id' to 'id_order'
 
-        if (reviewImage) {
-            formData.append('review_image', reviewImage); // Thêm file ảnh vào formData, không chỉ tên file
-        }
+    var reviewImage = $('#review_image').prop('files')[0]; // Lấy file ảnh đầu tiên
 
-        // Add CSRF token if Laravel is using CSRF protection
-        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    if (reviewImage) {
+        formData.append('review_image', reviewImage); // Thêm file ảnh vào formData, không chỉ tên file
+    }
 
-        // Debug formData
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+    // Add CSRF token if Laravel is using CSRF protection
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
-        // Send AJAX request
-        $.ajax({
-            url: '/submit-review',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.success) {
+    // Send AJAX request
+    $.ajax({
+        url: '/submit-review',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Đánh giá thành công!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 6000,
+                    showCloseButton: true
+                });
+                // Đóng modal sau khi đánh giá thành công
+                $('#reviewModal').modal('hide');
+                // Thay đổi nút "Write Review" thành "View Review" sau khi đánh giá thành công
+                var orderId = $('input[name="order_id"]').val();
+                var button = $('button.open-review');
+                button.text('Xem đánh giá').attr('disabled', true);
+            }
+        },
+        error: function (xhr) {
+            // Nếu gặp lỗi từ server (422 - đã đánh giá rồi)
+            if (xhr.status === 422) {
+                var errors = xhr.responseJSON.errors;
+
+                // Hiển thị lỗi cụ thể cho mỗi trường
+                if (xhr.responseJSON.message) {
                     Swal.fire({
-                        title: 'Thông báo',
-                        text: 'Đánh giá thành công!',
-                        icon: 'success',
+                        title: 'Lỗi',
+                        text: xhr.responseJSON.message,
+                        icon: 'error',
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,
                         timer: 6000,
                         showCloseButton: true
                     });
-                     // Đóng modal sau khi đánh giá thành công
-                     $('#reviewModal').modal('hide');
-                     // Change the "Write Review" button to "View Review" after successful submission
-                    var orderId = $('input[name="order_id"]').val();
-                    var button = $('button.open-review-modal[data-order-id="' + orderId + '"]');
-
-                    button.removeClass('btn-primary open-review-modal')
-                        .addClass('btn-secondary open-view-review-modal')
-                         .text('Xem đánh giá')
-                         .attr('data-order-id', orderId);
-
-                    
-                } else {
-                    alert(response.message || 'Có lỗi xảy ra.');
                 }
-            },
-            error: function (xhr) {
-                console.log(xhr);
-                if (xhr.status === 422) {
-                    var errors = xhr.responseJSON.errors;
 
-                    // Display error messages for each field
-                    if (errors.review_text) {
-                        $('#review_text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
-                    }
-                    if (errors.rate) {
-                        $('input[name="rate"]').closest('.rate').after('<div class="error-message text-danger">Mời bạn đánh giá sao !</div>');
-                    }
-                    if (errors.review_image) {
-                        $('#review_image').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');
-                    }
-                } else {
-                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                // Display error messages for each field
+                if (errors.review_text) {
+                    $('#review_text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
                 }
+                if (errors.rate) {
+                    $('input[name="rate"]').closest('.rate').after('<div class="error-message text-danger">Mời bạn đánh giá sao !</div>');
+                }
+                if (errors.review_image) {
+                    $('#review_image').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');
+                }
+            } else {
+                Swal.fire({
+                    title: 'Lỗi',
+                    text: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                    icon: 'error',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 6000,
+                    showCloseButton: true
+                });
             }
-        });
-    });         
+        }
+    });
+});
+    
 
     // Cập nhật ảnh
     $(document).on('change', '#review_image', function (event) {

@@ -8,7 +8,6 @@
                     <div id="custom-search-input">
                         <div class="input-group col-md-12">
                             <input type="text" placeholder="Search..." name="" class="form-control search search-text">
-
                             <button class="btn btn-danger" type="button">
                                 <span class="glyphicon glyphicon-search search_btn"></span>
                             </button>
@@ -26,7 +25,7 @@
                                         @if(isset($item->user_image))
                                         <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                         @else
-                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                        <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
                                         @endif
                                         <!-- <span class="online_icon"></span> -->
                                     </div>
@@ -55,7 +54,7 @@
 
             <div class="col-sm-9 message_section">
                 <div class="row">
-                    <input type="hidden" id="idUserReciever" value="{{ $user->id }}">
+                    <input type="hidden" id="idUserReciever" value="{{ $user ? $user->id : '' }}">
                     <div class="new_message_head">
                         <div class="pull-left" id="user{{ $item->id ?? '' }}" style="display: flex;">
                             <div class="img_cont">
@@ -65,7 +64,7 @@
                                 @if(isset($user->image))
                                 <img src="{{ $checkUrlImg }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;">
                                 @else
-                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
+                                <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="rounded-circle user_img" style="width: 50px; height: 50px; border-radius: 50%;" alt="Profile image">
                                 @endif
                                 <span class="online_icon2 online_icon" style="left: 50px; top: 51px; display: none;"></span>
                             </div>
@@ -94,13 +93,16 @@
                             @foreach ($messagePrivate as $item)
                             @if ($item->id_user_send === Auth::user()->id)
                             <li class="left clearfix admin_chat">
+                                @php
+                                $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                                @endphp
                                 @if(isset($item->image_user_send))
                                 <span class="chat-img1 pull-right">
-                                    <img src="{{ $item->image_user_send }}" alt="User Avatar" class="img-circle">
+                                    <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                 </span>
                                 @else
                                 <span class="chat-img1 pull-right">
-                                    <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                    <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
                                 </span>
                                 @endif
 
@@ -113,12 +115,14 @@
                             @else
                             <li class="left clearfix">
                                 <span class="chat-img1 pull-left">
+                                    @php
+                                    $checkUrlImg = \Illuminate\Support\Str::contains($item->image_user_send, '/userfiles/') ? $item->image_user_send : Storage::url($item->image_user_send);
+                                    @endphp
                                     @if(isset($item->image_user_send))
-
-                                    <img src="{{ Storage::url($item->image_user_send) }}" alt="User Avatar" class="img-circle">
+                                    <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-circle">
                                     @else
                                     <span class="chat-img1 pull-right">
-                                        <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
+                                        <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
                                     </span>
                                     @endif
 
@@ -146,7 +150,6 @@
 </div>
 @endsection
 @section('js')
-
 <script type="module">
     $(document).ready(function() {
         scrollToBottom()
@@ -232,12 +235,9 @@
             }
         });
 
-
-
     var content_message = document.querySelector('#content_message')
 
     var idUserReciever = document.querySelector('#idUserReciever')
-    // console.log(idUserReciever);
 
     var fa_location_arrow = document.createElement('i')
     fa_location_arrow.classList.add('fas', 'fa-location-arrow');
@@ -256,9 +256,7 @@
             }
         }
     });
-
     let messageContent = ''
-
     content_message.addEventListener('keypress', e => {
         if (event.key === 'Enter') {
             event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter (nếu có)
@@ -266,21 +264,12 @@
             sendMess();
         }
     })
-
     fa_location_arrow.addEventListener('click', function() {
-
         if (send_btn.contains(fa_location_arrow)) {
             send_btn.removeChild(fa_location_arrow);
         }
         messageContent = content_message.value.trim();
         sendMess()
-        // axios.post('/message-private', {
-        //         message: messageContent,
-        //         idUserReciever: idUserReciever.value,
-        //     })
-        //     .then(function(response) {
-
-        //     })
     })
 
     const sendMess = () => {
@@ -345,12 +334,12 @@
             var card_header_msg_head = document.querySelector('.msg_head')
             let image_url = event.idUserSend?.image ?
                 event.idUserSend.image :
-                "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
 
             // Kiểm tra và xử lý đường dẫn ảnh
             let image = image_url.includes('http') ?
                 image_url :
-                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                '/storage/' + event.idUserSend?.image || "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -388,8 +377,6 @@
             scrollToBottom()
         })
 
-
-
     Echo.private("chat.private.{{ $user->id }}.{{ Auth::user()->id }}")
         .listen('ChatPrivateEvent', event => {
             // console.log(123);
@@ -399,12 +386,12 @@
             var ui = ''
             let image_url = event.idUserSend?.image ?
                 event.idUserSend.image :
-                "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                "{{ asset('userfiles/thumb/Images/avata_null.jpg') }}";
 
             // Kiểm tra và xử lý đường dẫn ảnh
             let image = image_url.includes('http') ?
                 image_url :
-                '/storage/' + event.idUserSend?.image || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+                '/storage/' + event.idUserSend?.image || "{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
                    <div class="d-flex justify-content-end mb-4">
@@ -440,16 +427,12 @@
 </script>
 
 <script>
-    // console.log(334444);
-
     var search_text = document.querySelector('.search-text')
     var contacts = document.querySelector('.list-unstyled');
-    // console.log(contacts);
-
+    console.log(contacts);
 
     search_text.addEventListener('input', function() {
         var query = search_text.value.trim();
-
 
         axios.post('/chat-private-admin/search', {
                 search_text: query
@@ -460,12 +443,15 @@
                 if (response.data && response.data.data) {
 
                     response.data.data.forEach(function(user) {
-                        let image = null
-                        if (user.user_image) {
-                            image = 'storage/' + user.user_image
-                        } else {
-                            image = 'theme/client/assets/images/whatsapp/admin.jpg'
-                        }
+                        let image_url = (user.user_image && user.user_image !== '') ?
+                            user.user_image :
+                            "{{ asset('userfiles/thumb/Images/avata_null.jpg') }}";
+
+                        // Kiểm tra và xử lý đường dẫn ảnh
+                        let image = image_url.includes('http') ?
+                            image_url :
+                            '/storage/' + (user.user_image || '') || "{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
+
                         ui += `
                         <li class="left clearfix">
                                 <a style="color: #000" href="/chat-private-admin/${user.user_id}" id="user${user.user_id}">
