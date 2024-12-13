@@ -122,7 +122,11 @@
                 "sInfoPostFix": "",
                 "sSearch": "Tìm:",
                 "sUrl": "",
-            }
+            },
+            columnDefs: [{
+                orderable: false,
+                targets: [0, 1]
+            }]
         });
 
         $('#product-flash').on('change', 'input[type="checkbox"]', function() {

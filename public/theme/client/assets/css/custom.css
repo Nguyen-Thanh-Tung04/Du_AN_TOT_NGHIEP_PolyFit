@@ -323,12 +323,9 @@ body {
 }
 
 .flash-sale-banner {
-    background-image: url('/theme/client/assets/images/bg/flashsale.png');
-    background-size: cover;
-    background-color: #ff6f61;
     /* Màu cam nhạt */
     color: white;
-    padding: 20px;
+    padding: 50px;
     border-radius: 5px;
     text-align: center;
     /* Căn giữa nội dung */

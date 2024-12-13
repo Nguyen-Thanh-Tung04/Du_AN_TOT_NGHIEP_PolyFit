@@ -133,7 +133,7 @@
                                     <img
                                         style="height: 40px; width: 40px;"
                                         class="img-profile rounded-circle"
-                                        src="{{ asset('userfiles/image/avata_null.jpg') }}"
+                                        src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}"
                                         alt="Default Avatar">
                                     @endif
                                     @else

@@ -55,7 +55,7 @@
                                     </span> --}}
                                     <div class="ec-check-bill-form">
                                         <div class="form-flex">
-                                            <form action="{{ route('order.store') }}" method="POST">
+                                            <form id="orderForm" action="{{ route('order.store') }}" method="POST">
                                                 @csrf
                                                 <span class="ec-bill-wrap ec-bill-half">
                                                     <label>Họ và tên*</label>
@@ -100,10 +100,17 @@
                                                         </select>
                                                     </span>
                                                 </span>
-                                                <span class="ec-bill-wrap">
+                                                <span class="ec-bill-wrap ec-bill-half">
                                                     <label>Địa chỉ cụ thể</label>
-                                                    <textarea name="address" style="border: 1px solid #dee2e6" id="address" cols="20" rows="7">{{ $user->address }}</textarea>
+                                                    <input type="text" id="address" name="address" value="{{ $user->address }}"
+                                                        placeholder="" required />
                                                 </span>
+                                                <span class="ec-bill-wrap">
+                                                    <label>Lưu ý khi giao hàng</label>
+                                                    <textarea name="note" style="border: 1px solid #dee2e6" id="note" cols="20" rows="7" placeholder="Lưu ý"></textarea>
+                                                </span>
+                                               
+                                               
                                         </div>
                                     </div>
 
@@ -130,15 +137,15 @@
                             <div class="ec-checkout-summary">
                                 <div>
                                     <span class="text-left">Tổng tiền hàng</span>
-                                    <span class="text-right" id="totalAmount">đ{{ number_format($total, 0, '', '.') }}</span>
+                                    <span class="text-right" id="totalAmount">{{ number_format($total, 0, '', '.') }}đ</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Giảm giá (Voucher)</span>
-                                    <span class="text-right text-danger" id="discountAmount">- đ0</span>
+                                    <span class="text-right text-danger" id="discountAmount">- 0đ</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Phí vận chuyển</span>
-                                    <span class="text-right" id="shippingCost">đ20.000</span>
+                                    <span class="text-right" id="shippingCost">20.000đ</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Voucher</span>
@@ -168,7 +175,7 @@
                                 </div>
                                 <div class="ec-checkout-summary-total">
                                     <span class="text-left">Tổng thanh toán</span>
-                                    <span class="text-right" id="finalTotal">đ{{ number_format(($total + 20000), 0, '', '.') }}</span>
+                                    <span class="text-right" id="finalTotal">{{ number_format(($total + 20000), 0, '', '.') }}đ</span>
                                 </div>
                             </div>
                             <div class="ec-checkout-pro">
@@ -179,6 +186,7 @@
                                 <div class="col-sm-12 mb-6">
                                     <div class="ec-product-inner product-variant-item"
                                         data-product-variant-id="{{ $item->id }}"
+                                        data-name="{{ $item->product->name }}"
                                         data-image="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
                                         data-price="{{ $item->new_price != null ? $item->new_price : $item->normal_price }}"
                                         data-size="{{ $item->size->name }}"
@@ -205,10 +213,10 @@
                                             </div> --}}
                                             <span class="ec-price">
                                                 @if ($item->new_price)
-                                                <span id="listedPrice" class="old-price">đ{{ number_format($item->normal_price, 0, '', '.') }} </span>
-                                                <span class="new-price">đ{{ number_format($item->new_price, 0, '', '.') }}</span>
+                                                <span id="listedPrice" class="old-price">{{ number_format($item->normal_price, 0, '', '.') }}đ </span>
+                                                <span class="new-price">{{ number_format($item->new_price, 0, '', '.') }}đ</span>
                                                 @else
-                                                <span class="new-price">đ{{ number_format($item->normal_price, 0, '', '.') }} </span>
+                                                <span class="new-price">{{ number_format($item->normal_price, 0, '', '.') }}đ </span>
                                                 @endif
                                             </span>
 
@@ -229,7 +237,7 @@
                     </div>
                     <!-- Sidebar Summary Block -->
                 </div>
-                <div class="ec-sidebar-wrap ec-checkout-del-wrap">
+                {{-- <div class="ec-sidebar-wrap ec-checkout-del-wrap">
                     <!-- Sidebar Summary Block -->
                     <div class="ec-sidebar-block">
                         <div class="ec-sb-title">
@@ -241,12 +249,7 @@
                                     <span>
                                         <span class="ec-del-opt-head">Giao hàng tiết kiệm</span>
                                         <input type="radio" id="del1" name="shipping_method" value="20000" checked>
-                                        <label for="del1">đ20.000</label>
-                                    </span>
-                                    <span>
-                                        <span class="ec-del-opt-head">Giao hàng nhanh</span>
-                                        <input type="radio" id="del2" name="shipping_method" value="40000">
-                                        <label for="del2">đ40.000</label>
+                                        <label for="del1">20.000đ</label>
                                     </span>
                                 </span>
                                 <span class="ec-del-commemt">
@@ -257,7 +260,7 @@
                         </div>
                     </div>
                     <!-- Sidebar Summary Block -->
-                </div>
+                </div> --}}
                 <div class="ec-sidebar-wrap ec-checkout-pay-wrap">
                     <!-- Sidebar Payment Block -->
                     <div class="ec-sidebar-block">
@@ -296,6 +299,16 @@
     var province_id = "{{ (isset($user->province_id)) ? $user->province_id : old('province_id') }}"
     var district_id = "{{ (isset($user->district_id)) ? $user->district_id : old('district_id') }}"
     var ward_id = "{{ (isset($user->ward_id)) ? $user->ward_id : old('ward_id') }}"
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('orderForm');
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function(event) {
+            // Vô hiệu hóa nút submit
+            submitButton.disabled = true;
+        });
+    });
 </script>
 <script src="{{ asset('admin/library/location.js') }}"></script>
 <script>
@@ -319,6 +332,7 @@
                 let productVariants = [];
                 $('.product-variant-item').each(function() {
                     let productVariantId = $(this).data('product-variant-id');
+                    let name = $(this).data('name');
                     let image = $(this).data('image');
                     let price = $(this).data('price');
                     let color = $(this).data('color');
@@ -327,6 +341,7 @@
 
                     productVariants.push({
                         product_variant_id: productVariantId,
+                        name: name,
                         image: image,
                         price: price,
                         color: color,
@@ -352,6 +367,10 @@
                     sendAjaxRequest('{{ route("order.store") }}', 'POST', function(response) {
                         // Success callback
                         toastr.success(response.message);
+                        
+                         // Thay đổi lịch sử trình duyệt để khi người dùng nhấn nút Back, họ sẽ về trang giỏ hàng
+                        history.replaceState(null, null, '{{ route("cart.index") }}');
+
                         window.location.href = '{{ url("order") }}/' + response.order_id;
                     }, function(response) {
                         // Error callback (nếu cần thêm xử lý lỗi khác)
@@ -426,13 +445,9 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                for (let field in errors) {
-                                    if (errors.hasOwnProperty(field)) {
-                                        toastr.error(errors[field][0]); // Hiển thị lỗi đầu tiên cho mỗi trường
-                                    }
-                                }
+                            if (xhr.status === 400) { // Kiểm tra mã lỗi 400
+                                let message = xhr.responseJSON.message;
+                                toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
                             } else {
                                 toastr.error('Có lỗi xảy ra: ' + error);
                             }
@@ -482,8 +497,7 @@
                     success: function(response) {
                         if (response.success) {
                             // Cập nhật giá trị giảm giá dựa trên mã voucher
-                            discountAmount = response.discount;
-                            console.log(discountAmount);
+                            discountAmount = Number(response.discount);
 
                             // Cập nhật lại giá trị hiển thị cho giảm giá
                             $('#discountAmount').text('-' + formatCurrency(discountAmount));
@@ -492,8 +506,7 @@
                             let shippingCost = parseInt($('input[name="shipping_method"]:checked').val()) || 0;
 
                             // Tính toán tổng tiền thanh toán mới (sử dụng giá trị trả về từ server)
-                            let finalTotal = response.final_total + shippingCost; // Dùng final_total từ server
-
+                            let finalTotal = Number(response.final_total) + Number(shippingCost); // Dùng final_total từ server
                             // Cập nhật lại giá trị hiển thị
                             $('#finalTotal').text(formatCurrency(finalTotal));
                             toastr.success(response.message);
@@ -521,7 +534,7 @@
                 let shippingCost = parseInt($('input[name="shipping_method"]:checked').val());
 
                 // Tính toán lại tổng tiền
-                let finalTotal = totalAmount + shippingCost;
+                let finalTotal = Number(totalAmount) + Number(shippingCost);
 
                 // Cập nhật lại giá trị hiển thị
                 $('#finalTotal').text(formatCurrency(finalTotal));

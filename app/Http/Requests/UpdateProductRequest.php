@@ -27,11 +27,33 @@ class UpdateProductRequest extends FormRequest
             'category_id' => 'gt:0',
             'color.*' => 'gt:0', 
             'size.*' => 'gt:0', 
-            'purchase_price.*' => 'required|integer|min:1|max:999999999', 
-            'listed_price.*' => 'required|integer|min:1|max:999999999',
-            'sale_price.*' => 'required|integer|min:1|max:999999999',
-            'quantity.*' => 'required|integer|min:1|max:999999999',
+            'purchase_price.*' => 'required|integer|min:1|max:9999999', 
+            'listed_price.*' => 'required|integer|min:1|max:9999999',
+            'sale_price.*' => 'integer|min:1|max:9999999',
+            'quantity.*' => 'required|integer|min:1|max:9999999',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $purchasePrices = $this->input('purchase_price', []);
+            $listedPrices = $this->input('listed_price', []);
+            $salePrices = $this->input('sale_price', []);
+
+            foreach ($purchasePrices as $index => $purchasePrice) {
+                $listedPrice = $listedPrices[$index] ?? 0;
+                $salePrice = $salePrices[$index] ?? 0;
+
+                if ($purchasePrice >= $listedPrice) {
+                    $validator->errors()->add("purchase_price.{$index}", 'Giá niêm yết phải lớn hơn giá nhập kho.');
+                }
+
+                if ($listedPrice <= $salePrice) {
+                    $validator->errors()->add("sale_price.{$index}", 'Giá sale phải nhỏ hơn giá niêm yết.');
+                }
+            }
+        });
     }
 
     public function messages(): array
@@ -51,7 +73,6 @@ class UpdateProductRequest extends FormRequest
             'listed_price.*.integer' => 'Giá niêm yết phải là dạng số nguyên.',
             'listed_price.*.min' => 'Giá niêm yết phải lớn hơn 1.',
             'listed_price.*.max' => 'Giá niêm yết quá lớn.',
-            'sale_price.*.required' => 'Bạn chưa nhập giá sale.',
             'sale_price.*.integer' => 'Giá sale phải là dạng số nguyên.',
             'sale_price.*.min' => 'Giá sale phải lớn hơn 1.',
             'sale_price.*.max' => 'Giá sale quá lớn.',

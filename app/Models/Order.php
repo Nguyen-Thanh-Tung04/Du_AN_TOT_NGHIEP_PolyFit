@@ -117,12 +117,15 @@ class Order extends Model
     }
 
     public function getHasReviewAttribute()
-    {
-        // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
-        return $this->orderItems->every(function ($item) {
+{
+    // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
+    return $this->orderItems->every(function ($item) {
+        if ($item->variant && $item->variant->product_id) {
             return Review::where('product_id', $item->variant->product_id)
                 ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
                 ->exists();
-        });
-    }
+        }
+        return false; // Nếu không có variant hoặc product_id, trả về false
+    });
+}
 }

@@ -28,16 +28,41 @@ class ReviewController extends Controller
                 'review_image.mimes' => 'Chỉ chấp nhận định dạng ảnh jpg, jpeg, png.',
                 'review_image.max' => 'Ảnh không được quá 2MB.',
             ]);
-
+    
+            // Kiểm tra xem đơn hàng đã được đánh giá hay chưa
+            $existingReview = Review::where('order_id', $request->input('id_order'))
+                ->where('account_id', auth()->id()) // Đảm bảo kiểm tra theo người dùng
+                ->exists();
+    
+            if ($existingReview) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn đã đánh giá đơn hàng này rồi.',
+                ], 422);
+            }
+    
             // Save the image if provided
             $imagePath = $request->hasFile('review_image')
                 ? $request->file('review_image')->store('review_images', 'public')
                 : '';
-
+    
             // Retrieve the order and its items
             $order = Order::with('orderItems')->findOrFail($request->input('id_order'));
-            $products = $order->orderItems->pluck('variant.product_id')->unique(); // Get unique product IDs
-
+            $products = $order->orderItems
+                ->pluck('variant.product_id')          // Trích xuất product_id từ variant
+                ->filter(function ($productId) {
+                    return !is_null($productId);        // Loại bỏ các giá trị null
+                })
+                ->values()                            // Loại bỏ các khóa
+                ->unique();                          // Chỉ giữ các giá trị duy nhất
+    
+            if ($products->count() <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm không còn tồn tại.',
+                ]);
+            }
+    
             // Create a new review for each product
             foreach ($products as $productId) {
                 Review::create([
@@ -50,7 +75,7 @@ class ReviewController extends Controller
                     'status' => 1,
                 ]);
             }
-
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Đánh giá của bạn đã được lưu.',
@@ -63,6 +88,7 @@ class ReviewController extends Controller
             ], 422);
         }
     }
+    
     public function getReviews($orderId)
     {
         $order = Order::with('orderItems.variant.product')->findOrFail($orderId);

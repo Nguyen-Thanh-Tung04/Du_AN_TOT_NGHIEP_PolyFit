@@ -12,6 +12,7 @@ class OrderItem extends Model
 
     protected $fillable = [
         'variant_id',
+        'name',
         'order_id',
         'image',
         'price',
@@ -32,10 +33,10 @@ class OrderItem extends Model
         return $this->belongsTo(Variant::class, 'variant_id', 'id');
     }
 
-    public function product()
-    {
-        return $this->variant->product(); // Nếu Variant có quan hệ với Product
-    }
+    // public function product()
+    // {
+    //     return $this->variant->product(); // Nếu Variant có quan hệ với Product
+    // }
     // Lấy tất cả đánh giá của sản phẩm thuộc OrderItem
     public function reviews()
     {

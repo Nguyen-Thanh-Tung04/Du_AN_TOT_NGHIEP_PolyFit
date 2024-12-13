@@ -16,7 +16,9 @@
         content="apparel, catalog, clean, ecommerce, ecommerce HTML, electronics, fashion, html eCommerce, html store, minimal, multipurpose, multipurpose ecommerce, online store, responsive ecommerce template, shops" />
     <meta name="description" content="Best ecommerce html template for single and multi vendor store.">
     <meta name="author" content="ashishmaraviya">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!-- site Favicon -->
     <link rel="icon" href="{{asset('theme/client/assets/images/logo/logo1.png')}}" sizes="32x32" />
     <link rel="apple-touch-icon" href="{{asset('theme/client/assets/images/logo/logo1.png')}}" />
@@ -74,7 +76,35 @@
 
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
 
+    <style>
+        .ec-product-image {
+            position: relative;
+            overflow: hidden;
+        }
 
+        .ec-product-image .hover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .ec-product-image:hover .hover-image {
+            opacity: 1;
+        }
+
+        .ec-product-image .default-image {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .ec-product-image:hover .default-image {
+            opacity: 0;
+        }
+
+    </style>
 
 
 </head>

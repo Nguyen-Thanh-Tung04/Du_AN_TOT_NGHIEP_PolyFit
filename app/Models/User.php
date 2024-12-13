@@ -58,12 +58,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function user_catalogues() {
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'province_id', 'code');
+    }
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id', 'code');
+    }
+    public function ward()
+    {
+        return $this->belongsTo(Ward::class, 'ward_id', 'code');
+    }
+    public function user_catalogues()
+    {
         return $this->belongsTo(UserCatalogue::class, 'user_catalogue_id', 'id');
     }
 
-    public function orders() {
+    public function orders()
+    {
         return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class, 'voucher_user')->withTimestamps();
     }
 }

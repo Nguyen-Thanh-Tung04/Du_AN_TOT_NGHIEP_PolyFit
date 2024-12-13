@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Events\OrderPlaced;
-
+use Ramsey\Uuid\Type\Integer;
 
 class CheckoutController
 {
@@ -132,15 +132,16 @@ class CheckoutController
     {
         $voucherCode = $request->input('voucher_code');
         $totalAmount = $request->input('total_amount');
+        $user = auth()->user();
 
         $voucher = Voucher::where('code', $voucherCode)
-            ->where('start_time', '<=', now())
-            ->where('end_time', '>=', now())
-            ->where('min_order_value', '<=', $totalAmount)
-            ->where('max_order_value', '>=', $totalAmount)
-            ->where('quantity', '>', 0)
-            ->where('status', 1)
-            ->first();
+        ->where('start_time', '<=', now())
+        ->where('end_time', '>=', now())
+        ->where('min_order_value', '<=', $totalAmount)
+        ->where('max_order_value', '>=', $totalAmount)
+        ->where('quantity', '>', 0)
+        ->where('status', 1)
+        ->first();
 
         if (!$voucher) {
             return response()->json([
@@ -148,18 +149,31 @@ class CheckoutController
                 'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.'
             ]);
         }
+
+        // Kiểm tra nếu người dùng đã sử dụng voucher này
+        if ($voucher->users()->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn đã sử dụng voucher này trước đó.'
+            ]);
+        }
+
+        // Kiểm tra thời gian sử dụng voucher
         if ($voucher->start_time > now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Mã voucher này chưa có hiệu lực.'
             ]);
         }
+
         if ($voucher->end_time < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Mã voucher này đã hết hạn, không thể sử dụng.'
             ]);
         }
+
+        // Kiểm tra giá trị đơn hàng và các điều kiện khác (min_order_value, max_order_value)
         if ($voucher->min_order_value && $totalAmount < $voucher->min_order_value) {
             return response()->json([
                 'success' => false,
@@ -177,7 +191,7 @@ class CheckoutController
         // Tính toán giảm giá
         $discount = 0;
         if ($voucher->discount_type == 'percentage') {
-            // Tính giảm giá theo phần trăm
+            // Giảm giá theo phần trăm
             $discount = ($voucher->value / 100) * $totalAmount;
 
             // Kiểm tra nếu giảm giá vượt quá max_discount_value
@@ -198,6 +212,12 @@ class CheckoutController
         // Tính toán tổng tiền sau khi áp dụng giảm giá
         $finalTotal = $totalAmount - $discount;
 
+        // Lưu voucher đã được sử dụng vào bảng trung gian voucher_user
+        $voucher->users()->attach($user->id, ['used_at' => now()]);
+
+        // Giảm số lượng voucher còn lại
+        $voucher->decrement('quantity');
+
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng voucher thành công.',
@@ -206,6 +226,7 @@ class CheckoutController
             'voucher' => $voucher,
         ]);
     }
+
 
     public function getAvailableVouchers()
     {
@@ -222,7 +243,48 @@ class CheckoutController
 
     public function orderStore(StoreCheckoutRequest $request)
     {
-        $totalAmount = $request->input('total_amount');
+        $totalAmount = 0;
+        $productVariants = $request->input('product_variants');
+        $productVariantIds = [];
+
+        foreach ($productVariants as $variant) {
+            $productVariant = Variant::find($variant['product_variant_id']);
+
+            if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
+                $flashSaleProduct = $productVariant->product->flashSaleProducts()
+                    ->where('variant_id', $productVariant->id)
+                    ->whereHas('flashSale', function ($query) {
+                        $query->where('status', 1)
+                            ->where('date', now()->toDateString())
+                            ->where(function ($query) {
+                                $currentHour = now()->hour;
+                                $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                    ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                            });
+                    })
+                    ->where('status', 1)
+                    ->where('quantity', '>', 0)
+                    ->first();
+
+                $flashSaleQty = 0;
+                $normalQty = $variant['quantity'];
+                $flashSalePrice = 0;
+                $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
+                if ($flashSaleProduct) {
+                    $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
+                    $normalQty = $variant['quantity'] - $flashSaleQty;
+                    $flashSalePrice = $flashSaleProduct->flash_price;
+                }
+
+                $totalAmount += ($flashSalePrice * $flashSaleQty) + ($normalPrice * $normalQty);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                ], 400);
+            }
+        }
+
         $voucherCode = $request->input('voucher_code');
         $dateCode = date('Ymd');
         $randomNumberCode = mt_rand(10000000, 99999999);
@@ -247,6 +309,17 @@ class CheckoutController
         }
 
         $user = Auth::user();
+        $lastOrder = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
+
+        if ($lastOrder && $lastOrder->created_at->diffInSeconds(now()) < 10) {
+            return redirect()->back();
+        }
+
+        if ($request->input('discount_amount')) {
+            $totalAmount = ($totalAmount + $request->input('shipping_cost')) - $request->input('discount_amount');
+        } else {
+            $totalAmount = ($totalAmount + $request->input('shipping_cost'));
+        }
 
         $order = Order::create([
             'user_id' => $user->id,
@@ -260,43 +333,70 @@ class CheckoutController
             'address' => $request->input('address'),
             'phone' => $request->input('phone'),
             'note' => $request->input('note') ?? null,
-            'shipping_cost' => $request->input('shipping_cost'),
-            'total_price' => $request->input('final_total'),
+            'shipping_cost' => (int)$request->input('shipping_cost'),
+            'total_price' => $totalAmount,
             'discount_amount' => $request->input('discount_amount'),
-            'payment_method' => $request->input('payment_method'),
+            'payment_method' => (int)$request->input('payment_method'),
         ]);
 
-        $productVariants = $request->input('product_variants');
-        $productVariantIds = []; // Mảng lưu trữ ID của các biến thể sản phẩm đã đặt hàng
-
         foreach ($productVariants as $variant) {
-            // Tìm kiếm biến thể sản phẩm
             $productVariant = Variant::find($variant['product_variant_id']);
 
-            // Kiểm tra nếu biến thể tồn tại và số lượng đủ
-            if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
-                // Tạo bản ghi OrderItem
+            $flashSaleProduct = $productVariant->product->flashSaleProducts()
+                ->where('variant_id', $productVariant->id)
+                ->whereHas('flashSale', function ($query) {
+                    $query->where('status', 1)
+                        ->where('date', now()->toDateString())
+                        ->where(function ($query) {
+                            $currentHour = now()->hour;
+                            $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                        });
+                })
+                ->where('status', 1)
+                ->where('quantity', '>', 0)
+                ->first();
+
+            $flashSaleQty = 0;
+            $normalQty = $variant['quantity'];
+            $flashSalePrice = 0;
+            $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
+
+            if ($flashSaleProduct) {
+                $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
+                $normalQty = $variant['quantity'] - $flashSaleQty;
+                $flashSalePrice = $flashSaleProduct->flash_price;
+            }
+
+            if ($flashSaleQty > 0) {
                 OrderItem::create([
                     'order_id' => $order->id,
+                    'name' => $variant['name'],
                     'variant_id' => $variant['product_variant_id'],
+                    'price' => $flashSalePrice,
+                    'quantity' => $flashSaleQty,
                     'image' => $variant['image'],
-                    'price' => $variant['price'],
                     'color' => $variant['color'],
                     'size' => $variant['size'],
-                    'quantity' => $variant['quantity'],
                 ]);
-                // Trừ số lượng sản phẩm
-                $productVariant->decrement('quantity', $variant['quantity']);
-
-                // Thêm ID của biến thể vào mảng
-                $productVariantIds[] = $variant['product_variant_id'];
-            } else {
-                // Xử lý trường hợp không đủ số lượng sản phẩm
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sản phẩm không đủ số lượng: ' . $variant['product_variant_id'],
-                ], 400);
+                $flashSaleProduct->decrement('quantity', $flashSaleQty);
             }
+
+            if ($normalQty > 0) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'name' => $variant['name'],
+                    'variant_id' => $variant['product_variant_id'],
+                    'price' => $normalPrice,
+                    'quantity' => $normalQty,
+                    'image' => $variant['image'],
+                    'color' => $variant['color'],
+                    'size' => $variant['size'],
+                ]);
+            }
+
+            $productVariant->decrement('quantity', $variant['quantity']);
+            $productVariantIds[] = $variant['product_variant_id'];
         }
         // Sau khi đơn hàng được tạo, phát sự kiện realtime
         event(new OrderPlaced($order));
@@ -354,69 +454,82 @@ class CheckoutController
             }
         }
 
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = route('vnpay.return');
-        $vnp_TmnCode = "QAZ9JCE2"; //Mã website tại VNPAY 
-        $vnp_HashSecret = "M2B6JJ8UT7G5Z3AX737YGFBAV026H5OW"; //Chuỗi bí mật
+        $productVariants = $request->input('product_variants');
 
-        $dateCode = date('Ymd');
-        $randomNumberCode = mt_rand(10000000, 99999999);
-        $code = 'SP-' . $dateCode . $randomNumberCode;
+        foreach ($productVariants as $variant) {
+            $productVariant = Variant::find($variant['product_variant_id']);
 
-        $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
-        $vnp_OrderInfo = 'Thanh toán đơn hàng';
-        $vnp_OrderType = 'other';
-        $vnp_Amount = $request->input('final_total') * 100;
-        $vnp_Locale = 'vn';
-        // $vnp_BankCode = 'NCB';
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+            if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
+                $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+                $vnp_Returnurl = route('vnpay.return');
+                $vnp_TmnCode = "QAZ9JCE2"; //Mã website tại VNPAY 
+                $vnp_HashSecret = "M2B6JJ8UT7G5Z3AX737YGFBAV026H5OW"; //Chuỗi bí mật
 
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef,
-        );
+                $dateCode = date('Ymd');
+                $randomNumberCode = mt_rand(10000000, 99999999);
+                $code = 'SP-' . $dateCode . $randomNumberCode;
 
-        // if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-        //     $inputData['vnp_BankCode'] = $vnp_BankCode;
-        // }
+                $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+                $vnp_OrderInfo = 'Thanh toán đơn hàng';
+                $vnp_OrderType = 'other';
+                $vnp_Amount = $request->input('final_total') * 100;
+                $vnp_Locale = 'vn';
+                // $vnp_BankCode = 'NCB';
+                $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
-        //var_dump($inputData);
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+                $inputData = array(
+                    "vnp_Version" => "2.1.0",
+                    "vnp_TmnCode" => $vnp_TmnCode,
+                    "vnp_Amount" => $vnp_Amount,
+                    "vnp_Command" => "pay",
+                    "vnp_CreateDate" => date('YmdHis'),
+                    "vnp_CurrCode" => "VND",
+                    "vnp_IpAddr" => $vnp_IpAddr,
+                    "vnp_Locale" => $vnp_Locale,
+                    "vnp_OrderInfo" => $vnp_OrderInfo,
+                    "vnp_OrderType" => $vnp_OrderType,
+                    "vnp_ReturnUrl" => $vnp_Returnurl,
+                    "vnp_TxnRef" => $vnp_TxnRef,
+                );
+
+                // if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+                //     $inputData['vnp_BankCode'] = $vnp_BankCode;
+                // }
+
+                //var_dump($inputData);
+                ksort($inputData);
+                $query = "";
+                $i = 0;
+                $hashdata = "";
+                foreach ($inputData as $key => $value) {
+                    if ($i == 1) {
+                        $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+                    } else {
+                        $hashdata .= urlencode($key) . "=" . urlencode($value);
+                        $i = 1;
+                    }
+                    $query .= urlencode($key) . "=" . urlencode($value) . '&';
+                }
+
+                $vnp_Url = $vnp_Url . "?" . $query;
+                if (isset($vnp_HashSecret)) {
+                    $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+                    $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'code' => '00',
+                    'message' => 'success',
+                    'vnpay_url' => $vnp_Url
+                ]);
             } else {
-                $hashdata .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                ], 400);
             }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
-
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-        }
-
-        return response()->json([
-            'success' => true,
-            'code' => '00',
-            'message' => 'success',
-            'vnpay_url' => $vnp_Url
-        ]);
     }
 
     public function execPostRequest($url, $data)
@@ -465,53 +578,65 @@ class CheckoutController
                 ]);
             }
         }
+        $productVariants = $request->input('product_variants');
 
-        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+        foreach ($productVariants as $variant) {
+            $productVariant = Variant::find($variant['product_variant_id']);
 
-        $dateOrderId = date('Ymd');
-        $randomNumberOrderId = mt_rand(10000000, 99999999);
+            if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
+                $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
-        $amount = $request->input('final_total');
-        $partnerCode = 'MOMOBKUN20180529';
-        $accessKey = 'klm05TvNBzhg7h7j';
-        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-        $orderInfo = "Thanh toán qua ATM MoMo";
-        $orderId = 'SP-' . $dateOrderId . $randomNumberOrderId . "";
-        $redirectUrl = route('vnpay.return');
-        $ipnUrl = route('vnpay.return');
+                $dateOrderId = date('Ymd');
+                $randomNumberOrderId = mt_rand(10000000, 99999999);
 
-        $extraData = "";
+                $amount = $request->input('final_total');
+                $partnerCode = 'MOMOBKUN20180529';
+                $accessKey = 'klm05TvNBzhg7h7j';
+                $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+                $orderInfo = "Thanh toán qua ATM MoMo";
+                $orderId = 'SP-' . $dateOrderId . $randomNumberOrderId . "";
+                $redirectUrl = route('vnpay.return');
+                $ipnUrl = route('vnpay.return');
 
-        $requestId = time() . "";
-        $requestType = "payWithATM";
-        // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
-        //before sign HMAC SHA256 signature
-        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
-        $signature = hash_hmac("sha256", $rawHash, $secretKey);
-        $data = array(
-            'partnerCode' => $partnerCode,
-            'partnerName' => "Test",
-            "storeId" => "MomoTestStore",
-            'requestId' => $requestId,
-            'amount' => $amount,
-            'orderId' => $orderId,
-            'orderInfo' => $orderInfo,
-            'redirectUrl' => $redirectUrl,
-            'ipnUrl' => $ipnUrl,
-            'lang' => 'vi',
-            'extraData' => $extraData,
-            'requestType' => $requestType,
-            'signature' => $signature
-        );
-        $result = $this->execPostRequest($endpoint, json_encode($data));
-        $jsonResult = json_decode($result, true);  // decode json
+                $extraData = "";
 
-        //Just a example, please check more in there
-        return response()->json([
-            'success' => true,
-            'message' => 'success',
-            'momo_url' => $jsonResult['payUrl']
-        ]);
+                $requestId = time() . "";
+                $requestType = "payWithATM";
+                // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+                //before sign HMAC SHA256 signature
+                $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+                $signature = hash_hmac("sha256", $rawHash, $secretKey);
+                $data = array(
+                    'partnerCode' => $partnerCode,
+                    'partnerName' => "Test",
+                    "storeId" => "MomoTestStore",
+                    'requestId' => $requestId,
+                    'amount' => $amount,
+                    'orderId' => $orderId,
+                    'orderInfo' => $orderInfo,
+                    'redirectUrl' => $redirectUrl,
+                    'ipnUrl' => $ipnUrl,
+                    'lang' => 'vi',
+                    'extraData' => $extraData,
+                    'requestType' => $requestType,
+                    'signature' => $signature
+                );
+                $result = $this->execPostRequest($endpoint, json_encode($data));
+                $jsonResult = json_decode($result, true);  // decode json
+
+                //Just a example, please check more in there
+                return response()->json([
+                    'success' => true,
+                    'message' => 'success',
+                    'momo_url' => $jsonResult['payUrl']
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                ], 400);
+            }
+        }
     }
 
     public function vnpayReturn(Request $request)
@@ -520,12 +645,63 @@ class CheckoutController
         if ($vnp_ResponseCode == '00' || $vnp_ResponseCode == '0') {
             $checkoutData = session()->get('checkout_data');
 
+            $productVariants = $checkoutData['product_variants'];
+
+            // Calculate total amount
+            $totalAmount = 0;
+            foreach ($productVariants as $variant) {
+                $productVariant = Variant::find($variant['product_variant_id']);
+
+                if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
+                    $flashSaleProduct = $productVariant->product->flashSaleProducts()
+                        ->where('variant_id', $productVariant->id)
+                        ->whereHas('flashSale', function ($query) {
+                            $query->where('status', 1)
+                                ->where('date', now()->toDateString())
+                                ->where(function ($query) {
+                                    $currentHour = now()->hour;
+                                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                                });
+                        })
+                        ->where('status', 1)
+                        ->where('quantity', '>', 0)
+                        ->first();
+
+                    $flashSaleQty = 0;
+                    $normalQty = $variant['quantity'];
+                    $flashSalePrice = 0;
+                    $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
+
+                    if ($flashSaleProduct) {
+                        $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
+                        $normalQty = $variant['quantity'] - $flashSaleQty;
+                        $flashSalePrice = $flashSaleProduct->flash_price;
+                    }
+
+                    // Kiểm tra nếu sản phẩm hết hàng (số lượng <= 0)
+                    if ($flashSaleQty == 0 && $normalQty == 0) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                        ], 400);
+                    }
+
+                    $totalAmount += ($flashSalePrice * $flashSaleQty) + ($normalPrice * $normalQty);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn.',
+                    ], 400);
+                }
+            }
+
             $user = Auth::user();
-            $voucher = Voucher::where('code', $checkoutData['voucher_code'])
+            $voucher = Voucher::where('code',  $checkoutData['voucher_code'])
                 ->where('start_time', '<=', now())
                 ->where('end_time', '>=', now())
-                ->where('min_order_value', '<=', $checkoutData['total_amount'])
-                ->where('max_order_value', '>=', $checkoutData['total_amount'])
+                ->where('min_order_value', '<=', $totalAmount)
+                ->where('max_order_value', '>=', $totalAmount)
                 ->where('quantity', '>', 0)
                 ->where('status', 1)
                 ->first();
@@ -534,7 +710,7 @@ class CheckoutController
                 'user_id' => $user->id,
                 'code' => $request->input('vnp_TxnRef') ?? $request->input('orderId'),
                 'voucher_id' => $voucher->id ?? null,
-                'voucher_code' => $checkoutData['voucher_code'] ?? null,
+                'voucher_code' => $voucherCode ?? null,
                 'full_name' => $checkoutData['full_name'],
                 'province_id' => $checkoutData['province_id'],
                 'district_id' => $checkoutData['district_id'],
@@ -543,40 +719,74 @@ class CheckoutController
                 'phone' => $checkoutData['phone'],
                 'note' => $checkoutData['note'] ?? null,
                 'shipping_cost' => $checkoutData['shipping_cost'],
-                'total_price' => $checkoutData['final_total'],
+                'total_price' => $totalAmount + $checkoutData['shipping_cost'],
                 'discount_amount' => $checkoutData['discount_amount'],
                 'payment_method' => $checkoutData['payment_method'],
             ]);
 
-            $productVariantIds = []; // Mảng lưu trữ ID của các biến thể sản phẩm đã đặt hàng
-
-            foreach ($checkoutData['product_variants'] as $variant) {
-                // Tìm kiếm biến thể sản phẩm
+            // Create order items
+            $productVariantIds = [];
+            foreach ($productVariants as $variant) {
                 $productVariant = Variant::find($variant['product_variant_id']);
 
-                // Kiểm tra nếu biến thể tồn tại và số lượng đủ
                 if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
-                    // Tạo bản ghi OrderItem
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'variant_id' => $variant['product_variant_id'],
-                        'image' => $variant['image'],
-                        'price' => $variant['price'],
-                        'color' => $variant['color'],
-                        'size' => $variant['size'],
-                        'quantity' => $variant['quantity'],
-                    ]);
+                    $flashSaleProduct = $productVariant->product->flashSaleProducts()
+                        ->where('variant_id', $productVariant->id)
+                        ->whereHas('flashSale', function ($query) {
+                            $query->where('status', 1)
+                                ->where('date', now()->toDateString())
+                                ->where(function ($query) {
+                                    $currentHour = now()->hour;
+                                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                                });
+                        })
+                        ->where('status', 1)
+                        ->where('quantity', '>', 0)
+                        ->first();
 
-                    // Trừ số lượng sản phẩm
+                    $flashSaleQty = 0;
+                    $normalQty = $variant['quantity'];
+                    $flashSalePrice = 0;
+                    $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
+
+                    if ($flashSaleProduct) {
+                        $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
+                        $normalQty = $variant['quantity'] - $flashSaleQty;
+                        $flashSalePrice = $flashSaleProduct->flash_price;
+                    }
+
+                    if ($flashSaleQty > 0) {
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'variant_id' => $variant['product_variant_id'],
+                            'price' => $flashSalePrice,
+                            'quantity' => $flashSaleQty,
+                            'image' => $variant['image'],
+                            'color' => $variant['color'],
+                            'size' => $variant['size'],
+                        ]);
+                        $flashSaleProduct->decrement('quantity', $flashSaleQty);
+                    }
+
+                    if ($normalQty > 0) {
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'variant_id' => $variant['product_variant_id'],
+                            'price' => $normalPrice,
+                            'quantity' => $normalQty,
+                            'image' => $variant['image'],
+                            'color' => $variant['color'],
+                            'size' => $variant['size'],
+                        ]);
+                    }
+
                     $productVariant->decrement('quantity', $variant['quantity']);
-
-                    // Thêm ID của biến thể vào mảng
                     $productVariantIds[] = $variant['product_variant_id'];
                 } else {
-                    // Xử lý trường hợp không đủ số lượng sản phẩm
                     return response()->json([
                         'success' => false,
-                        'message' => 'Sản phẩm không đủ số lượng: ' . $variant['product_variant_id'],
+                        'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
                     ], 400);
                 }
             }

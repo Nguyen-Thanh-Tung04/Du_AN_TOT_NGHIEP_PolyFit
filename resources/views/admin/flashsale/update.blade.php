@@ -152,7 +152,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                                    <!-- <input type="checkbox" value="" id="checkAll" class="input-checkbox"> -->
                                 </th>
                                 <th class="text-center" style="width:100px;">Ảnh</th>
                                 <th>Mã sản phẩm</th>
@@ -211,7 +211,11 @@
                 "sInfoPostFix": "",
                 "sSearch": "Tìm:",
                 "sUrl": "",
-            }
+            },
+            columnDefs: [{
+                orderable: false,
+                targets: [0, 1]
+            }]
         });
 
         $('#product-flash').on('change', 'input[type="checkbox"]', function() {
@@ -333,7 +337,7 @@
                                                 <div class="custom-col-1 custom-text-center">${variant.quantity}</div>
                                                 <div class="custom-col-2 custom-text-center"><input type="number" name="products[${product.id}][${variant.id}][quantity]" class="form-control discount-quantity" value="${variant.quantity}" min="0" max="${variant.quantity}" placeholder="Số lượng"></div>
                                                 <div class="custom-col-1 custom-text-right">
-                                                 <input type="hidden"  name="products[${product.id}][${variant.id}][status]" class="status-value" value="1">
+                                                    <input type="hidden"  name="products[${product.id}][${variant.id}][status]" class="status-value" value="1">
                                                     <input type="checkbox" class="new-switch status-variant" checked value="1">
                                                 </div>
                                                 <input type="hidden" name="products[${product.id}][${variant.id}][variant_id]" value="${variant.id}">
@@ -348,6 +352,7 @@
                                         color: '#1AB394',
                                         size: 'small'
                                     });
+                                    $(this).removeClass('new-switch');
                                 });
                             }
                         });

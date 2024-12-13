@@ -13,7 +13,7 @@ class OrderHistoryController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['user', 'orderItems.variant.product'])
+        $orders = Order::with(['user', 'orderItems.variant'])
             ->where('user_id', auth()->id())
             ->orderBy('id', 'desc')
             ->get();
@@ -91,7 +91,7 @@ class OrderHistoryController extends Controller
 
             if ($request->has('giao_hang_thanh_cong')) {
                 if ($previousStatus !== Order::STATUS_GIAO_HANG_THANH_CONG) {
-                    return redirect()->back()->with('error', 'Không thể xác nhận đã nhận hàng khi đơn hàng không ở trạng thái "Đã giao hàng".');
+                    return redirect()->back()->with('error', 'Không thể xác nhận đã nhận hàng khi đơn hàng không ở trạng thái "Giao hàng thành công".');
                 }
 
                 $donHang->update(['status' => Order::STATUS_HOAN_THANH]);

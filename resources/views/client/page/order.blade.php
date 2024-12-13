@@ -125,24 +125,22 @@
                 $totalPrice = 0;
                 @endphp
             @foreach ($order->orderItems as $orderItem)
-           
             @php
-            $gallery = json_decode($orderItem->product->gallery);
             $totalPrice += $orderItem->price * $orderItem->quantity;
             @endphp
             <div class="ec-trackorder-inner">
                 <div class="row align-items-center p-3">
                     <div class="col-1">
-                        <img src="{{ (!empty($gallery)) ? $gallery[0] : '' }}">
+                        <img src="{{ $orderItem->image ?? '' }}">
                     </div>
                     <div class="col-8">
-                        <h6>{{ $orderItem->variant->product->name }}</h6>
+                        <h6>{{ $orderItem->name }}</h6>
                         <div class="text-muted">Phân loại hàng: <span>{{ $orderItem->color }}, {{ $orderItem->size }}</span></div>
                         <div class="text-muted">x{{ $orderItem->quantity }}</div>
                     </div>
                     <div class="col-3 text-right">
-                        <span class="fs-6 fw-medium text-primary">₫{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}</span>
-                    </div>
+                        <span class="fs-6 fw-bold">{{ number_format($orderItem->price * $orderItem->quantity, 0, ',', '.') }}đ</span>
+                    </div>                    
                 </div>
                 </a>
             </div>
@@ -156,7 +154,7 @@
                         action="https://demo.s-cart.org/order-add">
                         <input type="hidden" name="_token" value="iVEYxp5y3lPVUVDFyMO3aJvIsN7llsz8GfbGpEy7">
                         <div class="row">
-                            <div class="col-12 col-sm-12 col-md-6">
+                            <div class="col-12 col-sm-12 col-md-6 mt-3">
                                 <h3 class="control-label"><i class="fa fa-truck" aria-hidden="true"></i>
                                     Địa chỉ giao hàng:<br></h3>
                                 <table class="table box table-bordered" id="showTotal">
@@ -220,7 +218,7 @@
                                             </tr>
                                             <tr class="showTotal" style="background:#f5f3f3;font-weight: bold;">
                                                 <th>Tổng tiền</th>
-                                                <td style="text-align: right" id="total">
+                                                <td style="text-align: right" id="total" class="text-danger fw-bold">
                                                     {{ number_format($order->total_price, 0, ',', '.') }}₫
                                                 </td>
                                             </tr>

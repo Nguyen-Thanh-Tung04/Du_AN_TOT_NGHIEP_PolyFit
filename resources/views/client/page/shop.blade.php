@@ -32,6 +32,17 @@
                 <!-- Product grid/list view -->
                 <div class="shop-pro-content">
                     <div class="shop-pro-inner">
+                        @if(isset($products) && $products->isEmpty())
+                        <div class="alert alert-info">
+                            Không tìm thấy kết quả.
+                        </div>
+                        @elseif(isset($products) && !$products->isEmpty())
+                        <div class="alert alert-success">
+                            Đã tìm thấy {{ $products->count() }} kết quả.
+                        </div>
+                        @endif
+
+
                         <div class="row">
                             @foreach ($products as $product)
                             @php
@@ -89,117 +100,117 @@
                                         </div>
                                         {{-- <div class="ec-link-btn">
                                             <a class=" ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                        </div> --}}
-                                    </div>
-
+                                    </div> --}}
                                 </div>
-                                <!-- START single card -->
-                            </div>
-                            @endforeach
 
-                            <div class="pagination justify-content-center align-items-center mt-5">
-                                {{ $products->appends(request()->input())->links() }}
                             </div>
+                            <!-- START single card -->
+                        </div>
+                        @endforeach
+
+                        <div class="pagination justify-content-center align-items-center mt-5">
+                            {{ $products->appends(request()->input())->links() }}
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Sidebar filters for category, size, color -->
-            <div class="ec-shop-leftside col-lg-3 col-md-12 order-lg-first order-md-last">
-                <div id="shop_sidebar">
-                    <div class="ec-sidebar-heading">
-                        <h1>Lọc sản phẩm</h1>
-                    </div>
-                    <div class="ec-sidebar-wrap">
-
-                        <!-- Filter by Category -->
-                        <div class="ec-sidebar-block">
-                            <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Danh mục</h3>
-                            </div>
-                            <div class="ec-sb-block-content">
-                                <ul>
-                                    @foreach ($categories as $category)
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" class="filter-category" value="{{ $category->id }}"
-                                                {{ request()->category && in_array($category->id, explode(',', request()->category)) ? 'checked' : '' }}>
-                                            <a href="#"> {{ $category->name }}</a><span class="checked"></span>
-
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Filter by Size -->
-                        <div class="ec-sidebar-block">
-                            <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Kích thước</h3>
-                            </div>
-                            <div class="ec-sb-block-content">
-                                <ul>
-                                    @foreach ($sizes as $size)
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" class="filter-size" value="{{ $size->id }}"
-                                                {{ request()->size && in_array($size->id, explode(',', request()->size)) ? 'checked' : '' }}>
-                                            <a href="#">{{ $size->name }}</a><span class="checked"></span>
-                                        </div>
-                                    </li>
-                                    @endforeach
-
-
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Filter by Color -->
-                        <div class="ec-sidebar-block">
-                            <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Màu sắc</h3>
-                            </div>
-                            <div class="ec-sb-block-content">
-                                <ul>
-                                    @foreach ($colors as $color)
-                                    <li>
-                                        <div class="ec-sidebar-block-item">
-                                            <input type="checkbox" class="filter-color" value="{{ $color->id }}"
-                                                {{ request()->color && in_array($color->id, explode(',', request()->color)) ? 'checked' : '' }}>
-
-                                            <a href="#"> {{ $color->name }}</a><span class="checked"></span>
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Filter by Price -->
-                        <div class="ec-sidebar-block">
-                            <div class="ec-sb-title">
-                                <h3 class="ec-sidebar-title">Khoảng giá</h3>
-                            </div>
-                            <div class="">
-                                <div class="d-flex gap-1">
-                                    <input class="form-control px-1" type="text" id="min_price" placeholder="Giá tối thiểu" value="{{ request()->min_price ? number_format(request()->min_price) : '' }}">
-                                    <input class="form-control px-1" type="text" id="max_price" placeholder="Giá tối đa" value="{{ request()->max_price ? number_format(request()->max_price) : '' }}">
-                                </div>
-                                <div class="d-grid gap-2">
-
-                                    <button id="apply-price-filter" class="btn btn-primary mt-2">Áp dụng</button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <!-- Sidebar filters for category, size, color -->
+        <div class="ec-shop-leftside col-lg-3 col-md-12 order-lg-first order-md-last">
+            <div id="shop_sidebar">
+                <div class="ec-sidebar-heading">
+                    <h1>Lọc sản phẩm</h1>
+                </div>
+                <div class="ec-sidebar-wrap">
+
+                    <!-- Filter by Category -->
+                    <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                            <h3 class="ec-sidebar-title">Danh mục</h3>
+                        </div>
+                        <div class="ec-sb-block-content">
+                            <ul>
+                                @foreach ($categories as $category)
+                                <li>
+                                    <div class="ec-sidebar-block-item">
+                                        <input type="checkbox" class="filter-category" value="{{ $category->id }}"
+                                            {{ request()->category && in_array($category->id, explode(',', request()->category)) ? 'checked' : '' }}>
+                                        <a href="#"> {{ $category->name }}</a><span class="checked"></span>
+
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Filter by Size -->
+                    <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                            <h3 class="ec-sidebar-title">Kích thước</h3>
+                        </div>
+                        <div class="ec-sb-block-content">
+                            <ul>
+                                @foreach ($sizes as $size)
+                                <li>
+                                    <div class="ec-sidebar-block-item">
+                                        <input type="checkbox" class="filter-size" value="{{ $size->id }}"
+                                            {{ request()->size && in_array($size->id, explode(',', request()->size)) ? 'checked' : '' }}>
+                                        <a href="#">{{ $size->name }}</a><span class="checked"></span>
+                                    </div>
+                                </li>
+                                @endforeach
+
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Filter by Color -->
+                    <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                            <h3 class="ec-sidebar-title">Màu sắc</h3>
+                        </div>
+                        <div class="ec-sb-block-content">
+                            <ul>
+                                @foreach ($colors as $color)
+                                <li>
+                                    <div class="ec-sidebar-block-item">
+                                        <input type="checkbox" class="filter-color" value="{{ $color->id }}"
+                                            {{ request()->color && in_array($color->id, explode(',', request()->color)) ? 'checked' : '' }}>
+
+                                        <a href="#"> {{ $color->name }}</a><span class="checked"></span>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Filter by Price -->
+                    <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                            <h3 class="ec-sidebar-title">Khoảng giá</h3>
+                        </div>
+                        <div class="">
+                            <div class="d-flex gap-1">
+                                <input class="form-control px-1" type="text" id="min_price" placeholder="Giá tối thiểu" value="{{ request()->min_price ? number_format(request()->min_price) : '' }}">
+                                <input class="form-control px-1" type="text" id="max_price" placeholder="Giá tối đa" value="{{ request()->max_price ? number_format(request()->max_price) : '' }}">
+                            </div>
+                            <div class="d-grid gap-2">
+
+                                <button id="apply-price-filter" class="btn btn-primary mt-2">Áp dụng</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
     </div>
 </section>
 

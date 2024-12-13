@@ -8,7 +8,7 @@ return [
             'name' => ['user', 'member', 'permission'],
             'subModule' => [
                 [
-                    'title' => 'Quản lý Vai Trò',
+                    'title' => 'Quản lý Chức Vụ',
                     'route' => 'user/catalogue/index',
                 ],
                 [
@@ -79,11 +79,12 @@ return [
                 [
                     'title' => 'Quản lý đánh giá',
                     'route' => 'reviews/index',
-                ],
-                [
-                    'title' => 'Lịch sử đánh giá',
-                    'route' => 'reviews/history',
                 ]
+                // ,
+                // [
+                //     'title' => 'Lịch sử đánh giá',
+                //     'route' => 'reviews/history',
+                // ]
             ],
         ],
         [

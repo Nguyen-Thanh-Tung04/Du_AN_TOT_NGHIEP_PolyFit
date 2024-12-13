@@ -5,7 +5,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 <link href="admin/css/customize.css" rel="stylesheet">
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/al...in.css">
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 @endsection
@@ -20,9 +20,9 @@
             </li>
             <li class="active"><strong>Danh sách đơn hàng</strong></li>
         </ol>
-        
+
     </div>
-     
+
 </div>
 <div class="row mt-20">
     <div class="col-lg-12">
@@ -56,15 +56,14 @@
                             @php
                             $perpage = request('perpage') ?: old('perpage');
                             @endphp
-                            {{-- <div class="perpage">
+                            <div class="perpage">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <select name="perpage" class="form-control input-control input-sm perpage filter mr-10">
-                                        @for($i = 20; $i <= 200; $i+=20)
-                                            <option {{ ($perpage == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }} bản ghi</option>
+                                        @for($i = 20; $i <= 200; $i+=20)/-strong/-heart:>:o:-((:-h <option {{ ($perpage == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }} bản ghi</option>
                                         @endfor
                                     </select>
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="action">
                                 <div class="uk-flex uk-flex-middle">
                                     <div class="uk-flex uk-flex-middle mr-10 ml-10">
@@ -147,8 +146,7 @@
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                                     <td class="text-center d-flex justify-content-center">
                                         <a href="{{ route('orders.show', $order->id) }}" class="btn btn-warning">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
+                                            <i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -166,7 +164,7 @@
 <script src="admin/js/plugins/switchery/switchery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-     function confirmSubmit(selectElement) {
+    function confirmSubmit(selectElement) {
         var form = selectElement.form;
         var selectedOption = selectElement.options[selectElement.selectedIndex].text;
         var defaultValue = selectElement.getAttribute('data-default-value');
@@ -182,7 +180,7 @@
             if (result.isConfirmed) {
                 form.submit();
             } else {
-                selectElement.value = defaultValue; 
+                selectElement.value = defaultValue;
             }
         });
     }

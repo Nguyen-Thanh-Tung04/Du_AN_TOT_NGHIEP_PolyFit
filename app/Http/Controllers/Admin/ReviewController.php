@@ -174,7 +174,11 @@ class ReviewController extends Controller
     {
         // Lấy review dựa vào ID
         $reviews = $this->ReviewRepository->find($id);
-
+        $reviewsHistory = ReviewHistory::withTrashed() // Thêm withTrashed để lấy cả các bản ghi đã bị xóa mềm
+        ->where('review_id', $id)
+        ->orWhere('reply_id', $id)
+        ->orderBy('created_at', 'desc')
+        ->get();
         // Lấy phản hồi nếu có, bạn có thể sử dụng where để tìm phản hồi theo review_id
         $reply = ReviewReply::where('review_id', $id)
             ->with('user') // Load quan hệ với User
@@ -200,7 +204,8 @@ class ReviewController extends Controller
             'template',
             'reviews',
             'reply',  // Truyền thêm $reply vào view
-            'config'
+            'config',
+            'reviewsHistory'
         ));
     }
 

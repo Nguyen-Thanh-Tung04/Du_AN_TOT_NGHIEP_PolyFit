@@ -251,19 +251,19 @@ function ecCheckCookie() {
         }
     };
 
-    $(window).on("scroll", function () {
-        var distance = $('.sticky-header-next-sec').offset().top,
-            $window = $(window);
+    // $(window).on("scroll", function () {
+    //     var distance = $('.sticky-header-next-sec').offset().top,
+    //         $window = $(window);
 
-        if ($window.scrollTop() <= distance + 50) {
-            // alert("1");
-            $("#ec-main-menu-desk").removeClass("menu_fixed");
-        }
-        else {
-            // alert("2");
-            checkScroll();
-        }
-    });
+    //     if ($window.scrollTop() <= distance + 50) {
+    //         // alert("1");
+    //         $("#ec-main-menu-desk").removeClass("menu_fixed");
+    //     }
+    //     else {
+    //         // alert("2");
+    //         checkScroll();
+    //     }
+    // });
 
 
     /*-----------------------------  Navigation for scroll section to section  --------------------*/
@@ -1344,7 +1344,7 @@ function ecCheckCookie() {
 
     /*----------------------------- Recent auto popup -----------------------------------*/
     // Hiển thị liên tục sau 15s
-    setInterval(function () { $(".recent-purchase").stop().slideToggle('slow'); }, 10000);
+    setInterval(function () { $(".recent-purchase").stop().slideToggle('slow'); }, 8000);
     $(".recent-close").click(function () {
         $(".recent-purchase").stop().slideToggle('slow');
     });
