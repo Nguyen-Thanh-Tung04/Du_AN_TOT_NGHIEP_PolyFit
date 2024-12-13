@@ -36,19 +36,18 @@
                             </div>
                         </div>
 
-                        <!-- Đường ngăn cách -->
-                        @if (!$loop->last) <!-- Không thêm đường ngăn cách ở sản phẩm cuối cùng -->
-                            <hr class="product-separator" />
-                        @endif
+                        
                     @endforeach
                 </div>
 
                 <div class="order-footer d-flex justify-content-between align-items-center mt-3">
                     <div class="total-amount">
-                        Tổng tiền: <strong class="text-danger">{{ number_format($order->orderItems->sum(function($item) {
+                        <strong>Tổng tiền: </strong>
+                        <strong class="text-danger">{{ number_format($order->orderItems->sum(function($item) {
                             return $item->price * $item->quantity;
                         }), 0, ',', '.') }} đ</strong>
                     </div>
+                    
                     <div class="order-actions">
                             @php
                                 $hasVariant = $order->orderItems->contains(function($item) {

@@ -9,9 +9,17 @@ class Voucher extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'code', 'name', 'value', 'max_discount_value',
-        'min_order_value', 'max_order_value', 'discount_type', 'quantity',
-        'start_time', 'end_time', 'status'
+        'code',
+        'name',
+        'value',
+        'max_discount_value',
+        'min_order_value',
+        'max_order_value',
+        'discount_type',
+        'quantity',
+        'start_time',
+        'end_time',
+        'status'
     ];
 
 
@@ -20,5 +28,9 @@ class Voucher extends Model
     public function orders()
     {
         return $this->hasMany(Order::class, 'voucher_id', 'id');
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'voucher_user')->withTimestamps();
     }
 }

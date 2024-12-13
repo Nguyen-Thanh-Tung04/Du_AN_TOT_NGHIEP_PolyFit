@@ -100,10 +100,17 @@
                                                         </select>
                                                     </span>
                                                 </span>
-                                                <span class="ec-bill-wrap">
+                                                <span class="ec-bill-wrap ec-bill-half">
                                                     <label>Địa chỉ cụ thể</label>
-                                                    <textarea name="address" style="border: 1px solid #dee2e6" id="address" cols="20" rows="7">{{ $user->address }}</textarea>
+                                                    <input type="text" id="address" name="address" value="{{ $user->address }}"
+                                                        placeholder="" required />
                                                 </span>
+                                                <span class="ec-bill-wrap">
+                                                    <label>Lưu ý khi giao hàng</label>
+                                                    <textarea name="note" style="border: 1px solid #dee2e6" id="note" cols="20" rows="7" placeholder="Lưu ý"></textarea>
+                                                </span>
+                                               
+                                               
                                         </div>
                                     </div>
 
@@ -130,15 +137,15 @@
                             <div class="ec-checkout-summary">
                                 <div>
                                     <span class="text-left">Tổng tiền hàng</span>
-                                    <span class="text-right" id="totalAmount">đ{{ number_format($total, 0, '', '.') }}</span>
+                                    <span class="text-right" id="totalAmount">{{ number_format($total, 0, '', '.') }}đ</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Giảm giá (Voucher)</span>
-                                    <span class="text-right text-danger" id="discountAmount">- đ0</span>
+                                    <span class="text-right text-danger" id="discountAmount">- 0đ</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Phí vận chuyển</span>
-                                    <span class="text-right" id="shippingCost">đ20.000</span>
+                                    <span class="text-right" id="shippingCost">20.000đ</span>
                                 </div>
                                 <div>
                                     <span class="text-left">Voucher</span>
@@ -167,7 +174,7 @@
                                 </div>
                                 <div class="ec-checkout-summary-total">
                                     <span class="text-left">Tổng thanh toán</span>
-                                    <span class="text-right" id="finalTotal">đ{{ number_format(($total + 20000), 0, '', '.') }}</span>
+                                    <span class="text-right" id="finalTotal">{{ number_format(($total + 20000), 0, '', '.') }}đ</span>
                                 </div>
                             </div>
                             <div class="ec-checkout-pro">
@@ -205,10 +212,10 @@
                                             </div> --}}
                                             <span class="ec-price">
                                                 @if ($item->new_price)
-                                                <span id="listedPrice" class="old-price">đ{{ number_format($item->normal_price, 0, '', '.') }} </span>
-                                                <span class="new-price">đ{{ number_format($item->new_price, 0, '', '.') }}</span>
+                                                <span id="listedPrice" class="old-price">{{ number_format($item->normal_price, 0, '', '.') }}đ </span>
+                                                <span class="new-price">{{ number_format($item->new_price, 0, '', '.') }}đ</span>
                                                 @else
-                                                <span class="new-price">đ{{ number_format($item->normal_price, 0, '', '.') }} </span>
+                                                <span class="new-price">{{ number_format($item->normal_price, 0, '', '.') }}đ </span>
                                                 @endif
                                             </span>
 
@@ -229,7 +236,7 @@
                     </div>
                     <!-- Sidebar Summary Block -->
                 </div>
-                <div class="ec-sidebar-wrap ec-checkout-del-wrap">
+                {{-- <div class="ec-sidebar-wrap ec-checkout-del-wrap">
                     <!-- Sidebar Summary Block -->
                     <div class="ec-sidebar-block">
                         <div class="ec-sb-title">
@@ -241,7 +248,7 @@
                                     <span>
                                         <span class="ec-del-opt-head">Giao hàng tiết kiệm</span>
                                         <input type="radio" id="del1" name="shipping_method" value="20000" checked>
-                                        <label for="del1">đ20.000</label>
+                                        <label for="del1">20.000đ</label>
                                     </span>
                                 </span>
                                 <span class="ec-del-commemt">
@@ -252,7 +259,7 @@
                         </div>
                     </div>
                     <!-- Sidebar Summary Block -->
-                </div>
+                </div> --}}
                 <div class="ec-sidebar-wrap ec-checkout-pay-wrap">
                     <!-- Sidebar Payment Block -->
                     <div class="ec-sidebar-block">
