@@ -74,6 +74,12 @@ class OrderHistoryController extends Controller
                     $variant = $item->variant;
                     $variant->update(['quantity' => $variant->quantity + $item->quantity]);
                 }
+                if ($donHang->voucher) {
+                    $voucher = $donHang->voucher;
+                    $voucher->update(['quantity' => $voucher->quantity + 1]);
+
+                    $voucher->users()->detach($donHang->user_id);
+                }
 
                 $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
                 OrderStatusHistory::create([

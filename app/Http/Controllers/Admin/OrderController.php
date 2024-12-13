@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\AutoCompleteOrderStatus;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -133,8 +134,9 @@ class OrderController extends Controller
 
         // Nếu trạng thái giao hàng thành công, gửi yêu cầu hoàn thành
         if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
-            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(20));
+            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(5));
         }
+        
 
         return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
