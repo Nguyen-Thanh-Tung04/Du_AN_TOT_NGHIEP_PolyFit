@@ -232,7 +232,7 @@
             </div>
             <div class="row text-center">
                 <div class="col-12 mr-a">
-                    <button onClick="location.href='{{ url('/history') }}'" class="btn btn-primary btn-lg" type="button">
+                    <button onClick="location.href='{{ route('cart.index') }}'" class="btn btn-primary btn-lg" type="button">
                         <i class="fa fa-arrow-left"></i> Trở lại giỏ hàng
                     </button>
                 </div>
