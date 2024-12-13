@@ -39,7 +39,7 @@
                             <div class="ec-checkout-block ec-check-bill">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="ec-checkout-title">Địa chỉ nhận hàng</h3>
-                                    <a class="btn btn-secondary" style="" href="">Thêm địa chỉ mới</a>
+                                    {{-- <a class="btn btn-secondary" style="" href="">Thêm địa chỉ mới</a> --}}
                                 </div>
                                 <div class="ec-bl-block-content">
                                     {{-- <div class="ec-check-subtitle">Tùy chọn</div>
