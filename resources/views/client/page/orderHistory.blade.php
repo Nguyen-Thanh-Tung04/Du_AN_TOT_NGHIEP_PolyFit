@@ -162,7 +162,7 @@
                                                 <td style="text-align: right" id="subtotal">
                                                     <div>
                                                         @if ($order->payment_method == 1)
-                                                            Thanh toán khi nhận hàng
+                                                            Thanh toán COD
                                                         @elseif ($order->payment_method == 2)
                                                             Thanh toán VnPay
                                                         @elseif ($order->payment_method == 3)
