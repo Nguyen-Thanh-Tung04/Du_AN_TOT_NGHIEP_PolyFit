@@ -70,6 +70,10 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 //     return view('client.page.about');
 // });
 Route::get('/about', [App\Http\Controllers\client\ReviewController::class, 'about_reviews_list'])->name('about');
+// Lọc client
+Route::get('/reviews_filter/{product_id}', [ClientProductController::class, 'filterReviews'])->name('reviews.filter');
+// Route mới để xử lý phân trang đánh giá
+// Route::get('/reviews/{product_id}', [ClientProductController::class, 'fetchReviews'])->name('reviews.fetch');
 
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
