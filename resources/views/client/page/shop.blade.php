@@ -33,12 +33,11 @@
                 <div class="shop-pro-content">
                     <div class="shop-pro-inner">
                         @if(isset($products) && $products->isEmpty())
-                        <div class="alert alert-info">
-                            Không tìm thấy kết quả.
-                        </div>
-                        @elseif(isset($products) && !$products->isEmpty())
-                        <div class="alert alert-success">
-                            Đã tìm thấy {{ $products->count() }} kết quả.
+                        <div class="empty-results d-flex justify-content-center align-items-center">
+                            <div class="text-center">
+                                <img src="{{ asset('theme/client/assetss/images/icons/emty.webp') }}" alt="No Results" class="img-fluid mb-3">
+                                <p>Không tìm thấy kết quả.</p>
+                            </div>
                         </div>
                         @endif
 

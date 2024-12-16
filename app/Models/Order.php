@@ -28,13 +28,13 @@ class Order extends Model
         self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
     const PAYMENT_METHOD_COD = 1;
-    const PAYMENT_METHOD_ONLINE = 2;
+    const PAYMENT_METHOD_VNPAY = 2;
+    const PAYMENT_METHOD_MOMO = 3;
 
     const PAYMENT_METHOD_NAMES = [
         self::PAYMENT_METHOD_COD => 'Thanh toán COD',
-        self::PAYMENT_METHOD_ONLINE => 'Thanh toán VNPAY',
-        self::PAYMENT_METHOD_ONLINE => 'Thanh toán MOMO',
-
+        self::PAYMENT_METHOD_VNPAY => 'Thanh toán VNPAY',
+        self::PAYMENT_METHOD_MOMO => 'Thanh toán MOMO',
     ];
 
     protected $fillable = [
@@ -117,15 +117,15 @@ class Order extends Model
     }
 
     public function getHasReviewAttribute()
-{
-    // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
-    return $this->orderItems->every(function ($item) {
-        if ($item->variant && $item->variant->product_id) {
-            return Review::where('product_id', $item->variant->product_id)
-                ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
-                ->exists();
-        }
-        return false; // Nếu không có variant hoặc product_id, trả về false
-    });
-}
+    {
+        // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
+        return $this->orderItems->every(function ($item) {
+            if ($item->variant && $item->variant->product_id) {
+                return Review::where('product_id', $item->variant->product_id)
+                    ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
+                    ->exists();
+            }
+            return false; // Nếu không có variant hoặc product_id, trả về false
+        });
+    }
 }

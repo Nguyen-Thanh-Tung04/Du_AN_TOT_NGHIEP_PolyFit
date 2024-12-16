@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\AutoCompleteOrderStatus;
+use App\Mail\OrderCanceled;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -107,6 +109,7 @@ class OrderController extends Controller
             if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
                 return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
             }
+            Mail::to($order->user->email)->queue(new OrderCanceled($order));
         } else {
             $currentIndex = array_search($currentStatus, $statuses);
             $newIndex = array_search($newStatus, $statuses);
@@ -132,7 +135,7 @@ class OrderController extends Controller
 
         // 5. Nếu trạng thái giao hàng thành công, gửi yêu cầu hoàn thành
         if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
-            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(5));
+            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(20));
         }
 
         return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
