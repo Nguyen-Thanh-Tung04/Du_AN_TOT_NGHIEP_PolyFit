@@ -240,7 +240,7 @@
         $(document).on('click', '.remove-product-flash', function() {
             let productId = $(this).data('id');
             let checkBox = $(`.checkBoxItem[value="${productId}"]`);
-            checkBox.prop('checked', false).trigger('click');
+            checkBox.trigger('click');
             $(this).closest('.custom-col-12').remove();
         });
 

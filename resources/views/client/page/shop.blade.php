@@ -130,9 +130,9 @@
                             <h3 class="ec-sidebar-title">Danh mục</h3>
                         </div>
                         <div class="ec-sb-block-content">
-                            <ul>
+                            <ul id="category-list" class="mb-1">
                                 @foreach ($categories as $category)
-                                <li>
+                                <li class="category-item-filter">
                                     <div class="ec-sidebar-block-item">
                                         <input type="checkbox" class="filter-category" value="{{ $category->id }}"
                                             {{ request()->category && in_array($category->id, explode(',', request()->category)) ? 'checked' : '' }}>
@@ -142,6 +142,7 @@
                                 </li>
                                 @endforeach
                             </ul>
+                            <div id="show-more" style="display: none;" class="">Xem thêm <i style="font-size: 12px;" class="fas fa-chevron-down"></i></div>
                         </div>
                     </div>
 
@@ -222,6 +223,23 @@
     $(document).ready(function() {
         function parseNumber(num) {
             return parseFloat(num.replace(/,/g, ''));
+        }
+
+        const categoryItems = $('#category-list .category-item-filter');
+        const hiddenItems = categoryItems.slice(6);
+
+        const anyChecked = hiddenItems.find('input:checked').length > 0;
+
+
+        $('#show-more').on('click', function() {
+            $('#category-list .category-item-filter').slideDown();
+            $(this).hide();
+        });
+
+        if (anyChecked) {
+            $('#show-more').trigger('click');
+        } else if (categoryItems.length > 6) {
+            $('#show-more').show();
         }
 
         function updateURL() {
