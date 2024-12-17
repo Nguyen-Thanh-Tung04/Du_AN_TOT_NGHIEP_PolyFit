@@ -72,8 +72,8 @@
                             <button type="button" id="cancelOrderButton" class="custom-btn danger-btn">
                                 <i class="fas fa-times-circle"></i> Hủy đơn hàng
                             </button>
-                        @elseif ($order->status === \App\Models\Order::STATUS_DANG_VAN_CHUYEN)
-                            <input type="hidden" name="da_giao_hang" value="1">
+                        @elseif ($order->status === \App\Models\Order::STATUS_GIAO_HANG_THANH_CONG)
+                            <input type="hidden" name="giao_hang_thanh_cong" value="1">
                             <button type="button" id="confirmReceivedButton" class="custom-btn success-btn">
                                 <i class="fas fa-check-circle"></i> Đã nhận hàng
                             </button>
@@ -162,7 +162,7 @@
                                                 <td style="text-align: right" id="subtotal">
                                                     <div>
                                                         @if ($order->payment_method == 1)
-                                                            Thanh toán khi nhận hàng
+                                                            Thanh toán COD
                                                         @elseif ($order->payment_method == 2)
                                                             Thanh toán VnPay
                                                         @elseif ($order->payment_method == 3)
@@ -206,7 +206,7 @@
             <div class="row text-center">
                 <div class="col-12 mr-a">
                     <button onClick="location.href='{{ url('/history') }}'" class="btn btn-primary btn-lg" type="button">
-                        <i class="fa fa-arrow-left"></i> Trở lại giỏ hàng
+                        <i class="fa fa-arrow-left"></i> Trở lại 
                     </button>
                 </div>
             </div>

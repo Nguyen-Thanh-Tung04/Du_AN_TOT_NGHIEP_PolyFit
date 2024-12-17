@@ -276,7 +276,7 @@ class FlashSaleController extends Controller
         return [
             'js' => [
                 'admin/js/plugins/switchery/switchery.js',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'admin/js/plugins/select2/select2.full.min.js',
                 'admin/plugins/ckfinder_2/ckfinder.js',
                 'admin/library/finder.js',
                 'admin/plugins/ckeditor/ckeditor.js',
@@ -284,7 +284,7 @@ class FlashSaleController extends Controller
             'css' => [
                 'admin/css/plugins/switchery/switchery.css',
                 'admin/css/flashsale.css',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+                'admin/css/plugins/select2/select2.min.css',
             ]
         ];
     }

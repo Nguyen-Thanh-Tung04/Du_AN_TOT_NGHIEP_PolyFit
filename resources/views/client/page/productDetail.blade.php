@@ -285,73 +285,20 @@
                                                 @endfor
                                         </div>
                                     </div>
+                                    <div class="rating-buttons" style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+                                        <button data-star="" class="rating-button active" style="padding: 5px 10px; font-size: 14px; ">Tất cả (<span>{{ array_sum($reviewCounts->toArray()) }}</span>)</button>
+                                        <button data-star="5" class="rating-button" style="padding: 5px 10px; font-size: 14px; ">5 sao (<span>{{ $reviewCounts[5] ?? 0 }}</span>)</button>
+                                        <button data-star="4" class="rating-button" style="padding: 5px 10px; font-size: 14px; ">4 sao (<span>{{ $reviewCounts[4] ?? 0 }}</span>)</button>
+                                        <button data-star="3" class="rating-button" style="padding: 5px 10px; font-size: 14px; ">3 sao (<span>{{ $reviewCounts[3] ?? 0 }}</span>)</button>
+                                        <button data-star="2" class="rating-button" style="padding: 5px 10px; font-size: 14px; ">2 sao (<span>{{ $reviewCounts[2] ?? 0 }}</span>)</button>
+                                        <button data-star="1" class="rating-button" style="padding: 5px 10px; font-size: 14px; ">1 sao (<span>{{ $reviewCounts[1] ?? 0 }}</span>)</button>
+                                    </div>
+                                    
+                                    
                                 </div>
 
                                 <div class="row">
-                                    <div class="ec-t-review-wrapper" id="reviewList">
-                                        @if($reviews->count() > 0)
-                                        @foreach($reviews as $rv)
-                                        <div class="ec-t-review-item">
-                                            <div class="ec-t-review-avtar">
-                                                <img src="{{ asset('theme/client/assets/images/review-image/1.jpg') }}" class="rounded-circle" alt="" />
-                                            </div>
-                                            <div class="ec-t-review-content">
-                                                <div class="ec-t-review-top">
-                                                    <div class="ec-t-review-name">{{ $rv->user->name ?? 'Khách hàng' }}</div>
-                                                    <div class="ec-t-review-rating">
-                                                        @for($i = 1; $i <= 5; $i++)
-                                                            @if($i <=$rv->score)
-                                                            <i class="ecicon eci-star text-warning"></i>
-                                                            @else
-                                                            <i class="ecicon eci-star-o"></i>
-                                                            @endif
-                                                            @endfor
-                                                    </div>
-                                                </div>
-                                                <div class="ec-t-review-bottom">
-                                                    <p>{{ $rv->content }}</p>
-                                                </div>
-                                                @if($rv->image)
-                                                <img src="{{ asset(Storage::url($rv->image)) }}" style="height:90px; width:90px" alt="Review Image" />
-                                                @endif
-                                                <div class="ec-t-review-bottom">
-                                                    <p>{{ $rv->created_at->format('Y-m-d') }}</p>
-                                                </div>
-                                                {{-- Trả lời đánh giá  --}}
-                                                @foreach($rv->replies as $reply)
-                                                <div class="ec-t-review-item mt-2">
-                                                    <div class="ec-t-review-avtar">
-                                                        <img src="{{ asset('theme/client/assets/images/logo/logo1.png') }}" class="rounded-circle border" style="width: 90px; height: 90px;" alt="" />
-                                                    </div>
-                                                    <div class="ec-t-review-content border bg-light p-3" style="width:45rem">
-                                                        <div class="ec-t-review-top">
-                                                            <div class="ec-t-review-name">PolyFit </div>
-                                                            <div class="ec-t-review-rating">
-                                                                @for($i = 1; $i <= 5; $i++)
-                                                                    @if($i <=$rv->score)
-                                                                    <i class="ecicon eci-star text-warning"></i>
-                                                                    @else
-                                                                    <i class="ecicon eci-star-o"></i>
-                                                                    @endif
-                                                                    @endfor
-                                                            </div>
-                                                        </div>
-                                                        <div class="ec-t-review-bottom">
-                                                            <p> {{ $reply->content }}</p>
-                                                        </div>
-                                                        <div class="ec-t-review-bottom">
-                                                            <p>{{ $reply->created_at->format('Y-m-d') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                        @else
-                                        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
-                                        @endif
-                                    </div>
+                                    @include('client.page.partials',['reviews' => $reviews])
                                 </div>
                             </div>
                         </div>
@@ -737,6 +684,83 @@
             }
         }
 
+        $('.rating-buttons button').on('click', function() {
+            const star = $(this).data('star') || null; // Lấy giá trị từ data-star
+
+            // Hiển thị trạng thái loading
+            $('#reviewList').html('<p>Đang tải đánh giá...</p>');
+
+            // Đổi trạng thái active
+            $('.rating-buttons button').removeClass('active'); // Loại bỏ trạng thái active từ các nút khác
+            $(this).addClass('active'); // Thêm trạng thái active cho nút hiện tại
+
+
+            // Gửi yêu cầu AJAX
+            $.ajax({
+                url: `/reviews_filter/${product_id}`,
+                type: 'GET',
+                data: {
+                    star: star,
+                    _token: '{{ csrf_token() }}'
+                },
+                headers: {  
+                    'X-Requested-With': 'XMLHttpRequest' // Xác định yêu cầu AJAX
+                },
+                success: function(data) {
+                    if (data && data.html) {
+                        // Cập nhật danh sách đánh giá
+                        $('#reviewList').html(data.html);
+
+                        // Đặt nút hiện tại thành nút đang chọn (active)
+                        // $('.rating-buttons button').removeClass('active');
+                        // $(`[data-star="${star}"]`).addClass('active');
+                    } else {
+                        $('#reviewList').html('<p>Không tìm thấy đánh giá nào phù hợp.</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Lỗi:', error); // Ghi lỗi ra console
+                    $('#reviewList').html('<p>Đã xảy ra lỗi khi tải đánh giá. Vui lòng thử lại sau.</p>');
+                }
+            });
+        });
+
+        // $('.rating-buttons button').on('click', function() {
+        // Lấy số sao từ nút được bấm
+        
     });
+
+  // Lắng nghe sự kiện click trên các nút phân trang
+//   $(document).on('click', '.pagination a', function (e) {
+//         e.preventDefault(); // Ngăn chặn tải lại trang
+
+//         let url = $(this).attr('href'); // Lấy URL từ liên kết phân trang
+
+//         // Hiển thị trạng thái loading
+//         $('#reviewList').html('<p>Đang tải đánh giá...</p>');
+
+//         // Gửi yêu cầu AJAX
+//         $.ajax({
+//             url: url,
+//             type: 'GET',
+//             headers: {
+//                 'X-Requested-With': 'XMLHttpRequest', // Đảm bảo server nhận biết đây là yêu cầu AJAX
+//             },
+//             success: function (response) {
+//                 if (response.html) {
+//                     // Cập nhật nội dung đánh giá mới
+//                     $('#reviewList').html(response.html);
+//                 } else {
+//                     $('#reviewList').html('<p>Không tìm thấy dữ liệu nào.</p>');
+//                 }
+//             },
+//             error: function (xhr, status, error) {
+//                 console.error('Lỗi:', error);
+//                 $('#reviewList').html('<p>Đã xảy ra lỗi khi tải đánh giá. Vui lòng thử lại sau.</p>');
+//             }
+//         });
+//     });
+
+    
 </script>
 @endsection

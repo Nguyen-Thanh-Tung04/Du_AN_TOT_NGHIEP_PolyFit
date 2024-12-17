@@ -164,13 +164,16 @@ class CheckoutController
     {
         $voucherCode = $request->input('voucher_code');
         $totalAmount = $request->input('total_amount');
+        $user = auth()->user();
 
         $voucher = Voucher::where('code', $voucherCode)
-            ->where('start_time', '<=', now())
-            ->where('end_time', '>=', now())
-            ->where('quantity', '>', 0)
-            ->where('status', 1)
-            ->first();
+        ->where('start_time', '<=', now())
+        ->where('end_time', '>=', now())
+        ->where('min_order_value', '<=', $totalAmount)
+        ->where('max_order_value', '>=', $totalAmount)
+        ->where('quantity', '>', 0)
+        ->where('status', 1)
+        ->first();
 
         if (!$voucher) {
             return response()->json([
@@ -178,6 +181,31 @@ class CheckoutController
                 'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.'
             ]);
         }
+
+        // Kiểm tra nếu người dùng đã sử dụng voucher này
+        if ($voucher->users()->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn đã sử dụng voucher này trước đó.'
+            ]);
+        }
+
+        // Kiểm tra thời gian sử dụng voucher
+        if ($voucher->start_time > now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã voucher này chưa có hiệu lực.'
+            ]);
+        }
+
+        if ($voucher->end_time < now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã voucher này đã hết hạn, không thể sử dụng.'
+            ]);
+        }
+
+        // Kiểm tra giá trị đơn hàng và các điều kiện khác (min_order_value, max_order_value)
         if ($voucher->min_order_value && $totalAmount < $voucher->min_order_value) {
             return response()->json([
                 'success' => false,
@@ -195,7 +223,7 @@ class CheckoutController
         // Tính toán giảm giá
         $discount = 0;
         if ($voucher->discount_type == 'percentage') {
-            // Tính giảm giá theo phần trăm
+            // Giảm giá theo phần trăm
             $discount = ($voucher->value / 100) * $totalAmount;
 
             // Kiểm tra nếu giảm giá vượt quá max_discount_value
@@ -216,6 +244,12 @@ class CheckoutController
         // Tính toán tổng tiền sau khi áp dụng giảm giá
         $finalTotal = $totalAmount - $discount;
 
+        // Lưu voucher đã được sử dụng vào bảng trung gian voucher_user
+        $voucher->users()->attach($user->id, ['used_at' => now()]);
+
+        // Giảm số lượng voucher còn lại
+        $voucher->decrement('quantity');
+
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng voucher thành công.',
@@ -224,6 +258,7 @@ class CheckoutController
             'voucher' => $voucher,
         ]);
     }
+
 
     public function getAvailableVouchers()
     {
@@ -458,9 +493,11 @@ class CheckoutController
                 $vnp_TmnCode = "QAZ9JCE2"; //Mã website tại VNPAY 
                 $vnp_HashSecret = "M2B6JJ8UT7G5Z3AX737YGFBAV026H5OW"; //Chuỗi bí mật
 
+
                 $dateCode = date('Ymd');
                 $randomNumberCode = mt_rand(10000000, 99999999);
                 $code = 'SP-' . $dateCode . $randomNumberCode;
+
 
                 $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
                 $vnp_OrderInfo = 'Thanh toán đơn hàng';
@@ -469,6 +506,7 @@ class CheckoutController
                 $vnp_Locale = 'vn';
                 // $vnp_BankCode = 'NCB';
                 $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+
 
                 $inputData = array(
                     "vnp_Version" => "2.1.0",
@@ -485,9 +523,11 @@ class CheckoutController
                     "vnp_TxnRef" => $vnp_TxnRef,
                 );
 
+
                 // if (isset($vnp_BankCode) && $vnp_BankCode != "") {
                 //     $inputData['vnp_BankCode'] = $vnp_BankCode;
                 // }
+
 
                 //var_dump($inputData);
                 ksort($inputData);
@@ -504,11 +544,13 @@ class CheckoutController
                     $query .= urlencode($key) . "=" . urlencode($value) . '&';
                 }
 
+
                 $vnp_Url = $vnp_Url . "?" . $query;
                 if (isset($vnp_HashSecret)) {
                     $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                     $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
                 }
+
 
                 return response()->json([
                     'success' => true,
@@ -580,6 +622,7 @@ class CheckoutController
                 $dateOrderId = date('Ymd');
                 $randomNumberOrderId = mt_rand(10000000, 99999999);
 
+
                 $amount = $request->input('final_total');
                 $partnerCode = 'MOMOBKUN20180529';
                 $accessKey = 'klm05TvNBzhg7h7j';
@@ -589,7 +632,9 @@ class CheckoutController
                 $redirectUrl = route('vnpay.return');
                 $ipnUrl = route('vnpay.return');
 
+
                 $extraData = "";
+
 
                 $requestId = time() . "";
                 $requestType = "payWithATM";
@@ -614,6 +659,7 @@ class CheckoutController
                 );
                 $result = $this->execPostRequest($endpoint, json_encode($data));
                 $jsonResult = json_decode($result, true);  // decode json
+
 
                 //Just a example, please check more in there
                 return response()->json([

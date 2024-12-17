@@ -111,7 +111,7 @@
                                 <th>Mã đơn hàng</th>
                                 <th>Tên Khách Hàng</th>
                                 <th>Điện Thoại</th>
-                                
+                                <th>Phương thức thanh toán</th>
                                 <th>Tổng Tiền</th>
                                 <th>Trạng Thái</th>
                                 <th>Ngày Tạo</th>
@@ -124,6 +124,7 @@
                                     <td>{{ $order->code }}</td>
                                     <td>{{ $order->full_name }}</td>
                                     <td>{{ $order->phone }}</td>
+                                    <td>{{$order->payment_method_name}}</td>
                                     <td>{{ number_format($order->total_price) }} VNĐ</td>
                                     <td>
                                         <form action="{{ route('orders.update', $order->id) }}" method="POST" class="form-status">
@@ -134,7 +135,7 @@
                                                 @foreach ($orderStatuses as $key => $value)
                                                 <option value="{{ $key }}" 
                                                 {{ $order->status == $key ? 'selected' : '' }}
-                                                {{ ($key == $completedOrder || $key == $cancelledOrder) ? 'disabled' : '' }}>
+                                                {{ ($key == $completedOrder) ? 'disabled' : '' }}>
                                                 {{ $value }}
                                             </option>
                                                 @endforeach

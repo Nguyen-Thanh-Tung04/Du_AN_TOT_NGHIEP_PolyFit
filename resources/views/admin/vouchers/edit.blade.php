@@ -131,6 +131,19 @@
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
+                                    <label class="control-label text-left">Loại Giảm Giá <span class="text-danger">(*)</span></label>
+                                    <select name="discount_type" class="form-control" id="discount_type">
+                                        <option value="" disabled>Chọn loại giảm giá</option>
+                                        <option value="percentage" {{ old('discount_type', $voucher->discount_type) == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
+                                        <option value="fixed" {{ old('discount_type', $voucher->discount_type) == 'fixed' ? 'selected' : '' }}>Cố định</option>
+                                    </select>
+                                    @error('discount_type')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-15">
+                                <div class="form-row">
                                     <label class="control-label text-left">Số Lượng <span class="text-danger">(*)</span></label>
                                     <input
                                         type="number"
@@ -145,26 +158,14 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-15">
-                                <div class="form-row">
-                                    <label class="control-label text-left">Loại Giảm Giá <span class="text-danger">(*)</span></label>
-                                    <select name="discount_type" class="form-control" id="discount_type">
-                                        <option value="" disabled>Chọn loại giảm giá</option>
-                                        <option value="percentage" {{ old('discount_type', $voucher->discount_type) == 'percentage' ? 'selected' : '' }}>Phần trăm</option>
-                                        <option value="fixed" {{ old('discount_type', $voucher->discount_type) == 'fixed' ? 'selected' : '' }}>Cố định</option>
-                                    </select>
-                                    @error('discount_type')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Thời gian bắt đầu<span class="text-danger">(*)</span></label>
                                     <input
-                                        type="datetime-local"
+                                        type="date"
                                         name="start_time"
                                         value="{{ old('start_time', $voucher->start_time) }}"
                                         class="form-control"
@@ -178,7 +179,7 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Thời gian kết thúc<span class="text-danger">(*)</span></label>
                                     <input
-                                        type="datetime-local"
+                                        type="date"
                                         name="end_time"
                                         value="{{ old('end_time', $voucher->end_time) }}"
                                         class="form-control"

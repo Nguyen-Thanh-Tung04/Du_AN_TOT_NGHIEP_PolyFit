@@ -312,32 +312,50 @@
                         
                         reviewsHtml = `
                             <div class="ec-t-review-item d-flex">
-                <div class="ec-t-review-avtar">
-                    ${review.user.image ? `<img src="/storage/${review.user.image}" class="rounded-circle" alt="" style="width: 70px; height: 70px; object-fit: cover;" />` 
-                    : '<img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" width="70px" class="rounded-circle" alt="" />'}
-                </div>
-                <div class="mx-5 ec-t-review-content">
-                    <div class="ec-t-review-top">
-                        <div class="ec-t-review-name">${review.user.name}</div>
-                        <div class="ec-t-review-rating">
-                            ${Array.from({length: 5}, (v, i) => `
-                                <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="ec-t-review-bottom">
-                        <p>${review.content}</p>
-                    </div>
-                    ${review.image ? `<img src="/storage/${review.image}" alt="Review Image" width="100">` : ''}
-                    <div class="ec-t-review-bottom">
-                        <p>${new Date(review.created_at).toLocaleDateString()}</p>
-                    </div>
-                </div>
-            </div>
-                        `;
-                    } else {
-                        reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
-                    }
+                                <div class="ec-t-review-avtar">
+                                    @if(Auth::check())
+                                    @php
+                                    $checkUrlImg = Auth::user()->image && \Illuminate\Support\Str::contains(Auth::user()->image, '/userfiles/')
+                                    ? Auth::user()->image
+                                    : (Auth::user()->image ? Storage::url(Auth::user()->image) : null);
+                                    @endphp
+
+                                    @if ($checkUrlImg)
+                                    <!-- Nếu user có ảnh đại diện -->
+                                    <img src="{{ $checkUrlImg }}" alt="User Avatar" class="img-profile rounded-circle border shadow"
+                                        style="height: 60px; width: 60px; object-fit: cover;">
+                                    @else
+                                    <!-- Nếu không có ảnh đại diện -->
+                                    <img style="height: 60px; width: 60px;" class="img-profile rounded-circle"
+                                        src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" alt="Default Avatar">
+                                    @endif
+                                    @else
+                                    <!-- Nếu chưa đăng nhập -->
+                                    <i class="fi-rr-user"></i>
+                                    @endif
+                                </div>
+                                <div class="mx-5 ec-t-review-content">
+                                    <div class="ec-t-review-top">
+                                        <div class="ec-t-review-name">${review.user.name}</div>
+                                        <div class="ec-t-review-rating">
+                                            ${Array.from({length: 5}, (v, i) => `
+                                            <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                    <div class="ec-t-review-bottom">
+                                        <p>${review.content}</p>
+                                    </div>
+                                    ${review.image ? `<img src="/storage/${review.image}" alt="Review Image" width="100">` : ''}
+                                    <div class="ec-t-review-bottom">
+                                        <p>${new Date(review.created_at).toLocaleDateString()}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                            } else {
+                            reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
+                            }
                     
                     // Display the review (or message if no reviews)
                     $('#view-review-list').html(reviewsHtml);
@@ -402,8 +420,13 @@ $('#submit-review').on('click', function (e) {
                 $('#reviewModal').modal('hide');
                 // Thay đổi nút "Write Review" thành "View Review" sau khi đánh giá thành công
                 var orderId = $('input[name="order_id"]').val();
-                var button = $('button.open-review');
-                button.text('Xem đánh giá').attr('disabled', true);
+                var button = $('button.open-review-modal[data-order-id="' + orderId + '"]');
+
+                    button.removeClass('btn-primary open-review-modal')
+                        .addClass('btn-secondary open-view-review-modal')
+                         .text('Xem đánh giá')
+                         .attr('data-order-id', orderId);
+
             }
         },
         error: function (xhr) {

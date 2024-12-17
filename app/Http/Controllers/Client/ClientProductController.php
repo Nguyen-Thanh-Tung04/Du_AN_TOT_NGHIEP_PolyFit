@@ -79,19 +79,68 @@ class ClientProductController extends Controller
 
         $galleryImages = json_decode($galleryString);
 
-        $reviews = Review::with('replies')
+        $reviews = Review::with('replies', 'user','order.orderItems')
             ->where('product_id', $id)
             ->where('status', '!=', 2) // Exclude reviews with status 2
-            ->get();
+            ->get(); 
+        // $reviews = Review::with(['order.orderItems' => function($query) use ($id) {
+        //     // Lọc orderItems theo order_id và product_id
+        //     $query->where('order_id', '=', $id);  // Lọc theo order_id
+        // }, 'replies', 'user'])  // Eager load các mối quan hệ còn lại
+        //     ->where('product_id', $id) // Lọc theo product_id của Review
+        //     ->where('status', '!=', 2)  // Loại bỏ đánh giá có trạng thái = 2
+        //     ->get();
+        
+        
+    
+
 
         // Lấy điểm đánh giá trung bình
         $averageScore = $product->averageScore();
 
+        // Đếm số lượng đánh giá theo từng sao
+        $reviewCounts = Review::where('product_id', $id)
+            ->where('status', '!=', 2) // Chỉ lấy các đánh giá được duyệt
+            ->selectRaw('score, COUNT(*) as count')
+            ->groupBy('score')
+            ->pluck('count', 'score');
+
         return view(
             'client.page.productDetail',
-            compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'averageScore', 'reviews', 'similar_products', 'discountPercentage', 'flashSaleEndTime')
+            compact('product', 'minListedPrice', 'minSalePrice', 'galleryImages', 'averageScore', 'reviews', 'similar_products', 'discountPercentage', 'flashSaleEndTime', 'reviewCounts')
         );
     }
+    public function filterReviews(Request $request, $product_id)
+    {
+        $star = $request->get('star'); // Số sao lọc
+        $query = Review::with('replies')->where('product_id', $product_id);
+        // Lọc theo số sao nếu được cung cấp
+        if ($star) {
+            $query->where('score', $star);
+        }
+
+        // Chỉ lấy đánh giá đã được duyệt (status != 2)
+        $reviews = $query->where('status', '!=', 2)->get();
+        return response()->json([
+            'html' => view('client.page.partials', compact('reviews'))->render()
+        ]);
+    }
+    public function fetchReviews(Request $request, $product_id)
+    {
+        dd("Tung");
+        // Lấy danh sách đánh giá với phân trang
+        $reviews = Review::with('replies', 'user')
+            ->where('product_id', $product_id)
+            ->where('status', '!=', 2) // Exclude reviews with status 2
+            ->paginate(5); // Số đánh giá mỗi trang
+
+        // Render view của danh sách đánh giá và trả về HTML
+        $html = view('client.page.partials', compact('reviews'))->render();
+
+        return response()->json(['html' => $html]);
+    }
+
+
 
     public function getVariantDetails(Request $request)
     {
