@@ -30,7 +30,7 @@ class UpdateProductRequest extends FormRequest
             'purchase_price.*' => 'required|integer|min:1|max:9999999', 
             'listed_price.*' => 'required|integer|min:1|max:9999999',
             'sale_price.*' => 'integer|min:1|max:9999999',
-            'quantity.*' => 'required|integer|min:1|max:9999999',
+            'quantity.*' => 'required|integer|min:0|max:9999999',
         ];
     }
 
@@ -78,7 +78,7 @@ class UpdateProductRequest extends FormRequest
             'sale_price.*.max' => 'Giá sale quá lớn.',
             'quantity.*.required' => 'Bạn chưa nhập số lượng.',
             'quantity.*.integer' => 'Số lượng phải là dạng số nguyên.',
-            'quantity.*.min' => 'Số lượng phải lớn hơn 1.',
+            'quantity.*.min' => 'Số lượng không được nhập số âm.',
             'quantity.*.max' => 'Số lượng quá lớn.',
         ];
     }

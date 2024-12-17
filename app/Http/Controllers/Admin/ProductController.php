@@ -141,7 +141,7 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('error', 'Xóa bản ghi thất bại. Hãy thử lại.');
     }
 
-    public function destroyVariantDetail(DeleteVariantRequest $request) {
+    public function destroyVariantDetail(Request $request) {
         if ($this->productService->destroyVariant($request)) {
             return redirect()->route('product.delete', $request->id)->with('success', 'Xóa bản ghi thành công.');
         }
