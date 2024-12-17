@@ -272,7 +272,7 @@
                                     <span class="">
                                         <div style="margin-bottom:10px">
                                             <input type="radio" id="pay1" name="payment_method" value="1" checked>
-                                            <label for="pay1">Thanh toán khi nhận hàng</label>
+                                            <label for="pay1">Thanh toán COD</label>
                                         </div>
                                         <div style="margin-bottom:10px">
                                             <input type="radio" id="pay2" name="payment_method" value="2">

@@ -77,7 +77,7 @@
                     <table class="table table-sm table-striped table-bordered">
                         <thead class="thead-light">
                             <tr>
-                                <th>Mã sản phẩm</th>
+                                <th>STT</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Ảnh sản phẩm</th>
                                 <th>Biến thể</th>
@@ -87,17 +87,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($donHang->orderItems as $item)
+                            @foreach($donHang->orderItems as $index => $item)
                         
                             <tr>
-                                <td>{{ $item->code }}</td>
+                                <td>{{$index+1}}</td> 
                                 <td>{{ $item->name }}</td>
                                 <td><img src="{{ $item->image ?? '' }}" width="100px"></td>
 
                                 <td>(Màu: {{ $item->color }}, Kích thước: {{ $item->size }})</td>
-                                <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
+                                <td>{{ number_format($item->price, 0, ',', '.') }} đ</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} VNĐ</td>
+                                <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -115,6 +115,7 @@
                     <h5 class="card-title mb-0">Lịch sử trạng thái</h5>
                     <table class="table table-sm table-striped table-bordered">
                         <tr>
+                            <th>STT</th>
                             <th>Trạng thái trước</th>
                             <th>Trạng thái mới</th>
                             <th>Ghi chú</th>
@@ -123,13 +124,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach ($donHang->statusHistories as $history)
+                            @foreach ($donHang->statusHistories as $index => $history)
                             <tr>
+                                <td>{{ count($donHang->statusHistories) - $index }}</td>
                                 <td>{{ $trangThaiDonHang[$history->previous_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $trangThaiDonHang[$history->new_status] ?? 'Không xác định' }}</td>
                                 <td>{{ $history->cancel_reason ?? '-' }}</td>
                                 <td>{{ $history->user->name ?? 'Hệ thống' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($history->created_at)->format('d-m-Y H:i:s') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($history->created_at)->format('H:i:s d-m-Y') }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -138,6 +140,7 @@
             </div>
         </div>
     </div>
+    
 </div>
 
 @endsection
