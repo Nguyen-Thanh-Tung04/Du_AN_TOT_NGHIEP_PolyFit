@@ -858,7 +858,7 @@ class CheckoutController
     
     
                 // Chuyển hướng đến trang bill với thông tin đơn hàng
-                return redirect()->route('order.show', $order->id);
+                return redirect()->route('order.show', $order->id)->with('success', 'Thanh toán thành công.');
             } else {
                 return redirect()->route('cart.index')->with('error', 'Thanh toán không thành công vì có sản phẩm đã hết số lượng.');
             }

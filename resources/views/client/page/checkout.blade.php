@@ -399,7 +399,6 @@
                                         // Xử lý sự kiện khi nhấn nút back (trở về)
                                         window.onpopstate = function(event) {
                                             if (event.state && event.state.page === 'checkout') {
-                                                history.replaceState(null, null, '{{ route("cart.index") }}');
                                                 // Trả về trang checkout khi người dùng nhấn back
                                                 window.location.href = '/checkout'; // Điều hướng về trang checkout
                                             }
@@ -416,7 +415,6 @@
                                 sendAjaxRequest('{{ route("momo.payment") }}', 'POST', function(response) {
                                     // Khi thành công, chuyển hướng người dùng đến URL MoMo
                                     if (response.success) {
-                                        history.replaceState(null, null, '{{ route("cart.index") }}');
                                         window.location.href = response.momo_url;
                                     } else {
                                         toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
