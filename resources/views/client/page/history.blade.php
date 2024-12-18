@@ -85,67 +85,67 @@
                                 @include('client.page.orders_table', ['orders' => $cancelledOrders])
                             </div>
                         </div>
-                        
-                        
-                           
+
+
+
                         <div class="ec-vendor-card-table">
                             <table class="table ec-table">
                                 <tbody>
                                     @foreach($orders as $order)
-                                            <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h3 class="modal-title" id="reviewModalLabel"></h3>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                            
-                                                        <div class="modal-body">
-                                                            <!-- Danh sách sản phẩm trong đơn hàng -->
-                                                            <div id="products-list"></div>
-                                            
-                                                            <div id="review-list">
-                                                                <!-- Các phần tiếp theo -->
-                                                            </div>
-                                                                                                                         
-                                                        </div>
-                                            
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                                                            <button type="button" class="btn btn-primary" id="submit-review">Gửi đánh giá</button>
-                                                        </div>
-                                                    </div>
+                                    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="reviewModalLabel"></h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                            </div>      
-                                            <!-- Modal Xem đánh giá -->
-                                            <div class="modal fade" id="viewReviewModal" tabindex="-1" aria-labelledby="viewReviewModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h3 class="modal-title" id="viewReviewModalLabel">Xem đánh giá</h3>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
 
-                                                        <div class="modal-body">
-                                                            <!-- Phần hiển thị danh sách sản phẩm -->
-                                                            <h5>Danh sách sản phẩm đã mua</h5>
-                                                            <div id="pr-list"></div>
-                                                        </div>
+                                                <div class="modal-body">
+                                                    <!-- Danh sách sản phẩm trong đơn hàng -->
+                                                    <div id="products-list"></div>
 
-                                                        <div class="modal-body">
-                                                            <!-- Phần hiển thị danh sách đánh giá -->
-                                                            <h5>Đánh giá của bạn</h5>
-                                                            <div id="view-review-list"></div>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                                                        </div>
+                                                    <div id="review-list">
+                                                        <!-- Các phần tiếp theo -->
                                                     </div>
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                                                    <button type="button" class="btn btn-primary" id="submit-review">Gửi đánh giá</button>
                                                 </div>
                                             </div>
-                                      
-                                      @endforeach
+                                        </div>
+                                    </div>
+                                    <!-- Modal Xem đánh giá -->
+                                    <div class="modal fade" id="viewReviewModal" tabindex="-1" aria-labelledby="viewReviewModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="viewReviewModalLabel">Xem đánh giá</h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <!-- Phần hiển thị danh sách sản phẩm -->
+                                                    <h5>Danh sách sản phẩm đã mua</h5>
+                                                    <div id="pr-list"></div>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <!-- Phần hiển thị danh sách đánh giá -->
+                                                    <h5>Đánh giá của bạn</h5>
+                                                    <div id="view-review-list"></div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -154,42 +154,47 @@
             </div>
         </div>
     </div>
-</div>
- 
+    </div>
+
 </section>
 <!-- End User history section -->
 @endsection
 
 @section('scripts')
 <script>
-   $(document).ready(function () {
-    // Đối tượng chứa mô tả tương ứng với từng ngôi sao
-    var starDescriptions = {
-        1: "Không thích",
-        2: "Tạm được",
-        3: "Bình thường",
-        4: "Hài lòng",
-        5: "Rất hài lòng"
-    };    
+    $(document).ready(function() {
+        // Đối tượng chứa mô tả tương ứng với từng ngôi sao
+        var starDescriptions = {
+            1: "Không thích",
+            2: "Tạm được",
+            3: "Bình thường",
+            4: "Hài lòng",
+            5: "Rất hài lòng"
+        };
 
-    // khi bấm đánh giá
-    $(document).on('click', '.open-review-modal', function () {
-        // Lấy order_idtừ button
-        var orderId = $(this).data('order-id');
-        var products = $(this).data('products');
-        
+        $('#see-more-history').on('click', function() {
+            $('.order-history.d-none').removeClass('d-none').addClass('d-flex');
+            $(this).hide();
+        });
 
-        // Đổ dữ liệu vào modal
-        $('#order_id').val(orderId);
-
-        // Xóa danh sách sản phẩm cũ
-        $('#products-list').empty();
-        $('#review-list').empty();
+        // khi bấm đánh giá
+        $(document).on('click', '.open-review-modal', function() {
+            // Lấy order_idtừ button
+            var orderId = $(this).data('order-id');
+            var products = $(this).data('products');
 
 
-        // Đổ sản phẩm vào danh sách
-        products.forEach(function(product) {
-            $('#products-list').append(`
+            // Đổ dữ liệu vào modal
+            $('#order_id').val(orderId);
+
+            // Xóa danh sách sản phẩm cũ
+            $('#products-list').empty();
+            $('#review-list').empty();
+
+
+            // Đổ sản phẩm vào danh sách
+            products.forEach(function(product) {
+                $('#products-list').append(`
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-3 col-12 text-center">
                         <img class="img-fluid rounded" src="${product.image}" alt="${product.name}" style="max-width: 60px;">
@@ -205,9 +210,9 @@
                     </div>
                 </div>
             `);
-        });
-        // Đổ form
-        $('#review-list').append(`
+            });
+            // Đổ form
+            $('#review-list').append(`
                 <!-- Form để đánh giá cả đơn hàng -->
                 <div id="review-form-${orderId}">
                     <input type="hidden" name="order_id" value="${orderId}">
@@ -255,34 +260,34 @@
                 </div>                                                             
             `);
 
-        // Hiển thị modal
-        $('#reviewModalLabel').text('Viết đánh giá cho đơn hàng ');
-        $('#reviewModal').modal('show');
-        
-    });
+            // Hiển thị modal
+            $('#reviewModalLabel').text('Viết đánh giá cho đơn hàng ');
+            $('#reviewModal').modal('show');
 
-    $(document).on('change', '.rate input[type="radio"]', function () {
-        var starValue = $(this).val();
+        });
 
-        // Cập nhật nội dung mô tả dựa trên giá trị sao
-        $('.rate-text').text(starDescriptions[starValue]);
+        $(document).on('change', '.rate input[type="radio"]', function() {
+            var starValue = $(this).val();
 
-        // Hiển thị lại phần mô tả nếu nó đang bị ẩn
-        if ($('.rate-text').hasClass('uk-hidden')) {
-            $('.rate-text').removeClass('uk-hidden');
-        }
-    });
-   
-    // Khi bấm nút 'Xem đánh giá'
-    $(document).on('click', '.open-view-review-modal', function() {
-        const orderId = $(this).data('order-id');
-        const products = $(this).data('products');
-        console.log(products);
-        // Xóa danh sách sản phẩm cũ
-        $('#pr-list').empty();
-        // Đổ sản phẩm vào danh sách
-         products.forEach(function(product) {
-            $('#pr-list').append(`
+            // Cập nhật nội dung mô tả dựa trên giá trị sao
+            $('.rate-text').text(starDescriptions[starValue]);
+
+            // Hiển thị lại phần mô tả nếu nó đang bị ẩn
+            if ($('.rate-text').hasClass('uk-hidden')) {
+                $('.rate-text').removeClass('uk-hidden');
+            }
+        });
+
+        // Khi bấm nút 'Xem đánh giá'
+        $(document).on('click', '.open-view-review-modal', function() {
+            const orderId = $(this).data('order-id');
+            const products = $(this).data('products');
+            console.log(products);
+            // Xóa danh sách sản phẩm cũ
+            $('#pr-list').empty();
+            // Đổ sản phẩm vào danh sách
+            products.forEach(function(product) {
+                $('#pr-list').append(`
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-3 col-12 text-center">
                         <img class="img-fluid rounded" src="${product.image}" alt="${product.name}" style="max-width: 60px;">
@@ -298,18 +303,18 @@
                     </div>
                 </div>
             `);
-        });
-        // Gọi AJAX để lấy danh sách đánh giá
-        $.ajax({
+            });
+            // Gọi AJAX để lấy danh sách đánh giá
+            $.ajax({
                 url: `/reviews/${orderId}`, // Đường dẫn API để lấy đánh giá
                 method: 'GET',
                 success: function(response) {
                     let reviewsHtml = '';
-                    
+
                     // Check if there are reviews
                     if (response.reviews && response.reviews.length > 0) {
                         const review = response.reviews[0]; // Get the first review only
-                        
+
                         reviewsHtml = `
                             <div class="ec-t-review-item d-flex">
                                 <div class="ec-t-review-avtar">
@@ -353,10 +358,10 @@
                                 </div>
                             </div>
                             `;
-                            } else {
-                            reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
-                            }
-                    
+                    } else {
+                        reviewsHtml = `<p>Chưa có đánh giá nào cho đơn hàng này.</p>`;
+                    }
+
                     // Display the review (or message if no reviews)
                     $('#view-review-list').html(reviewsHtml);
 
@@ -366,149 +371,149 @@
                 error: function() {
                     alert('Không thể tải danh sách đánh giá.');
                 }
+            });
+            // Hiển thị modal sau khi đã đổ sản phẩm
+            $('#viewReviewModal').modal('show');
+
         });
-        // Hiển thị modal sau khi đã đổ sản phẩm
-        $('#viewReviewModal').modal('show');
-
-    });
 
 
- // Submit review
-$('#submit-review').on('click', function (e) {
-    e.preventDefault();
+        // Submit review
+        $('#submit-review').on('click', function(e) {
+            e.preventDefault();
 
-    // Clear previous error messages
-    $('.error-message').remove(); // Xóa các thông báo lỗi cũ
+            // Clear previous error messages
+            $('.error-message').remove(); // Xóa các thông báo lỗi cũ
 
-    // Create a new FormData object
-    var formData = new FormData();
-    
-    // Add data from input fields to formData
-    formData.append('review_text', $('#review_text').val());
-    formData.append('rate', $('input[name="rate"]:checked').val());
-    formData.append('id_order', $('input[name="order_id"]').val()); // Corrected from 'order_id' to 'id_order'
+            // Create a new FormData object
+            var formData = new FormData();
 
-    var reviewImage = $('#review_image').prop('files')[0]; // Lấy file ảnh đầu tiên
+            // Add data from input fields to formData
+            formData.append('review_text', $('#review_text').val());
+            formData.append('rate', $('input[name="rate"]:checked').val());
+            formData.append('id_order', $('input[name="order_id"]').val()); // Corrected from 'order_id' to 'id_order'
 
-    if (reviewImage) {
-        formData.append('review_image', reviewImage); // Thêm file ảnh vào formData, không chỉ tên file
-    }
+            var reviewImage = $('#review_image').prop('files')[0]; // Lấy file ảnh đầu tiên
 
-    // Add CSRF token if Laravel is using CSRF protection
-    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-
-    // Send AJAX request
-    $.ajax({
-        url: '/submit-review',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            if (response.success) {
-                Swal.fire({
-                    title: 'Thông báo',
-                    text: 'Đánh giá thành công!',
-                    icon: 'success',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 6000,
-                    showCloseButton: true
-                });
-                // Đóng modal sau khi đánh giá thành công
-                $('#reviewModal').modal('hide');
-                // Thay đổi nút "Write Review" thành "View Review" sau khi đánh giá thành công
-                var orderId = $('input[name="order_id"]').val();
-                var button = $('button.open-review-modal[data-order-id="' + orderId + '"]');
-
-                    button.removeClass('btn-primary open-review-modal')
-                        .addClass('btn-secondary open-view-review-modal')
-                         .text('Xem đánh giá')
-                         .attr('data-order-id', orderId);
-
+            if (reviewImage) {
+                formData.append('review_image', reviewImage); // Thêm file ảnh vào formData, không chỉ tên file
             }
-        },
-        error: function (xhr) {
-            // Nếu gặp lỗi từ server (422 - đã đánh giá rồi)
-            if (xhr.status === 422) {
-                var errors = xhr.responseJSON.errors;
 
-                // Hiển thị lỗi cụ thể cho mỗi trường
-                if (xhr.responseJSON.message) {
-                    Swal.fire({
-                        title: 'Lỗi',
-                        text: xhr.responseJSON.message,
-                        icon: 'error',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 6000,
-                        showCloseButton: true
+            // Add CSRF token if Laravel is using CSRF protection
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+            // Send AJAX request
+            $.ajax({
+                url: '/submit-review',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: 'Thông báo',
+                            text: 'Đánh giá thành công!',
+                            icon: 'success',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 6000,
+                            showCloseButton: true
+                        });
+                        // Đóng modal sau khi đánh giá thành công
+                        $('#reviewModal').modal('hide');
+                        // Thay đổi nút "Write Review" thành "View Review" sau khi đánh giá thành công
+                        var orderId = $('input[name="order_id"]').val();
+                        var button = $('button.open-review-modal[data-order-id="' + orderId + '"]');
+
+                        button.removeClass('btn-primary open-review-modal')
+                            .addClass('btn-secondary open-view-review-modal')
+                            .text('Xem đánh giá')
+                            .attr('data-order-id', orderId);
+
+                    }
+                },
+                error: function(xhr) {
+                    // Nếu gặp lỗi từ server (422 - đã đánh giá rồi)
+                    if (xhr.status === 422) {
+                        var errors = xhr.responseJSON.errors;
+
+                        // Hiển thị lỗi cụ thể cho mỗi trường
+                        if (xhr.responseJSON.message) {
+                            Swal.fire({
+                                title: 'Lỗi',
+                                text: xhr.responseJSON.message,
+                                icon: 'error',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 6000,
+                                showCloseButton: true
+                            });
+                        }
+
+                        // Display error messages for each field
+                        if (errors.review_text) {
+                            $('#review_text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
+                        }
+                        if (errors.rate) {
+                            $('input[name="rate"]').closest('.rate').after('<div class="error-message text-danger">Mời bạn đánh giá sao !</div>');
+                        }
+                        if (errors.review_image) {
+                            $('#review_image').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');
+                        }
+                    } else {
+                        Swal.fire({
+                            title: 'Lỗi',
+                            text: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                            icon: 'error',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 6000,
+                            showCloseButton: true
+                        });
+                    }
+                }
+            });
+        });
+
+
+        // Cập nhật ảnh
+        $(document).on('change', '#review_image', function(event) {
+            console.log('File input changed'); // Debugging line
+
+            // Clear previous images
+            $('#image-preview-container').empty();
+
+            var file = event.target.files[0];
+            console.log(file); // Check if a file has been selected
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    console.log("File loaded:", e.target.result);
+
+                    var imgElement = $('<img>', {
+                        src: e.target.result,
+                        class: 'img-thumbnail',
+                        style: 'height: 90px; width: 90px; margin-right: 5px;'
                     });
-                }
+                    $('#image-preview-container').append(imgElement);
+                };
 
-                // Display error messages for each field
-                if (errors.review_text) {
-                    $('#review_text').after('<div class="error-message text-danger fw-bold">' + errors.review_text[0] + '</div>');
-                }
-                if (errors.rate) {
-                    $('input[name="rate"]').closest('.rate').after('<div class="error-message text-danger">Mời bạn đánh giá sao !</div>');
-                }
-                if (errors.review_image) {
-                    $('#review_image').after('<div class="error-message text-danger fw-bold">' + errors.review_image[0] + '</div>');
-                }
+                reader.readAsDataURL(file);
+                $('#filesel_2').text('1 file selected');
             } else {
-                Swal.fire({
-                    title: 'Lỗi',
-                    text: 'Có lỗi xảy ra. Vui lòng thử lại.',
-                    icon: 'error',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 6000,
-                    showCloseButton: true
-                });
+                $('#filesel_2').text('No file selected');
             }
-        }
+        });
+
+
+
+
     });
-});
-    
-
-    // Cập nhật ảnh
-    $(document).on('change', '#review_image', function (event) {
-        console.log('File input changed'); // Debugging line
-
-        // Clear previous images
-        $('#image-preview-container').empty();
-
-        var file = event.target.files[0];
-        console.log(file); // Check if a file has been selected
-
-        if (file) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                console.log("File loaded:", e.target.result);
-
-                var imgElement = $('<img>', {
-                    src: e.target.result,
-                    class: 'img-thumbnail',
-                    style: 'height: 90px; width: 90px; margin-right: 5px;'
-                });
-                $('#image-preview-container').append(imgElement);
-            };
-
-            reader.readAsDataURL(file);
-            $('#filesel_2').text('1 file selected');
-        } else {
-            $('#filesel_2').text('No file selected');
-        }
-    });
-
-
-
-
-});
 </script>
 @endsection
