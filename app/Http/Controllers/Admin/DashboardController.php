@@ -40,16 +40,16 @@ class DashboardController extends Controller
                 ->count();
         }
         // dd($unreadMessagesCount);
-        // Truy vấn tổng số đơn chờ xác nhận
+        // Truy vấn tổng số đơn chờ xác nhận trong tháng hiện tại
         $totalOrdersConfirm = DB::table('orders')
             ->where('status', 1) // Đơn hàng chờ xác nhận
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->count();
 
-        // Truy vấn tổng số đơn hàng đã thanh toán
-        $totalOrders = DB::table('orders')
-            ->where('status', 6) // Đơn hàng đã thanh toán
+        // Truy vấn tổng số đơn hàng đã hoàn thành
+        $totalOrdersCancel = DB::table('orders')
+            ->where('status', 7) // Đơn hàng đã hoàn thành
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->count();
@@ -87,59 +87,19 @@ class DashboardController extends Controller
             ->limit(10) // Lấy 10 người dùng mới nhất
             ->get();
 
-        // Truy vấn trạng thái đơn hàng
+
         $orderStatus = DB::table('orders')
             ->select('status', DB::raw('count(*) as total'))
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
             ->groupBy('status')
             ->get();
+
         //        dd($orderStatus);
         // Nếu không có dữ liệu đơn hàng
         if ($monthlyOrders->isEmpty()) {
             return view('admin.dashboard.layout', compact('template', 'config', 'totalOrders', 'totalOrdersConfirm', 'totalCustomers', 'latestOrders', 'orderStatus', 'latestUsers'));
         }
-
-        // Lấy dữ liệu tháng mới nhất
-        $latestMonthData = $monthlyOrders->last();
-        $latestMonthOrders = $latestMonthData->total_orders;
-        $latestMonthRevenue = $latestMonthData->total_revenue;
-        $latestMonth = $latestMonthData->month;
-
-        // Tính tổng đơn hàng và doanh thu của tháng trước (trường hợp tháng hiện tại có dữ liệu)
-        $previousMonthOrders = DB::table('orders')
-            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
-            ->whereMonth('created_at', $latestMonth == 1 ? 12 : $latestMonth - 1)
-            ->whereYear('created_at', $latestMonth == 1 ? $currentYear - 1 : $currentYear)
-            ->count();
-
-        $previousMonthRevenue = DB::table('orders')
-            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
-            ->whereMonth('created_at', $latestMonth == 1 ? 12 : $latestMonth - 1)
-            ->whereYear('created_at', $latestMonth == 1 ? $currentYear - 1 : $currentYear)
-            ->sum('total_price');
-
-        // Tính tỷ lệ tăng trưởng đơn hàng
-        $growth = ($previousMonthOrders > 0)
-            ? (($latestMonthOrders - $previousMonthOrders) / $previousMonthOrders) * 100
-            : ($latestMonthOrders > 0 ? 100 : 0);
-        $growth = min($growth, 100);
-
-        // Tính tỷ lệ tăng trưởng doanh thu
-        $revenueGrowth = ($previousMonthRevenue > 0)
-            ? (($latestMonthRevenue - $previousMonthRevenue) / $previousMonthRevenue) * 100
-            : ($latestMonthRevenue > 0 ? 100 : 0);
-        $revenueGrowth = min($revenueGrowth, 100);
-
-        // Chuẩn bị dữ liệu kết quả
-        $results = [
-            [
-                'month' => $latestMonth,
-                'total_orders' => $latestMonthOrders,
-                'total_revenue' => round($latestMonthRevenue, 2),
-                'growth' => round($growth, 2) . '%', // Tăng trưởng đơn hàng
-                'revenue_growth' => round($revenueGrowth, 2) . '%' // Tăng trưởng doanh thu
-            ]
-        ];
-
         // Truy vấn lợi nhuận gộp
         $grossProfit = DB::table('order_items')
             ->join('variants', 'order_items.variant_id', '=', 'variants.id')
@@ -161,9 +121,9 @@ class DashboardController extends Controller
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
-            'results', // Truyền dữ liệu đã tính toán vào view
+            'monthlyOrders', // Truyền dữ liệu đã tính toán vào view
             'totalOrdersConfirm', // Truyền tổng số đơn hàng vào view
-            'totalOrders',
+            'totalOrdersCancel',
             'totalCustomers', // Tổng khách hàng
             'latestOrders', // 10 đơn hàng mới nhất
             'latestUsers',
@@ -189,28 +149,15 @@ class DashboardController extends Controller
 
         // Kiểm tra nếu ngày bắt đầu hoặc ngày kết thúc chưa được nhập
         $results_one = collect();
-        // Truy vấn 10 đơn hàng mới nhất trong tháng này
-        $latestOrders = DB::table('orders')
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
-            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
-            ->limit(10) // Lấy 10 đơn hàng mới nhất
-            ->get();
-
-        $latestUsers = DB::table('users')
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
-            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
-            ->limit(10) // Lấy 10 đơn hàng mới nhất
-            ->get();
-        $totalOrders = DB::table('orders')
-            ->where('status', 6) // Chỉ tính những đơn hàng đã thanh toán
+        $totalOrdersConfirm = DB::table('orders')
+            ->where('status', 1) // Đơn hàng chờ xác nhận
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->count();
 
-        $totalOrdersConfirm = DB::table('orders')
-            ->where('status', 1) // Chỉ tính những đơn hàng chờ xác nhận
+        // Truy vấn tổng số đơn hàng đã hủy
+        $totalOrdersCancel = DB::table('orders')
+            ->where('status', 7) // Đơn hàng đã hủy
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->count();
@@ -222,67 +169,41 @@ class DashboardController extends Controller
                 DB::raw('COUNT(*) as total_orders'),
                 DB::raw('SUM(total_price) as total_revenue') // Giả sử bạn có cột 'total_price' lưu trữ doanh thu
             )
-            ->where('status', 6) // Chỉ tính những đơn hàng đã thanh toán
+            ->where('status', 6) // Đơn hàng đã thanh toán
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
-        // Truy vấn tổng số khách hàng truy cập
+        // Truy vấn tổng số khách hàng
         $totalCustomers = DB::table('users')->count();
-        // Truy vấn trạng thái đơn hàng
+
+        // Truy vấn 10 đơn hàng mới nhất trong tháng này
+        $latestOrders = DB::table('orders')
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
+            ->limit(5) // Lấy 10 đơn hàng mới nhất
+            ->get();
+
+        // Truy vấn 10 người dùng mới nhất trong tháng này
+        $latestUsers = DB::table('users')
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
+            ->limit(10) // Lấy 10 người dùng mới nhất
+            ->get();
+
+
         $orderStatus = DB::table('orders')
             ->select('status', DB::raw('count(*) as total'))
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
             ->groupBy('status')
             ->get();
 
-        // Nếu không có dữ liệu
-        if ($monthlyOrders->isEmpty()) {
-            return view('admin.dashboard.layout', compact('template', 'config', 'totalOrders', 'totalOrdersConfirm', 'totalCustomers', 'latestOrders', 'latestUsers', 'orderStatus'));
-        }
-
-        // Lấy dữ liệu tháng mới nhất
-        $latestMonthData = $monthlyOrders->last();
-        $latestMonthOrders = $latestMonthData->total_orders;
-        $latestMonthRevenue = $latestMonthData->total_revenue;
-        $latestMonth = $latestMonthData->month;
-
-        // Tính tổng đơn hàng và doanh thu của tháng trước (trường hợp tháng hiện tại có dữ liệu)
-        $previousMonthOrders = DB::table('orders')
-            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
-            ->whereMonth('created_at', $currentMonth - 1)
-            ->whereYear('created_at', $currentYear)
-            ->count();
-
-        $previousMonthRevenue = DB::table('orders')
-            ->where('status', 6) // Chỉ tính đơn hàng đã thanh toán
-            ->whereMonth('created_at', $currentMonth - 1)
-            ->whereYear('created_at', $currentYear)
-            ->sum('total_price');
-
-        // Tính tỷ lệ tăng trưởng đơn hàng
-        $growth = ($previousMonthOrders > 0)
-            ? (($latestMonthOrders - $previousMonthOrders) / $previousMonthOrders) * 100
-            : ($latestMonthOrders > 0 ? 100 : 0);
-        $growth = min($growth, 100);
-
-        // Tính tỷ lệ tăng trưởng doanh thu
-        $revenueGrowth = ($previousMonthRevenue > 0)
-            ? (($latestMonthRevenue - $previousMonthRevenue) / $previousMonthRevenue) * 100
-            : ($latestMonthRevenue > 0 ? 100 : 0);
-        $revenueGrowth = min($revenueGrowth, 100);
-
-        // Chuẩn bị dữ liệu kết quả
-        $results = [
-            [
-                'month' => $latestMonth,
-                'total_orders' => $latestMonthOrders,
-                'total_revenue' => round($latestMonthRevenue, 2),
-                'growth' => round($growth, 2) . '%', // Tăng trưởng đơn hàng
-                'revenue_growth' => round($revenueGrowth, 2) . '%' // Tăng trưởng doanh thu
-            ]
-        ];
+        // dd($orderStatus);
         if (empty($date_start) || empty($end_date)) {
             // Thông báo lỗi nếu chưa nhập ngày
             $errorMessage = 'Vui lòng nhập ngày bắt đầu và ngày kết thúc!';
@@ -291,7 +212,7 @@ class DashboardController extends Controller
                 'template1',
                 'config',
                 'results', // Truyền dữ liệu đã tính toán vào view
-                'totalOrders', // Truyền tổng số đơn hàng vào view
+                'totalOrdersCancel', // Truyền tổng số đơn hàng vào view
                 'totalOrdersConfirm',
                 'totalCustomers', // Tổng khách hàng
                 'latestOrders', // 10 đơn hàng mới nhất
@@ -331,10 +252,10 @@ class DashboardController extends Controller
             ->select(
                 DB::raw($choose_time === 'week' ? "CONCAT(YEAR(orders.created_at), '-', LPAD(WEEK(orders.created_at, 3), 2, '0')) AS date" : // Chọn định dạng cho tuần
                     ($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m') AS date" : ($choose_time === 'year' ? "YEAR(orders.created_at) AS date" : "DATE(orders.created_at) AS date"))),
-                DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 6 THEN orders.id END) AS so_luong_don_hang'), // Đếm đơn hàng đã đặt thành công
-                DB::raw('SUM(CASE WHEN orders.status = 6 THEN order_items.quantity ELSE 0 END) AS so_luong_ban_ra'), // Số lượng bán ra cho đơn hàng đã đặt thành công
-                DB::raw('SUM(CASE WHEN orders.status = 6 THEN orders.total_price ELSE 0 END) AS doanh_thu'), // Doanh thu từ đơn hàng đã đặt thành công
-                DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 6 THEN orders.id END) AS tong_so_don_hang_huy') // Đếm đơn hàng đã hủy
+                DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 6 THEN orders.id END) AS total_orders'), // Đếm đơn hàng đã đặt thành công
+                DB::raw('SUM(CASE WHEN orders.status = 6 THEN order_items.quantity ELSE 0 END) AS quantity_sold'), // Số lượng bán ra cho đơn hàng đã đặt thành công
+                DB::raw('SUM(CASE WHEN orders.status = 6 THEN orders.total_price ELSE 0 END) AS revenue'), // Doanh thu từ đơn hàng đã đặt thành công
+                DB::raw('COUNT(DISTINCT CASE WHEN orders.status = 7 THEN orders.id END) AS total_canceled_orders ') // Đếm đơn hàng đã hủy
             )
             ->whereBetween(DB::raw('DATE(orders.created_at)'), [$date_start, $end_date])
             ->groupBy(DB::raw($choose_time === 'month' ? "DATE_FORMAT(orders.created_at, '%Y-%m')" : ($choose_time === 'week' ? "CONCAT(YEAR(orders.created_at), '-', LPAD(WEEK(orders.created_at, 3), 2, '0'))" : // Nhóm theo tuần
@@ -356,12 +277,13 @@ class DashboardController extends Controller
 
             return [
                 'date' => $date,
-                'so_luong_don_hang' => $dateResult->so_luong_don_hang ?? 0,
-                'so_luong_ban_ra' => $dateResult->so_luong_ban_ra ?? 0,
-                'doanh_thu' => $dateResult->doanh_thu ?? 0,
-                'tong_so_don_hang_huy' => $dateResult->tong_so_don_hang_huy ?? 0, // Số lượng đơn hàng đã hủy
+                'total_orders' => $dateResult->total_orders ?? 0,
+                'quantity_sold' => $dateResult->quantity_sold ?? 0,
+                'revenue' => $dateResult->revenue ?? 0,
+                'total_canceled_orders' => $dateResult->total_canceled_orders ?? 0, // Số lượng đơn hàng đã hủy
             ];
         });
+        // dd($results_one);
         // Truy vấn lợi nhuận gộp
         $grossProfit = DB::table('order_items')
             ->join('variants', 'order_items.variant_id', '=', 'variants.id')
@@ -379,43 +301,26 @@ class DashboardController extends Controller
             ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
+            // dd($grossProfit);
 
-
-        $authUserId = Auth::user()->id; // ID người dùng hiện tại
-        $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
-        if ($authUserRole === 1) {
-            // Đếm tin nhắn chưa đọc (Admin xem tất cả)
-            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)->count();
-        } else {
-            // Còn Nếu là tk nhân viên: đếm tất nhắn tin chưa đọc với tài khoản nhân viên đó
-            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)
-                ->where(function ($query) use ($authUserId) {
-                    $query->where('user_reciever', $authUserId)
-                        ->orWhere('user_send', $authUserId);
-                })
-                ->count();
-        }
         $successMessage = 'Lọc dữ liệu thành công!';
 
 
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
-            'results', // Truyền dữ liệu đã tính toán vào view
-            'totalOrders', // Truyền tổng số đơn hàng vào view
+            'monthlyOrders',
+            'totalOrdersCancel', 
             'totalOrdersConfirm',
-            'totalCustomers', // Tổng khách hàng
-            'latestOrders', // 10 đơn hàng mới nhất
+            'totalCustomers', 
+            'latestOrders', 
             'latestUsers',
             'results_one',
             'orderStatus',
             'grossProfit',
             'successMessage',
-            'unreadMessagesCount'
         ));
     }
-
-
 
     private function config()
     {
