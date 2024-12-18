@@ -528,7 +528,7 @@
                 $('#voucherCode').val('');
 
                 // Cập nhật lại giảm giá và tổng tiền về ban đầu
-                $('#discountAmount').text('đ0');
+                $('#discountAmount').text('0đ');
 
                 // Lấy lại phí vận chuyển hiện tại
                 let shippingCost = parseInt($('input[name="shipping_method"]:checked').val());
