@@ -105,7 +105,7 @@
                                                     placeholder="Nhập từ khóa bạn muốn tìm kiếm..."
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">
+                                                    <button type="submit" name="search" value="search" class="btn btn-success mb0 btn-sm">
                                                         Tìm kiếm
                                                     </button>
                                                 </span>
@@ -173,8 +173,8 @@
                                         <td class="text-center js-switch-{{ $voucher->id }}">
                                             <input type="checkbox" value="{{ $voucher->status }}" 
                                             class="js-switch status " 
-                                            data-field="is_active" 
-                                            data-model="Category"
+                                            data-field="status" 
+                                            data-model="Voucher"
                                             data-modelId="{{ $voucher->id }}"
                                             {{ ($voucher->status == 1) ? 'checked' : '' }} />
                                         </td> 

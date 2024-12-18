@@ -88,9 +88,7 @@
                         </thead>
                         <tbody>
                             @foreach($donHang->orderItems as $item)
-                            @php
-                            $gallery = json_decode($item->gallery);
-                            @endphp
+                        
                             <tr>
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->name }}</td>

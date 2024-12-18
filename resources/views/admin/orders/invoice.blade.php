@@ -142,7 +142,6 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Mã sản phẩm</th>
                         <th>Tên sản phẩm</th>
                         <th>Ảnh sản phẩm</th>
                         <th>Biến thể</th>
@@ -153,14 +152,10 @@
                 </thead>
                 <tbody>
                     @foreach($order->orderItems as $item)
-                    @php
-                    $gallery = json_decode($item->product->gallery);
-                    @endphp
                     <tr>
-                        <td>{{ $item->product->code }}</td>
-                        <td>{{ $item->variant->product->name }}</td>
+                        <td>{{ $item->name }}</td>
                         <td>
-                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('userfiles/image/3.jpg'))) }}" width="100px" alt="Logo Công Ty">
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('userfiles/image/Trắng.jpg'))) }}" width="100px" alt="Logo Công Ty">
                         </td>
                         <td>(Màu: {{ $item->color }}, Kích thước: {{ $item->size }})</td>
                         <td>{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>

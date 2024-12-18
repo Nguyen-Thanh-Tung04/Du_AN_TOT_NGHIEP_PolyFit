@@ -84,8 +84,12 @@ class HomeController extends Controller
         foreach ($bestSellingProducts as $product) {
             $product->progress = $product->total_quantity > 0 ? min(($product->total_sold / $product->total_quantity) * 100, 100) : 0;
         }
-        
+
         $productsFlashSale = $this->getActiveFlashSaleProducts();
+        $flashSaleEndTime = null;
+        if ($productsFlashSale->isNotEmpty()) {
+            $flashSaleEndTime = $productsFlashSale->first()->flash_sale_end;
+        }
 
         // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
         foreach ($newProducts as $product) {
@@ -114,7 +118,7 @@ class HomeController extends Controller
         // dd($categories);
 
 
-        return view('client.welcome', $data, compact('categories', 'productsFlashSale'));
+        return view('client.welcome', $data, compact('categories', 'productsFlashSale', 'flashSaleEndTime'));
     }
 
     public function getActiveFlashSaleProducts()
@@ -149,10 +153,12 @@ class HomeController extends Controller
         $products->each(function ($product) {
             $product->averageScore = $product->averageScore();
             $flashSaleProduct = $product->flashSaleProducts->first();
+            $flashSaleEndTime = now()->toDateString() . ' ' . explode('-', $flashSaleProduct->flashSale->time_slot)[1] . ':00:00';
             if ($flashSaleProduct) {
                 $product->flash_sale_price = $flashSaleProduct->flash_price;
                 $product->listed_price = $flashSaleProduct->listed_price;
                 $product->discount_percentage = $flashSaleProduct->discount_percentage;
+                $product->flash_sale_end =  $flashSaleEndTime;
             } else {
                 $product->flash_sale_price = null;
                 $product->listed_price = $product->variants->min('listed_price');
