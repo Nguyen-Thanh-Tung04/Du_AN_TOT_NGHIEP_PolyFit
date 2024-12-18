@@ -27,6 +27,14 @@ class Order extends Model
         self::STATUS_HUY_DON_HANG => 'Hủy đơn hàng',
         self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
+
+    const PAYMENT_STATUS_UNPAID = 0;
+    const PAYMENT_STATUS_PAID = 1;
+
+    const PAYMENT_STATUS_NAMES = [
+        self::PAYMENT_STATUS_UNPAID => 'Chưa thanh toán',
+        self::PAYMENT_STATUS_PAID => 'Đã thanh toán',
+    ];
     const PAYMENT_METHOD_COD = 1;
     const PAYMENT_METHOD_VNPAY = 2;
     const PAYMENT_METHOD_MOMO = 3;
@@ -101,6 +109,10 @@ class Order extends Model
     public function getPaymentMethodNameAttribute()
     {
         return self::PAYMENT_METHOD_NAMES[$this->payment_method] ?? 'Phương thức thanh toán không xác định';
+    }
+    public function getPaymentStatusNameAttribute()
+    {
+        return self::PAYMENT_STATUS_NAMES[$this->payment_status] ?? 'Trạng thái thanh toán không xác định';
     }
 
     // Lấy tất cả các đánh giá liên quan đến các sản phẩm trong đơn hàng

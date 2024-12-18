@@ -167,7 +167,7 @@
                                     <input
                                         type="date"
                                         name="start_time"
-                                        value="{{ old('start_time', $voucher->start_time) }}"
+                                        value="{{ old('start_time', \Carbon\Carbon::parse($voucher->start_time)->format('Y-m-d') ?? '') }}"
                                         class="form-control"
                                     >
                                     @error('start_time')
@@ -181,7 +181,7 @@
                                     <input
                                         type="date"
                                         name="end_time"
-                                        value="{{ old('end_time', $voucher->end_time) }}"
+                                        value="{{ old('end_time', \Carbon\Carbon::parse($voucher->end_time)->format('Y-m-d') ?? '') }}"
                                         class="form-control"
                                     >
                                     @error('end_time')
@@ -190,6 +190,8 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
                      
                     </div>
                 </div>

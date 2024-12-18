@@ -184,13 +184,7 @@ class CheckoutController
             ]);
         }
 
-        // Kiểm tra nếu người dùng đã sử dụng voucher này
-        if ($voucher->users()->where('user_id', $user->id)->exists()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Bạn đã sử dụng voucher này trước đó.'
-            ]);
-        }
+
 
         // Kiểm tra thời gian sử dụng voucher
         if ($voucher->start_time > now()) {
@@ -247,11 +241,14 @@ class CheckoutController
         $finalTotal = $totalAmount - $discount;
 
         // Lưu voucher đã được sử dụng vào bảng trung gian voucher_user
+
+        if ($voucher->users()->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn đã sử dụng voucher này trước đó.'
+            ]);
+        }
         $voucher->users()->attach($user->id, ['used_at' => now()]);
-
-        // Giảm số lượng voucher còn lại
-        $voucher->decrement('quantity');
-
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng voucher thành công.',
@@ -339,6 +336,9 @@ class CheckoutController
                 ]);
             }
         }
+        // Kiểm tra nếu người dùng đã sử dụng voucher này
+
+
 
         $user = Auth::user();
         $lastOrder = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
