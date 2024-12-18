@@ -92,7 +92,7 @@
                                                 class="form-control">
                                             <span class="input-group-btn">
                                                 <button type="submit" name="search" value="search"
-                                                    class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
+                                                    class="btn btn-success mb0 btn-sm">Tìm kiếm</button>
                                             </span>
                                         </div>
                                         <a href="{{ route('orders.export', request()->query()) }}" class="btn btn-success mb-3 float-right">
