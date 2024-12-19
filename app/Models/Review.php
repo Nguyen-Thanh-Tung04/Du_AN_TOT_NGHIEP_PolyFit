@@ -76,7 +76,7 @@ class Review extends Model
             ReviewHistory::create([
                 'review_id' => $review->id,
                 'user_id' => Auth::id(),
-                'content' => $review->content,
+                'content' => 'Xóa', 
                 'score' => $review->score,
                 'action' => 'delete',
                 'type' => 'admin_Delete',

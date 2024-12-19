@@ -179,7 +179,7 @@
                                             {{ ($voucher->status == 1) ? 'checked' : '' }} />
                                         </td> 
                                         <td class="text-center">
-                                            <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                                            {{-- <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a> --}}
                                             <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')

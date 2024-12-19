@@ -354,3 +354,17 @@ body {
 .more:hover {
     opacity: 0.5;
 }
+
+#category-list .category-item-filter {
+    display: none;
+}
+
+#category-list .category-item-filter:nth-child(-n+6) {
+    display: block;
+}
+
+#show-more {
+    display: block;
+    text-align: center;
+    cursor: pointer;
+}

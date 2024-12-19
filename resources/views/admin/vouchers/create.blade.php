@@ -172,7 +172,7 @@
                                     <label class="control-label text-left">Thời gian bắt đầu
                                     </label>
                                     <input
-                                        type="datetime-local"
+                                        type="date"
                                         name="start_time"
                                         value="{{ old('start_time') }}"
                                         class="form-control"
@@ -187,7 +187,7 @@
                                     <label class="control-label text-left">Thời gian kết thúc
                                     </label>
                                     <input
-                                        type="datetime-local"
+                                        type="date"
                                         name="end_time"
                                         value="{{ old('end_time') }}"
                                         class="form-control"

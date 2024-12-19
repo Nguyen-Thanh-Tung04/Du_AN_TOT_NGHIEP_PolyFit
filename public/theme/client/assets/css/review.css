@@ -302,6 +302,33 @@
     /* Màu vàng */
 }
 
+/* Kiểu chung cho tất cả các nút */
+.rating-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #767f89;
+    border-radius: 5px;
+    background-color: white;
+    color: #767f89;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Hiệu ứng mượt khi thay đổi */
+}
+
+/* Hiệu ứng hover */
+.rating-buttons button:hover {
+    background-color: #007bff; /* Màu xanh khi hover */
+    color: white;
+}
+
+/* Nút đang được chọn (active) */
+.rating-buttons button.active {
+    background-color: #007bff; /* Màu xanh cho nút active */
+    color: white;
+    border-color: #007bff;
+}
+
+
 /* Hiệu ứng cho thanh tiến độ */
 /* .progress-bar-animated {
     animation: progressBar 1000s infinite;

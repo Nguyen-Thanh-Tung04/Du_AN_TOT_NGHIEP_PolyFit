@@ -33,16 +33,20 @@ class AutoCompleteOrderStatus implements ShouldQueue
 
         if ($order->status == Order::STATUS_GIAO_HANG_THANH_CONG) {
             $previousStatus = $order->status;
-
             $order->status = Order::STATUS_HOAN_THANH;
 
+            $changedBy = 'Hệ thống'; 
+
+            if (auth()->check()) {
+                $changedBy = auth()->user()->name; 
+            }
             if ($order->save()) {
                 OrderStatusHistory::create([
                     'order_id' => $order->id,
                     'previous_status' => $previousStatus,
                     'new_status' => Order::STATUS_HOAN_THANH,
                     'cancel_reason' => null,  
-                    'changed_by' => null,  
+                    'changed_by' => $changedBy,  
                     'changed_at' => now(),  
                 ]);
             } else {

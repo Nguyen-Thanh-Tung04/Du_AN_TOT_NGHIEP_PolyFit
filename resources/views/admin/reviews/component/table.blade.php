@@ -41,17 +41,17 @@
                 <td class="text-center">
                     <div class="d-inline-flex">
                         @if(!$review->trashed()) <!-- Kiểm tra nếu bản ghi chưa bị xóa mềm -->
-                        <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
-                            <i class="fa fa-edit"></i>
-                        </a>
-
-                        <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0" style="display: inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-delete">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </form>
+                            <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-success me-2">
+                                <i class="fa fa-edit"></i>
+                            </a>
+{{--                     
+                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="m-0" style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form> --}}
                         @endif
 
                         <!-- Hiển thị nút "Xem lại" nếu bị xóa mềm -->

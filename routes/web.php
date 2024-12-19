@@ -70,6 +70,10 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 //     return view('client.page.about');
 // });
 Route::get('/about', [App\Http\Controllers\client\ReviewController::class, 'about_reviews_list'])->name('about');
+// Lọc client
+Route::get('/reviews_filter/{product_id}', [ClientProductController::class, 'filterReviews'])->name('reviews.filter');
+// Route mới để xử lý phân trang đánh giá
+// Route::get('/reviews/{product_id}', [ClientProductController::class, 'fetchReviews'])->name('reviews.fetch');
 
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
@@ -256,8 +260,7 @@ Route::prefix('flashsale/')->name('flashsale.')->middleware('checkLogin')->group
     Route::put('{id}/update', [FlashSaleController::class, 'update'])
         ->name('update');
     Route::delete('{id}/destroy', [FlashSaleController::class, 'destroy'])
-        ->name('destroy')
-        ->middleware('checkModulePermission:flashsale.delete');
+        ->name('destroy');
     Route::patch('/{id}/status', [FlashSaleController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/get-selected-products', [ProductCatalogueController::class, 'getSelectedProducts'])->name('getSelectedProducts');
     Route::get('/get-occupied-time-slots', [FlashSaleController::class, 'getOccupiedTimeSlots'])->name('getOccupiedTimeSlots');
@@ -395,7 +398,6 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
     Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
     Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
-    
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');
