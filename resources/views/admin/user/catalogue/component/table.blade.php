@@ -2,8 +2,8 @@
     <table class="table table-sm table-striped table-bordered">
         <thead>
         <tr>
-            <th>
-                <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+            <th class="text-center">
+                STT
             </th>
             <th>Tên vai trò</th>
             <th class="text-center">Số người</th>
@@ -14,13 +14,13 @@
         </thead>
         <tbody>
             @if (isset($userCatalogues) && is_object($userCatalogues))
-                @foreach($userCatalogues as $userCatalogue)
+                @foreach($userCatalogues as $key => $userCatalogue)
                 @if ($userCatalogue->id == 3)
                     @continue
                 @endif
                 <tr>
-                    <td>
-                        <input type="checkbox" value="{{ $userCatalogue->id }}" class="input-checkbox checkBoxItem">
+                    <td class="text-center">
+                        {{ $key + 1 }}
                     </td>
                     <td>{{ $userCatalogue->name }}</td>
                     <td class="text-center">

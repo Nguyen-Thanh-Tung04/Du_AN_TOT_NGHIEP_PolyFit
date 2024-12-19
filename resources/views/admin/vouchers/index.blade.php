@@ -126,8 +126,8 @@
                         <table class="table table-sm table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                                    <th class="text-center">
+                                        STT
                                     </th>
                                     <th>Mã Voucher</th>
                                     <th>Tên Voucher</th>
@@ -144,10 +144,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($vouchers as $voucher)
+                                @foreach($vouchers as $key => $voucher)
                                     <tr>
-                                        <td>
-                                            <input type="checkbox" value="{{ $voucher->id }}" class="input-checkbox checkBoxItem">
+                                        <td class="text-center">
+                                            {{ $key + 1 }}
                                         </td>
                                         <td>{{ $voucher->code }}</td>
                                         <td>{{ $voucher->name }}</td>

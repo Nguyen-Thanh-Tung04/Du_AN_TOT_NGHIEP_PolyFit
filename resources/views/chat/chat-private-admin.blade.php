@@ -74,17 +74,21 @@
                             </div>
                         </div>
                         <div class="pull-right">
-                            <div class="dropdown">
-                                <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-cogs" aria-hidden="true"></i> Setting
+                                @if(Auth::user()->user_catalogue_id == 1)
+                                <a href="{{ route('list-chat-staff') }}">
+                                <button type="button">
+                                    <i class="fa fa-cogs"></i> Quay lại
                                     <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Profile</a></li>
-                                    <li><a href="#">Logout</a></li>
-                                </ul>
-                            </div>
+                                </a>
+                                @else
+                                <a href="{{ route('list-chat') }}">
+                                <button type="button">
+                                    <i class="fa fa-cogs"></i> Quay lại
+                                    <span class="caret"></span>
+                                </button>
+                                </a>
+                                @endif
                         </div>
                     </div><!--new_message_head-->
 
@@ -102,7 +106,7 @@
                                 </span>
                                 @else
                                 <span class="chat-img1 pull-right">
-                                    <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="img-circle" alt="Profile image">
+                                    <img src="{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="img-circle" alt="Profile image">
                                 </span>
                                 @endif
 
@@ -334,12 +338,12 @@
             var card_header_msg_head = document.querySelector('.msg_head')
             let image_url = event.idUserSend?.image ?
                 event.idUserSend.image :
-                "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
+                "{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
 
             // Kiểm tra và xử lý đường dẫn ảnh
             let image = image_url.includes('http') ?
                 image_url :
-                '/storage/' + event.idUserSend?.image || "{{ asset('userfiles\thumb\Images\avata_null.jpg') }}";
+                '/storage/' + event.idUserSend?.image || "{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}";
             var ui = ''
             if (event.idUserSend.id == '{{ Auth::user()->id }}') {
                 ui = `
@@ -444,8 +448,7 @@
 
                     response.data.data.forEach(function(user) {
                         let image_url = (user.user_image && user.user_image !== '') ?
-                            user.user_image :
-                            "{{ asset('userfiles/thumb/Images/avata_null.jpg') }}";
+                            user.user_image : "{{ asset('userfiles/thumb/Images/avata_null.jpg') }}";
 
                         // Kiểm tra và xử lý đường dẫn ảnh
                         let image = image_url.includes('http') ?
@@ -476,7 +479,6 @@
 
     function scrollToBottom() {
         const chatBox = document.querySelector('.msg_card_body');
-        // console.log(chatBox);
 
         chatBox.scrollTop = chatBox.scrollHeight;
     }
