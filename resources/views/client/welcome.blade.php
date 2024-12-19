@@ -423,38 +423,38 @@
             <div class="ec-brand-outer">
                 <ul id="ec-brand-slider">
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/1.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/2.png') }}" /></a></div>
                     </li>
 
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/4.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/5.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/6.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/7.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/8.png') }}" /></a></div>
                     </li>
