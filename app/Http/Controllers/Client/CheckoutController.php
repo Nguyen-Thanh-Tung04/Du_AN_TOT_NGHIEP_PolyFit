@@ -132,13 +132,11 @@ class CheckoutController
     {
         $voucherCode = $request->input('voucher_code');
         $totalAmount = $request->input('total_amount');
-        $user = auth()->user();
 
         $voucher = Voucher::where('code', $voucherCode)
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            ->where('min_order_value', '<=', $totalAmount)
-            ->where('max_order_value', '>=', $totalAmount)
+            
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -206,15 +204,7 @@ class CheckoutController
         // Tính toán tổng tiền sau khi áp dụng giảm giá
         $finalTotal = $totalAmount - $discount;
 
-        // Lưu voucher đã được sử dụng vào bảng trung gian voucher_user
 
-        if ($voucher->users()->where('user_id', $user->id)->exists()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Bạn đã sử dụng voucher này trước đó.'
-            ]);
-        }
-        $voucher->users()->attach($user->id, ['used_at' => now()]);
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng voucher thành công.',
@@ -290,8 +280,7 @@ class CheckoutController
         $voucher = Voucher::where('code', $voucherCode)
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            ->where('min_order_value', '<=', $totalAmount)
-            ->where('max_order_value', '>=', $totalAmount)
+            
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
