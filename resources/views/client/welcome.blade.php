@@ -71,7 +71,7 @@
                             <span class="category-name">{{ $category->name }}</span>
                             <span class="category-count">{{ $category->products_count ?? 0 }}</span>
                         </div>
-                        <a href="{{ route('home.shop') }}" class="category-link">Chi tiết <i class="ecicon eci-angle-double-right"></i></a>
+                        <a href="{{ route('home.shop', ['category' => $category->id]) }}" class="category-link">Chi tiết <i class="ecicon eci-angle-double-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                     <path d="m11.5639648 5.05283203v4.71571528l-2.72832027 1.57129639" stroke-linecap="round" stroke-linejoin="round" transform="matrix(-1 0 0 1 20.39961 0)"></path>
                 </g>
             </svg>
-            {{-- <div class="end-text">Kết thúc trong</div> --}}
+            <div class="end-text">Kết thúc trong</div>
             <div class="flash-sale-countdown" id="the-24h-countdown">
                 <p></p>
             </div>
@@ -532,4 +532,55 @@
     <!--/ End Right Floating Button-->
 </div>
 <!-- Whatsapp end -->
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        var flashSaleEndTime = "{{ $flashSaleEndTime }}";
+        const coutDown = (hours, minutes, seconds) => {
+            let countDownDate = new Date().getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+
+            let countdownFunction = setInterval(() => {
+                let now = new Date().getTime();
+                let distance = countDownDate - now;
+
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+                if (seconds < 10) seconds = "0" + seconds;
+
+                $("#the-24h-countdown p").html(
+                    "<span>" +
+                    hours +
+                    '</span><span class="min">' +
+                    minutes +
+                    '<br></span><span class="seg">' +
+                    seconds +
+                    "</span>"
+                );
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    $("#the-24h-countdown p").html("Hết giờ");
+                }
+            }, 1000);
+        };
+
+        if (flashSaleEndTime) {
+            var countDownDate = new Date(flashSaleEndTime).getTime();
+            var now = new Date().getTime();
+
+            var distance = countDownDate - now;
+
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            coutDown(hours, minutes, seconds);
+        }
+    });
+</script>
 @endsection

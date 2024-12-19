@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Events\OrderPlaced;
 use App\Http\Requests\StoreCheckoutRequest;
 use App\Mail\OrderPlacedMail;
 use App\Models\Cart;
@@ -16,7 +17,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Events\OrderPlaced;
+use Illuminate\Support\Facades\Session;
 use Ramsey\Uuid\Type\Integer;
 
 class CheckoutController
@@ -40,92 +41,126 @@ class CheckoutController
 
     public function checkoutProcess(Request $request)
     {
-        if ($request->isMethod('GET')) {
-            // Chuyển hướng về trang giỏ hàng nếu người dùng truy cập bằng GET
-            return redirect()->route('cart.index')->with('error', 'Không được phép truy cập khi chưa mua hàng.');
-        }
+        if (Session::has('product_variants')) {
+            $data = Session::get('product_variants');
+            
+            if (empty($data)) {
+                return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm nào để thanh toán.');
+            }
+    
+            $existingVariants = Variant::whereIn('id', $data['product_variant_ids'])->pluck('id')->all();
+            $nonExistingVariants = array_diff($data['product_variant_ids'], $existingVariants);
+            if (!empty($nonExistingVariants)) {
+                return redirect()->back()->with('error', 'Thuộc tính sản phẩm không tồn tại.');
+            }
+    
+            $quantities = [];
+            foreach ($data['product_variant_ids'] as $id) {
+                $quantities[$id] = $data["quantities"][$id];
+            }
+            $productVariants = Variant::whereIn('id', $data['product_variant_ids'])->with('product', 'color', 'size')->get();
+    
+            // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
+            foreach ($productVariants as $productVariant) {
+                $requestedQuantity = $quantities[$productVariant->id];
+    
+                if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) {
+                    return redirect()->back()->with('error', 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.');
+                }
+            }
+    
+            $total = 0;
+            $firstProduct = null;
+    
+            foreach ($productVariants as $productVariant) {
+                $qty = $quantities[$productVariant->id];
+                // lấy thông tin sản phẩm đầu tiên
+                if (!$firstProduct) {
+                    $firstProduct = $productVariant->product;
+                }
+    
+                $flashSaleProduct = $productVariant->product->flashSaleProducts()->where('variant_id', $productVariant->id)
+                    ->whereHas('flashSale', function ($query) {
+                        $query->where('status', 1)
+                            ->where('date', now()->toDateString())
+                            ->where(function ($query) {
+                                $currentHour = now()->hour;
+                                $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
+                                    ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
+                            });
+                    })
+                    ->where('status', 1)
+                    ->where('quantity', '>', 0)
+                    ->first();
+    
+                if ($flashSaleProduct) {
+                    $flashSaleQty = min($qty, $flashSaleProduct->quantity);
+                    $normalQty = $qty - $flashSaleQty;
+                    $productVariant->setAttribute('new_price', $flashSaleProduct->flash_price);
+                    $productVariant->setAttribute('normal_price', $flashSaleProduct->listed_price);
+                    $total += $flashSaleProduct->flash_price * $flashSaleQty;
+                    $total += ($productVariant->sale_price != 0 ? $productVariant->sale_price : $productVariant->listed_price) * $normalQty;
+                } else {
+                    $total += ($productVariant->sale_price != 0) ? $productVariant->sale_price * $qty : $productVariant->listed_price * $qty;
+                    $productVariant->setAttribute('new_price', $productVariant->sale_price  ?? null);
+                    $productVariant->setAttribute('normal_price', $productVariant->listed_price);
+                }
+            }
+            $userId = Auth::id();
+            $user = $this->userRepository->findById($userId);
+            $provinces = $this->provinceRepository->all();
+    
+            $selectedItems = session('selected_items', []);
+            $cartItems = Cart::with('variant.product')
+                ->where('user_id', Auth::id())
+                ->whereIn('id', $selectedItems)
+                ->get();
+    
+            $totalPrice = $this->checkoutService->calculateTotal($cartItems);
+            return view('client.page.checkout', [
+                'user' => $user,
+                'provinces' => $provinces,
+                'productVariants' => $productVariants,
+                'quantities' => $quantities,
+                'total' => $total,
+                'cartItems' => $cartItems,
+                'totalPrice' => $totalPrice,
+                'product_name' => $firstProduct->name ?? 'Sản phẩm không xác định', // Tên sản phẩm đầu tiên
+                'image' => $firstProduct->image ?? 'default-image.jpg' // Ảnh sản phẩm đầu tiên
+            ]);
+        } 
+        // else {
+        //     // Xử lý khi không có dữ liệu trong session (ví dụ: chuyển hướng đến trang khác hoặc hiển thị thông báo lỗi)
+        //     return redirect()->route('cart.index')->with('error', 'Bạn chưa chọn sản phẩm khi tiến hành mua hàng.');
+        // }
     }
 
     public function showFormCheckout(Request $request)
     {
-        $productVarians = $request->input('product_variant_ids');
-        if (empty($productVarians)) {
-            return redirect()->back()->with('error', 'Bạn chưa chọn sản phẩm nào để thanh toán.');
-        }
-        $quantities = [];
-        foreach ($productVarians as $id) {
-            $quantities[$id] = $request->input("quantities.$id");
-        }
-        $productVariants = Variant::whereIn('id', $productVarians)->with('product', 'color', 'size')->get();
-
-        // Kiểm tra số lượng từng sản phẩm so với số lượng trong kho
-        foreach ($productVariants as $productVariant) {
-            $requestedQuantity = $quantities[$productVariant->id];
-
-            if ($productVariant->quantity < $requestedQuantity || $productVariant->quantity <= 0) { // Giả sử `quantity` là cột chứa số lượng hàng trong kho
-                return redirect()->back()->with('error', 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.');
+        if ($request->has('product_variant_ids')) {
+            $cartItems = Cart::where('user_id', auth()->id())
+                ->with('variant.product') // Tải mối quan hệ từ Cart -> Variant -> Product
+                ->get();
+            
+            if ($cartItems->isEmpty()) {
+                return redirect()->route('cart.index')->with('error', 'Sản phẩm không còn tồn tại.');
             }
-        }
-
-        $total = 0;
-        $firstProduct = null;
-
-        foreach ($productVariants as $productVariant) {
-            $qty = $quantities[$productVariant->id];
-            // lấy thông tin sản phẩm đầu tiên
-            if (!$firstProduct) {
-                $firstProduct = $productVariant->product;
+    
+            foreach ($cartItems as $item) {
+                // Kiểm tra số lượng, trạng thái sản phẩm
+                if ($item->quantity <= 0 || $item->variant->product->status == 2) {
+                    return redirect()->route('cart.index')->with('error', 'Sản phẩm đã hết hàng.');
+                }
             }
-
-            $flashSaleProduct = $productVariant->product->flashSaleProducts()->where('variant_id', $productVariant->id)
-                ->whereHas('flashSale', function ($query) {
-                    $query->where('status', 1)
-                        ->where('date', now()->toDateString())
-                        ->where(function ($query) {
-                            $currentHour = now()->hour;
-                            $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour]) // Giờ bắt đầu <= giờ hiện tại
-                                ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]); // Giờ kết thúc > giờ hiện tại
-                        });
-                })
-                ->where('status', 1)
-                ->where('quantity', '>', 0)
-                ->first();
-
-            if ($flashSaleProduct) {
-                $flashSaleQty = min($qty, $flashSaleProduct->quantity);
-                $normalQty = $qty - $flashSaleQty;
-                $productVariant->setAttribute('new_price', $flashSaleProduct->flash_price);
-                $productVariant->setAttribute('normal_price', $flashSaleProduct->listed_price);
-                $total += $flashSaleProduct->flash_price * $flashSaleQty;
-                $total += ($productVariant->sale_price != 0 ? $productVariant->sale_price : $productVariant->listed_price) * $normalQty;
-            } else {
-                $total += ($productVariant->sale_price != 0) ? $productVariant->sale_price * $qty : $productVariant->listed_price * $qty;
-                $productVariant->setAttribute('new_price', $productVariant->sale_price  ?? null);
-                $productVariant->setAttribute('normal_price', $productVariant->listed_price);
-            }
+    
+            $data = $request->all();
+            Session::put('product_variants', $data);
+    
+            // Chuyển hướng đến route 'checkout' với phương thức GET
+            return redirect()->route('checkout.process');
+        } else {
+            return redirect()->route('cart.index')->with('error', 'Chưa chọn sản phẩm.');
         }
-        $userId = Auth::id();
-        $user = $this->userRepository->findById($userId);
-        $provinces = $this->provinceRepository->all();
-
-        $selectedItems = session('selected_items', []);
-        $cartItems = Cart::with('variant.product')
-            ->where('user_id', Auth::id())
-            ->whereIn('id', $selectedItems)
-            ->get();
-
-        $totalPrice = $this->checkoutService->calculateTotal($cartItems);
-        return view('client.page.checkout', [
-            'user' => $user,
-            'provinces' => $provinces,
-            'productVariants' => $productVariants,
-            'quantities' => $quantities,
-            'total' => $total,
-            'cartItems' => $cartItems,
-            'totalPrice' => $totalPrice,
-            'product_name' => $firstProduct->name ?? 'Sản phẩm không xác định', // Tên sản phẩm đầu tiên
-            'image' => $firstProduct->image ?? 'default-image.jpg' // Ảnh sản phẩm đầu tiên
-        ]);
     }
 
     public function applyVoucher(Request $request)
@@ -136,7 +171,6 @@ class CheckoutController
         $voucher = Voucher::where('code', $voucherCode)
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -147,36 +181,17 @@ class CheckoutController
                 'message' => 'Mã voucher không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.'
             ]);
         }
-
-
-
-        // Kiểm tra thời gian sử dụng voucher
-        if ($voucher->start_time > now()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã voucher này chưa có hiệu lực.'
-            ]);
-        }
-
-        if ($voucher->end_time < now()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã voucher này đã hết hạn, không thể sử dụng.'
-            ]);
-        }
-
-        // Kiểm tra giá trị đơn hàng và các điều kiện khác (min_order_value, max_order_value)
         if ($voucher->min_order_value && $totalAmount < $voucher->min_order_value) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đơn hàng của bạn không đủ giá trị tối thiểu để áp dụng mã voucher này.'
+                'message' => 'Đơn hàng không đủ điều kiện để áp dụng mã voucher này.'
             ]);
         }
 
         if ($voucher->max_order_value && $totalAmount > $voucher->max_order_value) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đơn hàng của bạn vượt mức số tiền cho phép để áp dụng mã voucher này.'
+                'message' => 'Đơn hàng không đủ điều kiện để áp dụng mã voucher này.'
             ]);
         }
 
@@ -232,10 +247,20 @@ class CheckoutController
     {
         $totalAmount = 0;
         $productVariants = $request->input('product_variants');
+       
         $productVariantIds = [];
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::find($variant['product_variant_id']);
+            $productVariant = Variant::where('id', $variant['product_variant_id'])
+            ->with('product')
+            ->first();
+
+            if ($productVariant && $productVariant->product->status == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                ], 400);
+            }
 
             if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
                 $flashSaleProduct = $productVariant->product->flashSaleProducts()
@@ -267,7 +292,7 @@ class CheckoutController
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
                 ], 400);
             }
         }
@@ -280,7 +305,6 @@ class CheckoutController
         $voucher = Voucher::where('code', $voucherCode)
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -329,7 +353,16 @@ class CheckoutController
         ]);
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::find($variant['product_variant_id']);
+            $productVariant = Variant::where('id', $variant['product_variant_id'])
+            ->with('product')
+            ->first();
+
+            if ($productVariant && $productVariant->product->status == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                ], 400);
+            }
 
             $flashSaleProduct = $productVariant->product->flashSaleProducts()
                 ->where('variant_id', $productVariant->id)
@@ -401,8 +434,8 @@ class CheckoutController
             ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
             ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
         //Send Mail
-        Mail::to($user->email)->queue(new OrderPlacedMail($order));
-
+        // Mail::to($user->email)->queue(new OrderPlacedMail($order));
+        Session::forget('product_variants');
         return response()->json([
             'success' => true,
             'order_id' => $order->id,
@@ -428,8 +461,6 @@ class CheckoutController
         $voucher = Voucher::where('code', $checkoutData['voucher_code'])
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            ->where('min_order_value', '<=', $checkoutData['total_amount'])
-            ->where('max_order_value', '>=', $checkoutData['total_amount'])
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -446,7 +477,16 @@ class CheckoutController
         $productVariants = $request->input('product_variants');
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::find($variant['product_variant_id']);
+            $productVariant = Variant::where('id', $variant['product_variant_id'])
+            ->with('product')
+            ->first();
+
+            if ($productVariant && $productVariant->product->status == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                ], 400);
+            }
 
             if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
                 $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
@@ -515,7 +555,7 @@ class CheckoutController
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
                 ], 400);
             }
         }
@@ -553,8 +593,6 @@ class CheckoutController
         $voucher = Voucher::where('code', $checkoutData['voucher_code'])
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            ->where('min_order_value', '<=', $checkoutData['total_amount'])
-            ->where('max_order_value', '>=', $checkoutData['total_amount'])
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -570,7 +608,16 @@ class CheckoutController
         $productVariants = $request->input('product_variants');
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::find($variant['product_variant_id']);
+            $productVariant = Variant::where('id', $variant['product_variant_id'])
+            ->with('product')
+            ->first();
+
+            if ($productVariant && $productVariant->product->status == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                ], 400);
+            }
 
             if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
                 $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
@@ -622,7 +669,7 @@ class CheckoutController
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
                 ], 400);
             }
         }
@@ -634,181 +681,204 @@ class CheckoutController
         if ($vnp_ResponseCode == '00' || $vnp_ResponseCode == '0') {
             $checkoutData = session()->get('checkout_data');
 
-            $productVariants = $checkoutData['product_variants'];
+            if ($checkoutData != null) {
+                $productVariants = $checkoutData['product_variants'];
 
-            // Calculate total amount
-            $totalAmount = 0;
-            foreach ($productVariants as $variant) {
-                $productVariant = Variant::find($variant['product_variant_id']);
-
-                if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
-                    $flashSaleProduct = $productVariant->product->flashSaleProducts()
-                        ->where('variant_id', $productVariant->id)
-                        ->whereHas('flashSale', function ($query) {
-                            $query->where('status', 1)
-                                ->where('date', now()->toDateString())
-                                ->where(function ($query) {
-                                    $currentHour = now()->hour;
-                                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
-                                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
-                                });
-                        })
-                        ->where('status', 1)
-                        ->where('quantity', '>', 0)
-                        ->first();
-
-                    $flashSaleQty = 0;
-                    $normalQty = $variant['quantity'];
-                    $flashSalePrice = 0;
-                    $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
-
-                    if ($flashSaleProduct) {
-                        $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
-                        $normalQty = $variant['quantity'] - $flashSaleQty;
-                        $flashSalePrice = $flashSaleProduct->flash_price;
-                    }
-
-                    // Kiểm tra nếu sản phẩm hết hàng (số lượng <= 0)
-                    if ($flashSaleQty == 0 && $normalQty == 0) {
+                // Calculate total amount
+                $totalAmount = 0;
+                foreach ($productVariants as $variant) {
+                    $productVariant = Variant::where('id', $variant['product_variant_id'])
+                    ->with('product')
+                    ->first();
+                    
+                    if ($productVariant && $productVariant->product->status == 2) {
                         return response()->json([
                             'success' => false,
-                            'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
+                            'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
                         ], 400);
                     }
-
-                    $totalAmount += ($flashSalePrice * $flashSaleQty) + ($normalPrice * $normalQty);
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn.',
-                    ], 400);
+    
+                    if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
+                        $flashSaleProduct = $productVariant->product->flashSaleProducts()
+                            ->where('variant_id', $productVariant->id)
+                            ->whereHas('flashSale', function ($query) {
+                                $query->where('status', 1)
+                                    ->where('date', now()->toDateString())
+                                    ->where(function ($query) {
+                                        $currentHour = now()->hour;
+                                        $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                            ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                                    });
+                            })
+                            ->where('status', 1)
+                            ->where('quantity', '>', 0)
+                            ->first();
+    
+                        $flashSaleQty = 0;
+                        $normalQty = $variant['quantity'];
+                        $flashSalePrice = 0;
+                        $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
+    
+                        if ($flashSaleProduct) {
+                            $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
+                            $normalQty = $variant['quantity'] - $flashSaleQty;
+                            $flashSalePrice = $flashSaleProduct->flash_price;
+                        }
+    
+                        // Kiểm tra nếu sản phẩm hết hàng (số lượng <= 0)
+                        if ($flashSaleQty == 0 && $normalQty == 0) {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                            ], 400);
+                        }
+    
+                        $totalAmount += ($flashSalePrice * $flashSaleQty) + ($normalPrice * $normalQty);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' =>'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                        ], 400);
+                    }
                 }
-            }
-
-            $user = Auth::user();
-            $voucher = Voucher::where('code',  $checkoutData['voucher_code'])
-                ->where('start_time', '<=', now())
-                ->where('end_time', '>=', now())
-                ->where('min_order_value', '<=', $totalAmount)
-                ->where('max_order_value', '>=', $totalAmount)
-                ->where('quantity', '>', 0)
-                ->where('status', 1)
-                ->first();
-
-            $order = Order::create([
-                'user_id' => $user->id,
-                'code' => $request->input('vnp_TxnRef') ?? $request->input('orderId'),
-                'voucher_id' => $voucher->id ?? null,
-                'voucher_code' => $voucherCode ?? null,
-                'full_name' => $checkoutData['full_name'],
-                'province_id' => $checkoutData['province_id'],
-                'district_id' => $checkoutData['district_id'],
-                'ward_id' => $checkoutData['ward_id'],
-                'address' => $checkoutData['address'],
-                'phone' => $checkoutData['phone'],
-                'note' => $checkoutData['note'] ?? null,
-                'shipping_cost' => $checkoutData['shipping_cost'],
-                'total_price' => $totalAmount + $checkoutData['shipping_cost'],
-                'discount_amount' => $checkoutData['discount_amount'],
-                'payment_method' => $checkoutData['payment_method'],
-            ]);
-
-            // Create order items
-            $productVariantIds = [];
-            foreach ($productVariants as $variant) {
-                $productVariant = Variant::find($variant['product_variant_id']);
-
-                if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
-                    $flashSaleProduct = $productVariant->product->flashSaleProducts()
-                        ->where('variant_id', $productVariant->id)
-                        ->whereHas('flashSale', function ($query) {
-                            $query->where('status', 1)
-                                ->where('date', now()->toDateString())
-                                ->where(function ($query) {
-                                    $currentHour = now()->hour;
-                                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
-                                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
-                                });
-                        })
-                        ->where('status', 1)
-                        ->where('quantity', '>', 0)
-                        ->first();
-
-                    $flashSaleQty = 0;
-                    $normalQty = $variant['quantity'];
-                    $flashSalePrice = 0;
-                    $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
-
-                    if ($flashSaleProduct) {
-                        $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
-                        $normalQty = $variant['quantity'] - $flashSaleQty;
-                        $flashSalePrice = $flashSaleProduct->flash_price;
+    
+                $user = Auth::user();
+                $voucher = Voucher::where('code',  $checkoutData['voucher_code'])
+                    ->where('start_time', '<=', now())
+                    ->where('end_time', '>=', now())
+                    ->where('quantity', '>', 0)
+                    ->where('status', 1)
+                    ->first();
+    
+                $order = Order::create([
+                    'user_id' => $user->id,
+                    'code' => $request->input('vnp_TxnRef') ?? $request->input('orderId'),
+                    'voucher_id' => $voucher->id ?? null,
+                    'voucher_code' => $voucherCode ?? null,
+                    'full_name' => $checkoutData['full_name'],
+                    'province_id' => $checkoutData['province_id'],
+                    'district_id' => $checkoutData['district_id'],
+                    'ward_id' => $checkoutData['ward_id'],
+                    'address' => $checkoutData['address'],
+                    'phone' => $checkoutData['phone'],
+                    'note' => $checkoutData['note'] ?? null,
+                    'shipping_cost' => $checkoutData['shipping_cost'],
+                    'total_price' => $totalAmount + $checkoutData['shipping_cost'],
+                    'discount_amount' => $checkoutData['discount_amount'],
+                    'payment_method' => $checkoutData['payment_method'],
+                ]);
+    
+                // Create order items
+                $productVariantIds = [];
+                foreach ($productVariants as $variant) {
+                    $productVariant = Variant::where('id', $variant['product_variant_id'])
+                    ->with('product')
+                    ->first();
+                    
+                    if ($productVariant && $productVariant->product->status == 2) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                        ], 400);
                     }
-
-                    if ($flashSaleQty > 0) {
-                        OrderItem::create([
-                            'order_id' => $order->id,
-                            'variant_id' => $variant['product_variant_id'],
-                            'price' => $flashSalePrice,
-                            'quantity' => $flashSaleQty,
-                            'image' => $variant['image'],
-                            'color' => $variant['color'],
-                            'size' => $variant['size'],
-                        ]);
-                        $flashSaleProduct->decrement('quantity', $flashSaleQty);
+    
+                    if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
+                        $flashSaleProduct = $productVariant->product->flashSaleProducts()
+                            ->where('variant_id', $productVariant->id)
+                            ->whereHas('flashSale', function ($query) {
+                                $query->where('status', 1)
+                                    ->where('date', now()->toDateString())
+                                    ->where(function ($query) {
+                                        $currentHour = now()->hour;
+                                        $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                            ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                                    });
+                            })
+                            ->where('status', 1)
+                            ->where('quantity', '>', 0)
+                            ->first();
+    
+                        $flashSaleQty = 0;
+                        $normalQty = $variant['quantity'];
+                        $flashSalePrice = 0;
+                        $normalPrice = $productVariant->sale_price ?? $productVariant->listed_price;
+    
+                        if ($flashSaleProduct) {
+                            $flashSaleQty = min($variant['quantity'], $flashSaleProduct->quantity);
+                            $normalQty = $variant['quantity'] - $flashSaleQty;
+                            $flashSalePrice = $flashSaleProduct->flash_price;
+                        }
+    
+                        if ($flashSaleQty > 0) {
+                            OrderItem::create([
+                                'order_id' => $order->id,
+                                'name' => $variant['name'],
+                                'variant_id' => $variant['product_variant_id'],
+                                'price' => $normalPrice,
+                                'quantity' => $normalQty,
+                                'image' => $variant['image'],
+                                'color' => $variant['color'],
+                                'size' => $variant['size'],
+                            ]);
+                            $flashSaleProduct->decrement('quantity', $flashSaleQty);
+                        }
+    
+                        if ($normalQty > 0) {
+                            OrderItem::create([
+                                'order_id' => $order->id,
+                                'name' => $variant['name'],
+                                'variant_id' => $variant['product_variant_id'],
+                                'price' => $normalPrice,
+                                'quantity' => $normalQty,
+                                'image' => $variant['image'],
+                                'color' => $variant['color'],
+                                'size' => $variant['size'],
+                            ]);
+                        }
+    
+                        $productVariant->decrement('quantity', $variant['quantity']);
+                        $productVariantIds[] = $variant['product_variant_id'];
+                        Session::forget('product_variants');
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' =>'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                        ], 400);
                     }
-
-                    if ($normalQty > 0) {
-                        OrderItem::create([
-                            'order_id' => $order->id,
-                            'variant_id' => $variant['product_variant_id'],
-                            'price' => $normalPrice,
-                            'quantity' => $normalQty,
-                            'image' => $variant['image'],
-                            'color' => $variant['color'],
-                            'size' => $variant['size'],
-                        ]);
-                    }
-
-                    $productVariant->decrement('quantity', $variant['quantity']);
-                    $productVariantIds[] = $variant['product_variant_id'];
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Sản phẩm đã hết hàng do có người đặt hàng trước bạn',
-                    ], 400);
                 }
+                // Sau khi đơn hàng được tạo, phát sự kiện realtime
+                event(new OrderPlaced($order));
+    
+                // Trừ số lượng hoặc số lần sử dụng của voucher (nếu voucher tồn tại và có cột để quản lý số lượng)
+                if ($voucher) {
+                    // Giả sử bạn có cột `quantity` để quản lý số lượng hoặc `uses` để đếm số lần sử dụng voucher
+                    if ($voucher->quantity > 0) {
+                        $voucher->decrement('quantity', 1); // Trừ số lượng voucher nếu có cột quantity
+                    } //  elseif ($voucher->uses > 0) {
+                    //     $voucher->decrement('uses', 1); // Trừ số lần sử dụng voucher nếu có cột uses
+                    // }
+                }
+    
+                // Xóa những sản phẩm đã được chọn mua trong giỏ hàng
+                Cart::where('user_id', $user->id)
+                    ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
+                    ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
+    
+                //Send Mail
+                // Mail::to($user->email)->queue(new OrderPlacedMail($order));
+    
+                // Xóa thông tin trong session
+                session()->forget('checkout_data');
+    
+                // Sau khi đơn hàng được tạo, phát sự kiện realtime
+                event(new OrderPlaced($order));
+    
+    
+                // Chuyển hướng đến trang bill với thông tin đơn hàng
+                return redirect()->route('order.show', $order->id)->with('success', 'Thanh toán thành công.');
+            } else {
+                return redirect()->route('cart.index')->with('error', 'Thanh toán không thành công vì có sản phẩm đã hết số lượng.');
             }
-            // Sau khi đơn hàng được tạo, phát sự kiện realtime
-            event(new OrderPlaced($order));
-
-            // Trừ số lượng hoặc số lần sử dụng của voucher (nếu voucher tồn tại và có cột để quản lý số lượng)
-            if ($voucher) {
-                // Giả sử bạn có cột `quantity` để quản lý số lượng hoặc `uses` để đếm số lần sử dụng voucher
-                if ($voucher->quantity > 0) {
-                    $voucher->decrement('quantity', 1); // Trừ số lượng voucher nếu có cột quantity
-                } //  elseif ($voucher->uses > 0) {
-                //     $voucher->decrement('uses', 1); // Trừ số lần sử dụng voucher nếu có cột uses
-                // }
-            }
-
-            // Xóa những sản phẩm đã được chọn mua trong giỏ hàng
-            Cart::where('user_id', $user->id)
-                ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
-                ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
-
-            //Send Mail
-            Mail::to($user->email)->queue(new OrderPlacedMail($order));
-
-            // Xóa thông tin trong session
-            session()->forget('checkout_data');
-
-            // Sau khi đơn hàng được tạo, phát sự kiện realtime
-            event(new OrderPlaced($order));
-
-
-            // Chuyển hướng đến trang bill với thông tin đơn hàng
-            return redirect()->route('order.show', $order->id);
         } else {
             // Thanh toán thất bại
             return redirect()->route('cart.index')->with('error', 'Thanh toán không thành công.');

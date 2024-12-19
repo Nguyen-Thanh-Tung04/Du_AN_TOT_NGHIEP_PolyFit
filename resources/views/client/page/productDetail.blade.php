@@ -88,7 +88,8 @@
                                                     @endif
                                         </div>
                                     </div>
-                                    <div class="ec-single-stoke">
+                                    <div class="ec-single-stoke d-flex  justify-content-between">
+                                        <span><span class="quantity-detail">{{ $product->total_quantity }}</span> sản phẩm có sẵn</span>
                                         <span class="ec-single-sku">SKU#: {{ $product->code }}</span>
                                     </div>
 
@@ -186,7 +187,7 @@
                                             </div>
                                         </div>
                                         <div class="ec-pro-variation-inner ec-pro-variation-color">
-                                            <span>Màu</span>
+                                            <span>Màu sắc</span>
                                             <div class="">
                                                 @foreach($product->variants->unique('color_id') as $variant)
                                                 <button class="product-option color-btn" data-id="{{ $variant->color_id }}">{{ $variant->color->name }}</button>
@@ -386,38 +387,65 @@
                             @php
                             $gallery = json_decode($product->gallery);
                             @endphp
-                            <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
                                 <!-- START single card -->
-                                <div class="ec-product-ds">
+                                <div class="ec-product-tp">
                                     <div class="ec-product-image">
-                                        <a href="{{ route('client.product.show', $product->id) }}" class="image">
-                                            <img class="pic-1" src="{{ (!empty($gallery)) ? $gallery[0] : '' }}"
-                                                alt="" style="height: 300px" />
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img src="{{ !empty($gallery) ? $gallery[0] : '' }}" class="img-center" alt="">
+                                            @if($product->variants->sum('quantity') === 0)
+                                            <div class="out-of-stock-label">Hết hàng</div>
+                                            @endif
                                         </a>
-                                        <span class="ec-product-discount-label">-33%</span>
+
                                     </div>
                                     <div class="ec-product-body">
-                                        <ul class="ec-rating">
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star fill"></li>
-                                            <li class="ecicon eci-star"></li>
-                                        </ul>
                                         <h3 class="ec-title"><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
-                                        <div class="ec-price">
-                                            <span>{{ number_format($product->listed_price, 0) }}₫ </span>
-                                            {{ number_format($product->min_price, 0) }} ₫
-                                            {{-- - {{ number_format($product->max_price, 0) }} ₫ --}}
-                                        </div>
-                                        <a class="ec-add-to-cart" href="{{ route('client.product.show', $product->id) }}">Mua ngay</a>
-                                    </div>
-                                </div>
-                                <!--/END single card -->
-                            </div>
-                            @endforeach
 
+                                        <ul class="ec-rating">
+                                            @php
+                                            $averageScore = $product->averageScore();
+                                            @endphp
+
+                                            @if ($averageScore)
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <=$averageScore)
+                                                <li class="ecicon eci-star fill">
+                                                </li> <!-- Sao đầy -->
+                                                @else
+                                                <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                @endif
+                                                @endfor
+                                                @else
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <=5)
+                                                    <li class="ecicon eci-star fill">
+                                                    </li> <!-- Sao đầy -->
+                                                    @else
+                                                    <li class="ecicon eci-star"></li> <!-- Sao rỗng -->
+                                                    @endif
+                                                    @endfor
+                                                    @endif
+                                        </ul>
+                                        <div class="ec-price">
+                                            @if ($product->min_price)
+
+                                            <span>{{ number_format($product->listed_price, 0) }}₫</span> {{ number_format($product->min_price, 0) }}₫
+                                            @else
+
+                                            {{ number_format($product->listed_price, 0) }}₫
+                                            @endif
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- START single card -->
+                            @endforeach
                         </div>
+
                     </div>
                 </div>
                 <!-- ec 1st Product tab end -->
@@ -676,6 +704,7 @@
                             let listedPrice = response.data.listed_price;
                             let salePrice = response.data.sale_price;
                             let discountPercentage = response.data.discount_percentage;
+                            let quantity = response.data.quantity;
 
                             if (response.data.is_in_flash_sale) {
                                 // Hiển thị giá flash sale
@@ -683,6 +712,7 @@
                                 $('#non-flash-sale-container').addClass('d-none');
                                 $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + '₫');
                                 $('.sale-price').text(new Intl.NumberFormat().format(salePrice) + '₫');
+                                $('.quantity-detail').text(quantity);
                                 if (discountPercentage) {
                                     $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
                                 } else {
@@ -694,6 +724,7 @@
                                 $('#non-flash-sale-container').removeClass('d-none');
                                 $('.listed-price').text(new Intl.NumberFormat().format(listedPrice) + '₫');
                                 $('.sale-price').text(salePrice ? new Intl.NumberFormat().format(salePrice) + '₫' : '');
+                                $('.quantity-detail').text(quantity);
                                 if (discountPercentage) {
                                     $('.discount-percentage').text(new Intl.NumberFormat().format(discountPercentage) + '%').show();
                                 } else {

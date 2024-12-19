@@ -162,14 +162,13 @@
                                     </form>
                                     <div class="table-responsive">
                                         <div id="availableVouchers" class="mt-3">
-                                            <p class="font-weight-bold">Voucher:
-                                                <span id="voucherMessage" class="" style="display: none; margin-left:8px; font-size: 12px;"></span>
-                                            </p>
+                                          
                                             <ul id="voucherList" class="list-inline d-flex">
                                                 <!-- Danh sách voucher sẽ được thêm ở đây bằng jQuery -->
-
+                                                
                                             </ul>
-
+                                            <span id="voucherDetail" class="" style="font-size: 12px;">
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -329,134 +328,157 @@
             $('#placeOrder').click(function(e) {
                 e.preventDefault(); // Ngăn chặn form submit mặc định
 
-                let productVariants = [];
-                $('.product-variant-item').each(function() {
-                    let productVariantId = $(this).data('product-variant-id');
-                    let name = $(this).data('name');
-                    let image = $(this).data('image');
-                    let price = $(this).data('price');
-                    let color = $(this).data('color');
-                    let size = $(this).data('size');
-                    let quantity = $(this).data('quantity');
+                // Hiển thị thông báo xác nhận
+                Swal.fire({
+                        title: 'Bạn chắc chắn muốn đặt hàng?',
+                        text: "Nếu bạn hủy đơn hàng này, chúng tôi sẽ không thể hoàn tiền vào ví của bạn. Bạn có thể liên hệ với chúng tôi để được hỗ trợ hoàn tiền.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy bỏ',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let productVariants = [];
+                            $('.product-variant-item').each(function() {
+                                let productVariantId = $(this).data('product-variant-id');
+                                let name = $(this).data('name');
+                                let image = $(this).data('image');
+                                let price = $(this).data('price');
+                                let color = $(this).data('color');
+                                let size = $(this).data('size');
+                                let quantity = $(this).data('quantity');
 
-                    productVariants.push({
-                        product_variant_id: productVariantId,
-                        name: name,
-                        image: image,
-                        price: price,
-                        color: color,
-                        size: size,
-                        quantity: quantity,
-                    });
-                });
+                                productVariants.push({
+                                    product_variant_id: productVariantId,
+                                    name: name,
+                                    image: image,
+                                    price: price,
+                                    color: color,
+                                    size: size,
+                                    quantity: quantity,
+                                });
+                            });
 
-                let fullName = $('#fullName').val();
-                let note = $('#note').val();
-                let paymentMethod = $('input[name="payment_method"]:checked').val();
-                let phone = $('#phone').val();
-                let provinceId = $('#provinceId').val();
-                let districtId = $('#districtId').val();
-                let wardId = $('#wardId').val();
-                let address = $('#address').val();
-                let discountAmount = $('#discountAmount').text().replace(/^\s*-\s*/, '').replace(/đ/, '').replace(/\./g, '').trim();
-                let shippingCost = $('#shippingCost').text().replace(/đ/, '').replace(/\./g, '').trim();
-                let totalAmount = $('#totalAmount').text().replace(/đ/, '').replace(/\./g, '').trim();
-                let finalTotal = $('#finalTotal').text().replace(/đ/, '').replace(/\./g, '').trim();
+                            let fullName = $('#fullName').val();
+                            let note = $('#note').val();
+                            let paymentMethod = $('input[name="payment_method"]:checked').val();
+                            let phone = $('#phone').val();
+                            let provinceId = $('#provinceId').val();
+                            let districtId = $('#districtId').val();
+                            let wardId = $('#wardId').val();
+                            let address = $('#address').val();
+                            let discountAmount = $('#discountAmount').text().replace(/^\s*-\s*/, '').replace(/đ/, '').replace(/\./g, '').trim();
+                            let shippingCost = $('#shippingCost').text().replace(/đ/, '').replace(/\./g, '').trim();
+                            let totalAmount = $('#totalAmount').text().replace(/đ/, '').replace(/\./g, '').trim();
+                            let finalTotal = $('#finalTotal').text().replace(/đ/, '').replace(/\./g, '').trim();
 
-                if (paymentMethod == '1') {
-                    sendAjaxRequest('{{ route("order.store") }}', 'POST', function(response) {
-                        // Success callback
-                        toastr.success(response.message);
-                        
-                         // Thay đổi lịch sử trình duyệt để khi người dùng nhấn nút Back, họ sẽ về trang giỏ hàng
-                        history.replaceState(null, null, '{{ route("cart.index") }}');
+                            if (paymentMethod == '1') {
+                                sendAjaxRequest('{{ route("order.store") }}', 'POST', function(response) {
+                                    // Success callback
+                                    toastr.success(response.message);
+                                    
+                                    // Thay đổi lịch sử trình duyệt để khi người dùng nhấn nút Back, họ sẽ về trang giỏ hàng
+                                    history.replaceState(null, null, '{{ route("cart.index") }}');
 
-                        window.location.href = '{{ url("order") }}/' + response.order_id;
-                    }, function(response) {
-                        // Error callback (nếu cần thêm xử lý lỗi khác)
-                        console.error('Đặt hàng không thành công:', response.message);
-                    });
-                } else if (paymentMethod == '2') {
-                    //lưu trạng thái hiện tại trước khi chuyển hướng
-                    window.history.pushState({
-                        page: 'checkout'
-                    }, 'Checkout', '/checkout');
-                    sendAjaxRequest('{{ route("vnpay.payment") }}', 'POST', function(response) {
-                        // Khi thành công, chuyển hướng người dùng đến URL VNPAY
-                        if (response.code == '00') {
-                            window.location.href = response.vnpay_url;
-                            // Xử lý sự kiện khi nhấn nút back (trở về)
-                            window.onpopstate = function(event) {
-                                if (event.state && event.state.page === 'checkout') {
-                                    // Trả về trang checkout khi người dùng nhấn back
-                                    window.location.href = '/checkout'; // Điều hướng về trang checkout
-                                }
-                            };
+                                    window.location.href = '{{ url("order") }}/' + response.order_id;
+                                }, function(response) {
+                                    // Error callback (nếu cần thêm xử lý lỗi khác)
+                                    console.error('Đặt hàng không thành công:', response.message);
+                                });
+                            } else if (paymentMethod == '2') {
+                                //lưu trạng thái hiện tại trước khi chuyển hướng
+                                window.history.pushState({
+                                    page: 'checkout'
+                                }, 'Checkout', '/checkout');
+                                sendAjaxRequest('{{ route("vnpay.payment") }}', 'POST', function(response) {
+                                    // Khi thành công, chuyển hướng người dùng đến URL VNPAY
+                                    if (response.code == '00') {
+                                        window.location.href = response.vnpay_url;
+                                        // Xử lý sự kiện khi nhấn nút back (trở về)
+                                        window.onpopstate = function(event) {
+                                            if (event.state && event.state.page === 'checkout') {
+                                                // Trả về trang checkout khi người dùng nhấn back
+                                                window.location.href = '/checkout'; // Điều hướng về trang checkout
+                                            }
+                                        };
+                                    } else {
+                                        toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
+                                    }
+                                }, function(response) {
+                                    // Xử lý lỗi
+                                    console.error('Thanh toán không thành công:', response.message);
+                                });
+                            } else if (paymentMethod == '3') {
+                                // Thanh toán qua MoMo
+                                sendAjaxRequest('{{ route("momo.payment") }}', 'POST', function(response) {
+                                    // Khi thành công, chuyển hướng người dùng đến URL MoMo
+                                    if (response.success) {
+                                        window.location.href = response.momo_url;
+                                    } else {
+                                        toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
+                                    }
+                                }, function(response) {
+                                    console.error('Thanh toán không thành công:', response.message);
+                                });
+                            }
+
+                            function sendAjaxRequest(url, method, successCallback, errorCallback) {
+                                $.ajax({
+                                    url: url,
+                                    type: method,
+                                    data: {
+                                        _token: '{{ csrf_token() }}', // CSRF token
+                                        shipping_cost: shippingCost,
+                                        final_total: finalTotal,
+                                        full_name: fullName,
+                                        phone: phone,
+                                        province_id: provinceId,
+                                        district_id: districtId,
+                                        ward_id: wardId,
+                                        address: address,
+                                        note: note,
+                                        total_amount: totalAmount,
+                                        discount_amount: discountAmount,
+                                        voucher_code: voucherCode,
+                                        product_variants: productVariants,
+                                        payment_method: paymentMethod,
+                                    },
+                                    success: function(response) {
+                                        if (response.success) {
+                                            successCallback(response);
+                                        } else {
+                                            toastr.error(response.message || 'Có lỗi xảy ra khi đặt hàng.');
+                                            if (errorCallback) {
+                                                errorCallback(response);
+                                            }
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        if (xhr.status === 400) { // Kiểm tra mã lỗi 400
+                                            let message = xhr.responseJSON.message;
+                                            toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
+                                        } else {
+                                            toastr.error('Có lỗi xảy ra: ' + error);
+                                        }
+                                        if (errorCallback) {
+                                            errorCallback(xhr, status, error);
+                                        }
+                                    }
+                                });
+                            }
+                            console.log('Người dùng đã đồng ý. Tiếp tục thực hiện hành động.');
+                            
+                            // Thực hiện các code tiếp theo
                         } else {
-                            toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
+                            // Người dùng đã hủy bỏ hành động
+                            console.log('Người dùng đã hủy bỏ hành động.');
                         }
-                    }, function(response) {
-                        // Xử lý lỗi
-                        console.error('Thanh toán không thành công:', response.message);
                     });
-                } else if (paymentMethod == '3') {
-                    // Thanh toán qua MoMo
-                    sendAjaxRequest('{{ route("momo.payment") }}', 'POST', function(response) {
-                        // Khi thành công, chuyển hướng người dùng đến URL MoMo
-                        if (response.success) {
-                            window.location.href = response.momo_url;
-                        } else {
-                            toastr.error(response.message || 'Có lỗi xảy ra trong quá trình thanh toán.');
-                        }
-                    }, function(response) {
-                        console.error('Thanh toán không thành công:', response.message);
-                    });
-                }
 
-                function sendAjaxRequest(url, method, successCallback, errorCallback) {
-                    $.ajax({
-                        url: url,
-                        type: method,
-                        data: {
-                            _token: '{{ csrf_token() }}', // CSRF token
-                            shipping_cost: shippingCost,
-                            final_total: finalTotal,
-                            full_name: fullName,
-                            phone: phone,
-                            province_id: provinceId,
-                            district_id: districtId,
-                            ward_id: wardId,
-                            address: address,
-                            note: note,
-                            total_amount: totalAmount,
-                            discount_amount: discountAmount,
-                            voucher_code: voucherCode,
-                            product_variants: productVariants,
-                            payment_method: paymentMethod,
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                successCallback(response);
-                            } else {
-                                toastr.error(response.message || 'Có lỗi xảy ra khi đặt hàng.');
-                                if (errorCallback) {
-                                    errorCallback(response);
-                                }
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            if (xhr.status === 400) { // Kiểm tra mã lỗi 400
-                                let message = xhr.responseJSON.message;
-                                toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
-                            } else {
-                                toastr.error('Có lỗi xảy ra: ' + error);
-                            }
-                            if (errorCallback) {
-                                errorCallback(xhr, status, error);
-                            }
-                        }
-                    });
-                }
+
+                
 
             });
         });
@@ -538,6 +560,7 @@
 
                 // Cập nhật lại giá trị hiển thị
                 $('#finalTotal').text(formatCurrency(finalTotal));
+                $('#voucherDetail').hide();
             });
         });
 
@@ -569,15 +592,38 @@
 
                         // Hiển thị các voucher hợp lệ
                         vouchers.forEach(function(voucher) {
+                            let discount_value = '';
+                            let min_value = '';
+                            let max_value = '';
+                            if (voucher.discount_type == 'percentage') {
+                                let valueAsNumber = parseFloat(voucher.max_discount_value);
+                                let formattedValue = valueAsNumber.toLocaleString('vi-VN');
+                                discount_value = `Giảm ${Number(voucher.value)}% Giảm tối đa đ${formattedValue}`;
+                                let replaceMin = voucher.min_order_value.replace('.00', '');
+                                min_value = 'đ'+parseFloat(replaceMin.replace(/\./g, '')).toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                                let replaceMax = voucher.max_order_value.replace('.00', '');
+                                max_value = 'đ'+parseFloat(replaceMax.replace(/\./g, '')).toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                            } else {
+                                let valueAsNumber = parseFloat(voucher.value);
+                                let formattedValue = valueAsNumber.toLocaleString('vi-VN');
+                                discount_value = `Giảm đ${formattedValue}`;
+                                let replaceMin = voucher.min_order_value.replace('.00', '');
+                                min_value = 'đ'+parseFloat(replaceMin.replace(/\./g, '')).toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                                let replaceMax = voucher.max_order_value.replace('.00', '');
+                                max_value = 'đ'+parseFloat(replaceMax.replace(/\./g, '')).toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                            }
                             // Thêm mã voucher và thời gian hết hạn vào thuộc tính data
                             $('#voucherList').append(
-                                `<li class="voucher-item" data-end-time="${voucher.end_time}">${voucher.code}</li>`
+                                `<li class="voucher-item" data-discount-value="${discount_value}" data-end-time="${voucher.end_time}" data-min-value="${min_value}" data-max-value="${max_value}">${voucher.code}</li>`
                             );
                         });
 
                         // Lắng nghe sự kiện di chuột trên từng voucher
-                        $('.voucher-item').mouseenter(function() {
+                        $('.voucher-item').click(function() {
                             let endTime = $(this).data('end-time');
+                            let discountValue = $(this).data('discount-value');
+                            let minValue = $(this).data('min-value');
+                            let maxValue = $(this).data('max-value');
                             let now = new Date();
                             let endDate = new Date(endTime);
 
@@ -588,14 +634,26 @@
                                 let hoursLeft = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
                                 // Tạo thông báo
-                                let message = `${daysLeft} Ngày/ ${hoursLeft} Giờ`;
-                                $('#voucherMessage').html(`<span class="text-success">HSD: ${message}</span>`).show();
+                                let message = `${daysLeft} ngày/ ${hoursLeft} giờ`;
+                                $('#voucherDetail').html(`<div class="voucher">
+                                    <div class="voucher-left">
+                                        <span class="voucher-badge">Ưu đãi</span>
+                                        <img src="https://down-vn.img.susercontent.com/file/vn-11134004-7r98o-lw5hktdso8uxb1" alt="Voucher Icon" class="voucher-icon">
+                                    </div>
+                                    <div class="voucher-right">
+                                        <h3 class="voucher-title">${discountValue}</h3>
+                                        <p class="voucher-subtitle">Đơn Tối Thiểu ${minValue}</p>
+                                        <p class="voucher-details">Đơn tối đa ${maxValue}</p>
+                                        <div class="voucher-footer">
+                                            <span class="voucher-expiry">Hạn sử dụng: Còn ${message}</span>
+                                        </div>
+                                    </div>
+                                </div>`).show();
                             } else {
-                                $('#voucherMessage').text('Voucher đã hết hạn.').show();
+                                // $('#voucherMessage').text('Voucher đã hết hạn.').show();
+                                // $('#voucherDetail').html(`<span class="color-default">${discountType}</span>`).show();
                             }
-                        }).mouseleave(function() {
-                            $('#voucherMessage').hide();
-                        });
+                        })
                     }
                 },
                 error: function() {
