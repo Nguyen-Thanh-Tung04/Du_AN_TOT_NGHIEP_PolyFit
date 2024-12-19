@@ -137,13 +137,15 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
+    Route::get('/list-chat-staff', [ChatController::class, 'listChatStaff'])->name('list-chat-staff');
+    Route::get('/show-chat/{sender_id}/{receiver_id}', [ChatController::class, 'show'])->name('show');
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
     Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
     Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
     Route::post('/message-private', [ChatController::class, 'messagePrivate']);
     Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
-    Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
+    // Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');

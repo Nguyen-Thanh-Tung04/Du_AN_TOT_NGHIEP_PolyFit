@@ -495,7 +495,7 @@
                                 @if(isset($item->image))
                                 <img src="{{$checkUrlImg }}" class="ec-user-img" alt="Profile image">
                                 @else
-                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
+                                <img src="{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
                                 @endif
                             </div>
 
