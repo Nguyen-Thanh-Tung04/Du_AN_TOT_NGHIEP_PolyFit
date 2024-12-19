@@ -172,9 +172,12 @@
             5: "Rất hài lòng"
         };
 
-        $('#see-more-history').on('click', function() {
-            $('.order-history.d-none').removeClass('d-none').addClass('d-flex');
-            $(this).hide();
+        $('.order-items').each(function() {
+            var $orderItems = $(this);
+            $orderItems.find('#see-more-history').on('click', function() {
+                $orderItems.find('.order-history.d-none').removeClass('d-none').addClass('d-flex');
+                $(this).hide();
+            });
         });
 
         // khi bấm đánh giá
