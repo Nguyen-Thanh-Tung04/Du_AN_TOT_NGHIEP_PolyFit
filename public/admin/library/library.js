@@ -5,7 +5,7 @@
 
     HT.switchery = () => {
         $('.js-switch').each(function () {
-            var switchery = new Switchery(this, { color: '#1AB394', size: 'small' });
+            var switchery = new Switchery(this, { color: 'rgb(249, 58, 11)', size: 'small' });
         })
     }
 
@@ -226,14 +226,14 @@
                                 title: "Bật trạng thái thành công!",
                                 text: "Trạng thái đã được bật.",
                                 icon: "success",
-                                confirmButtonColor: "#3085d6",
+                                confirmButtonColor: "rgb(249, 58, 11)",
                             });
                         } else {
                             Swal.fire({
                                 title: "Đã tắt trạng thái thành công!",
                                 text: "Trạng thái đã được tắt và tắt tất cả những dữ liệu trong nó.",
                                 icon: "success",
-                                confirmButtonColor: "#3085d6",
+                                confirmButtonColor: "rgb(249, 58, 11)",
                             });
                         }
                     }
@@ -348,7 +348,7 @@
                     dataType: 'json',
                     success: function (res) {
                         if (res.flag == true) {
-                            let cssActive1 = 'background-color: rgb(26, 179, 148); border-color: rgb(26, 179, 148); box-shadow: rgb(26, 179, 148) 0px 0px 0px 11px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;';
+                            let cssActive1 = 'background-color: rgb(249, 58, 11); border-color: rgb(249, 58, 11); box-shadow: rgb(249, 58, 11) 0px 0px 0px 11px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;';
                             let cssActive2 = 'left: 13px; background-color: rgb(255, 255, 255); transition: background-color 0.4s, left 0.2s;';
                             let cssUnactive1 = 'box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset; border-color: rgb(223, 223, 223); background-color: rgb(255, 255, 255); transition: border 0.4s, box-shadow 0.4s;';
                             let cssUnactive2 = 'left: 0px; transition: background-color 0.4s, left 0.2s;';

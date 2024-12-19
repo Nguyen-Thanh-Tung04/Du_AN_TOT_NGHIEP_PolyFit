@@ -346,9 +346,9 @@
                                     <div class="ec-t-review-top">
                                         <div class="ec-t-review-name">${review.user.name}</div>
                                         <div class="ec-t-review-rating">
-                                            ${Array.from({length: 5}, (v, i) => ` <
-                            i class = "ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}" > < /i>
-                        `).join('')}
+                                            ${Array.from({length: 5}, (v, i) => `
+                                            <i class="ecicon ${i < review.score ? 'eci-star text-warning' : 'eci-star-o'}"></i>
+                                            `).join('')}
                                         </div>
                                     </div>
                                     <div class="ec-t-review-bottom">

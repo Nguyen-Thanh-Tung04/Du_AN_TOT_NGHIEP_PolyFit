@@ -238,8 +238,8 @@
         </div>
         <div class="row text-center">
             <div class="col-12 mr-a">
-                <button onClick="location.href='{{ url('/history') }}'" class="btn btn-primary btn-lg" type="button">
-                    <i class="fa fa-arrow-left"></i> Trở lại
+                <button onClick="navigateBack()" class="btn btn-primary btn-lg" type="button">
+                    <i class="fa fa-arrow-left"></i> Quay lại
                 </button>
             </div>
         </div>
@@ -312,6 +312,20 @@
             }
         });
     });
+    function navigateBack() {
+    const currentUrl = window.location.href;
+    const isHistoryPage = /\/history\/\d+$/.test(currentUrl); // Kiểm tra nếu URL kết thúc bằng /history/{id}
+    const isPaymentPage = /\/payment-success$/.test(currentUrl); // URL của trang thanh toán thành công
+
+    if (isHistoryPage) {
+        window.location.href = '{{ url('/history') }}';
+    } else if (isPaymentPage) {
+        window.location.href = '{{ route('cart.index') }}';
+    } else {
+        // Trường hợp mặc định, có thể chuyển hướng về trang chủ hoặc trang khác tùy ý
+        window.location.href = '{{ route('cart.index') }}';
+    }
+}
 </script>
 
 

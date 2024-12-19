@@ -1,4 +1,4 @@
-<form action="{{ route('user.index') }}">
+<form action="{{ route('member.index') }}">
     <div class="filter-wraper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             @php
@@ -24,18 +24,6 @@
                         <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
                         @endforeach
                     </select>
-                    <select name="user_catalogue_id" class="form-control mr-10 setupSelect2">
-                        <option value="0">Chọn chức vụ</option>
-                        @foreach ($getUserCatalogue as $val)
-                        @if ($val->id != 3)
-                        @continue;
-                        @endif
-                        <option
-                            value="{{ $val->id }}"
-                            {{ $user_catalogue_id == $val->id ? 'selected' : '' }}>{{ $val->name }}
-                        </option>
-                        @endforeach
-                    </select>
                     <div class="uk-search uk-flex uk-flex-middle mr-10 ml-10">
                         <div class="input-group">
                             <input type="text"
@@ -45,7 +33,7 @@
                                 class="form-control">
                             <span class="input-group-btn">
                                 <button type="submit" name="search" value="search"
-                                    class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
+                                    class="btn btn-success mb0 btn-sm">Tìm kiếm</button>
                             </span>
 
                         </div>

@@ -90,7 +90,7 @@
                                                        class="form-control">
                                                 <span class="input-group-btn">
                                                     <button type="submit" name="search" value="search"
-                                                            class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
+                                                            class="btn btn-success mb0 btn-sm">Tìm kiếm</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -112,10 +112,7 @@
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>
-                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
-                    </th>
-                    <th>Mã Banner</th>
+                    <th class="text-center">STT</th>
                     <th>Tiêu đề chính</th>
                     <th>Tiêu đề phụ</th>
                     <th>Nội dung</th>
@@ -126,12 +123,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($banners as $banner)
+                @foreach ($banners as $key => $banner)
                     <tr>
-                        <td>
-                            <input type="checkbox" value="" class="input-checkbox checkBoxItem">
-                        </td>
-                        <td>{{ $banner->id }}</td>
+                        <td class="text-center">{{ $key + 1 }}</td>
                         <td>{{ $banner->title_main }}</td>
                         <td>{{ $banner->title_sub }}</td>
                         <td>{{ $banner->content }}</td>
@@ -139,9 +133,9 @@
                         <td>{{ $banner->link }}</td>
                         <td class="text-center js-switch-{{ $banner->id }}">
                             <input type="checkbox" value="{{ $banner->is_active }}" 
-                            class="js-switch status " 
+                            class="js-switch is_active " 
                             data-field="is_active" 
-                            data-model="Category"
+                            data-model="Banner"
                             data-modelId="{{ $banner->id }}"
                             {{ ($banner->is_active == 1) ? 'checked' : '' }} />
                         </td> 

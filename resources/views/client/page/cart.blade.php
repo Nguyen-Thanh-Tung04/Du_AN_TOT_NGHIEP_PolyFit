@@ -146,10 +146,6 @@
                                             <span class="text-left">Tổng tiền hàng</span>
                                             <span id="subtotal" class="text-right">0₫</span>
                                         </div>
-                                        <div class="pt-3">
-                                            <span class="text-left">Giảm giá sản phẩm</span>
-                                            <span id="discount" class="text-right">0₫</span>
-                                        </div>
                                         <div class="fw-bolder pt-3 border-top">
                                             <span class="text-left">Tổng số tiền</span>
                                             <span id="total" class="text-right fw-bold fs-4 text-danger">0₫</span>
@@ -294,7 +290,6 @@
 
             if (selectedItems.length === 0) {
                 $('#subtotal').text('0₫');
-                $('#discount').text('0₫');
                 $('#total').text('0₫');
                 return;
             }
@@ -309,7 +304,6 @@
                 success: function(response) {
 
                     $('#subtotal').text(new Intl.NumberFormat().format(response.subtotal) + '₫');
-                    $('#discount').text(new Intl.NumberFormat().format(response.discount) + '₫');
                     $('#total').text(new Intl.NumberFormat().format(response.total) + '₫');
                 },
                 error: function(xhr) {

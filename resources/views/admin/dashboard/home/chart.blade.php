@@ -42,39 +42,21 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-success pull-right">
-                        Tháng {{ isset($results[0]['month']) ? $results[0]['month'] : 0 }}
+                        Tháng {{ isset($monthlyOrders[0]->month) ? $monthlyOrders[0]->month : 0 }}
                     </span>
                     <h5>ĐƠN HÀNG TRONG</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">
-                        {{ isset($results[0]['total_orders']) ? $results[0]['total_orders'] : 0 }}
+                        {{ isset($monthlyOrders[0]->total_orders) ? $monthlyOrders[0]->total_orders : 0 }}
                     </h1>
-                    <div class="stat-percent font-bold
-                    {{ isset($results[0]['growth']) && $results[0]['growth'] > 0 ? 'text-success' : 'text-danger' }}">
-                        {{ isset($results[0]['growth']) ? $results[0]['growth'] : '0%' }}
-                        <i class="fa
-                        {{ isset($results[0]['growth']) && $results[0]['growth'] > 0 ? 'fa-level-up' : 'fa-level-down' }}">
-                        </i>
-                    </div>
-
                     <small>
-                        {{-- @dd($results)--}}
-                        @if(isset($results[0]['growth']))
-                        @if($results[0]['growth'] > 0)
-                        Tăng so với tháng trước
-                        @elseif($results[0]['growth'] < 0)
-                            Giảm so với tháng trước
-                            @else
-                            Không thay đổi so với tháng trước
-                            @endif
-                            @else
-                            Không có dữ liệu
-                            @endif
-                            </small>
+                        Đơn hàng đã hoàn thành
+                    </small>
                 </div>
             </div>
         </div>
+
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -82,14 +64,7 @@
                     <h5>TỔNG DOANH THU</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{ isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00' }}</h1>
-                    <div class="stat-percent font-bold
-                    {{ isset($results[0]['revenue_growth']) && $results[0]['revenue_growth'] > 0 ? 'text-navy' : 'text-danger' }}">
-                        {{ isset($results[0]['revenue_growth']) ? $results[0]['revenue_growth'] : '0%' }}
-                        <i class="fa
-                        {{ isset($results[0]['revenue_growth']) && $results[0]['revenue_growth'] > 0 ? 'fa-level-up' : 'fa-level-down' }}">
-                        </i>
-                    </div>
+                    <h1 class="no-margins">{{ isset($monthlyOrders[0]->total_revenue) ? number_format($monthlyOrders[0]->total_revenue) : '0.00' }}</h1>
                     <small>Tổng doanh thu</small>
                 </div>
             </div>
@@ -179,12 +154,12 @@
                             // Lấy dữ liệu doanh thu theo thời gian
                             foreach ($results_one as $value) {
                                 $date = $value['date']; // Lấy ngày ở định dạng 'Y-W' cho tuần
-                                $doanh_thu = $value['doanh_thu'];
+                                $revenue = $value['revenue'];
 
                                 if ($timeFilter == 'month') {
                                     // Nếu lọc theo tháng
                                     $month = date('n', strtotime($date)); // Lấy tháng từ ngày
-                                    $chartData[$month] = ($chartData[$month] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo tháng
+                                    $chartData[$month] = ($chartData[$month] ?? 0) + $revenue; // Cộng dồn doanh thu theo tháng
                                     // Thêm nhãn cho tháng
                                     if (!in_array("Tháng $month", $labels)) {
                                         $labels[] = "Tháng $month";
@@ -192,7 +167,7 @@
                                 } elseif ($timeFilter == 'week') {
                                     // Nếu lọc theo tuần
                                     list($year, $week) = explode('-', $date); // Lấy năm và tuần từ chuỗi
-                                    $chartData[$week] = ($chartData[$week] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo tuần
+                                    $chartData[$week] = ($chartData[$week] ?? 0) + $revenue; // Cộng dồn doanh thu theo tuần
                                     // Thêm nhãn cho tuần
                                     if (!in_array("Tuần $week", $labels)) {
                                         $labels[] = "Tuần $week";
@@ -200,7 +175,7 @@
                                 } elseif ($timeFilter == 'day') {
                                     // Nếu lọc theo ngày
                                     $day = date('j', strtotime($date)); // Lấy ngày trong tháng (1-31)
-                                    $chartData[$day] = ($chartData[$day] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo ngày
+                                    $chartData[$day] = ($chartData[$day] ?? 0) + $revenue; // Cộng dồn doanh thu theo ngày
                                     // Thêm nhãn cho ngày
                                     if (!in_array("Ngày $day", $labels)) {
                                         $labels[] = "Ngày $day";
@@ -208,7 +183,7 @@
                                 } elseif ($timeFilter == 'year') {
                                     // Nếu lọc theo năm
                                     $year = date('Y', strtotime($date)); // Lấy năm từ ngày
-                                    $chartData[$year] = ($chartData[$year] ?? 0) + $doanh_thu; // Cộng dồn doanh thu theo năm
+                                    $chartData[$year] = ($chartData[$year] ?? 0) + $revenue; // Cộng dồn doanh thu theo năm
                                     // Thêm nhãn cho năm
                                     if (!in_array("$year", $labels)) {
                                         $labels[] = "$year";
@@ -264,52 +239,49 @@
                                 <li>
                                     @php
                                     // Tính tổng số đơn hàng từ dữ liệu mới gửi lên nếu có
-                                    $totalOrders1 = isset($results_one) ? collect($results_one)->sum('so_luong_don_hang') : 0;
-                                    //
-                                    // // Kiểm tra nếu đã có tổng số đơn hàng mặc định
-                                    // $totalOrders = isset($totalOrders) ? $totalOrders : 0;
-                                    //
-                                    // // Quyết định hiển thị giá trị nào
-                                    // $displayTotalOrders = $totalOrders1 > 0 ? $totalOrders1 : $totalOrders;
+                                    $totalOrders = isset($results_one) ? collect($results_one)->sum('total_orders') : 0;
                                     @endphp
-                                    <h2 class="no-margins">{{ $totalOrders1 }}</h2>
-                                    <small>Tổng số đơn đặt hàng</small>
-                                    <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
+                                    <h2 class="no-margins">{{ $totalOrders }}</h2>
+                                    <small>Tổng số đơn hàng</small>
+                                    <div class="stat-percent"> <i class="fa fa-bolt text-navy"></i></div>
                                     <div class="progress progress-mini">
                                         <div style="width: 48%;" class="progress-bar"></div>
                                     </div>
                                 </li>
-
                                 <li>
                                     @php
-                                    $totalCancelOrders = isset($results_one) ? collect($results_one)->sum('tong_so_don_hang_huy') : 0; // Tính tổng số đơn hàng đã hủy
-                                    // $canceledOrders = isset($canceledOrders) ? $canceledOrders : 0;
-                                    // $TotalCancelOrders = $totalCancelOrders > 0 ? $totalCancelOrders : $canceledOrders;
+                                    $totalRevenue = isset($results_one) ? collect($results_one)->sum('quantity_sold') : 0; // Tính tổng số lượng bán ra
+                                    @endphp
+                                    <h2 class="no-margins">{{ $totalRevenue }}</h2>
+                                    <small>Số lượng bán ra</small>
+                                    <div class="stat-percent"> <i class="fa fa-bolt text-navy"></i></div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 22%;" class="progress-bar"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    @php
+                                    $totalCancelOrders = isset($results_one) ? collect($results_one)->sum('total_canceled_orders') : 0; // Tính tổng số đơn hàng đã hủy
                                     @endphp
                                     <h2 class="no-margins">{{ $totalCancelOrders }}</h2>
                                     <small>Tổng số đơn hàng đã hủy</small>
-                                    <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i></div>
+                                    <div class="stat-percent"> <i class="fa fa-bolt text-navy"></i></div>
                                     <div class="progress progress-mini">
                                         <div style="width: 60%;" class="progress-bar"></div>
                                     </div>
                                 </li>
                                 <li>
                                     @php
-                                    $totalRevenue = isset($results_one) ? collect($results_one)->sum('doanh_thu') : 0; // Tính tổng doanh thu
-
-                                    // // Kiểm tra nếu đã có tổng số doanh thu mặc định
-                                    // $totalRevenue_month = isset($results[0]['total_revenue']) ? number_format($results[0]['total_revenue'], 2) : '0.00'; // Đã thêm dấu chấm phẩy
-                                    //
-                                    // // Quyết định hiển thị giá trị nào
-                                    // $displayTotalRevenue = $totalRevenue > 0 ? $totalRevenue : $totalRevenue_month;
+                                    $totalRevenue = isset($results_one) ? collect($results_one)->sum('revenue') : 0; // Tính tổng doanh thu
                                     @endphp
                                     <h2 class="no-margins">{{ $totalRevenue }}</h2>
                                     <small>Doanh thu</small>
-                                    <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
+                                    <div class="stat-percent"> <i class="fa fa-bolt text-navy"></i></div>
                                     <div class="progress progress-mini">
                                         <div style="width: 22%;" class="progress-bar"></div>
                                     </div>
                                 </li>
+                                
 
                             </ul>
 
@@ -320,6 +292,8 @@
             </div>
         </div>
     </div>
+
+    
     <div class="row">
         <div class="col-lg-8">
             <div class="ibox float-e-margins">

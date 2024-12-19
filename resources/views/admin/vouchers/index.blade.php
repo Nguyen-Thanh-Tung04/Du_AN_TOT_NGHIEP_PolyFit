@@ -105,7 +105,7 @@
                                                     placeholder="Nhập từ khóa bạn muốn tìm kiếm..."
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">
+                                                    <button type="submit" name="search" value="search" class="btn btn-success mb0 btn-sm">
                                                         Tìm kiếm
                                                     </button>
                                                 </span>
@@ -126,8 +126,8 @@
                         <table class="table table-sm table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                                    <th class="text-center">
+                                        STT
                                     </th>
                                     <th>Mã Voucher</th>
                                     <th>Tên Voucher</th>
@@ -144,10 +144,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($vouchers as $voucher)
+                                @foreach($vouchers as $key => $voucher)
                                     <tr>
-                                        <td>
-                                            <input type="checkbox" value="{{ $voucher->id }}" class="input-checkbox checkBoxItem">
+                                        <td class="text-center">
+                                            {{ $key + 1 }}
                                         </td>
                                         <td>{{ $voucher->code }}</td>
                                         <td>{{ $voucher->name }}</td>
@@ -173,13 +173,13 @@
                                         <td class="text-center js-switch-{{ $voucher->id }}">
                                             <input type="checkbox" value="{{ $voucher->status }}" 
                                             class="js-switch status " 
-                                            data-field="is_active" 
-                                            data-model="Category"
+                                            data-field="status" 
+                                            data-model="Voucher"
                                             data-modelId="{{ $voucher->id }}"
                                             {{ ($voucher->status == 1) ? 'checked' : '' }} />
                                         </td> 
                                         <td class="text-center">
-                                            <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                                            {{-- <a href="{{ route('vouchers.edit', $voucher->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a> --}}
                                             <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')

@@ -641,7 +641,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   color: #f8ac59;
 }
 .btn-danger.btn-outline {
-  color: #ed5565;
+  color: rgb(249, 58, 11);
 }
 .btn-primary.btn-outline:hover,
 .btn-success.btn-outline:hover,
@@ -664,8 +664,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .btn-primary:active:hover,
 .btn-primary.active:hover,
 .btn-primary.active:focus {
-  background-color: #18a689;
-  border-color: #18a689;
+  background-color: rgb(239, 62, 17);
+  border-color: rgb(239, 62, 17);
   color: #FFFFFF;
 }
 .btn-primary:active,
@@ -854,8 +854,8 @@ fieldset[disabled] .btn-warning.active {
   border-color: #f9b66d;
 }
 .btn-danger {
-  background-color: #ed5565;
-  border-color: #ed5565;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
   color: #FFFFFF;
 }
 .btn-danger:hover,
@@ -867,8 +867,8 @@ fieldset[disabled] .btn-warning.active {
 .btn-danger:active:hover,
 .btn-danger.active:hover,
 .btn-danger.active:focus {
-  background-color: #ec4758;
-  border-color: #ec4758;
+  background-color: rgb(239, 62, 17);
+  border-color: rgb(239, 62, 17);
   color: #FFFFFF;
 }
 .btn-danger:active,
@@ -1111,7 +1111,7 @@ button.dim:active:before {
 }
 .label-danger,
 .badge-danger {
-  background-color: #ed5565;
+  background-color: rgb(249, 58, 11);
   color: #FFFFFF;
 }
 .label-info,
@@ -1909,7 +1909,7 @@ div.dt-button-info {
 }
 .has-error .form-control,
 .has-error .form-control:focus {
-  border-color: #ed5565;
+  border-color: rgb(249, 58, 11);
 }
 .has-success .control-label {
   color: rgb(249, 58, 11);
@@ -1918,7 +1918,7 @@ div.dt-button-info {
   color: #f8ac59;
 }
 .has-error .control-label {
-  color: #ed5565;
+  color: rgb(249, 58, 11);
 }
 .input-group-addon {
   background-color: #eee;
@@ -1942,7 +1942,7 @@ div.dt-button-info {
   box-shadow: none;
 }
 .slider_red .noUi-connect {
-  background: none repeat scroll 0 0 #ed5565;
+  background: none repeat scroll 0 0 rgb(249, 58, 11);
   box-shadow: none;
 }
 /* UI Sortable */
@@ -2502,7 +2502,7 @@ label.error {
   background-color: rgb(249, 58, 11);
 }
 .toast-error {
-  background-color: #ed5565;
+  background-color: rgb(249, 58, 11);
 }
 .toast-info {
   background-color: #23c6c8;
@@ -2534,7 +2534,7 @@ label.error {
   border-left: 6px solid #1c84c6;
 }
 .inspinia-notify.alert-danger {
-  border-left: 6px solid #ed5565;
+  border-left: 6px solid rgb(249, 58, 11);
 }
 .inspinia-notify.alert-info {
   border-left: 6px solid rgb(249, 58, 11);
@@ -3293,8 +3293,8 @@ body.tour-open .animated {
 }
 .stream .stream-badge i.bg-danger {
   color: #ffffff;
-  background-color: #ed5565;
-  border-color: #ed5565;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
 }
 .stream .stream-badge:before {
   content: '';
@@ -4056,7 +4056,7 @@ table.table-mail tr td {
 }
 .red-bg,
 .bg-danger {
-  background-color: #ed5565;
+  background-color: rgb(249, 58, 11);
   color: #ffffff;
 }
 .black-bg {
@@ -4094,11 +4094,11 @@ table.table-mail tr td {
   color: #ffffff;
 }
 .panel-danger {
-  border-color: #ed5565;
+  border-color: rgb(249, 58, 11);
 }
 .panel-danger > .panel-heading {
-  background-color: #ed5565;
-  border-color: #ed5565;
+  background-color: rgb(249, 58, 11);
+  border-color: rgb(249, 58, 11);
   color: #ffffff;
 }
 .progress-bar {
@@ -4130,7 +4130,7 @@ table.table-mail tr td {
   background-color: #f8ac59;
 }
 .progress-bar-danger {
-  background-color: #ed5565;
+  background-color: rgb(249, 58, 11);
 }
 .panel-title {
   font-size: inherit;
@@ -4159,7 +4159,7 @@ table.table-mail tr td {
   color: #f8ac59;
 }
 .text-danger {
-  color: #ed5565;
+  color: rgb(249, 58, 11);
 }
 .text-muted {
   color: #888888;
@@ -5462,7 +5462,7 @@ table.issue-tracker tbody tr td {
   border-left: 3px solid #f8ac59;
 }
 .agile-list li.danger-element {
-  border-left: 3px solid #ed5565;
+  border-left: 3px solid rgb(249, 58, 11);
 }
 .agile-list li.info-element {
   border-left: 3px solid #1c84c6;

@@ -33,11 +33,16 @@ class UpdateVoucherRequest extends FormRequest
             $maxDiscountValue = $this->input('max_discount_value');
             $minOrderValue = $this->input('min_order_value');
             $maxOrderValue = $this->input('max_order_value');
+            $discountType = $this->input('discount_type');
+            $value = $this->input('value');
+
+            if ($discountType == 'fixed' && $value >= $minOrderValue) {
+                $validator->errors()->add('value', 'Giá trị giảm giá cố định phải nhỏ hơn giá trị đơn hàng tối thiểu.');
+            }
 
             if ($maxDiscountValue !== null && $minOrderValue !== null && $maxDiscountValue >= $minOrderValue) {
                 $validator->errors()->add('max_discount_value', 'Giá trị giảm giá tối đa phải nhỏ hơn giá trị đơn hàng tối thiểu.');
             }
-
             if ($maxDiscountValue !== null && $maxOrderValue !== null && $maxDiscountValue >= $maxOrderValue) {
                 $validator->errors()->add('max_discount_value', 'Giá trị giảm giá tối đa phải nhỏ hơn giá trị đơn hàng tối đa.');
             }

@@ -66,9 +66,14 @@ class OrderHistoryController extends Controller
             $previousStatus = $donHang->status;
 
             if ($request->has('huy_don_hang')) {
+                if ($previousStatus === Order::STATUS_HUY_DON_HANG) {
+                    return redirect()->back()->with('error', 'Đơn hàng đã bị hủy trước đó.');
+                }
+
                 if ($previousStatus !== Order::STATUS_CHO_XAC_NHAN) {
                     return redirect()->back()->with('error', 'Không thể hủy vì đơn hàng đã được xử lý.');
                 }
+
 
                 foreach ($donHang->orderItems as $item) {
                     $variant = $item->variant;

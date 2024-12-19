@@ -3,7 +3,7 @@
         <thead>
         <tr>
             <th style="width:50px">
-                <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                STT
             </th>
             <th>Tên chức năng</th>
             <th>Đường dẫn</th>
@@ -12,13 +12,13 @@
         </thead>
         <tbody>
             @if (isset($permissions) && is_object($permissions))
-                @foreach($permissions as $permission)
+                @foreach($permissions as $key => $permission)
                 @php
                     $gallery = json_decode($permission->gallery, true);
                 @endphp
                 <tr>
-                    <td>
-                        <input type="checkbox" value="{{ $permission->id }}" class="input-checkbox checkBoxItem">
+                    <td class="text-center">
+                        {{ $key + 1 }}
                     </td>
                     <td>
                         {{ $permission->name }}
