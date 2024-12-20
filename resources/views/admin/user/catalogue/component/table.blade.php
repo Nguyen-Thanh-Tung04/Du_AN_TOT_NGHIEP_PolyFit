@@ -2,10 +2,10 @@
     <table class="table table-sm table-striped table-bordered">
         <thead>
         <tr>
-            <th>
-                <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+            <th class="text-center">
+                STT
             </th>
-            <th>Tên vai trò</th>
+            <th>Tên chức vụ</th>
             <th class="text-center">Số người</th>
             <th class="text-center">Mô tả</th>
             <th class="text-center">Tình Trạng</th>
@@ -14,13 +14,13 @@
         </thead>
         <tbody>
             @if (isset($userCatalogues) && is_object($userCatalogues))
-                @foreach($userCatalogues as $userCatalogue)
+                @foreach($userCatalogues as $key => $userCatalogue)
                 @if ($userCatalogue->id == 3)
                     @continue
                 @endif
                 <tr>
-                    <td>
-                        <input type="checkbox" value="{{ $userCatalogue->id }}" class="input-checkbox checkBoxItem">
+                    <td class="text-center">
+                        {{ $key + 1 }}
                     </td>
                     <td>{{ $userCatalogue->name }}</td>
                     <td class="text-center">
@@ -29,7 +29,8 @@
                     <td>{{ $userCatalogue->description }}</td>
                     <td class="text-center js-switch-{{ $userCatalogue->id }}">
                         <input type="checkbox" value="{{ $userCatalogue->publish }}"
-                        class="js-switch status "
+                        class="js-switch status " 
+                        {{ ($userCatalogue->id == 1) ? 'disabled' : '' }}
                         data-field="publish"
                         data-model="UserCatalogue"
                         data-modelId="{{ $userCatalogue->id }}"

@@ -70,6 +70,10 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 //     return view('client.page.about');
 // });
 Route::get('/about', [App\Http\Controllers\client\ReviewController::class, 'about_reviews_list'])->name('about');
+// Lọc client
+Route::get('/reviews_filter/{product_id}', [ClientProductController::class, 'filterReviews'])->name('reviews.filter');
+// Route mới để xử lý phân trang đánh giá
+// Route::get('/reviews/{product_id}', [ClientProductController::class, 'fetchReviews'])->name('reviews.fetch');
 
 
 Route::get('/shop', [ProductCatalogueController::class, 'index'])->name('home.shop');
@@ -137,13 +141,15 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
+    Route::get('/list-chat-staff', [ChatController::class, 'listChatStaff'])->name('list-chat-staff');
+    Route::get('/show-chat/{sender_id}/{receiver_id}', [ChatController::class, 'show'])->name('show');
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
     Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
     Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
     Route::post('/message-private', [ChatController::class, 'messagePrivate']);
     Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
-    Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
+    // Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');
@@ -260,8 +266,7 @@ Route::prefix('flashsale/')->name('flashsale.')->middleware('checkLogin')->group
     Route::put('{id}/update', [FlashSaleController::class, 'update'])
         ->name('update');
     Route::delete('{id}/destroy', [FlashSaleController::class, 'destroy'])
-        ->name('destroy')
-        ->middleware('checkModulePermission:flashsale.delete');
+        ->name('destroy');
     Route::patch('/{id}/status', [FlashSaleController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/get-selected-products', [ProductCatalogueController::class, 'getSelectedProducts'])->name('getSelectedProducts');
     Route::get('/get-occupied-time-slots', [FlashSaleController::class, 'getOccupiedTimeSlots'])->name('getOccupiedTimeSlots');
@@ -399,7 +404,6 @@ Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(functi
     Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
     Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
     Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
-    
 });
 Route::middleware(['checkLoginClient'])->group(function () {
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('order.history');

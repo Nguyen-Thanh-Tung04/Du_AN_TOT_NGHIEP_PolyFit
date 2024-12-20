@@ -66,13 +66,24 @@ class OrderHistoryController extends Controller
             $previousStatus = $donHang->status;
 
             if ($request->has('huy_don_hang')) {
+                if ($previousStatus === Order::STATUS_HUY_DON_HANG) {
+                    return redirect()->back()->with('error', 'Đơn hàng đã bị hủy trước đó.');
+                }
+
                 if ($previousStatus !== Order::STATUS_CHO_XAC_NHAN) {
                     return redirect()->back()->with('error', 'Không thể hủy vì đơn hàng đã được xử lý.');
                 }
 
+
                 foreach ($donHang->orderItems as $item) {
                     $variant = $item->variant;
                     $variant->update(['quantity' => $variant->quantity + $item->quantity]);
+                }
+                if ($donHang->voucher) {
+                    $voucher = $donHang->voucher;
+                    $voucher->update(['quantity' => $voucher->quantity + 1]);
+
+                    $voucher->users()->detach($donHang->user_id);
                 }
 
                 $donHang->update(['status' => Order::STATUS_HUY_DON_HANG]);
@@ -91,7 +102,7 @@ class OrderHistoryController extends Controller
 
             if ($request->has('giao_hang_thanh_cong')) {
                 if ($previousStatus !== Order::STATUS_GIAO_HANG_THANH_CONG) {
-                    return redirect()->back()->with('error', 'Không thể xác nhận đã nhận hàng khi đơn hàng không ở trạng thái "Đã giao hàng".');
+                    return redirect()->back()->with('error', 'Không thể xác nhận đã nhận hàng khi đơn hàng không ở trạng thái "Giao hàng thành công".');
                 }
 
                 $donHang->update(['status' => Order::STATUS_HOAN_THANH]);

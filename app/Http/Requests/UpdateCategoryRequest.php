@@ -26,6 +26,8 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'code' => 'required|string|unique:categories,code,' . $this->id . '|max:255',
             'name' => 'required|string|unique:categories,name,' . $this->id,
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', // Thêm quy tắc validate cho hình ảnh
+
         ];
     }
 
@@ -38,6 +40,8 @@ class UpdateCategoryRequest extends FormRequest
             'name.max' => 'Trường tên không được vượt quá 255 ký tự.',
             'code.unique' => 'Mã này đã tồn tại.',
             'name.unique' => 'Tên này đã tồn tại.',
+            'image.mimes' => 'Tệp được tải lên phải là một hình ảnh (jpeg, png, jpg, gif).',
+            'image.max' => 'Hình ảnh không được vượt quá 2MB.',
         ];
     }
 }

@@ -27,14 +27,22 @@ class Order extends Model
         self::STATUS_HUY_DON_HANG => 'Hủy đơn hàng',
         self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
+
+    const PAYMENT_STATUS_UNPAID = 0;
+    const PAYMENT_STATUS_PAID = 1;
+
+    const PAYMENT_STATUS_NAMES = [
+        self::PAYMENT_STATUS_UNPAID => 'Chưa thanh toán',
+        self::PAYMENT_STATUS_PAID => 'Đã thanh toán',
+    ];
     const PAYMENT_METHOD_COD = 1;
-    const PAYMENT_METHOD_ONLINE = 2;
+    const PAYMENT_METHOD_VNPAY = 2;
+    const PAYMENT_METHOD_MOMO = 3;
 
     const PAYMENT_METHOD_NAMES = [
-        self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
-        self::PAYMENT_METHOD_ONLINE => 'Thanh toán VNPAY',
-        self::PAYMENT_METHOD_ONLINE => 'Thanh toán MOMO',
-
+        self::PAYMENT_METHOD_COD => 'Thanh toán COD',
+        self::PAYMENT_METHOD_VNPAY => 'Thanh toán VNPAY',
+        self::PAYMENT_METHOD_MOMO => 'Thanh toán MOMO',
     ];
 
     protected $fillable = [
@@ -102,6 +110,10 @@ class Order extends Model
     {
         return self::PAYMENT_METHOD_NAMES[$this->payment_method] ?? 'Phương thức thanh toán không xác định';
     }
+    public function getPaymentStatusNameAttribute()
+    {
+        return self::PAYMENT_STATUS_NAMES[$this->payment_status] ?? 'Trạng thái thanh toán không xác định';
+    }
 
     // Lấy tất cả các đánh giá liên quan đến các sản phẩm trong đơn hàng
     public function reviews()
@@ -117,15 +129,15 @@ class Order extends Model
     }
 
     public function getHasReviewAttribute()
-{
-    // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
-    return $this->orderItems->every(function ($item) {
-        if ($item->variant && $item->variant->product_id) {
-            return Review::where('product_id', $item->variant->product_id)
-                ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
-                ->exists();
-        }
-        return false; // Nếu không có variant hoặc product_id, trả về false
-    });
-}
+    {
+        // Kiểm tra nếu tất cả các sản phẩm trong đơn hàng đã có đánh giá trong đúng đơn hàng đó
+        return $this->orderItems->every(function ($item) {
+            if ($item->variant && $item->variant->product_id) {
+                return Review::where('product_id', $item->variant->product_id)
+                    ->where('order_id', $this->id) // Kiểm tra xem đánh giá là của đúng đơn hàng này
+                    ->exists();
+            }
+            return false; // Nếu không có variant hoặc product_id, trả về false
+        });
+    }
 }

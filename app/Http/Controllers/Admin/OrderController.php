@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\AutoCompleteOrderStatus;
+use App\Mail\OrderCanceled;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -95,48 +99,90 @@ class OrderController extends Controller
     // Controller's update method
     public function update(Request $request, string $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('orderItems.variant')->findOrFail($id);
         $currentStatus = $order->status;
         $newStatus = $request->input('status');
         $statuses = array_keys(Order::STATUS_NAMES);
 
-        // Kiểm tra nếu đơn hàng đã bị hủy
-        if ($currentStatus === Order::STATUS_HUY_DON_HANG) {
-            return redirect()->route('orders.index')->with('error', 'Đơn hàng đã bị hủy không thể thay đổi trạng thái.');
+        DB::beginTransaction();
+
+        try {
+            if ($newStatus == Order::STATUS_HUY_DON_HANG) {
+                if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
+                    return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
+                }
+
+                foreach ($order->orderItems as $item) {
+                    $variant = $item->variant;
+                    $variant->update(['quantity' => $variant->quantity + $item->quantity]);
+                }
+
+                if ($order->voucher) {
+                    $voucher = $order->voucher;
+                    $voucher->update(['quantity' => $voucher->quantity + 1]);
+                    $voucher->users()->detach($order->user_id);
+                }
+
+                $order->update(['status' => Order::STATUS_HUY_DON_HANG]);
+
+                OrderStatusHistory::create([
+                    'order_id' => $order->id,
+                    'previous_status' => $currentStatus,
+                    'new_status' => Order::STATUS_HUY_DON_HANG,
+                    'cancel_reason' => $request->cancel_reason,
+                    'changed_by' => auth()->id(),
+                ]);
+
+                // Gửi email thông báo hủy đơn hàng
+                Mail::to($order->user->email)->queue(new OrderCanceled($order));
+            } else {
+                // Kiểm tra trạng thái liền kề
+                $currentIndex = array_search($currentStatus, $statuses);
+                $newIndex = array_search($newStatus, $statuses);
+
+                if ($newIndex === false || abs($newIndex - $currentIndex) !== 1) {
+                    return redirect()->route('orders.index')->with('error', 'Chỉ có thể chuyển sang trạng thái liền kề.');
+                }
+
+                $order->update(['status' => $newStatus]);
+
+                // Cập nhật trạng thái thanh toán
+                if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG || $newStatus == Order::STATUS_HOAN_THANH) {
+                    $order->payment_status = Order::PAYMENT_STATUS_PAID;
+                } elseif (in_array($order->payment_method, [Order::PAYMENT_METHOD_VNPAY, Order::PAYMENT_METHOD_MOMO])) {
+                    $order->payment_status = Order::PAYMENT_STATUS_PAID;
+                } else {
+                    $order->payment_status = Order::PAYMENT_STATUS_UNPAID;
+                }
+
+                $order->save(); // Lưu lại thay đổi trạng thái thanh toán
+
+                OrderStatusHistory::create([
+                    'order_id' => $order->id,
+                    'previous_status' => $currentStatus,
+                    'new_status' => $newStatus,
+                    'cancel_reason' => $request->cancel_reason ?? null,
+                    'changed_by' => auth()->id(),
+                ]);
+            }
+
+            if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
+                AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(20));
+            }
+
+            DB::commit();
+
+            return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('orders.index')->with('error', 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.');
         }
-
-        $currentIndex = array_search($currentStatus, $statuses);
-        $newIndex = array_search($newStatus, $statuses);
-
-        if ($newIndex === false || abs($currentIndex - $newIndex) !== 1) {
-            return redirect()->route('orders.index')->with('error', 'Chỉ có thể chuyển sang trạng thái liền kề.');
-        }
-
-        if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
-            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật ngược lại trạng thái');
-        }
-
-        // Lưu lại lịch sử trạng thái
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'previous_status' => $order->status,
-            'new_status' => $newStatus,
-            'cancel_reason' => $request->cancel_reason ?? null,
-            'changed_by' => auth()->id(),
-            'changed_at' => now(),
-        ]);
-
-        // Cập nhật trạng thái đơn hàng
-        $order->status = $newStatus;
-        $order->save();
-
-        // Nếu trạng thái giao hàng thành công, gửi yêu cầu hoàn thành
-        if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
-            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(10));
-        }
-
-        return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
+
+
+
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -159,19 +205,19 @@ class OrderController extends Controller
         $endDate = $request->input('end_date');
         return Excel::download(new OrdersExport($status, $keyword, $startDate, $endDate), 'ListOrder.xlsx');
     }
-    public function exportPDF($id) 
+    public function exportPDF($id)
     {
         // Tạo đối tượng DomPDF
-        $pdf = \App::make('dompdf.wrapper');
-        
-    
+        $pdf = App::make('dompdf.wrapper');
+
+
         // Load nội dung HTML từ phương thức print_order_convert
         $pdf->loadHTML($this->print_order_convert($id));
-    
+
         // Trả về file PDF để tải về
         return $pdf->download();
     }
-    
+
     public function print_order_convert($id)
     {
         // Trả về HTML hợp lệ để tạo file PDF
@@ -183,5 +229,4 @@ class OrderController extends Controller
         // dd($order, $statusOrder, $statusPayment);
         return view('admin.orders.invoice', compact('order', 'statusOrder', 'statusPayment'));
     }
-
 }

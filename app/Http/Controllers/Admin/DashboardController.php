@@ -105,18 +105,25 @@ class DashboardController extends Controller
             ->join('variants', 'order_items.variant_id', '=', 'variants.id')
             ->join('products', 'variants.product_id', '=', 'products.id') // Giả sử variants có trường product_id để liên kết với bảng products
             ->join('orders', 'order_items.order_id', '=', 'orders.id') // Join bảng orders để lấy trạng thái
+            ->join('colors', 'variants.color_id', '=', 'colors.id') // Join với bảng colors để lấy tên màu sắc
+            ->join('sizes', 'variants.size_id', '=', 'sizes.id') // Join với bảng sizes để lấy tên kích thước
             ->select(
                 DB::raw('SUM((order_items.price - variants.purchase_price) * order_items.quantity) as gross_profit'),
                 DB::raw('order_items.variant_id, SUM(order_items.quantity) as total_quantity'),
                 'products.name as product_name', // Chọn tên sản phẩm từ bảng products
-                DB::raw('MONTH(order_items.created_at) as month') // Lấy tháng từ created_at
+                'colors.name as color_name', // Chọn tên màu sắc từ bảng colors
+                'sizes.name as size_name', // Chọn tên kích thước từ bảng sizes
+                DB::raw('DATE_FORMAT(order_items.created_at, "%d/%m/%Y") as date') // Lấy ngày, tháng và năm từ created_at
             )
             ->where('orders.status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('order_items.created_at', $currentMonth)
             ->whereYear('order_items.created_at', $currentYear)
-            ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
+            ->groupBy('order_items.variant_id', 'products.name', 'colors.name', 'sizes.name', 'date') // Nhóm theo variant_id, tên sản phẩm, tên màu sắc, tên kích thước, và ngày
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
+
+        // dd($grossProfit);
+
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
@@ -289,19 +296,23 @@ class DashboardController extends Controller
             ->join('variants', 'order_items.variant_id', '=', 'variants.id')
             ->join('products', 'variants.product_id', '=', 'products.id') // Giả sử variants có trường product_id để liên kết với bảng products
             ->join('orders', 'order_items.order_id', '=', 'orders.id') // Join bảng orders để lấy trạng thái
+            ->join('colors', 'variants.color_id', '=', 'colors.id') // Join với bảng colors để lấy tên màu sắc
+            ->join('sizes', 'variants.size_id', '=', 'sizes.id') // Join với bảng sizes để lấy tên kích thước
             ->select(
                 DB::raw('SUM((order_items.price - variants.purchase_price) * order_items.quantity) as gross_profit'),
                 DB::raw('order_items.variant_id, SUM(order_items.quantity) as total_quantity'),
                 'products.name as product_name', // Chọn tên sản phẩm từ bảng products
-                DB::raw('MONTH(order_items.created_at) as month') // Lấy tháng từ created_at
+                'colors.name as color_name', // Chọn tên màu sắc từ bảng colors
+                'sizes.name as size_name', // Chọn tên kích thước từ bảng sizes
+                DB::raw('DATE_FORMAT(order_items.created_at, "%d/%m/%Y") as date') // Lấy ngày, tháng và năm từ created_at
             )
             ->where('orders.status', 6) // Chỉ tính đơn hàng đã thanh toán
             ->whereMonth('order_items.created_at', $currentMonth)
             ->whereYear('order_items.created_at', $currentYear)
-            ->groupBy('order_items.variant_id', 'products.name', 'month') // Nhóm theo variant_id, tên sản phẩm, và tháng
+            ->groupBy('order_items.variant_id', 'products.name', 'colors.name', 'sizes.name', 'date') // Nhóm theo variant_id, tên sản phẩm, tên màu sắc, tên kích thước, và ngày
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
-            // dd($grossProfit);
+        // dd($grossProfit);
 
         $successMessage = 'Lọc dữ liệu thành công!';
 
@@ -310,10 +321,10 @@ class DashboardController extends Controller
             'template',
             'config',
             'monthlyOrders',
-            'totalOrdersCancel', 
+            'totalOrdersCancel',
             'totalOrdersConfirm',
-            'totalCustomers', 
-            'latestOrders', 
+            'totalCustomers',
+            'latestOrders',
             'latestUsers',
             'results_one',
             'orderStatus',
