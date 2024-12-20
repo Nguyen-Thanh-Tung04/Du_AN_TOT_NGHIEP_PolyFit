@@ -112,10 +112,7 @@
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>
-                        <input type="checkbox" value="" id="checkAll" class="input-checkbox">
-                    </th>
-                    <th>Mã Banner</th>
+                    <th class="text-center">STT</th>
                     <th>Tiêu đề chính</th>
                     <th>Tiêu đề phụ</th>
                     <th>Nội dung</th>
@@ -126,12 +123,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($banners as $banner)
+                @foreach ($banners as $key => $banner)
                     <tr>
-                        <td>
-                            <input type="checkbox" value="" class="input-checkbox checkBoxItem">
-                        </td>
-                        <td>{{ $banner->id }}</td>
+                        <td class="text-center">{{ $key + 1 }}</td>
                         <td>{{ $banner->title_main }}</td>
                         <td>{{ $banner->title_sub }}</td>
                         <td>{{ $banner->content }}</td>
@@ -139,19 +133,19 @@
                         <td>{{ $banner->link }}</td>
                         <td class="text-center js-switch-{{ $banner->id }}">
                             <input type="checkbox" value="{{ $banner->is_active }}" 
-                            class="js-switch status " 
+                            class="js-switch is_active " 
                             data-field="is_active" 
-                            data-model="Category"
+                            data-model="Banner"
                             data-modelId="{{ $banner->id }}"
                             {{ ($banner->is_active == 1) ? 'checked' : '' }} />
                         </td> 
                         <td class="text-center">
                             <a href="{{ route('banner.edit', $banner->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                            <form action="{{ route('banner.delete', $banner->id) }}" method="POST" style="display: inline-block;">
+                            {{-- <form action="{{ route('banner.delete', $banner->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button>
-                            </form>
+                            </form> --}}
                         </td>
                     </tr>
                 @endforeach

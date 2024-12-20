@@ -33,30 +33,6 @@
     </div>
 </div>
 
-<section class="section ec-about-sec section-space-p mt-4">
-    <div class="container">
-        <div class="row">
-            <div class="section-title d-none">
-                <h2 class="ec-title">Giới thiệu</h2>
-            </div>
-            <div class="col-lg-6">
-                <div class="ec-about">
-                    <img src="{{ asset('theme/client/assets/images/bg/black-friday-8.jpg') }}" alt="about-image">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="ec-about-detail">
-                    <h4 class="text-upper" style="font-weight: 700;">Phong cách nổi bật, đẳng cấp sang trọng nhất.</h4>
-                    <h5>Khám phá những mẫu quần áo thời trang phù hợp với xu hướng mới nhất.</h5>
-                    <p>Chúng tôi cung cấp những thiết kế độc đáo, chất lượng cao dành cho bạn. Từng sản phẩm đều được chọn lọc kỹ càng để mang lại sự thoải mái và tự tin trong mọi hoạt động.</p>
-                    <p>Đừng bỏ lỡ cơ hội sở hữu những bộ trang phục hiện đại, giúp bạn thể hiện cá tính và gu thẩm mỹ của mình.</p>
-                    <a class="btn btn-lg btn-primary" href="{{ route('home.shop') }}">Mua ngay</a>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <section class="section ec-category-section ec-category-wrapper-4 section-space-p">
     <div class="container">
         <div class="row cat-space-3 cat-auto margin-minus-tb-15">
@@ -423,38 +399,38 @@
             <div class="ec-brand-outer">
                 <ul id="ec-brand-slider">
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/1.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/2.png') }}" /></a></div>
                     </li>
 
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/4.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/5.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/6.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/7.png') }}" /></a></div>
                     </li>
                     <li class="ec-brand-item" data-animation="zoomIn">
-                        <div class="ec-brand-img"><a href="{{ url('/product_detail') }}"><img alt="brand"
+                        <div class="ec-brand-img"><a href="#"><img alt="brand"
                                     title="brand"
                                     src="{{ asset('theme/client/assets/images/brand-image/8.png') }}" /></a></div>
                     </li>
@@ -495,7 +471,7 @@
                                 @if(isset($item->image))
                                 <img src="{{$checkUrlImg }}" class="ec-user-img" alt="Profile image">
                                 @else
-                                <img src="{{ asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
+                                <img src="{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="ec-user-img" alt="Profile image">
                                 @endif
                             </div>
 

@@ -2,8 +2,8 @@
     <table class="table table-sm table-striped table-bordered">
         <thead>
         <tr>
-            <th>
-                <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+            <th class="text-center">
+                STT
             </th>
             <th class="text-center" style="width:100px;">Ảnh</th>
             <th>Họ Tên</th>
@@ -12,15 +12,14 @@
             <th>Địa Chỉ</th>
             <th>Vai trò</th>
             <th class="text-center">Tình Trạng</th>
-            <th class="text-center">Thao Tác</th>
         </tr>
         </thead>
         <tbody>
             @if (isset($members) && is_object($members))
-                @foreach($members as $member)
+                @foreach($members as $index => $member)
                 <tr>
-                    <td>
-                        <input type="checkbox" value="{{ $member->id }}" class="input-checkbox checkBoxItem">
+                    <td class="text-center">
+                        {{ $index + 1 }}
                     </td>
                     <td class="text-center">
                         <span>
@@ -45,7 +44,8 @@
                             {{ ($member->publish == 1) ? 'checked' : '' }}/>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('member.delete', $member->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                        {{-- <a href="{{ route('member.delete', $member->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
+                        <a href="{{ route('member.show', $member->id) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
                     </td>
                 </tr>
                 @endforeach

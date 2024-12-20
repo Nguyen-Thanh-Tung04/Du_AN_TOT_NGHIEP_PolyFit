@@ -144,13 +144,15 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
     Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
+    Route::get('/list-chat-staff', [ChatController::class, 'listChatStaff'])->name('list-chat-staff');
+    Route::get('/show-chat/{sender_id}/{receiver_id}', [ChatController::class, 'show'])->name('show');
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
     Route::get('/chat-private/{idUser}', [ChatController::class, 'chatPrivate'])->name('chat-private');
     Route::get('/chat-private-admin/{idUser}', [ChatController::class, 'chatPrivateAdmin'])->name('chat-private-admin');
     Route::post('/message-private', [ChatController::class, 'messagePrivate']);
     Route::post('/user-inactive', [ChatController::class, 'userInactive']);
     Route::get('/fetch-new-messages', [ChatController::class, 'fetchNewMessages'])->name('fetch.new.messages');
-    Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
+    // Route::get('/get-unread-messages-count', [ChatController::class, 'getUnreadMessagesCount']);
 });
 Route::get('huongdev', function () {
     return view('admin.chat.index');
@@ -178,6 +180,10 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
         ->middleware('checkModulePermission:user.edit');
     Route::post('{id}/update', [UserController::class, 'update'])
         ->name('update');
+    Route::get('{id}/profile', [UserController::class, 'profile'])
+        ->name('profile');
+    Route::post('{id}/updateProfile', [UserController::class, 'updateProfile'])
+        ->name('updateProfile');
     Route::get('{id}/delete', [UserController::class, 'delete'])
         ->name('delete')
         ->middleware('checkModulePermission:user.delete');
@@ -196,6 +202,8 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
         ->name('edit');
     Route::post('{id}/update', [MemberController::class, 'update'])
         ->name('update');
+    Route::get('{id}/show', [MemberController::class, 'show'])
+        ->name('show');
     Route::get('{id}/delete', [MemberController::class, 'delete'])
         ->name('delete')
         ->middleware('checkModulePermission:guest.delete');

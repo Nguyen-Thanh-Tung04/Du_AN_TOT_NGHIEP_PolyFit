@@ -75,7 +75,6 @@
                                         value="{{ old('value') }}"
                                         class="form-control"
                                         placeholder="Nhập giá trị"
-                                        min="0"
                                     >
                                     @error('value')
                                         <div class="text-danger">{{ $message }}</div>
@@ -158,7 +157,6 @@
                                         value="{{ old('quantity') }}"
                                         class="form-control"
                                         placeholder="Nhập số lượng"
-                                        min="1"
                                     >
                                     @error('quantity')
                                         <div class="text-danger">{{ $message }}</div>

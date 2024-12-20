@@ -2,8 +2,8 @@
     <table class="table table-sm table-striped table-bordered">
         <thead>
             <tr>
-                <th>
-                    <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                <th class="text-center">
+                    STT
                 </th>
                 <th class="text-center">Mã</th>
                 <th>Tên danh mục</th>
@@ -14,10 +14,10 @@
         </thead>
         <tbody>
             @if (isset($categories) && is_object($categories))
-                @foreach($categories as $category)
+                @foreach($categories as $key => $category)
                     <tr>
-                        <td>
-                            <input type="checkbox" value="{{ $category->id }}" class="input-checkbox checkBoxItem">
+                        <td class="text-center">
+                            {{ $key + 1 }}
                         </td>
                         <td>{{ $category->code }}</td>
                         <td class="text-center">{{ $category->name }}</td>
@@ -34,14 +34,14 @@
                         </td>   
                          <td class="text-center">
                             <a href="{{ route('category.edit', $category->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                            <form action="{{ route('category.destroy', $category->id) }}" method="POST" class="m-0" style="display: inline-block;"
+                            {{-- <form action="{{ route('category.destroy', $category->id) }}" method="POST" class="m-0" style="display: inline-block;"
                                 >
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-delete">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                            </form>
+                            </form> --}}
                             
                         </td>
                     </tr>

@@ -99,46 +99,92 @@ class OrderController extends Controller
     // Controller's update method
     public function update(Request $request, string $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('orderItems.variant')->findOrFail($id);
         $currentStatus = $order->status;
         $newStatus = $request->input('status');
         $statuses = array_keys(Order::STATUS_NAMES);
 
-        if ($newStatus == Order::STATUS_HUY_DON_HANG) {
-            if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
-                return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
-            }
-            Mail::to($order->user->email)->queue(new OrderCanceled($order));
-        } else {
-            $currentIndex = array_search($currentStatus, $statuses);
-            $newIndex = array_search($newStatus, $statuses);
-
-            if ($newIndex === false || abs($newIndex - $currentIndex) !== 1) {
-                return redirect()->route('orders.index')->with('error', 'Chỉ có thể chuyển sang trạng thái liền kề.');
-            }
+        if ($currentStatus == Order::STATUS_HUY_DON_HANG) {
+            return redirect()->route('orders.index')->with('error', 'Đơn hàng này đã bị hủy, không thể chuyển trạng thái khác.');
         }
 
-        // 3. Lưu lại lịch sử trạng thái
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'previous_status' => $order->status,
-            'new_status' => $newStatus,
-            'cancel_reason' => $request->cancel_reason ?? null,
-            'changed_by' => auth()->id(),
-            'changed_at' => now(),
-        ]);
-
-        // 4. Cập nhật trạng thái đơn hàng
-        $order->status = $newStatus;
-        $order->save();
-
-        // 5. Nếu trạng thái giao hàng thành công, gửi yêu cầu hoàn thành
-        if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
-            AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(20));
+        // Kiểm tra nếu đơn hàng đã bị hủy trước đó
+        if ($currentStatus == Order::STATUS_HUY_DON_HANG && $newStatus == Order::STATUS_HUY_DON_HANG) {
+            return redirect()->route('orders.index')->with('error', 'Đơn hàng này đã bị hủy trước đó.');
         }
 
-        return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+        // Kiểm tra trạng thái không quay ngược lại trạng thái trước đó
+        if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
+            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật trạng thái lùi về trạng thái trước đó.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+            if ($newStatus == Order::STATUS_HUY_DON_HANG) {
+                if ($currentStatus !== Order::STATUS_CHO_XAC_NHAN && $currentStatus !== Order::STATUS_DA_XAC_NHAN) {
+                    return redirect()->route('orders.index')->with('error', 'Chỉ có thể hủy đơn hàng ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận".');
+                }
+
+                foreach ($order->orderItems as $item) {
+                    $variant = $item->variant;
+                    $variant->update(['quantity' => $variant->quantity + $item->quantity]);
+                }
+
+                if ($order->voucher) {
+                    $voucher = $order->voucher;
+                    $voucher->update(['quantity' => $voucher->quantity + 1]);
+                    $voucher->users()->detach($order->user_id);
+                }
+
+                $order->update(['status' => Order::STATUS_HUY_DON_HANG]);
+
+                OrderStatusHistory::create([
+                    'order_id' => $order->id,
+                    'previous_status' => $currentStatus,
+                    'new_status' => Order::STATUS_HUY_DON_HANG,
+                    'cancel_reason' => $request->cancel_reason,
+                    'changed_by' => auth()->id(),
+                ]);
+
+                // Gửi email thông báo hủy đơn hàng
+                Mail::to($order->user->email)->queue(new OrderCanceled($order));
+            } else {
+                // Kiểm tra trạng thái liền kề
+                $currentIndex = array_search($currentStatus, $statuses);
+                $newIndex = array_search($newStatus, $statuses);
+
+                if ($newIndex === false || abs($newIndex - $currentIndex) !== 1) {
+                    return redirect()->route('orders.index')->with('error', 'Chỉ có thể chuyển sang trạng thái liền kề.');
+                }
+
+                $order->update(['status' => $newStatus]);
+                $order->save(); // Lưu lại thay đổi trạng thái thanh toán
+
+                OrderStatusHistory::create([
+                    'order_id' => $order->id,
+                    'previous_status' => $currentStatus,
+                    'new_status' => $newStatus,
+                    'cancel_reason' => $request->cancel_reason ?? null,
+                    'changed_by' => auth()->id(),
+                ]);
+            }
+
+            if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG) {
+                AutoCompleteOrderStatus::dispatch($order->id)->delay(now()->addSeconds(20));
+            }
+
+            DB::commit();
+
+            return redirect()->route('orders.index')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('orders.index')->with('error', 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.');
+        }
     }
+
+
+
 
 
 

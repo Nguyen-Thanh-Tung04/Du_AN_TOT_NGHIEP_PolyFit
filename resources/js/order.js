@@ -17,6 +17,15 @@ function timeSince(date) {
 // Lắng nghe sự kiện 'order.placed'
 window.Echo.channel('orders-channel')
     .listen('OrderPlaced', (e) => {
+        // Kiểm tra xem đơn hàng có trong vòng 1 giờ qua không
+        const createdAt = new Date(e.order.created_at);
+        const currentTime = new Date();
+        const timeDifferenceInSeconds = Math.floor((currentTime - createdAt) / 1000);
+
+        if (timeDifferenceInSeconds > 3600) {
+            // Nếu đơn hàng được tạo hơn 1 giờ trước, không hiển thị
+            return;
+        }
         const timeAgo = timeSince(e.order.created_at);
 
         // Tạo HTML cho thông báo
@@ -45,11 +54,11 @@ window.Echo.channel('orders-channel')
 // Cập nhật thời gian trôi qua cho các thông báo mỗi phút
 setInterval(function () {
     const allNotifications = document.querySelectorAll('.recent-purchase');
-    
+
     allNotifications.forEach(notification => {
         const createdAt = notification.getAttribute('data-created-at');
         const timeAgo = timeSince(createdAt);
-        
+
         // Cập nhật lại thời gian đã trôi qua
         notification.querySelector('.time-ago').innerText = timeAgo;
     });

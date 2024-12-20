@@ -27,6 +27,14 @@ class Order extends Model
         self::STATUS_HUY_DON_HANG => 'Hủy đơn hàng',
         self::STATUS_HOAN_THANH => 'Hoàn thành',
     ];
+
+    const PAYMENT_STATUS_UNPAID = 0;
+    const PAYMENT_STATUS_PAID = 1;
+
+    const PAYMENT_STATUS_NAMES = [
+        self::PAYMENT_STATUS_UNPAID => 'Chưa thanh toán',
+        self::PAYMENT_STATUS_PAID => 'Đã thanh toán',
+    ];
     const PAYMENT_METHOD_COD = 1;
     const PAYMENT_METHOD_VNPAY = 2;
     const PAYMENT_METHOD_MOMO = 3;
@@ -54,6 +62,7 @@ class Order extends Model
         'total_price',
         'discount_amount',
         'payment_method',
+        'payment_status',
     ];
 
     protected $table = 'orders';
@@ -102,6 +111,18 @@ class Order extends Model
     {
         return self::PAYMENT_METHOD_NAMES[$this->payment_method] ?? 'Phương thức thanh toán không xác định';
     }
+    public function getPaymentStatusNameAttribute()
+    {
+        // Kiểm tra nếu phương thức thanh toán là VNPAY (2) hoặc MOMO (3)
+        // Hoặc trạng thái đơn hàng là Giao hàng thành công (5) hoặc Hoàn thành (6)
+        if (in_array($this->payment_method, [self::PAYMENT_METHOD_VNPAY, self::PAYMENT_METHOD_MOMO]) || 
+            in_array($this->status, [self::STATUS_GIAO_HANG_THANH_CONG, self::STATUS_HOAN_THANH])) {
+            return self::PAYMENT_STATUS_PAID; // Đã thanh toán
+        }
+    
+        return self::PAYMENT_STATUS_UNPAID; // Chưa thanh toán
+    }
+    
 
     // Lấy tất cả các đánh giá liên quan đến các sản phẩm trong đơn hàng
     public function reviews()

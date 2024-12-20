@@ -2,16 +2,19 @@
 
 return [
     'index' => [
-        'title' => 'Quản lý thành viên',
-        'table' => 'Danh sách thành viên',
+        'title' => 'Quản lý nhân viên',
+        'table' => 'Danh sách nhân viên',
     ],
     'create' => [
-        'title' => 'Thêm mới thành viên',
+        'title' => 'Thêm mới nhân viên',
     ],
     'edit' => [
-        'title' => 'Cập nhật thành viên',
+        'title' => 'Cập nhật nhân viên',
     ],
     'delete' => [
-        'title' => 'Xóa thành viên',
+        'title' => 'Xóa nhân viên',
+    ],
+    'profile' => [
+        'title' => 'Thông tin tài khoản',
     ],
 ];

@@ -3,7 +3,7 @@
         <thead>
         <tr>
             <th>
-                <input type="checkbox" value="" id="checkAll" class="input-checkbox">
+                STT
             </th>
             <th class="text-center" style="width:100px;">Ảnh</th>
             <th>Họ Tên</th>
@@ -17,13 +17,13 @@
         </thead>
         <tbody>
             @if (isset($users) && is_object($users))
-                @foreach($users as $user)
+                @foreach($users as $key => $user)
                 @if ($user->user_catalogues->id == 3) 
                     @continue; 
                 @endif
                 <tr>
                     <td>
-                        <input type="checkbox" value="{{ $user->id }}" class="input-checkbox checkBoxItem">
+                        {{ $key + 1}}
                     </td>
                     <td class="text-center">
                         <span><img class="image img-cover" src="{{ $user->image }}" alt=""></span>
@@ -44,7 +44,7 @@
                     <td class="text-center">
                         <a href="{{ route('user.edit', $user->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
 
-                        <a href="{{ route('user.delete', $user->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                        {{-- <a href="{{ route('user.delete', $user->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
                     </td>
                 </tr>
                 @endforeach

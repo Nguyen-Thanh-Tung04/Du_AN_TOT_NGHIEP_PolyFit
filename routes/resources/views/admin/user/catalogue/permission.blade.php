@@ -15,7 +15,7 @@
                                 <th></th>
                                 @foreach ($userCatalogues as 
                                 $userCatalogue)
-                                @if ($userCatalogue->id == 3)
+                                @if ($userCatalogue->id == 1 || $userCatalogue->id == 3)
                                     @continue
                                 @endif
                                 <th class="text-center">{{ $userCatalogue->name }}</th>
@@ -25,7 +25,7 @@
                             <tr>
                                 <td><a href="" class="uk-flex uk-flex-middle uk-flex-space-between">{{ $permission->name }}</a></td>
                                 @foreach ($userCatalogues as $userCatalogue)
-                                @if ($userCatalogue->id == 3)
+                                @if ($userCatalogue->id == 1 || $userCatalogue->id == 3)
                                     @continue
                                 @endif
                                 <td>

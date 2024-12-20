@@ -9,10 +9,7 @@
                 <div class="ec-pro-list-top d-flex">
                     <div class="col-md-6 ec-grid-list">
                         <div class="ec-gl-btn">
-                            <a href="{{ route('home.shop') }}">
-                                <button class="btn btn-grid active"><i class="fi-rr-apps"></i></button>
-                            </a>
-                            <button class="btn btn-list"><i class="fi-rr-list"></i></button>
+                            <button class="btn btn-list active"><i class="fi-rr-list"></i></button>
                         </div>
                     </div>
                     <div class="col-md-6 ec-sort-select">
@@ -211,7 +208,6 @@
         </div>
 
     </div>
-    </div>
 </section>
 
 
@@ -244,6 +240,11 @@
         function updateURL() {
             let params = new URLSearchParams();
 
+            let search = $('#search-input').val();
+            if (search) {
+                params.set('search', search);
+            }
+
             let categories = [];
             $('.filter-category:checked').each(function() {
                 categories.push($(this).val());
@@ -273,6 +274,15 @@
                 params.set('sort', sortOption);
             }
 
+            let minPrice = parseNumber($('#min_price').val());
+            let maxPrice = parseNumber($('#max_price').val());
+
+            if (minPrice) params.set('min_price', minPrice);
+            else params.delete('min_price');
+
+            if (maxPrice) params.set('max_price', maxPrice);
+            else params.delete('max_price');
+
             if (params.toString()) {
                 window.location.search = params.toString();
             } else {
@@ -292,7 +302,7 @@
             if (maxPrice) params.set('max_price', maxPrice);
             else params.delete('max_price');
 
-            window.location.search = params.toString();
+            window.location.search = params.toString()
         }
 
 

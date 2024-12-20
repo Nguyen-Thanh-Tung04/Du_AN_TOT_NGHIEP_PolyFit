@@ -14,7 +14,7 @@
                             @if(isset($user->image))
                             <img src="{{ $checkUrlImg }}" class="rounded-circle user_img">
                             @else
-                            <img src="{{ asset('userfiles\thumb\Images\avata_null.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
+                            <img src="{{asset('theme/client/assets/images/whatsapp/admin.jpg') }}" class="rounded-circle user_img_msg" alt="Profile image">
                             @endif
                             <!-- <span class="online_icon"></span> -->
                         </div>

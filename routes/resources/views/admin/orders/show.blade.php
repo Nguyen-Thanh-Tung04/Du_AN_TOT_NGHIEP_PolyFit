@@ -56,6 +56,8 @@
                                         <li>Ghi chú: <b>{{ $donHang->note }}</b></li>
                                         <li>Trạng thái: <b>{{ $trangThaiDonHang[$donHang->status] ?? 'Trạng thái không xác định' }}</b></li>
                                         <li>Phương thức thanh toán: <b>{{ $trangThaiThanhToan[$donHang->payment_method] ?? 'Phương thức không xác định' }}</b></li>
+                                        <li>Trạng thái thanh toán: <b>{{ $donHang->paymentStatusName == 1 ? 'Đã thanh toán' : 'Chưa thanh toán' }}</b></li>
+
                                         <li>Tiền ship: <b>{{ number_format($donHang->shipping_cost, 0, '', '.') }} đ</b></li>
                                         <li>Giảm giá: <b>{{ number_format($donHang->discount_amount, 0, '', '.') }} đ</b></li>
                                         <li>Tổng tiền: <b class="fs-5 text-danger">{{ number_format($donHang->total_price, 0, '', '.') }} đ</b></li>
@@ -68,6 +70,7 @@
             </div>
         </div>
     </div>
+    
 
     <div class="row">
         <div class="col-lg-12">

@@ -13,6 +13,11 @@
             <span class="m-r-sm text-muted welcome-message">Chào mừng bạn đến với trang quản trị</span>
         </li>
 
+        <li>
+            <a href="{{ route('user.profile', Auth::id()) }}">
+                <i class="fa fa-sign-out"></i> Tài khoản
+            </a>
+        </li>
 
         <li>
             <a href="{{ route('auth.logout') }}">

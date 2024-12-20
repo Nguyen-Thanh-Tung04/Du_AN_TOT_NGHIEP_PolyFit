@@ -15,27 +15,47 @@ class ChatController extends Controller
     {
         $authUserId = Auth::user()->id; // ID người dùng hiện tại
         $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
-        $query = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
-            ->where('message_private.created_at', function ($query) {
-                $query->selectRaw('MAX(created_at)')
-                    ->from('message_private as mp_sub')
-                    ->whereColumn('mp_sub.user_send', 'message_private.user_send');
-            })
-            ->where('users.id', '<>', Auth::user()->id)
-            ->orderByDesc('message_private.created_at')
-            ->select(
-                'message_private.user_send',
-                'message_private.message',
-                'message_private.is_read',
-                'message_private.created_at',
-                'users.id as user_id',
-                'users.name as user_name',
-                'users.image as user_image'
-            );
+        // $query = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
+        //     ->where('message_private.created_at', function ($query) {
+        //         $query->selectRaw('MAX(created_at)')
+        //             ->from('message_private as mp_sub')
+        //             ->whereColumn('mp_sub.user_send', 'message_private.user_send');
+        //     })
+        //     ->where('users.id', '<>', Auth::user()->id)
+        //     ->orderByDesc('message_private.created_at')
+        //     ->select(
+        //         'message_private.user_send',
+        //         'message_private.message',
+        //         'message_private.is_read',
+        //         'message_private.created_at',
+        //         'users.id as user_id',
+        //         'users.name as user_name',
+        //         'users.image as user_image'
+        //     );
         // Logic hiển thị tùy theo vai trò
         if ($authUserRole === 1) {
-            // Nếu là admin: Hiển thị tất cả tài khoản users đã nhắn tin trên hệ thống hoặc nhắn cho nhân viên mà k cần phải check 
-            $users = $query
+            $users = ChatPrivateModel::join('users as sender', 'message_private.user_send', '=', 'sender.id') // Join bảng users (người gửi)
+                ->join('users as receiver', 'message_private.user_reciever', '=', 'receiver.id') // Join bảng users (người nhận)
+                ->where('message_private.created_at', function ($query) {
+                    $query->selectRaw('MAX(created_at)') // Lấy tin nhắn mới nhất
+                        ->from('message_private as mp_sub')
+                        ->whereColumn('mp_sub.user_send', 'message_private.user_send')
+                        ->whereColumn('mp_sub.user_reciever', 'message_private.user_reciever');
+                })
+                ->where('sender.id', '<>', Auth::user()->id) // Loại trừ người dùng hiện tại
+                ->where('receiver.user_catalogue_id', '2')
+                ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian tạo tin nhắn giảm dần
+                ->select(
+                    'sender.id as sender_id',
+                    'sender.name as sender_name',
+                    'sender.image as sender_image',
+                    'receiver.id as receiver_id',
+                    'receiver.name as receiver_name',
+                    'receiver.image as receiver_image',
+                    'message_private.message',
+                    'message_private.is_read',
+                    'message_private.created_at',
+                )
                 ->get();
         } else {
             // Nếu là nhân viên: Chỉ hiển thị các user đã nhắn tin với tài khoản nhân viên hiện tại
@@ -57,11 +77,18 @@ class ChatController extends Controller
                     DB::raw('(SELECT created_at FROM message_private 
                           WHERE (user_send = users.id AND user_reciever = ' . $authUserId . ') 
                              OR (user_reciever = users.id AND user_send = ' . $authUserId . ') 
-                          ORDER BY created_at DESC LIMIT 1) as created_at') // Lấy thời gian tạo tin nhắn gần nhất
+                          ORDER BY created_at DESC LIMIT 1) as created_at'), // Lấy thời gian tạo tin nhắn gần nhất
+                    DB::raw('
+                          (SELECT is_read 
+                           FROM message_private 
+                           WHERE (user_send = users.id AND user_reciever = ' . $authUserId . ') 
+                              OR (user_reciever = users.id AND user_send = ' . $authUserId . ') 
+                           ORDER BY created_at DESC LIMIT 1
+                          ) as is_read
+                      ')
                 )
                 ->get();
         }
-        // dd($users);
         $user = Auth::user(); // Lấy thông tin tài khoản hiện tại
 
         return view('chat.chat', [
@@ -69,6 +96,52 @@ class ChatController extends Controller
             'user' => $user,
         ]);
     }
+    public function listChatStaff()
+    {
+        $users = User::where('users.user_catalogue_id', '2')
+            ->select(
+                'users.id as user_id',
+                'users.name as user_name',
+                'users.image as user_image',
+                'users.created_at',
+            )
+            ->get();
+        $user = Auth::user(); // Lấy thông tin tài khoản hiện tại
+
+        return view('chat.list-chat-staff', [
+            'users' => $users,
+            'user' => $user,
+        ]);
+    }
+
+    public function show($sender_id, $receiver_id)
+    {
+        $messagePrivate = ChatPrivateModel::join('users as sender', 'message_private.user_send', '=', 'sender.id') // Join bảng users làm sender
+            ->join('users as receiver', 'message_private.user_reciever', '=', 'receiver.id') // Join bảng users làm receiver
+            ->where(function ($query) use ($sender_id, $receiver_id) {
+                $query->where('message_private.user_send', $sender_id)
+                    ->where('message_private.user_reciever', $receiver_id);
+            })
+            ->orWhere(function ($query) use ($sender_id, $receiver_id) {
+                $query->where('message_private.user_send', $receiver_id)
+                    ->where('message_private.user_reciever', $sender_id);
+            })
+            ->select(
+                'sender.id as sender_id',
+                'sender.name as sender_name',
+                'sender.image as sender_image',
+                'receiver.id as receiver_id',
+                'receiver.name as receiver_name',
+                'receiver.image as receiver_image',
+                'message_private.message',
+                'message_private.is_read',
+                'message_private.created_at'
+            )
+            ->get();
+
+        return response()->json(['messagePrivate' => $messagePrivate]);
+    }
+
 
     public function fetchNewMessages(Request $request)
     {
@@ -178,29 +251,26 @@ class ChatController extends Controller
             ->update(['is_read' => 1]);
         $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
 
-        // Truy vấn chung
-        $query = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id') // Join bảng users với bảng message_private
-            ->where('message_private.created_at', function ($query) {
-                $query->selectRaw('MAX(created_at)')
-                    ->from('message_private as mp_sub')
-                    ->whereColumn('mp_sub.user_send', 'message_private.user_send'); // So khớp user_send
-            })
-            ->where('users.id', '<>', Auth::user()->id) // Loại trừ người dùng hiện tại
-            ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian tạo tin nhắn giảm dần
-            ->select(
-                'message_private.user_send',
-                'message_private.message',
-                'message_private.is_read',
-                'message_private.created_at',
-                'users.id as user_id',
-                'users.name as user_name',
-                'users.image as user_image'
-            );
         // Logic hiển thị tùy theo vai trò
         if ($authUserRole === 1) {
-            // Nếu là admin: Hiển thị tất cả tài khoản đã nhắn tin
-            $users = $query
-                ->where('users.id', '<>', $authUserId) // Loại trừ chính admin
+            $users = ChatPrivateModel::join('users', 'message_private.user_send', '=', 'users.id')
+                ->where('message_private.user_reciever', $authUserId) // Admin là người nhận
+                ->where('users.user_catalogue_id', '2') // Lọc nhân viên (giả sử 2 là nhân viên)
+                ->whereIn('message_private.id', function ($query) use ($authUserId) {
+                    $query->selectRaw('MAX(id)') // Lấy ID lớn nhất (tin nhắn mới nhất)
+                        ->from('message_private')
+                        ->where('user_reciever', $authUserId) // Chỉ lấy tin nhắn gửi đến admin
+                        ->groupBy('user_send'); // Nhóm theo từng nhân viên
+                })
+                ->select(
+                    'users.id as user_id',
+                    'users.name as user_name',
+                    'users.image as user_image',
+                    'message_private.message',
+                    'message_private.created_at',
+                    'message_private.is_read'
+                )
+                ->orderByDesc('message_private.created_at') // Sắp xếp theo thời gian gần nhất
                 ->get();
         } elseif ($authUserRole === 2) {
             // Nếu là nhân viên: Chỉ hiển thị các user đã nhắn tin với tài khoản nhân viên hiện tại
@@ -222,7 +292,11 @@ class ChatController extends Controller
                     DB::raw('(SELECT created_at FROM message_private 
                           WHERE (user_send = users.id AND user_reciever = ' . $authUserId . ') 
                              OR (user_reciever = users.id AND user_send = ' . $authUserId . ') 
-                          ORDER BY created_at DESC LIMIT 1) as created_at') // Lấy thời gian tạo tin nhắn gần nhất
+                          ORDER BY created_at DESC LIMIT 1) as created_at'), // Lấy thời gian tạo tin nhắn gần nhất
+                    DB::raw('(SELECT is_read FROM message_private 
+                          WHERE (user_send = users.id AND user_reciever = ' . $authUserId . ') 
+                             OR (user_reciever = users.id AND user_send = ' . $authUserId . ') 
+                          ORDER BY created_at DESC LIMIT 1) as is_read') // Lấy thời gian tạo tin nhắn gần nhất
                 )
                 ->get();
         }
