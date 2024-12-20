@@ -12,6 +12,7 @@
             <th>Địa Chỉ</th>
             <th>Vai trò</th>
             <th class="text-center">Tình Trạng</th>
+            <th class="text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody>
