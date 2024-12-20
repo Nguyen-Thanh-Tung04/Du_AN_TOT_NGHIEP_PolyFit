@@ -68,8 +68,11 @@ class AuthController extends Controller
             if ($user->user_catalogue_id == 3) {
                 Auth::logout();
                 return redirect()->route('auth.login')->with('error', 'Tài khoản không hợp lệ.');
+            }elseif(Auth::user()->id != 1) {
+                return redirect()->route('product.index')->with('success', 'Đăng nhập thành công.');
+            } else {
+                return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công.');
             }
-            return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công.');
         }
         return redirect()->route('auth.login')->with('error', 'Email hoặc mật khẩu không chính xác.')->withInput();;
     }
