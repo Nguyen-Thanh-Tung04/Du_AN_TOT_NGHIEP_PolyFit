@@ -90,10 +90,10 @@ Route::get('/contact', function () {
     return view('client.page.contact');
 });
 
-Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
-Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
-Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile');
-Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile');
+Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile')->middleware('checkLoginClient');
+Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile')->middleware('checkLoginClient');
+Route::get('/account', [ProfileController::class, 'listProfile'])->name('listProfile')->middleware('checkLoginClient');
+Route::put('/updateAccount/{idUser}', [ProfileController::class, 'updateProfile'])->name('updateProfile')->middleware('checkLoginClient');
 // Route::get('/changePassword/{iduser}',[ProfileController::class,'changePassword'])->name('changePassword');
 // Route::patch('/updatePassword/{idUser}', [UserController::class, 'updatePassword'])->name('updatePassword');
 Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('changePassword');
@@ -272,7 +272,8 @@ Route::prefix('flashsale')->name('flashsale.')->middleware('checkLogin')->group(
 // Login client
 Route::get('login', [AuthController::class, 'login'])
     ->name('auth.client-login');
-Route::post('login-client', [AuthController::class, 'loginclient'])
+    
+Route::post('login-client', [AuthController::class, 'loginClient'])
     ->name('auth.login-client');
 
 // Login admin
