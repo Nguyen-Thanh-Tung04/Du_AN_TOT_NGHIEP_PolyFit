@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\AutoCompleteOrderStatus;
 use App\Mail\OrderCanceled;
+use App\Models\FlashSaleProduct;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -129,6 +130,22 @@ class OrderController extends Controller
                 foreach ($order->orderItems as $item) {
                     $variant = $item->variant;
                     $variant->update(['quantity' => $variant->quantity + $item->quantity]);
+
+                    $flashSaleProduct = FlashSaleProduct::query()
+                        ->where('variant_id', $variant->id)
+                        ->whereHas('flashSale', function ($query) {
+                            $query->where('date', now()->toDateString())
+                                ->where(function ($query) {
+                                    $currentHour = now()->hour;
+                                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                                });
+                        })
+                        ->first();
+
+                    if ($flashSaleProduct) {
+                        $flashSaleProduct->update(['quantity' => $flashSaleProduct->quantity + $item->quantity]);
+                    }
                 }
 
                 if ($order->voucher) {
