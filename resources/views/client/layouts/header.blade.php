@@ -100,7 +100,7 @@
                     <div class="align-self-center">
                         <div class="header-search">
                             <form class="ec-btn-group-form" action="{{ route('search') }}" method="GET">
-                                <input class="form-control ec-search-bar" name="search" placeholder="Tìm kiếm sản phẩm ..." type="text">
+                                <input class="form-control ec-search-bar" id="search-input" name="search" placeholder="Tìm kiếm sản phẩm ..." value="{{ request()->search }}" type="text">
                                 <button class="submit" type="submit" aria-label="Search"><i class="fi-rr-search"></i></button>
                             </form>
                         </div>

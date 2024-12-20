@@ -25,6 +25,14 @@ class ProductCatalogueController
                 $q->where('quantity', '>', 0);
             });
 
+        if ($request->has('search')) {
+            $search = $request->category;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
         // Tạo danh sách màu sắc và kích cỡ dựa trên các biến thể còn hàng
         $colorIds = [];
         $sizeIds = [];
@@ -35,6 +43,8 @@ class ProductCatalogueController
 
         $colors = Color::whereIn('id', $colorIds)->get();
         $sizes = Size::whereIn('id', $sizeIds)->get();
+
+
 
         if ($request->has('category')) {
             $categoryIds = explode(',', $request->category);
@@ -93,7 +103,7 @@ class ProductCatalogueController
         }
 
         // Lấy danh sách sản phẩm và xử lý giá hiển thị
-        $products = $query->paginate(10);
+        $products = $query->paginate(12);
 
         foreach ($products as $product) {
             $variant = $product->variants()

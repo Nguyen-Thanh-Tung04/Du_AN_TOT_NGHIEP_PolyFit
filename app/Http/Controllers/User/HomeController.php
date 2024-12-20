@@ -96,13 +96,13 @@ class HomeController extends Controller
             $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
         }
 
-       // Tính phần trăm bán chạy cho từng sản phẩm
-       foreach ($bestSellingProducts as $product) {
-        // Tính số lượng tồn kho ban đầu
-        $initial_stock = $product->total_sold + $product->total_quantity;
-        // Tính tỷ lệ bán chạy
-        $product->progress = $initial_stock > 0 ? min(($product->total_sold / $initial_stock) * 100, 100) : 0;
-    }
+        // Tính phần trăm bán chạy cho từng sản phẩm
+        foreach ($bestSellingProducts as $product) {
+            // Tính số lượng tồn kho ban đầu
+            $initial_stock = $product->total_sold + $product->total_quantity;
+            // Tính tỷ lệ bán chạy
+            $product->progress = $initial_stock > 0 ? min(($product->total_sold / $initial_stock) * 100, 100) : 0;
+        }
 
         $banners = Banner::where('is_active', 1)->get();
 
@@ -251,7 +251,7 @@ class HomeController extends Controller
         }
 
         // Phân trang kết quả tìm kiếm
-        $products = $query->paginate(10);
+        $products = $query->paginate(12);
 
         // Tính giá bán và giá niêm yết tối thiểu cho từng sản phẩm
         foreach ($products as $product) {
