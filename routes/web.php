@@ -159,7 +159,7 @@ Route::get('huongdev', function () {
 // BACKEND ROUTES
 Route::get('dashboard/index', [DashboardController::class, 'index'])
     ->name('dashboard.index')
-    ->middleware('logined');
+    ->middleware('logined', 'checkModulePermission:dashboard.index');
 Route::post('dashboard/index', [DashboardController::class, 'statistical_sale'])
     ->name('dashboard.post')
     ->middleware('logined');
@@ -315,8 +315,7 @@ Route::prefix('user/catalogue/')->name('user.catalogue.')->middleware('checkLogi
         ->name('index')
         ->middleware('checkModulePermission:user.catalogue.index');
     Route::get('create', [UserCatalogueController::class, 'create'])
-        ->name('create')
-        ->middleware('checkModulePermission:user.catalogue.create');
+        ->name('create');
     Route::post('store', [UserCatalogueController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [UserCatalogueController::class, 'edit'])
@@ -325,13 +324,11 @@ Route::prefix('user/catalogue/')->name('user.catalogue.')->middleware('checkLogi
     Route::post('{id}/update', [UserCatalogueController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [UserCatalogueController::class, 'delete'])
-        ->name('delete')
-        ->middleware('checkModulePermission:user.catalogue.delete');
+        ->name('delete');
     Route::delete('{id}/destroy', [UserCatalogueController::class, 'destroy'])
         ->name('destroy');
     Route::get('permission', [UserCatalogueController::class, 'permission'])
-        ->name('permission')
-        ->middleware('checkModulePermission:user.catalogue.permission');
+        ->name('permission');
     Route::post('updatePermission', [UserCatalogueController::class, 'updatePermission'])
         ->name('updatePermission');
 });
