@@ -141,11 +141,11 @@
                         </td> 
                         <td class="text-center">
                             <a href="{{ route('banner.edit', $banner->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                            <form action="{{ route('banner.delete', $banner->id) }}" method="POST" style="display: inline-block;">
+                            {{-- <form action="{{ route('banner.delete', $banner->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button>
-                            </form>
+                            </form> --}}
                         </td>
                     </tr>
                 @endforeach

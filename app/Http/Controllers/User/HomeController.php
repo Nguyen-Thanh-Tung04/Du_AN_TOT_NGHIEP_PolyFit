@@ -96,10 +96,13 @@ class HomeController extends Controller
             $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
         }
 
-        // Tính điểm trung bình cho từng sản phẩm và gán vào thuộc tính mới
-        foreach ($bestSellingProducts as $product) {
-            $product->averageScore = $product->averageScore(); // Gọi hàm averageScore() từ Model Product
-        }
+       // Tính phần trăm bán chạy cho từng sản phẩm
+       foreach ($bestSellingProducts as $product) {
+        // Tính số lượng tồn kho ban đầu
+        $initial_stock = $product->total_sold + $product->total_quantity;
+        // Tính tỷ lệ bán chạy
+        $product->progress = $initial_stock > 0 ? min(($product->total_sold / $initial_stock) * 100, 100) : 0;
+    }
 
         $banners = Banner::where('is_active', 1)->get();
 

@@ -168,13 +168,11 @@ class CheckoutController
     {
         $voucherCode = $request->input('voucher_code');
         $totalAmount = $request->input('total_amount');
-        $user = auth()->user();
 
         $voucher = Voucher::where('code', $voucherCode)
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            ->where('min_order_value', '<=', $totalAmount)
-            ->where('max_order_value', '>=', $totalAmount)
+            
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -207,14 +205,14 @@ class CheckoutController
         if ($voucher->min_order_value && $totalAmount < $voucher->min_order_value) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đơn hàng không đủ điều kiện để áp dụng mã voucher này.'
+                'message' => 'Đơn hàng của bạn không đủ giá trị tối thiểu để áp dụng mã voucher này.'
             ]);
         }
 
         if ($voucher->max_order_value && $totalAmount > $voucher->max_order_value) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đơn hàng không đủ điều kiện để áp dụng mã voucher này.'
+                'message' => 'Đơn hàng của bạn vượt mức số tiền cho phép để áp dụng mã voucher này.'
             ]);
         }
 
@@ -242,15 +240,7 @@ class CheckoutController
         // Tính toán tổng tiền sau khi áp dụng giảm giá
         $finalTotal = $totalAmount - $discount;
 
-        // Lưu voucher đã được sử dụng vào bảng trung gian voucher_user
 
-        if ($voucher->users()->where('user_id', $user->id)->exists()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Bạn đã sử dụng voucher này trước đó.'
-            ]);
-        }
-        $voucher->users()->attach($user->id, ['used_at' => now()]);
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng voucher thành công.',
@@ -259,7 +249,6 @@ class CheckoutController
             'voucher' => $voucher,
         ]);
     }
-
 
     public function getAvailableVouchers()
     {
@@ -278,20 +267,10 @@ class CheckoutController
     {
         $totalAmount = 0;
         $productVariants = $request->input('product_variants');
-       
         $productVariantIds = [];
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::where('id', $variant['product_variant_id'])
-            ->with('product')
-            ->first();
-
-            if ($productVariant && $productVariant->product->status == 2) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
-                ], 400);
-            }
+            $productVariant = Variant::find($variant['product_variant_id']);
 
             if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
                 $flashSaleProduct = $productVariant->product->flashSaleProducts()
@@ -323,7 +302,7 @@ class CheckoutController
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Sản phẩm "' . $productVariant->product->name . '" đã hết hàng.',
+                    'message' => 'Sản phẩm đã hết hàng !',
                 ], 400);
             }
         }
@@ -336,6 +315,7 @@ class CheckoutController
         $voucher = Voucher::where('code', $voucherCode)
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
+            
             ->where('quantity', '>', 0)
             ->where('status', 1)
             ->first();
@@ -353,6 +333,16 @@ class CheckoutController
 
 
         $user = Auth::user();
+        if($voucher != null) {
+            if ( $voucher->users()->where('user_id', $user->id)->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn đã sử dụng voucher này trước đó.'
+                ]);
+            }
+            $voucher->users()->attach($user->id, ['used_at' => now()]);
+        }
+        
         $lastOrder = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
 
         if ($lastOrder && $lastOrder->created_at->diffInSeconds(now()) < 10) {
@@ -384,16 +374,7 @@ class CheckoutController
         ]);
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::where('id', $variant['product_variant_id'])
-            ->with('product')
-            ->first();
-
-            if ($productVariant && $productVariant->product->status == 2) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
-                ], 400);
-            }
+            $productVariant = Variant::find($variant['product_variant_id']);
 
             $flashSaleProduct = $productVariant->product->flashSaleProducts()
                 ->where('variant_id', $productVariant->id)
@@ -465,8 +446,8 @@ class CheckoutController
             ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
             ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
         //Send Mail
-        // Mail::to($user->email)->queue(new OrderPlacedMail($order));
-        Session::forget('product_variants');
+        Mail::to($user->email)->queue(new OrderPlacedMail($order));
+
         return response()->json([
             'success' => true,
             'order_id' => $order->id,
@@ -907,7 +888,7 @@ class CheckoutController
                     ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
 
                 //Send Mail
-                // Mail::to($user->email)->queue(new OrderPlacedMail($order));
+                Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
                 // Xóa thông tin trong session
                 session()->forget('checkout_data');

@@ -104,6 +104,10 @@ class OrderController extends Controller
         $newStatus = $request->input('status');
         $statuses = array_keys(Order::STATUS_NAMES);
 
+        if ($currentStatus == Order::STATUS_HUY_DON_HANG) {
+            return redirect()->route('orders.index')->with('error', 'Đơn hàng này đã bị hủy, không thể chuyển trạng thái khác.');
+        }
+
         // Kiểm tra nếu đơn hàng đã bị hủy trước đó
         if ($currentStatus == Order::STATUS_HUY_DON_HANG && $newStatus == Order::STATUS_HUY_DON_HANG) {
             return redirect()->route('orders.index')->with('error', 'Đơn hàng này đã bị hủy trước đó.');
