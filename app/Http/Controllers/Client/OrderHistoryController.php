@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\FlashSaleProduct;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
@@ -78,6 +79,22 @@ class OrderHistoryController extends Controller
                 foreach ($donHang->orderItems as $item) {
                     $variant = $item->variant;
                     $variant->update(['quantity' => $variant->quantity + $item->quantity]);
+
+                    $flashSaleProduct = FlashSaleProduct::query()
+                        ->where('variant_id', $variant->id)
+                        ->whereHas('flashSale', function ($query) {
+                            $query->where('date', now()->toDateString())
+                                ->where(function ($query) {
+                                    $currentHour = now()->hour;
+                                    $query->whereRaw('SUBSTRING_INDEX(time_slot, "-", 1) <= ?', [$currentHour])
+                                        ->whereRaw('SUBSTRING_INDEX(time_slot, "-", -1) > ?', [$currentHour]);
+                                });
+                        })
+                        ->first();
+
+                    if ($flashSaleProduct) {
+                        $flashSaleProduct->update(['quantity' => $flashSaleProduct->quantity + $item->quantity]);
+                    }
                 }
                 if ($donHang->voucher) {
                     $voucher = $donHang->voucher;
