@@ -13,28 +13,29 @@
                         <table class="table table-sm table-striped table-bordered">
                             <tr>
                                 <th></th>
-                                @foreach ($userCatalogues as 
-                                $userCatalogue)
-                                @if ($userCatalogue->id == 1 || $userCatalogue->id == 3)
-                                    @continue
-                                @endif
-                                <th class="text-center">{{ $userCatalogue->name }}</th>
+                                @foreach ($userCatalogues as $userCatalogue)
+                                    @if ($userCatalogue->id == 3)
+                                        @continue
+                                    @endif
+                                    <th class="text-center" {{ $userCatalogue->id == 2 ? 'style=display:none' : '' }}>
+                                        {{ $userCatalogue->name }}
+                                    </th>
                                 @endforeach
                             </tr>
                             @foreach ($permissions as $permission)
                             <tr>
                                 <td><a href="" class="uk-flex uk-flex-middle uk-flex-space-between">{{ $permission->name }}</a></td>
                                 @foreach ($userCatalogues as $userCatalogue)
-                                @if ($userCatalogue->id == 1 || $userCatalogue->id == 3)
-                                    @continue
-                                @endif
-                                <td>
-                                    <input {{ (collect($userCatalogue->permissions)->contains('id', $permission->id) ? 'checked' : '') }} 
-                                    type="checkbox" 
-                                    name="permission[{{ $userCatalogue->id }}][]" 
-                                    value="{{ $permission->id }}" 
-                                    class="form-control">
-                                </td>
+                                    @if ($userCatalogue->id == 3)
+                                        @continue
+                                    @endif
+                                    <td {{ $userCatalogue->id == 1 ? 'style=display:none' : '' }}>
+                                        <input {{ (collect($userCatalogue->permissions)->contains('id', $permission->id) ? 'checked' : '') }}
+                                            type="checkbox" 
+                                            name="permission[{{ $userCatalogue->id }}][]" 
+                                            value="{{ $permission->id }}" 
+                                            class="form-control">
+                                    </td>
                                 @endforeach
                             </tr>
                             @endforeach
