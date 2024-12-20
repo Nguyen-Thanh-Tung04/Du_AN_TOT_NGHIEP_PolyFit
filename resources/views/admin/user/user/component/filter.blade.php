@@ -49,7 +49,9 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới nhân viên</a>
+                    @if (Auth::user()->user_catalogue_id == 1)
+                        <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr-5"></i>Thêm mới nhân viên</a>
+                    @endif
                 </div>
             </div>
         </div>

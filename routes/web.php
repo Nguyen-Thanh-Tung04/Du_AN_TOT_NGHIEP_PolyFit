@@ -140,7 +140,8 @@ Route::get('/momo/return', [CheckoutController::class, 'momoReturn'])->name('mom
 
 // Chat Realtime
 Route::middleware('checkLoginClient')->group(function () {
-    Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat');
+    Route::get('/list-chat', [ChatController::class, 'index'])->name('list-chat')
+    ->middleware('checkModulePermission:listChat.index');
     Route::get('/list-chat-staff', [ChatController::class, 'listChatStaff'])->name('list-chat-staff');
     Route::get('/show-chat/{sender_id}/{receiver_id}', [ChatController::class, 'show'])->name('show');
     Route::post('/chat-private-admin/search', [ChatController::class, 'search']);
@@ -168,13 +169,11 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
         ->name('index')
         ->middleware('checkModulePermission:user.index');
     Route::get('create', [UserController::class, 'create'])
-        ->name('create')
-        ->middleware('checkModulePermission:user.create');
+        ->name('create');
     Route::post('store', [UserController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [UserController::class, 'edit'])
-        ->name('edit')
-        ->middleware('checkModulePermission:user.edit');
+        ->name('edit');
     Route::post('{id}/update', [UserController::class, 'update'])
         ->name('update');
     Route::get('{id}/profile', [UserController::class, 'profile'])
@@ -182,8 +181,7 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
     Route::post('{id}/updateProfile', [UserController::class, 'updateProfile'])
         ->name('updateProfile');
     Route::get('{id}/delete', [UserController::class, 'delete'])
-        ->name('delete')
-        ->middleware('checkModulePermission:user.delete');
+        ->name('delete');
     Route::delete('{id}/destroy', [UserController::class, 'destroy'])
         ->name('destroy');
 });
@@ -200,7 +198,8 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
     Route::post('{id}/update', [MemberController::class, 'update'])
         ->name('update');
     Route::get('{id}/show', [MemberController::class, 'show'])
-        ->name('show');
+        ->name('show')
+        ->middleware('checkModulePermission:guest.detail');
     Route::get('{id}/delete', [MemberController::class, 'delete'])
         ->name('delete')
         ->middleware('checkModulePermission:guest.delete');
@@ -212,21 +211,17 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
 // USER
 Route::prefix('permission/')->name('permission.')->middleware('checkLogin')->group(function () {
     Route::get('index', [PermissionController::class, 'index'])
-        ->name('index')
-        ->middleware('checkModulePermission:permission.index');
+        ->name('index');
     Route::get('create', [PermissionController::class, 'create'])
-        ->name('create')
-        ->middleware('checkModulePermission:permission.create');
+        ->name('create');
     Route::post('store', [PermissionController::class, 'store'])
         ->name('store');
     Route::get('{id}/edit', [PermissionController::class, 'edit'])
-        ->name('edit')
-        ->middleware('checkModulePermission:permission.edit');
+        ->name('edit');
     Route::post('{id}/update', [PermissionController::class, 'update'])
         ->name('update');
     Route::get('{id}/delete', [PermissionController::class, 'delete'])
-        ->name('delete')
-        ->middleware('checkModulePermission:permission.delete');
+        ->name('delete');
     Route::delete('{id}/destroy', [PermissionController::class, 'destroy'])
         ->name('destroy');
 });
@@ -363,8 +358,8 @@ Route::prefix('categories')->name('category.')->middleware('checkLogin')->group(
 // reviews
 Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(function () {
     Route::get('index', [ReviewController::class, 'index'])->name('index')->middleware('checkModulePermission:review.index');
-    Route::get('history', [ReviewController::class, 'history'])->name("history")->middleware('checkModulePermission:review.history');
-    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail')->middleware('checkModulePermission:review.detail');
+    Route::get('history', [ReviewController::class, 'history'])->name("history");
+    Route::get('history_detail/{reviewId}', [ReviewController::class, 'showReviewHistory'])->name('history_detail');
 
     Route::get('{id}/edit', [ReviewController::class, 'edit'])
         ->name('edit')->middleware('checkModulePermission:review.edit');
@@ -373,7 +368,7 @@ Route::prefix('reviews')->name('reviews.')->middleware('checkLogin')->group(func
     Route::get('{id}/delete', [ReviewController::class, 'delete'])
         ->name('delete');
     Route::delete('{id}/destroy', [ReviewController::class, 'destroy'])
-        ->name('destroy')->middleware('checkModulePermission:review.delete');
+        ->name('destroy');
 });
 // Review reply
 Route::post('reviews/{review}/reply', [ReviewController::class, 'storeReply'])->name('reviews.reply');
@@ -383,7 +378,7 @@ Route::prefix('vouchers')->name('vouchers.')->middleware('checkLogin')->group(fu
     Route::get('index', [VoucherController::class, 'index'])->name('index')->middleware('checkModulePermission:voucher.index');
     Route::get('create', [VoucherController::class, 'create'])->name('create')->middleware('checkModulePermission:voucher.create');
     Route::post('store', [VoucherController::class, 'store'])->name('store');
-    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit')->middleware('checkModulePermission:voucher.edit');
+    Route::get('{voucher}/edit', [VoucherController::class, 'edit'])->name('edit');
     Route::put('{voucher}/update', [VoucherController::class, 'update'])->name('update');
     Route::get('{voucher}/delete', [VoucherController::class, 'delete'])->name('delete');
     Route::delete('{voucher}/destroy', [VoucherController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:voucher.delete');
@@ -395,13 +390,13 @@ Route::prefix('banners')->name('banner.')->middleware('checkLogin')->group(funct
     Route::post('store', [BannerController::class, 'store'])->name('store');
     Route::get('edit/{id}', [BannerController::class, 'edit'])->name('edit')->middleware('checkModulePermission:banner.edit');
     Route::put('update/{id}', [BannerController::class, 'update'])->name('update');
-    Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete')->middleware('checkModulePermission:banner.delete');
+    Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete');
 });
 Route::prefix('orders')->name('orders.')->middleware('checkLogin')->group(function () {
     Route::get('index',                 [OrderController::class, 'index'])->name('index')->middleware('checkModulePermission:order.index');
     Route::get('/show/{id}',        [OrderController::class, 'show'])->name('show')->middleware('checkModulePermission:order.detail');
-    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update')->middleware('checkModulePermission:order.edit');
-    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy')->middleware('checkModulePermission:order.delete');
+    Route::put('{id}/update',       [OrderController::class, 'update'])->name('update');
+    Route::delete('{id}/destroy',   [OrderController::class, 'destroy'])->name('destroy');
     Route::get('/export', [OrderController::class, 'exportOrders'])->name('export')->middleware('checkModulePermission:order.export');
     Route::get('/exportPDF/{id}', [OrderController::class, 'exportPDF'])->name('exportPDF');
 });

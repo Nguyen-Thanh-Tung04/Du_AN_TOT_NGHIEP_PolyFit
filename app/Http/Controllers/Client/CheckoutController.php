@@ -270,7 +270,16 @@ class CheckoutController
         $productVariantIds = [];
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::find($variant['product_variant_id']);
+            $productVariant = Variant::where('id', $variant['product_variant_id'])
+            ->with('product')
+            ->first();
+
+            if ($productVariant && $productVariant->product->status == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                ], 400);
+            }
 
             if ($productVariant && $productVariant->quantity >= $variant['quantity']) {
                 $flashSaleProduct = $productVariant->product->flashSaleProducts()
@@ -302,7 +311,7 @@ class CheckoutController
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Sản phẩm đã hết hàng !',
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
                 ], 400);
             }
         }
@@ -374,7 +383,16 @@ class CheckoutController
         ]);
 
         foreach ($productVariants as $variant) {
-            $productVariant = Variant::find($variant['product_variant_id']);
+            $productVariant = Variant::where('id', $variant['product_variant_id'])
+            ->with('product')
+            ->first();
+
+            if ($productVariant && $productVariant->product->status == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sản phẩm "'.$productVariant->product->name.'" đã hết hàng.',
+                ], 400);
+            }
 
             $flashSaleProduct = $productVariant->product->flashSaleProducts()
                 ->where('variant_id', $productVariant->id)
@@ -446,7 +464,7 @@ class CheckoutController
             ->whereIn('variant_id', $productVariantIds) // Giả định rằng bạn có cột variant_id trong bảng giỏ hàng
             ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
         //Send Mail
-        Mail::to($user->email)->queue(new OrderPlacedMail($order));
+        // Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
         return response()->json([
             'success' => true,
@@ -888,7 +906,7 @@ class CheckoutController
                     ->delete(); // Xóa các sản phẩm trong giỏ hàng tương ứng
 
                 //Send Mail
-                Mail::to($user->email)->queue(new OrderPlacedMail($order));
+                // Mail::to($user->email)->queue(new OrderPlacedMail($order));
 
                 // Xóa thông tin trong session
                 session()->forget('checkout_data');
