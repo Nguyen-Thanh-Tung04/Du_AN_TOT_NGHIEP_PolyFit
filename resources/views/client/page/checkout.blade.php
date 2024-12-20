@@ -459,6 +459,13 @@
                                     if (xhr.status === 400) { // Kiểm tra mã lỗi 400
                                         let message = xhr.responseJSON.message;
                                         toastr.error(message || 'Có lỗi xảy ra khi đặt hàng.');
+                                    } else if (xhr.status === 422) { // Kiểm tra mã lỗi 500
+                                        let errors = xhr.responseJSON.errors;
+                                        for (let field in errors) {
+                                            if (errors.hasOwnProperty(field)) {
+                                                toastr.error(errors[field][0]); // Hiển thị lỗi đầu tiên cho mỗi trường
+                                            }
+                                        }
                                     } else {
                                         toastr.error('Có lỗi xảy ra: ' + error);
                                     }
