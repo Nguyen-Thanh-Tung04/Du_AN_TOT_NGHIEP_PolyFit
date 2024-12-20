@@ -112,8 +112,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listOrder as $order)
+                            @foreach ($listOrder as $key => $order)
                                 <tr>
+                                    <td class="text-center">
+                                        {{ $key + 1 }}
+                                    </td>
                                     <td>{{ $order->code }}</td>
                                     <td>{{ $order->full_name }}</td>
                                     <td>{{ $order->phone }}</td>

@@ -5,7 +5,7 @@
             <th class="text-center">
                 STT
             </th>
-            <th>Tên vai trò</th>
+            <th>Tên chức vụ</th>
             <th class="text-center">Số người</th>
             <th class="text-center">Mô tả</th>
             <th class="text-center">Tình Trạng</th>
@@ -29,7 +29,8 @@
                     <td>{{ $userCatalogue->description }}</td>
                     <td class="text-center js-switch-{{ $userCatalogue->id }}">
                         <input type="checkbox" value="{{ $userCatalogue->publish }}"
-                        class="js-switch status "
+                        class="js-switch status " 
+                        {{ ($userCatalogue->id == 1) ? 'disabled' : '' }}
                         data-field="publish"
                         data-model="UserCatalogue"
                         data-modelId="{{ $userCatalogue->id }}"
@@ -38,7 +39,7 @@
                     <td class="text-center">
                         <a href="{{ route('user.catalogue.edit', $userCatalogue->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
 
-                        <a href="{{ route('user.catalogue.delete', $userCatalogue->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                        <!-- <a href="{{ route('user.catalogue.delete', $userCatalogue->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a> -->
                     </td>
                 </tr>
                 @endforeach
