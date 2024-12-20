@@ -104,6 +104,16 @@ class OrderController extends Controller
         $newStatus = $request->input('status');
         $statuses = array_keys(Order::STATUS_NAMES);
 
+        // Kiểm tra nếu đơn hàng đã bị hủy trước đó
+        if ($currentStatus == Order::STATUS_HUY_DON_HANG && $newStatus == Order::STATUS_HUY_DON_HANG) {
+            return redirect()->route('orders.index')->with('error', 'Đơn hàng này đã bị hủy trước đó.');
+        }
+
+        // Kiểm tra trạng thái không quay ngược lại trạng thái trước đó
+        if (array_search($newStatus, $statuses) < array_search($currentStatus, $statuses)) {
+            return redirect()->route('orders.index')->with('error', 'Không thể cập nhật trạng thái lùi về trạng thái trước đó.');
+        }
+
         DB::beginTransaction();
 
         try {
@@ -145,16 +155,6 @@ class OrderController extends Controller
                 }
 
                 $order->update(['status' => $newStatus]);
-
-                // Cập nhật trạng thái thanh toán
-                if ($newStatus == Order::STATUS_GIAO_HANG_THANH_CONG || $newStatus == Order::STATUS_HOAN_THANH) {
-                    $order->payment_status = Order::PAYMENT_STATUS_PAID;
-                } elseif (in_array($order->payment_method, [Order::PAYMENT_METHOD_VNPAY, Order::PAYMENT_METHOD_MOMO])) {
-                    $order->payment_status = Order::PAYMENT_STATUS_PAID;
-                } else {
-                    $order->payment_status = Order::PAYMENT_STATUS_UNPAID;
-                }
-
                 $order->save(); // Lưu lại thay đổi trạng thái thanh toán
 
                 OrderStatusHistory::create([
@@ -178,6 +178,8 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('error', 'Có lỗi xảy ra trong quá trình cập nhật trạng thái đơn hàng.');
         }
     }
+
+
 
 
 
