@@ -1,25 +1,25 @@
 @if (isset($successMessage) || isset($errorMessage))
-    <script type="text/javascript">
-        $(document).ready(function() {
-            @if (isset($successMessage))
-            toastr.success('{{ $successMessage }}', 'Thành công', {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 5000
-            });
-            @endif
-
-            @if (isset($errorMessage))
-            toastr.error('{{ $errorMessage }}', 'Lỗi', {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 5000
-            });
-            @endif
+<script type="text/javascript">
+    $(document).ready(function() {
+        @if(isset($successMessage))
+        toastr.success('{{ $successMessage }}', 'Thành công', {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 5000
         });
-    </script>
+        @endif
+
+        @if(isset($errorMessage))
+        toastr.error('{{ $errorMessage }}', 'Lỗi', {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 5000
+        });
+        @endif
+    });
+</script>
 @endif
 
 <div class="wrapper wrapper-content">
@@ -27,21 +27,9 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-warning pull-right">Xác nhận</span>
-                    <h5>ĐƠN HÀNG CHỜ</h5>
-                </div>
-                <div class="ibox-content">
-                    <a href="{{ route('orders.index') }}"><h1 class="no-margins">{{ isset($totalOrdersConfirm) ? $totalOrdersConfirm : 0 }}</h1></a>
-                    <small>Trên tổng số đơn hàng</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                <span class="label label-success pull-right">
-                    Tháng {{ isset($monthlyOrders[0]->month) ? $monthlyOrders[0]->month : 0 }}
-                </span>
+                    <span class="label label-success pull-right">
+                        Tháng {{ isset($monthlyOrders[0]->month) ? $monthlyOrders[0]->month : 0 }}
+                    </span>
                     <h5>ĐƠN HÀNG TRONG</h5>
                 </div>
                 <div class="ibox-content">
@@ -51,6 +39,21 @@
                     <small>
                         Đơn hàng đã hoàn thành
                     </small>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-warning pull-right">Xác nhận</span>
+                    <h5>ĐƠN HÀNG CHỜ</h5>
+                </div>
+                <div class="ibox-content">
+                    <a href="{{ route('orders.index') }}">
+                        <h1 class="no-margins">{{ isset($totalOrdersConfirm) ? $totalOrdersConfirm : 0 }}</h1>
+                    </a>
+                    <small>Trên tổng số đơn hàng</small>
                 </div>
             </div>
         </div>
@@ -71,12 +74,12 @@
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-danger pull-right">Khách hàng</span>
-                    <h5>TỔNG KHÁCH HÀNG</h5>
+                    <span class="label label-danger pull-right">Đã hủy</span>
+                    <h5>ĐƠN HÀNG</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">{{ isset($totalCustomers) ? $totalCustomers : 0 }}</h1>
-                    <small>Tổng số khách hàng</small>
+                    <small>Trên tổng số đơn hàng</small>
                 </div>
             </div>
         </div>
@@ -134,7 +137,7 @@
                     <div class="row">
                         <div class="col-lg-9">
                             <div>
-                                <canvas id="myChart" ></canvas>
+                                <canvas id="myChart"></canvas>
                             </div>
                             <?php
                             // Giả sử $results đã được khai báo và chứa dữ liệu của bạn
@@ -225,101 +228,134 @@
         <div class="col-lg-8">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>BIỂU ĐỒ THỐNG KÊ LỢI NHUẬN</h5>
+                    <h5>BIỂU ĐỒ THỐNG KÊ LỢI NHUẬN VÀ SỐ LƯỢNG BÁN</h5>
                 </div>
                 <div class="ibox-content">
                     <canvas id="myChart_bar"></canvas>
                     <script>
-                        // Tạo các mảng để lưu trữ nhãn và dữ liệu
-                        const labels = []; // Mảng nhãn cho các sản phẩm
-                        const barData = []; // Dữ liệu cho biểu đồ cột
-                        const lineData = []; // Dữ liệu cho biểu đồ đường
+                        // Tạo các mảng dữ liệu
+                        const labels = []; // Mảng nhãn (Tên sản phẩm + Tháng)
+                        const productNames = []; // Tên sản phẩm
+                        const productColor = []; // Tên sản phẩm
+                        const productSize = []; // Tên sản phẩm
+                        const profitData = []; // Lợi nhuận gộp
+                        const quantityData = []; // Số lượng bán
 
-                        // Kiểm tra xem $grossProfit có tồn tại không
-                        @if (isset($grossProfit) && count($grossProfit) > 0)
-                        // Duyệt qua $grossProfit để lấy tên sản phẩm, lợi nhuận gộp và số lượng
-                        @foreach ($grossProfit as $item)
-                        labels.push('Tháng {{ $item->month }}');
-                        barData.push({{ $item->gross_profit }}); // Thêm lợi nhuận gộp vào dữ liệu cho biểu đồ cột
-                        lineData.push({{ $item->total_quantity }}); // Thêm số lượng vào dữ liệu cho biểu đồ đường
-                        @endforeach
+                        @if(isset($grossProfit) && count($grossProfit) > 0)
+                            @foreach($grossProfit as $item)
+                                labels.push("{{ $item->date }}");
+                                productNames.push("{{ $item->product_name }}");
+                                productColor.push("{{ $item->color_name }}");
+                                productSize.push("{{ $item->size_name }}");
+                                profitData.push({{ $item->gross_profit }});
+                                quantityData.push({{ $item->total_quantity }});
+                            @endforeach
                         @else
-                        // Nếu không có dữ liệu, thêm giá trị mặc định
-                        labels.push('Không có dữ liệu');
-                        barData.push(0); // Giá trị mặc định cho lợi nhuận gộp
-                        lineData.push(0); // Giá trị mặc định cho số lượng bán
+                            labels.push('Không có dữ liệu');
+                            productNames.push(null);
+                            productColor.push(null);
+                            productSize.push(null);
+                            profitData.push(null);
+                            quantityData.push(null);
                         @endif
 
-                        const ctxBar = document.getElementById('myChart_bar').getContext('2d');
-
-                        // Hiển thị biểu đồ
-                        document.getElementById('myChart_bar').style.display = 'block'; // Hiển thị biểu đồ
-
-                        const dataBar = {
+                        // Cấu hình dữ liệu và biểu đồ
+                        const dataMixed = {
                             labels: labels,
-                            datasets: [{
-                                type: 'bar',
-                                label: 'Lợi Nhuận Gộp',
-                                data: barData,
-                                borderColor: 'rgb(255, 99, 132)',
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                yAxisID: 'y', // Chỉ định trục y cho lợi nhuận
-                            }, {
-                                type: 'line',
-                                label: 'Số Lượng Bán',
-                                data: lineData,
-                                fill: false,
-                                borderColor: 'rgb(54, 162, 235)',
-                                yAxisID: 'y1', // Chỉ định trục y cho số lượng
-                            }]
+                            datasets: [
+                                {
+                                    type: 'line', // Biểu đồ đường cho lợi nhuận gộp
+                                    label: 'Lợi Nhuận Gộp (VND)',
+                                    data: profitData,
+                                    fill: false,
+                                    borderColor: 'rgba(255, 99, 132, 1)', // Màu đỏ cho lợi nhuận
+                                    tension: 0.4,
+                                    borderWidth: 2,
+                                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    pointRadius: 5
+                                },
+                                {
+                                    type: 'line', // Biểu đồ đường cho số lượng bán
+                                    label: 'Số Lượng Bán',
+                                    data: quantityData,
+                                    fill: false,
+                                    borderColor: 'rgba(54, 162, 235, 1)', // Màu xanh lam cho số lượng bán
+                                    tension: 0.4,
+                                    borderWidth: 2,
+                                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    pointRadius: 5
+                                },
+                            ],
                         };
 
-                        const configBar = {
-                            type: 'bar',
-                            data: dataBar,
+                        const configMixed = {
+                            type: 'line',
+                            data: dataMixed,
                             options: {
                                 responsive: true,
+                                interaction: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
                                 scales: {
                                     y: {
-                                        beginAtZero: true,
-                                        position: 'left', // Vị trí của trục y
+                                        type: 'linear',
+                                        position: 'left',
                                         title: {
                                             display: true,
-                                            text: 'Lợi Nhuận Gộp'
-                                        }
-                                    },
-                                    y1: {
-                                        beginAtZero: true,
-                                        position: 'right', // Vị trí của trục y cho số lượng
-                                        title: {
-                                            display: true,
-                                            text: 'Số Lượng Bán'
+                                            text: 'Lợi Nhuận Gộp (VND)',
                                         },
+                                        beginAtZero: true,
+                                    },
+                                    yQuantity: {
+                                        type: 'linear',
+                                        position: 'right',
+                                        title: {
+                                            display: true,
+                                            text: 'Số Lượng Bán',
+                                        },
+                                        beginAtZero: true,
                                         grid: {
-                                            drawOnChartArea: false // Không vẽ lưới cho trục này
-                                        }
-                                    }
+                                            drawOnChartArea: false, // Không hiển thị lưới trục số lượng
+                                        },
+                                    },
                                 },
                                 plugins: {
                                     tooltip: {
                                         callbacks: {
                                             title: function(tooltipItems) {
-                                                // Hiển thị thông tin về tháng trong tooltip
-                                                return `Tháng: ${tooltipItems[0].label.split(' - ')[1] || 'N/A'}`; // Tách tháng hoặc N/A nếu không có
+                                                return tooltipItems[0].label; // Hiển thị nhãn
                                             },
                                             label: function(tooltipItem) {
-                                                // Hiển thị thêm thông tin trong tooltip
-                                                return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+                                                const value = tooltipItem.raw;
+                                                const label = tooltipItem.dataset.label;
+                                                const month = tooltipItem.label; // Tháng
+                                                const product = productNames[tooltipItem.dataIndex]; // Tên sản phẩm
+                                                const color = productColor[tooltipItem.dataIndex]; // Màu sắc
+                                                const size = productSize[tooltipItem.dataIndex]; // Kích thước
+
+                                                // Hiển thị thông tin chi tiết trong tooltip
+                                                return `${label}: ${value} - ${product} (${color}, ${size})`;
                                             }
                                         }
+                                    },
+                                    legend: {
+                                        position: 'top',
                                     }
                                 }
                             },
                         };
 
-                        const myChartBar = new Chart(ctxBar, configBar); // Vẽ biểu đồ
+                        // Vẽ biểu đồ
+                        const ctxMixed = document.getElementById('myChart_bar').getContext('2d');
+                        new Chart(ctxMixed, configMixed);
                     </script>
                 </div>
+
             </div>
         </div>
 
@@ -366,13 +402,27 @@
                                         // Nếu có dữ liệu, sử dụng màu sắc phù hợp cho từng trạng thái
                                         foreach ($orderStatus as $status) {
                                             switch ($status->status) {
-                                                case 1: echo "'rgb(255, 205, 86)',"; break;
-                                                case 2: echo "'rgba(75, 192, 192, 0.2)',"; break;
-                                                case 3: echo "'rgb(201, 203, 207)',"; break;
-                                                case 4: echo "'rgb(54, 162, 235)',"; break;
-                                                case 5: echo "'rgb(75, 192, 192)',"; break;
-                                                case 6: echo "'rgb(255, 99, 99)',"; break;
-                                                default: echo "'rgb(0, 0, 0)',"; break;
+                                                case 1:
+                                                    echo "'rgb(255, 205, 86)',";
+                                                    break;
+                                                case 2:
+                                                    echo "'rgba(75, 192, 192, 0.2)',";
+                                                    break;
+                                                case 3:
+                                                    echo "'rgb(201, 203, 207)',";
+                                                    break;
+                                                case 4:
+                                                    echo "'rgb(54, 162, 235)',";
+                                                    break;
+                                                case 5:
+                                                    echo "'rgb(75, 192, 192)',";
+                                                    break;
+                                                case 6:
+                                                    echo "'rgb(255, 99, 99)',";
+                                                    break;
+                                                default:
+                                                    echo "'rgb(0, 0, 0)',";
+                                                    break;
                                             }
                                         }
                                     } else {
@@ -438,15 +488,15 @@
                                 <div class="col-lg-12">
                                     <table class="table table-hover margin bottom">
                                         <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">STT</th>
-                                            <th class="text-center">Email</th>
-                                            <th >Trạng Thái</th>
-                                            <th class="text-center">Thời Gian</th>
-                                        </tr>
+                                            <tr>
+                                                <th style="width: 1%" class="text-center">STT</th>
+                                                <th class="text-center">Email</th>
+                                                <th>Trạng Thái</th>
+                                                <th class="text-center">Thời Gian</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($latestUsers as $latestUser)
+                                            @foreach($latestUsers as $latestUser)
                                             <tr>
                                                 <td class="text-center">{{ $latestUser->id }}</td>
                                                 <td class="text-center">{{ $latestUser->email }}</td>
@@ -458,7 +508,7 @@
 
                                                 <td class="text-center">{{ $latestUser->created_at }}</td>
                                             </tr>
-                                        @endforeach
+                                            @endforeach
 
                                         </tbody>
                                     </table>
@@ -490,16 +540,16 @@
                                 <div class="col-lg-12">
                                     <table class="table table-hover margin bottom">
                                         <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">STT</th>
-                                            <th style="width: 150px">Thông Tin</th>
-                                            <th class="text-center">Tổng Tiền</th>
-                                            <th class="text-center">Trạng Thái</th>
-                                            <th class="text-center">Thời Gian</th>
-                                        </tr>
+                                            <tr>
+                                                <th style="width: 1%" class="text-center">STT</th>
+                                                <th style="width: 150px">Thông Tin</th>
+                                                <th class="text-center">Tổng Tiền</th>
+                                                <th class="text-center">Trạng Thái</th>
+                                                <th class="text-center">Thời Gian</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($latestOrders as $latestOrder)
+                                            @foreach($latestOrders as $latestOrder)
                                             <tr>
                                                 <td class="text-center">{{ $latestOrder->id }}</td>
                                                 <td>
@@ -512,26 +562,26 @@
                                                 <td class="text-center">{{ number_format($latestOrder->total_price, 0, ',', '.') }} VNĐ</td>
                                                 <td class="text-center">
                                                     @php
-                                                        // Định nghĩa các trạng thái và màu sắc tương ứng
-                                                        $statuses = [
-                                                            1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
-                                                            2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
-                                                            3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
-                                                            4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
-                                                            5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
-                                                            6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
-                                                        ];
+                                                    // Định nghĩa các trạng thái và màu sắc tương ứng
+                                                    $statuses = [
+                                                    1 => ['label' => 'Chờ xác nhận', 'color' => 'label-warning'], // Waiting for confirmation
+                                                    2 => ['label' => 'Đã xác nhận', 'color' => 'label-success'], // Confirmed
+                                                    3 => ['label' => 'Đang chuẩn bị', 'color' => 'label-info'], // Preparing
+                                                    4 => ['label' => 'Đang vận chuyển', 'color' => 'label-secondary'], // In transit
+                                                    5 => ['label' => 'Đã giao hàng', 'color' => 'label-primary'], // Delivered
+                                                    6 => ['label' => 'Hủy đơn hàng', 'color' => 'label-danger'] // Order cancelled
+                                                    ];
                                                     @endphp
                                                     @php
-                                                        // Lấy trạng thái tương ứng
-                                                        $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
+                                                    // Lấy trạng thái tương ứng
+                                                    $currentStatus = $statuses[$latestOrder->status] ?? ['label' => 'Không xác định', 'color' => 'label-default'];
                                                     @endphp
                                                     <span class="label {{ $currentStatus['color'] }}">{{ $currentStatus['label'] }}</span>
                                                 </td>
 
                                                 <td class="text-center">{{ $latestOrder->created_at }}</td>
                                             </tr>
-                                        @endforeach
+                                            @endforeach
 
                                         </tbody>
                                     </table>

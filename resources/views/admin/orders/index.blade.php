@@ -113,22 +113,23 @@
                         </thead>
                         <tbody>
                             @foreach ($listOrder as $key => $order)
-                            <tr>
-                                <td class="text-center">
-                                    {{ $key + 1 }}
-                                </td>
-                                <td>{{ $order->code }}</td>
-                                <td>{{ $order->full_name }}</td>
-                                <td>{{ $order->phone }}</td>
-                                <td>{{ number_format($order->total_price) }} VNĐ</td>
-                                <td>
-                                    <form action="{{ route('orders.update', $order->id) }}" method="POST" class="form-status">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="status" class="form-control mr-10"
-                                            data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
-                                            @foreach ($orderStatuses as $key => $value)
-                                            <option value="{{ $key }}"
+                                <tr>
+                                    <td class="text-center">
+                                        {{ $key + 1 }}
+                                    </td>
+                                    <td>{{ $order->code }}</td>
+                                    <td>{{ $order->full_name }}</td>
+                                    <td>{{ $order->phone }}</td>
+                                    <td>{{$order->payment_method_name}}</td>
+                                    <td>{{ number_format($order->total_price) }} VNĐ</td>
+                                    <td>
+                                        <form action="{{ route('orders.update', $order->id) }}" method="POST" class="form-status">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="status" class="form-control mr-10"
+                                                data-default-value="{{ $order->status }}" onchange="confirmSubmit(this)">
+                                                @foreach ($orderStatuses as $key => $value)
+                                                <option value="{{ $key }}" 
                                                 {{ $order->status == $key ? 'selected' : '' }}
                                                 {{ ($key == $completedOrder) ? 'disabled' : '' }}>
                                                 {{ $value }}
