@@ -95,6 +95,30 @@ class UserController extends Controller
         ));
     }
 
+    public function profile($id) {
+        $user = $this->userRepository->findById($id);
+        $userCatalogue = $this->userCatalogueRepository->all();
+        $provinces = $this->provinceRepository->all();
+
+        $template = 'admin.user.user.profile';
+        $config = $this->configData();
+        $config['seo'] = config('apps.user');
+        $config['method'] = 'profile';
+        return view('admin.dashboard.layout', compact(
+            'template',
+            'user',
+            'userCatalogue',
+            'provinces',
+            'config',
+        ));
+    }
+    public function updateProfile($id, UpdateUserRequest $request) {
+        if ($this->userService->update($id, $request)) {
+            return redirect()->back()->with('success', 'Cập nhật bản ghi thành công.');
+        }
+        return redirect()->back()->with('error', 'Cập nhật bản ghi thất bại. Hãy thử lại.');
+    }
+
     public function update($id, UpdateUserRequest $request) {
         if ($this->userService->update($id, $request)) {
             return redirect()->route('user.index')->with('success', 'Cập nhật bản ghi thành công.');

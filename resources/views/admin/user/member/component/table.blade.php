@@ -43,6 +43,10 @@
                                data-modelId="{{ $member->id }}"
                             {{ ($member->publish == 1) ? 'checked' : '' }}/>
                     </td>
+                    <td class="text-center">
+                        {{-- <a href="{{ route('member.delete', $member->id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
+                        <a href="{{ route('member.show', $member->id) }}" class="btn btn-warning"><i class="fa fa-eye"></i></a>
+                    </td>
                 </tr>
                 @endforeach
             @endif
