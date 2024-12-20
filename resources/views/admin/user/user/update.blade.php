@@ -157,7 +157,7 @@
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Thành Phố</label>
-                                    <select name="province_id" class="form-control setupSelect2 province location" data-target="districts">
+                                    <select {{ ($config['method'] == 'create') ? '' : 'disabled' }} name="province_id" class="form-control setupSelect2 province location" data-target="districts">
                                         <option value="0">[Chọn Thành Phố]</option>
                                         @if (isset($provinces))
                                             @foreach($provinces as $province)
@@ -174,7 +174,7 @@
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Quận/Huyện</label>
-                                    <select name="district_id" class="form-control districts setupSelect2 location" data-target="wards">
+                                    <select {{ ($config['method'] == 'create') ? '' : 'disabled' }} name="district_id" class="form-control districts setupSelect2 location" data-target="wards">
                                         <option value="0">[Chọn Quận/Huyện]</option>
                                     </select>
                                 </div>
@@ -184,7 +184,7 @@
                             <div class="col-lg-6 mb-15">
                                 <div class="form-row">
                                     <label class="control-label text-left">Phường/Xã</label>
-                                    <select name="ward_id" class="form-control setupSelect2 wards">
+                                    <select {{ ($config['method'] == 'create') ? '' : 'disabled' }} name="ward_id" class="form-control setupSelect2 wards">
                                         <option value="0">[Chọn Phường/Xã]</option>
                                     </select>
                                 </div>
@@ -193,6 +193,7 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Địa chỉ</label>
                                     <input
+                                        {{ ($config['method'] == 'create') ? '' : 'disabled' }}
                                         type="text"
                                         name="address"
                                         value="{{ old('address', ($user->address) ?? '') }}"
@@ -208,6 +209,7 @@
                                 <div class="form-row">
                                     <label class="control-label text-left">Số điện thoại</label>
                                     <input
+                                        {{ ($config['method'] == 'create') ? '' : 'disabled' }}
                                         type="text"
                                         name="phone"
                                         value="{{ old('phone', ($user->phone) ?? '') }}"

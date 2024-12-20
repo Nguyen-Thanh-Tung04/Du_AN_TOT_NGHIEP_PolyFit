@@ -50,12 +50,12 @@
             </ul>
         </li>
 
-
         <li>
-            <a href="{{ route('auth.logout') }}">
+            <a href="{{ route('user.profile', Auth::id()) }}">
                 <i class="fa fa-sign-out"></i> Tài khoản
             </a>
         </li>
+
         <li>
             <a href="{{ route('auth.logout') }}">
                 <i class="fa fa-sign-out"></i> Đăng xuất

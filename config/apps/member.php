@@ -11,6 +11,9 @@ return [
     'edit' => [
         'title' => 'Cập nhật khách hàng',
     ],
+    'show' => [
+        'title' => 'Chi tiết khách hàng',
+    ],
     'delete' => [
         'title' => 'Xóa khách hàng',
     ],

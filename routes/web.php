@@ -171,6 +171,10 @@ Route::prefix('user/')->name('user.')->middleware('checkLogin')->group(function 
         ->middleware('checkModulePermission:user.edit');
     Route::post('{id}/update', [UserController::class, 'update'])
         ->name('update');
+    Route::get('{id}/profile', [UserController::class, 'profile'])
+        ->name('profile');
+    Route::post('{id}/updateProfile', [UserController::class, 'updateProfile'])
+        ->name('updateProfile');
     Route::get('{id}/delete', [UserController::class, 'delete'])
         ->name('delete')
         ->middleware('checkModulePermission:user.delete');
@@ -189,6 +193,8 @@ Route::prefix('member/')->name('member.')->middleware('checkLogin')->group(funct
         ->name('edit');
     Route::post('{id}/update', [MemberController::class, 'update'])
         ->name('update');
+    Route::get('{id}/show', [MemberController::class, 'show'])
+        ->name('show');
     Route::get('{id}/delete', [MemberController::class, 'delete'])
         ->name('delete')
         ->middleware('checkModulePermission:guest.delete');

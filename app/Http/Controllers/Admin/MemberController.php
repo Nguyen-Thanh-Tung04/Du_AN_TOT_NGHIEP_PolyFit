@@ -92,6 +92,22 @@ class MemberController extends Controller
         ));
     }
 
+    public function show($id) {
+        $user = $this->memberRepository->findById($id);
+        $provinces = $this->provinceRepository->all();
+
+        $template = 'admin.user.member.show';
+        $config = $this->configData();
+        $config['seo'] = config('apps.member');
+        $config['method'] = 'show';
+        return view('admin.dashboard.layout', compact(
+            'template',
+            'user',
+            'provinces',
+            'config',
+        ));
+    }
+
     public function update($id, UpdateMemberRequest $request) {
 //        dd($request);die();
         if ($this->memberService->update($id, $request)) {

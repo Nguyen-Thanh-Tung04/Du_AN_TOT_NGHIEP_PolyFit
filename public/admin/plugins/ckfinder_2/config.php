@@ -249,7 +249,8 @@ $config['ResourceType'][] = Array(
 		'url' => $baseUrl . 'image',
 		'directory' => $baseDir . 'image',
 		'maxSize' => 0,
-		'allowedExtensions' => 'bmp,gif,jpeg,jpg,png, webp, mp4',
+		// Cho phép file có đuôi gì
+		'allowedExtensions' => 'gif,jpeg,jpg,png, webp',
 		'deniedExtensions' => '');
 
 $config['ResourceType'][] = Array(
