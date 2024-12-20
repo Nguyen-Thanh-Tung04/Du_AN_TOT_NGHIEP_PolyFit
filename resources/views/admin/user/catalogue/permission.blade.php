@@ -17,7 +17,7 @@
                                     @if ($userCatalogue->id == 3)
                                         @continue
                                     @endif
-                                    <th class="text-center" {{ $userCatalogue->id == 2 ? 'style=display:none' : '' }}>
+                                    <th class="text-center" {{ $userCatalogue->id == 1 ? 'style=display:none' : '' }}>
                                         {{ $userCatalogue->name }}
                                     </th>
                                 @endforeach
