@@ -23,7 +23,100 @@
 @endif
 
 <div class="wrapper wrapper-content">
+<div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-warning pull-right">
+                        Trong kho
+                    </span>
+                    <h5>TỔNG SẢN PHẨM</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">
+                        {{ isset($totalProduct) ? $totalProduct : 0 }}
+                    </h1>
+                    <small>
+                        Sản phẩm trong hệ thống
+                    </small>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">Ngày {{ isset($dailyRevenue->date) ? $dailyRevenue->date : 0 }}</span>
+                    <h5>TỔNG DOANH THU</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{ isset($dailyRevenue->total_revenue) ? number_format($dailyRevenue->total_revenue) : '0.00' }}</h1>
+                    <small>Tổng doanh thu</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">Hoạt động</span>
+                    <h5>TỔNG NHÂN SỰ</h5>
+                </div>
+                <div class="ibox-content">
+                    <a href="{{ route('orders.index') }}">
+                        <h1 class="no-margins">{{ isset($totalStaff) ? $totalStaff : 0 }}</h1>
+                    </a>
+                    <small>Khách hàng trên hệ thống</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">Hoạt động</span>
+                    <h5>TỔNG KHÁCH HÀNG</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{ isset($totalCustomers) ? $totalCustomers : 0 }}</h1>
+                    <small>Khách hàng trên hệ thống</small>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">
+                        Ngày {{ isset($dailyRevenue->date) ? $dailyRevenue->date : 0 }}
+                    </span>
+                    <h5>TỔNG ĐƠN HÀNG</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">
+                        {{ isset($dailyRevenue->total_orders) ? $dailyRevenue->total_orders : 0 }}
+                    </h1>
+                    <small>
+                        Đơn hàng đã hoàn thành
+                    </small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">Ngày {{ isset($dailyRevenue->date) ? $dailyRevenue->date : 0 }}</span>
+                    <h5>TỔNG LỢI NHUẬN</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{ isset($grossProfitToday) ? number_format($grossProfitToday) : '0.00' }}</h1>
+                    <small>Tổng doanh thu</small>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -38,47 +131,16 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-success pull-right">
-                        Tháng {{ isset($monthlyOrders[0]->month) ? $monthlyOrders[0]->month : 0 }}
-                    </span>
-                    <h5>ĐƠN HÀNG TRONG</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">
-                        {{ isset($monthlyOrders[0]->total_orders) ? $monthlyOrders[0]->total_orders : 0 }}
-                    </h1>
-                    <small>
-                        Đơn hàng đã hoàn thành
-                    </small>
-                </div>
-            </div>
-        </div>
 
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-primary pull-right">Tổng</span>
-                    <h5>TỔNG DOANH THU</h5>
+                    <span class="label label-danger pull-right">Đã hủy</span>
+                    <h5>ĐƠN HÀNG</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{ isset($monthlyOrders[0]->total_revenue) ? number_format($monthlyOrders[0]->total_revenue) : '0.00' }}</h1>
-                    <small>Tổng doanh thu</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-danger pull-right">Khách hàng</span>
-                    <h5>TỔNG KHÁCH HÀNG</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">{{ isset($totalCustomers) ? $totalCustomers : 0 }}</h1>
-                    <small>Tổng số khách hàng</small>
+                    <h1 class="no-margins">{{ isset($totalOrdersCancel) ? $totalOrdersCancel : 0 }}</h1>
+                    <small>Trên tổng số đơn hàng</small>
                 </div>
             </div>
         </div>
@@ -524,12 +586,12 @@
 
     </div>
     <div class="row">
-        <div class="col-lg-6">
+    <div class="col-lg-6">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>TOP 10 KHÁCH HÀNG THÁNG NÀY</h5>
+                            <h5>TOP 10 SẢN PHẨM BÁN CHẠY TRONG THÁNG</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -546,23 +608,24 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 1%" class="text-center">STT</th>
-                                                <th class="text-center">Email</th>
-                                                <th class="text-center">Trạng Thái</th>
-                                                <th class="text-center">Thời Gian</th>
+                                                <th class="text-center">Tên sản phẩm</th>
+                                                <th>Màu sác</th>
+                                                <th>Kích thước</th>
+                                                <th class="text-center">Ngày mua</th>
+                                                <th class="text-center">Thao tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($latestUsers as $latestUser)
+                                            @foreach($bestSellingProducts as $index => $bestSellingProduct)
                                             <tr>
-                                                <td class="text-center">{{ $latestUser->id }}</td>
-                                                <td class="text-center">{{ $latestUser->email }}</td>
-                                                <td>
-                                                    <span class="label {{ $latestUser->publish == 1 ? 'label-primary' : 'label-warning' }}">
-                                                        {{ $latestUser->publish == 1 ? 'Hoạt động' : 'Khóa' }}
-                                                    </span>
-                                                </td>
+                                                <td class="text-center">{{ $index + 1 }}</td>
+                                                <td class="text-center">{{ $bestSellingProduct->product_name }}</td>
+                                                <td class="text-center">{{ $bestSellingProduct->color_name }}</td>
+                                                <td class="text-center">{{ $bestSellingProduct->size_name }}</td>
+                                                <td class="text-center">{{ $bestSellingProduct->sale_date }}</td>
+                                                <td class="text-center">
 
-                                                <td class="text-center">{{ $latestUser->created_at }}</td>
+                                                </td>
                                             </tr>
                                             @endforeach
 
