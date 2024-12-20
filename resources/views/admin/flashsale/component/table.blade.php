@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered">
+    <table class="table table-sm table-striped table-bordered table-pagination">
         <thead>
             <tr>
                 <th class="text-center">Khung giờ</th>
@@ -30,6 +30,7 @@
                     @if ($flashSale['status'] != 'Đã diễn ra')
                     <a href="{{ route('flashsale.edit', $flashSale['id']) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
                     @endif
+                    @if ($flashSale['status'] == 'Sắp diễn ra')
                     <form action="{{ route('flashsale.destroy', $flashSale['id']) }}" method="POST" class="m-0 delete-form" style="display: inline-block;">
                         @csrf
                         @method('DELETE')
@@ -37,6 +38,8 @@
                             <i class="fa fa-trash"></i>
                         </button>
                     </form>
+                    @endif
+
                 </td>
             </tr>
             @endforeach
@@ -46,7 +49,47 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('.flashsale-status').on('change', function() {
+        var tablePagination = $('.table-pagination').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "pageLength": 10,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            language: {
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Xem _MENU_ mục",
+                "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                "sInfoPostFix": "",
+                "sSearch": "Tìm:",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "Đầu",
+                    "sPrevious": "Trước",
+                    "sNext": "Tiếp",
+                    "sLast": "Cuối"
+                }
+            },
+        });
+
+        tablePagination.on('draw', function() {
+            $('.js-switch').each(function() {
+                if (!$(this).next().hasClass('switchery')) {
+                    new Switchery(this, {
+                        color: 'rgb(249, 58, 11)',
+                        size: 'small'
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('change', '.flashsale-status', function() {
             let status = this.checked ? 1 : 0;
             let modelId = $(this).data('modelid');
 
@@ -66,8 +109,7 @@
                 }
             });
         });
-
-        $('.delete-form').on('submit', function(e) {
+        $(document).on('submit', '.delete-form', function(e) {
             e.preventDefault();
             let form = this;
 

@@ -26,7 +26,7 @@ class AuthController extends Controller
     {
         return view('client.page.login');
     }
-    public function loginclient(AuthRequest $request)
+    public function loginClient(AuthRequest $request)
     {
         $credentials = [
             'email' => $request->input('email'),
@@ -37,6 +37,12 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->publish !== 1) {
+                Auth::logout();
+
+                $request->session()->invalidate();
+    
+                $request->session()->regenerateToken();
+                
                 return redirect()
                     ->route('auth.client-login')
                     ->with('error', 'Tài khoản của bạn đang bị khóa hoặc chưa được kích hoạt.');
@@ -62,8 +68,11 @@ class AuthController extends Controller
             if ($user->user_catalogue_id == 3) {
                 Auth::logout();
                 return redirect()->route('auth.login')->with('error', 'Tài khoản không hợp lệ.');
+            }elseif($user->user_catalogue_id == 1) {
+                return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công.');
+            } else {
+                return redirect()->route('product.index')->with('success', 'Đăng nhập thành công.');
             }
-            return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công.');
         }
         return redirect()->route('auth.login')->with('error', 'Email hoặc mật khẩu không chính xác.')->withInput();;
     }

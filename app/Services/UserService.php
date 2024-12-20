@@ -15,18 +15,22 @@ class UserService
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository) {
+    public function __construct(UserRepository $userRepository)
+    {
         $this->userRepository = $userRepository;
     }
 
-    public function getUserCatalogue() {
+    public function getUserCatalogue()
+    {
         $getUserCatalogue = $this->userRepository->getCatalogue(
-            'App\Models\userCatalogue',['id','name']
+            'App\Models\userCatalogue',
+            ['id', 'name']
         );
         return $getUserCatalogue;
     }
 
-    public function paginate($request) {
+    public function paginate($request)
+    {
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
         $perPage = $request->integer('perpage');
@@ -43,7 +47,8 @@ class UserService
         return $users;
     }
 
-    public function create($request) {
+    public function create($request)
+    {
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send', 're_password']);
@@ -57,12 +62,14 @@ class UserService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function update($id, $request) {
+    public function update($id, $request)
+    {
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send']);
@@ -75,12 +82,14 @@ class UserService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         DB::beginTransaction();
         try {
             $user = $this->userRepository->delete($id);
@@ -89,28 +98,33 @@ class UserService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function updateStatus($post = []) {
+    public function updateStatus($post = [])
+    {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $user = $this->userRepository->update($post['modelId'], $payload);
-
+            $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
+            $this->userRepository->update($post['modelId'], $payload);
+            $user = $this->userRepository->findById($post['modelId']);
+            if ($post['value'] == 1) DB::table('sessions')->where('user_id', $user->id)->delete();
             DB::commit();
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function updateStatusAll($post) {
+    public function updateStatusAll($post)
+    {
         DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
@@ -120,18 +134,17 @@ class UserService
         } catch (\Exception $e) {
             DB::rollBack();
 
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    private function convertBirthdayDate($birthday = '') {
+    private function convertBirthdayDate($birthday = '')
+    {
         $formatBirthday = Carbon::createFromFormat('Y-m-d', $birthday);
         $birthday = $formatBirthday->format('Y-m-d H:i:s');
 
         return $birthday;
     }
-
-
-
 }

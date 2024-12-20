@@ -20,73 +20,46 @@ class DashboardController extends Controller
         $template = 'admin.dashboard.home.index';
 
         // Lấy tháng và năm hiện tại
+        $currentDate = Carbon::today();
         $currentMonth = date('m');
         $currentYear = date('Y');
 
-        $authUserId = Auth::user()->id; // ID người dùng hiện tại
-        $authUserRole = Auth::user()->user_catalogue_id; // Vai trò người dùng hiện tại
+        // Truy vấn tổng số đơn chờ xác nhận trong tháng hiện tại
+        $totalProduct = DB::table('products')
+            ->count();
 
-
-        if ($authUserRole === 1) {
-            // Đếm tin nhắn chưa đọc (Admin xem tất cả)
-            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)->count();
-        } else {
-            // Còn Nếu là tk nhân viên: đếm tất nhắn tin chưa đọc với tài khoản nhân viên đó
-            $unreadMessagesCount = ChatPrivateModel::where('is_read', false)
-                ->where(function ($query) use ($authUserId) {
-                    $query->where('user_reciever', $authUserId)
-                        ->orWhere('user_send', $authUserId);
-                })
-                ->count();
-        }
-        // dd($unreadMessagesCount);
         // Truy vấn tổng số đơn chờ xác nhận trong tháng hiện tại
         $totalOrdersConfirm = DB::table('orders')
             ->where('status', 1) // Đơn hàng chờ xác nhận
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
+            ->whereDate('created_at', $currentDate)
             ->count();
 
         // Truy vấn tổng số đơn hàng đã hoàn thành
         $totalOrdersCancel = DB::table('orders')
             ->where('status', 7) // Đơn hàng đã hoàn thành
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
+            ->whereDate('created_at', $currentDate)
             ->count();
 
         // Truy vấn tổng đơn hàng và doanh thu trong tháng này
-        $monthlyOrders = DB::table('orders')
+        $dailyRevenue = DB::table('orders')
             ->select(
-                DB::raw('MONTH(created_at) as month'),
+                DB::raw('DATE(created_at) as date'),
                 DB::raw('COUNT(*) as total_orders'),
-                DB::raw('SUM(total_price) as total_revenue') // Giả sử bạn có cột 'total_price' lưu trữ doanh thu
+                DB::raw('SUM(total_price) as total_revenue')
             )
-            ->where('status', 6) // Đơn hàng đã thanh toán
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        // Truy vấn tổng số khách hàng
-        $totalCustomers = DB::table('users')->count();
+            ->where('status', 6)
+            ->whereDate('created_at', $currentDate)
+            ->groupBy('date')
+            ->first();
 
         // Truy vấn 10 đơn hàng mới nhất trong tháng này
         $latestOrders = DB::table('orders')
+            ->where('status', 1)
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
             ->limit(5) // Lấy 10 đơn hàng mới nhất
             ->get();
-
-        // Truy vấn 10 người dùng mới nhất trong tháng này
-        $latestUsers = DB::table('users')
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
-            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
-            ->limit(10) // Lấy 10 người dùng mới nhất
-            ->get();
-
 
         $orderStatus = DB::table('orders')
             ->select('status', DB::raw('count(*) as total'))
@@ -95,22 +68,34 @@ class DashboardController extends Controller
             ->groupBy('status')
             ->get();
 
-        //        dd($orderStatus);
-        // Nếu không có dữ liệu đơn hàng
-        if ($monthlyOrders->isEmpty()) {
-            return view('admin.dashboard.layout', compact('template', 'config', 'totalOrders', 'totalOrdersConfirm', 'totalCustomers', 'latestOrders', 'orderStatus', 'latestUsers'));
-        }
-        // Truy vấn lợi nhuận gộp
+        $totalCustomers = DB::table('users')
+            ->where('user_catalogue_id', 3)
+            ->count();
+
+        $totalStaff = DB::table('users')
+            ->where('user_catalogue_id', 2)
+            ->count();
+
+        $grossProfitToday = DB::table('order_items')
+            ->join('variants', 'order_items.variant_id', '=', 'variants.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('orders.status', 6) // Chỉ tính đơn hàng đã thanh toán
+            ->whereDate('order_items.created_at', $currentDate) // Lọc theo ngày hiện tại
+            ->select(DB::raw('SUM((order_items.price - variants.purchase_price) * order_items.quantity) as total_gross_profit'))
+            ->value('total_gross_profit'); // Trả về tổng lợi nhuận gộp
+
+
+        // Truy vấn lợi nhuận gộp tháng 
         $grossProfit = DB::table('order_items')
             ->join('variants', 'order_items.variant_id', '=', 'variants.id')
-            ->join('products', 'variants.product_id', '=', 'products.id') // Giả sử variants có trường product_id để liên kết với bảng products
-            ->join('orders', 'order_items.order_id', '=', 'orders.id') // Join bảng orders để lấy trạng thái
-            ->join('colors', 'variants.color_id', '=', 'colors.id') // Join với bảng colors để lấy tên màu sắc
-            ->join('sizes', 'variants.size_id', '=', 'sizes.id') // Join với bảng sizes để lấy tên kích thước
+            ->join('products', 'variants.product_id', '=', 'products.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('colors', 'variants.color_id', '=', 'colors.id')
+            ->join('sizes', 'variants.size_id', '=', 'sizes.id')
             ->select(
                 DB::raw('SUM((order_items.price - variants.purchase_price) * order_items.quantity) as gross_profit'),
                 DB::raw('order_items.variant_id, SUM(order_items.quantity) as total_quantity'),
-                'products.name as product_name', // Chọn tên sản phẩm từ bảng products
+                'products.name as product_name',
                 'colors.name as color_name', // Chọn tên màu sắc từ bảng colors
                 'sizes.name as size_name', // Chọn tên kích thước từ bảng sizes
                 DB::raw('DATE_FORMAT(order_items.created_at, "%d/%m/%Y") as date') // Lấy ngày, tháng và năm từ created_at
@@ -122,21 +107,69 @@ class DashboardController extends Controller
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
 
-        // dd($grossProfit);
+        // Truy vấn sản phẩm bán chạy
+
+        $bestSellingProducts = DB::table('order_items')
+            ->join('variants', 'order_items.variant_id', '=', 'variants.id')
+            ->join('products', 'variants.product_id', '=', 'products.id') // Liên kết sản phẩm
+            ->join('orders', 'order_items.order_id', '=', 'orders.id') // Liên kết đơn hàng
+            ->join('colors', 'variants.color_id', '=', 'colors.id') // Liên kết màu sắc
+            ->join('sizes', 'variants.size_id', '=', 'sizes.id') // Liên kết kích thước
+            ->select(
+                DB::raw('
+            SUM(order_items.quantity) as total_quantity
+        '),
+                'order_items.variant_id', // ID của biến thể
+                'products.name as product_name', // Tên sản phẩm
+                'colors.name as color_name', // Tên màu sắc
+                'sizes.name as size_name', // Tên kích thước
+                DB::raw('
+            DATE_FORMAT(order_items.created_at, "%d/%m/%Y") as sale_date
+        ') // Ngày bán
+            )
+            ->where('orders.status', 6) // Chỉ tính các đơn hàng đã thanh toán
+            ->whereMonth('order_items.created_at', $currentMonth)
+            ->whereYear('order_items.created_at', $currentYear)
+            ->groupBy(
+                'order_items.variant_id',
+                'products.name',
+                'colors.name',
+                'sizes.name',
+                DB::raw('DATE_FORMAT(order_items.created_at, "%d/%m/%Y")')
+            )
+            ->orderBy('total_quantity', 'desc') // Sắp xếp theo số lượng bán
+            ->take(10)
+            ->get();
+
+        $monthlyOrders = DB::table('orders')
+            ->select(
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(*) as total_orders'),
+                DB::raw('SUM(total_price) as total_revenue')
+            )
+            ->where('status', 6) // Đơn hàng đã thanh toán
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
         // Trả về view với dữ liệu
         return view('admin.dashboard.layout', compact(
             'template',
             'config',
-            'monthlyOrders', // Truyền dữ liệu đã tính toán vào view
+            'totalProduct',
+            'bestSellingProducts',
+            'dailyRevenue',
+            'monthlyOrders',
+            'totalCustomers',
+            'totalStaff',
             'totalOrdersConfirm', // Truyền tổng số đơn hàng vào view
             'totalOrdersCancel',
-            'totalCustomers', // Tổng khách hàng
             'latestOrders', // 10 đơn hàng mới nhất
-            'latestUsers',
             'orderStatus', // Trạng thái đơn hàng
             'grossProfit',
-            'unreadMessagesCount'
+            'grossProfitToday'
         ));
     }
 
@@ -148,6 +181,7 @@ class DashboardController extends Controller
         $template1 = 'admin.dashboard.home.index';
 
         // Lấy tháng và năm hiện tại
+        $currentDate = Carbon::today();
         $currentMonth = date('m');
         $currentYear = date('Y');
         $date_start = $request->input('date_start');
@@ -156,52 +190,43 @@ class DashboardController extends Controller
 
         // Kiểm tra nếu ngày bắt đầu hoặc ngày kết thúc chưa được nhập
         $results_one = collect();
-        $totalOrdersConfirm = DB::table('orders')
-            ->where('status', 1) // Đơn hàng chờ xác nhận
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
+
+        // Truy vấn tổng số đơn chờ xác nhận trong tháng hiện tại
+        $totalProduct = DB::table('products')
             ->count();
 
-        // Truy vấn tổng số đơn hàng đã hủy
+        // Truy vấn tổng số đơn chờ xác nhận trong tháng hiện tại
+        $totalOrdersConfirm = DB::table('orders')
+            ->where('status', 1) // Đơn hàng chờ xác nhận
+            ->whereDate('created_at', $currentDate)
+            ->count();
+
+        // Truy vấn tổng số đơn hàng đã hoàn thành
         $totalOrdersCancel = DB::table('orders')
-            ->where('status', 7) // Đơn hàng đã hủy
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
+            ->where('status', 7) // Đơn hàng đã hoàn thành
+            ->whereDate('created_at', $currentDate)
             ->count();
 
         // Truy vấn tổng đơn hàng và doanh thu trong tháng này
-        $monthlyOrders = DB::table('orders')
+        $dailyRevenue = DB::table('orders')
             ->select(
-                DB::raw('MONTH(created_at) as month'),
+                DB::raw('DATE(created_at) as date'),
                 DB::raw('COUNT(*) as total_orders'),
-                DB::raw('SUM(total_price) as total_revenue') // Giả sử bạn có cột 'total_price' lưu trữ doanh thu
+                DB::raw('SUM(total_price) as total_revenue')
             )
-            ->where('status', 6) // Đơn hàng đã thanh toán
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        // Truy vấn tổng số khách hàng
-        $totalCustomers = DB::table('users')->count();
+            ->where('status', 6)
+            ->whereDate('created_at', $currentDate)
+            ->groupBy('date')
+            ->first();
 
         // Truy vấn 10 đơn hàng mới nhất trong tháng này
         $latestOrders = DB::table('orders')
+            ->where('status', 1)
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
             ->limit(5) // Lấy 10 đơn hàng mới nhất
             ->get();
-
-        // Truy vấn 10 người dùng mới nhất trong tháng này
-        $latestUsers = DB::table('users')
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
-            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian mới nhất
-            ->limit(10) // Lấy 10 người dùng mới nhất
-            ->get();
-
 
         $orderStatus = DB::table('orders')
             ->select('status', DB::raw('count(*) as total'))
@@ -210,24 +235,34 @@ class DashboardController extends Controller
             ->groupBy('status')
             ->get();
 
-        // dd($orderStatus);
-        if (empty($date_start) || empty($end_date)) {
-            // Thông báo lỗi nếu chưa nhập ngày
-            $errorMessage = 'Vui lòng nhập ngày bắt đầu và ngày kết thúc!';
-            // return view('admin.dashboard.home.index', compact('template', 'config','results', 'totalOrders','canceledOrders','cancellationRate','totalCustomers', 'results_one', 'latestOrders', 'latestUsers', 'errorMessage'));
-            return view('admin.dashboard.layout', compact(
-                'template1',
-                'config',
-                'results', // Truyền dữ liệu đã tính toán vào view
-                'totalOrdersCancel', // Truyền tổng số đơn hàng vào view
-                'totalOrdersConfirm',
-                'totalCustomers', // Tổng khách hàng
-                'latestOrders', // 10 đơn hàng mới nhất
-                'latestUsers',
-                'errorMessage',
-                'orderStatus'
-            ));
-        }
+        $totalCustomers = DB::table('users')
+            ->where('user_catalogue_id', 3)
+            ->count();
+
+        $totalStaff = DB::table('users')
+            ->where('user_catalogue_id', 2)
+            ->count();
+
+        $grossProfitToday = DB::table('order_items')
+            ->join('variants', 'order_items.variant_id', '=', 'variants.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('orders.status', 6) // Chỉ tính đơn hàng đã thanh toán
+            ->whereDate('order_items.created_at', $currentDate) // Lọc theo ngày hiện tại
+            ->select(DB::raw('SUM((order_items.price - variants.purchase_price) * order_items.quantity) as total_gross_profit'))
+            ->value('total_gross_profit'); // Trả về tổng lợi nhuận gộp
+        $monthlyOrders = DB::table('orders')
+            ->select(
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(*) as total_orders'),
+                DB::raw('SUM(total_price) as total_revenue')
+            )
+            ->where('status', 6) // Đơn hàng đã thanh toán
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
         // Tạo danh sách các mốc thời gian từ date_start đến end_date
         $dates = collect();
         switch ($choose_time) {
@@ -312,6 +347,38 @@ class DashboardController extends Controller
             ->groupBy('order_items.variant_id', 'products.name', 'colors.name', 'sizes.name', 'date') // Nhóm theo variant_id, tên sản phẩm, tên màu sắc, tên kích thước, và ngày
             ->orderBy('gross_profit', 'desc') // Sắp xếp theo lợi nhuận gộp
             ->get();
+
+        $bestSellingProducts = DB::table('order_items')
+            ->join('variants', 'order_items.variant_id', '=', 'variants.id')
+            ->join('products', 'variants.product_id', '=', 'products.id') // Liên kết sản phẩm
+            ->join('orders', 'order_items.order_id', '=', 'orders.id') // Liên kết đơn hàng
+            ->join('colors', 'variants.color_id', '=', 'colors.id') // Liên kết màu sắc
+            ->join('sizes', 'variants.size_id', '=', 'sizes.id') // Liên kết kích thước
+            ->select(
+                DB::raw('
+            SUM(order_items.quantity) as total_quantity
+        '),
+                'order_items.variant_id', // ID của biến thể
+                'products.name as product_name', // Tên sản phẩm
+                'colors.name as color_name', // Tên màu sắc
+                'sizes.name as size_name', // Tên kích thước
+                DB::raw('
+            DATE_FORMAT(order_items.created_at, "%d/%m/%Y") as sale_date
+        ') // Ngày bán
+            )
+            ->where('orders.status', 6) // Chỉ tính các đơn hàng đã thanh toán
+            ->whereMonth('order_items.created_at', $currentMonth)
+            ->whereYear('order_items.created_at', $currentYear)
+            ->groupBy(
+                'order_items.variant_id',
+                'products.name',
+                'colors.name',
+                'sizes.name',
+                DB::raw('DATE_FORMAT(order_items.created_at, "%d/%m/%Y")')
+            )
+            ->orderBy('total_quantity', 'desc') // Sắp xếp theo số lượng bán
+            ->take(10)
+            ->get();
         // dd($grossProfit);
 
         $successMessage = 'Lọc dữ liệu thành công!';
@@ -321,14 +388,18 @@ class DashboardController extends Controller
             'template',
             'config',
             'monthlyOrders',
-            'totalOrdersCancel',
-            'totalOrdersConfirm',
-            'totalCustomers',
-            'latestOrders',
-            'latestUsers',
             'results_one',
-            'orderStatus',
             'grossProfit',
+            'totalProduct',
+            'totalOrdersConfirm',
+            'totalOrdersCancel',
+            'dailyRevenue',
+            'latestOrders',
+            'orderStatus',
+            'totalCustomers',
+            'totalStaff',
+            'grossProfitToday',
+            'bestSellingProducts',
             'successMessage',
         ));
     }

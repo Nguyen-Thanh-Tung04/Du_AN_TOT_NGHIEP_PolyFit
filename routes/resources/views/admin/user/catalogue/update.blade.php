@@ -34,6 +34,7 @@
                                     <label class="control-label text-left">Tên chức vụ
                                         </label>
                                     <input
+                                        disabled
                                         type="text"
                                         name="name"
                                         value="{{ old('name', ($userCatalogue->name) ?? '') }}"
